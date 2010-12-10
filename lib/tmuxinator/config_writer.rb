@@ -20,8 +20,7 @@ module Tmuxinator
       config_path = "#{root_dir}#{@filename}.tmux"
       tmp         = File.open(config_path, 'w') {|f| f.write(erb) }
       
-      "alias start_#{@filename}='tmux -c #{config_path} -s #{@project_name.gsub(" ", "_")}'"
-      
+      "alias start_#{@filename}='$SHELL #{config_path}'"
     end
     
     private
@@ -42,9 +41,9 @@ module Tmuxinator
       @tabs         = []
       
       yaml["tabs"].each do |tab|
-        t      = OpenStruct.new
-        t.name = tab.keys.first
-        value  = tab.values.first
+        t       = OpenStruct.new
+        t.name  = tab.keys.first
+        value   = tab.values.first
         t.stuff = value.is_a?(Array) ? value.join(" && ") : value
         @tabs << t
       end

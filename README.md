@@ -1,6 +1,6 @@
 # Tmuxinator
 
-Create and manage tmux sessions easily. Inspired by Arthur Chiu's ([Terminitor](http://github.com/achiu/terminitor))
+Create and manage tmux sessions easily. Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator)) and Arthur Chiu's ([Terminitor](http://github.com/achiu/terminitor))
 
 ## Installation
 
@@ -67,7 +67,7 @@ After you create a project, you will have to open a new shell window. This is be
 Example
 -------
 
-![Sample](http://img.skitch.com/20100922-b6yny5qxuh159asdekh3mx9quk.png)
+![Sample](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
 
 Other Commands
