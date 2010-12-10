@@ -1,0 +1,10 @@
+# ~/.tmuxinator/<%= @name %>.yml
+# you can make as many tabs as you wish...
+
+project_name: Tmuxinator
+project_root: ~/tmuxinator
+tabs:
+  - git: git status
+  - shell: ls
+  - tree: tree .
+  - rake: rake -T
