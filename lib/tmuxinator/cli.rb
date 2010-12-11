@@ -16,7 +16,22 @@ module Tmuxinator
 
       # print the usage string, this is a fall through method.
       def usage
-        puts "Usage: tmuxinator ACTION [Arg]"
+        puts <<"DOC"
+  Usage: tmuxinator ACTION [Arg]
+  
+  ACTOINS:
+  open [project_name]                 
+      create a new project file and open it in your editor
+  copy [source_project] [new_project]
+      copy source_project project file to a new project called new_project
+  delete [project_name]
+      deletes the project called project_name
+  implode
+      deletes all existing projects!
+  list [-v]
+      list all existing projects
+DOC
+        
       end
       
       # Open a config file, it's created if it doesn't exist already.
@@ -97,7 +112,12 @@ module Tmuxinator
         Tmuxinator::ConfigWriter.write_aliases(aliases)
       end
       
-      private
+      def method_missing(method, *args, &block)  
+        puts "There's no command called #{method} in tmuxinator" 
+        usage 
+      end
+
+      private #==============================
             
       def root_dir
         "#{ENV["HOME"]}/.tmuxinator/"
