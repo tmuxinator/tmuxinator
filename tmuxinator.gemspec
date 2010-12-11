@@ -5,18 +5,19 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tmuxinator}
-  s.version = "0.0.0"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Allen Bargi"]
-  s.date = %q{2010-12-10}
+  s.date = %q{2010-12-11}
   s.default_executable = %q{tmuxinator}
   s.description = %q{Create and manage complex tmux sessions easily.}
   s.email = %q{allen.bargi@gmail.com}
   s.executables = ["tmuxinator"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.md"
+    "README.md",
+    "TODO"
   ]
   s.files = [
     ".document",
@@ -35,7 +36,8 @@ Gem::Specification.new do |s|
     "lib/tmuxinator/config_writer.rb",
     "lib/tmuxinator/helper.rb",
     "spec/spec_helper.rb",
-    "spec/tmuxinator_spec.rb"
+    "spec/tmuxinator_spec.rb",
+    "tmuxinator.gemspec"
   ]
   s.homepage = %q{http://github.com/aziz/tmuxinator}
   s.licenses = ["MIT"]
