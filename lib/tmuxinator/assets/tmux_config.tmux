@@ -1,15 +1,23 @@
-tmux set-option -g base-index 1
-
-cd "<%= @project_root %>"
-
+cd <%= @project_root %>
 tmux start-server
-tmux new-session -d -s <%= @project_name %>
+
+if ! $(tmux has-session -t <%= @project_name %>); then
+
+tmux new-session -d -s <%= @project_name %> -n <%= @tab[0].name %>
+tmux set-option -t <%= @project_name %> base-index 1
 
 <% @tabs.each do |tab| %>
+  <% unless @tab.index(tab) == 0 %>
 tmux new-window -t <%= @project_name %>:<%= @tabs.index(tab) + 1 %> -n <%= tab.name %>
-tmux send-keys  -t <%= @project_name %>:<%= @tabs.index(tab) + 1 %> 'cd <%= @project_root %> && <%= tab.stuff %>' C-m
+  <% end %>
 <% end %>
 
-tmux select-window -t <%= @project_name %>:0
-tmux attach-session -t <%= @project_name %>
+<% @tabs.each do |tab| %>
+tmux send-keys  -t <%= @project_name %>:<%= @tabs.index(tab) + 1 %> '<%= tab.stuff %>' C-m
+<% end %>
 
+tmux select-window -t <%= @project_name %>:1
+
+fi
+
+tmux -u attach-session -t <%= @project_name %>
