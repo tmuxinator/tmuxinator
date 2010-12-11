@@ -52,8 +52,7 @@ If a tab contains multiple commands, they will be 'joined' together with '&&'.
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
 
 
-Starting a project
-------------------
+## Starting a project
 
     $ start_project_name
   
@@ -64,14 +63,12 @@ This will fire up tmux with all the tabs you configured.
 After you create a project, you will have to open a new shell window. This is because tmuxinator adds an alias to bash to open tmux with the project config.
 
 
-Example
--------
+## Example
 
 ![Sample](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
 
-Other Commands
---------------
+## Other Commands
 
     $ tmuxinator copy existing_project new_project
 
@@ -96,8 +93,7 @@ Remove a project
 Remove all tmuxinator configs, aliases and scripts.
 
 
-Questions? Comments? Feature Request?
--------------------------------------
+## Questions? Comments? Feature Request?
 
 I would love to hear your feedback on this project!  Send me a message!
 
