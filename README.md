@@ -2,6 +2,11 @@
 
 Create and manage tmux sessions easily. Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator)) and Arthur Chiu's ([Terminitor](http://github.com/achiu/terminitor))
 
+## Example
+
+![Sample](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
+
+
 ## Installation
 
 
@@ -61,12 +66,6 @@ This will fire up tmux with all the tabs you configured.
 ### Limitations ###
 
 After you create a project, you will have to open a new shell window. This is because tmuxinator adds an alias to bash to open tmux with the project config.
-
-
-## Example
-
-![Sample](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
-
 
 ## Other Commands
 
