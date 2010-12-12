@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Allen Bargi"]
-  s.date = %q{2010-12-11}
+  s.date = %q{2010-12-12}
   s.default_executable = %q{tmuxinator}
   s.description = %q{Create and manage complex tmux sessions easily.}
   s.email = %q{allen.bargi@gmail.com}
@@ -41,6 +41,27 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/aziz/tmuxinator}
   s.licenses = ["MIT"]
+  s.post_install_message = %q{
+  __________________________________________________________
+  ..........................................................
+
+  Thank you for installing tmuxinator
+  Please be sure to to drop a line in your ~/.bashrc file, similar 
+  to RVM if you've used that before:
+
+  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+  
+  also ensure that you've set these variables in your ENV:
+  
+  $EDITOR, $SHELL
+  
+  you can run `tmuxinator doctor` to make sure everything is set.
+  happy tmuxing with tmuxinator!
+
+  ..........................................................
+  __________________________________________________________
+  
+  }
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Create and manage complex tmux sessions easily.}

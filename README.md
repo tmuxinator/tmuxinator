@@ -9,48 +9,48 @@ Create and manage tmux sessions easily. Inspired by Jon Druse's ([Screeninator](
 
 ## Installation
 
-
     $ gem install tmuxinator
-  
+
 Then follow the instructions.  You just have to drop a line in your ~/.bashrc file, similar to RVM if you've used that before:
 
-    if [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] ; then source $HOME/.tmuxinator/scripts/tmuxinator ; fi
+    [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 
-## Editor
+## Editor and Shell
 
 tmuxinator uses your shell's default editor for opening files.  If you're not sure what that is type:
-  
+
     $ echo $EDITOR
-    
-For me that produces "mate -w"  
+
+For me that produces "mate -w"
 If you want to change your default editor simple put a line in ~/.bashrc that changes it. Mine looks like this:
 
     export EDITOR='mate -w'
 
+It also uses $SHELL variable. which is always set by your shell.
+
 ## Usage
 
-  
+
 ### Create a project ###
-  
+
     $ tmuxinator open project_name
-  
-Create or edit your projects with this command. Your default editor ($EDITOR) is used to open the file. If this is a new project you will see this default config:
+
+Create or edit your projects with this command. aliased to `o`. Your default editor ($EDITOR) is used to open the file. If this is a new project you will see this default config:
 
     # ~/.tmuxinator/project_name.yml
     # you can make as many tabs as you wish...
 
-    escape: ``
     project_name: tmuxinator
     project_root: ~/code/rails_project
     tabs:
       - shell: git pull
       - database: rails db
       - console: rails c
-      - logs: 
+      - logs:
         - cd logs
         - tail -f development.log
       - ssh: ssh me@myhost
-  
+
 
 If a tab contains multiple commands, they will be 'joined' together with '&&'.
 
@@ -60,18 +60,22 @@ If you want to have your own default config, place it into $HOME/.tmuxinator/def
 ## Starting a project
 
     $ start_project_name
-  
+
 This will fire up tmux with all the tabs you configured.
 
 ### Limitations ###
 
-After you create a project, you will have to open a new shell window. This is because tmuxinator adds an alias to bash to open tmux with the project config.
+After you create a project, you will have to open a new shell window. This is because tmuxinator adds an
+alias to bash (or any other shell you use, like zsh) to open tmux with the project config. You can reload your shell rc file
+instead of openning a new window like this, for instance in bash you could do this:
+
+    $ source ~/.bashrc
 
 ## Other Commands
 
     $ tmuxinator copy existing_project new_project
 
-Copy an existing project.
+Copy an existing project. aliased to `c`
 
 
     $ tmuxinator update_scripts
@@ -80,24 +84,35 @@ Re-create the tmux scripts and aliases from the configs. Use this only if you ed
 
 
     $ tmuxinator list
-  
-List all the projects you have configured
+
+List all the projects you have configured. aliased to `l`
+
 
     $ tmuxinator delete project_name
-  
+
 Remove a project
 
-    $ tmuxinator implode
-  
-Remove all tmuxinator configs, aliases and scripts.
 
+    $ tmuxinator implode
+
+Remove all tmuxinator configs, aliases and scripts. aliased to `i`
+
+
+    $ tmuxinator version
+
+shows tmuxinator's version. aliased to `v`
+
+
+    $ tmuxinator help
+
+shows tmuxinator's help. aliased to `h`
 
 ## Questions? Comments? Feature Request?
 
 I would love to hear your feedback on this project!  Send me a message!
 
 ## Contributing to tmuxinator
- 
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
 * Fork the project
@@ -108,5 +123,4 @@ I would love to hear your feedback on this project!  Send me a message!
 
 ## Copyright
 
-Copyright (c) 2010 Allen Bargi. See LICENSE.txt for
-further details.
+Copyright (c) 2010 Allen Bargi. See LICENSE.txt for further details.

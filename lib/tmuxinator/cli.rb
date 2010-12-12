@@ -16,7 +16,7 @@ module Tmuxinator
 
       # print the usage string, this is a fall through method.
       def usage
-        puts <<"DOC"
+        puts %{
   Usage: tmuxinator ACTION [Arg]
 
   ACTOINS:
@@ -34,7 +34,7 @@ module Tmuxinator
       shows this help document
   version
 
-DOC
+}
       end
       alias :help :usage
       alias :h :usage
@@ -114,11 +114,11 @@ DOC
       alias :ls :list
 
       def version
-        system("cat #{File.dirname(__FILE__) + '/../../VERSION'}") 
-        puts 
+        system("cat #{File.dirname(__FILE__) + '/../../VERSION'}")
+        puts
       end
       alias :v :version
-      
+
       def update_scripts
         Dir["#{root_dir}*.tmux"].each {|p| FileUtils.rm(p) }
         aliases = []
@@ -127,6 +127,22 @@ DOC
           aliases << Tmuxinator::ConfigWriter.new(path).write!
         end
         Tmuxinator::ConfigWriter.write_aliases(aliases)
+      end
+
+      def doctor
+        print "  cheking if tmux is installed ==> "
+        puts system("which tmux > /dev/null") ?  "Yes" : "No" 
+        print "  cheking if $EDITOR is set ==> "
+        puts ENV['EDITOR'] ? "Yes" : "No"
+        print "  cheking if $SHELL is set ==> "
+        puts ENV['SHELL'] ? "Yes" : "No"
+        puts %{
+  make sure you have this line in your ~/.bashrc file:
+  
+  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+      
+      
+}
       end
 
       def method_missing(method, *args, &block)
