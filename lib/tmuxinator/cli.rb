@@ -19,7 +19,7 @@ module Tmuxinator
         puts %{
   Usage: tmuxinator ACTION [Arg]
 
-  ACTOINS:
+  ACTIONS:
   open [project_name]
       create a new project file and open it in your editor
   copy [source_project] [new_project]
