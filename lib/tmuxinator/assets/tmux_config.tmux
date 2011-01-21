@@ -3,8 +3,8 @@ tmux start-server
 
 if ! $(tmux has-session -t <%= @project_name %>); then
 
+tmux set-option base-index 1
 tmux new-session -d -s <%= @project_name %> -n <%= @tabs[0].name %>
-tmux set-option -t <%= @project_name %> base-index 1
 
 <% @tabs.each do |tab| %>
   <% unless @tabs.index(tab) == 0 %>
