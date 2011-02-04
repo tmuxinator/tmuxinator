@@ -20,4 +20,8 @@ tmux select-window -t <%= @project_name %>:1
 
 fi
 
-tmux -u attach-session -t <%= @project_name %>
+if [ -z $TMUX ]; then
+    tmux -u attach-session -t <%= @project_name %>
+else
+    tmux -u switch-client -t <%= @project_name %>
+fi
