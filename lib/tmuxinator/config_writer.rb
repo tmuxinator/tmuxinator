@@ -53,6 +53,11 @@ module Tmuxinator
     def write_alias(stuff)
       File.open("#{root_dir}scripts/#{@filename}", 'w') {|f| f.write(stuff) }
     end
+
+    def shell_escape(str)
+      "'#{str.to_s.gsub("'") { %('\'') }}'"
+    end
+    alias s shell_escape
   end
   
 end
