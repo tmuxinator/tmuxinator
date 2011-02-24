@@ -5,3 +5,6 @@ doc
 .bundle
 pkg
 TODO
+
+# vim swaps
+.*.sw[a-z]
