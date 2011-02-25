@@ -10,7 +10,7 @@ tmux new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 tmux new-window -t <%=s @project_name %>:<%= i + 1 %> -n <%=s tab.name %>
 <% end %>
 
-<% @tabs.each_with_index do |tab, i| %>
+<% @tabs.select { |t| t.stuff }.each_with_index do |tab, i| %>
 tmux send-keys  -t <%=s @project_name %>:<%= i + 1 %> <%=s tab.stuff %> C-m
 <% end %>
 
