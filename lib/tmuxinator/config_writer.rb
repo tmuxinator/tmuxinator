@@ -38,6 +38,7 @@ module Tmuxinator
       
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
+      @rvm          = yaml["rvm"]
       @tabs         = []
       
       yaml["tabs"].each do |tab|
@@ -46,12 +47,17 @@ module Tmuxinator
         value   = tab.values.first
         case value
         when Array
+          value.unshift "rvm use #{@rvm}" if @rvm
           t.command = value.join(" && ")
         when String
+          value = "rvm use #{@rvm} && #{value}" if @rvm
           t.command = value
         when Hash
           t.panes = (value["panes"] || ['']).map do |pane|
-            pane = pane.join(' && ') if pane.is_a? Array
+            if pane.is_a? Array
+              pane.unshift "rvm use #{@rvm}" if @rvm
+              pane = pane.join(' && ')
+            end
             pane
           end
           t.layout = value["layout"]

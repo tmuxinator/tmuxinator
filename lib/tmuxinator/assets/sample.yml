@@ -3,6 +3,7 @@
 
 project_name: Tmuxinator
 project_root: ~/code/rails_project
+rvm: 1.9.2@rails_project
 tabs:
   - editor:
       layout: main-vertical
