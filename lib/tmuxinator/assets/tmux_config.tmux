@@ -1,4 +1,4 @@
-#!/bin/bash
+#!<%= ENV['SHELL'] || '/bin/bash' %>
 cd <%=s @project_root %>
 tmux start-server
 
