@@ -55,9 +55,10 @@ module Tmuxinator
         when Hash
           t.panes = (value["panes"] || ['']).map do |pane|
             if pane.is_a? Array
-              pane.unshift "rvm use #{@rvm}" if @rvm
+              pane.unshift! "rvm use #{@rvm}" if @rvm
               pane = pane.join(' && ')
             end
+            pane = "rvm use #{@rvm} && #{pane}" if @rvm
             pane
           end
           t.layout = value["layout"]
