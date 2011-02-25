@@ -4,6 +4,12 @@
 project_name: Tmuxinator
 project_root: ~/code/rails_project
 tabs:
+  - editor:
+      layout: main-vertical
+      panes:
+        - vim
+        - #empty, will just run plain bash
+        - top
   - shell: git pull
   - database: rails db
   - server: rails s

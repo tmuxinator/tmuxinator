@@ -44,10 +44,23 @@ module Tmuxinator
         t       = OpenStruct.new
         t.name  = tab.keys.first
         value   = tab.values.first
-        t.stuff = value.is_a?(Array) ? value.join(" && ") : value
+        case value
+        when Array
+          t.command = value.join(" && ")
+        when String
+          t.command = value
+        when Hash
+          t.panes = (value["panes"] || ['']).map do |pane|
+            pane = pane.join(' && ') if pane.is_a? Array
+            pane
+          end
+          t.layout = value["layout"]
+        end
         @tabs << t
       end
-      
+    end
+
+    def parse_tabs(tab_list)
     end
     
     def write_alias(stuff)
@@ -58,6 +71,15 @@ module Tmuxinator
       "'#{str.to_s.gsub("'") { %('\'') }}'"
     end
     alias s shell_escape
+
+    def window(i)
+      "#{s @project_name}:#{i}"
+    end
+
+    def send_keys(cmd, window_number)
+      return '' unless cmd
+      "tmux send-keys -t #{window(window_number)} #{s cmd} C-m"
+    end
   end
   
 end
