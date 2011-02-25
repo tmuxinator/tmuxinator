@@ -42,6 +42,7 @@ Create or edit your projects with this command. aliased to `o`. Your default edi
 
     project_name: tmuxinator
     project_root: ~/code/rails_project
+    rvm: 1.9.2@rails_project
     tabs:
       - shell: git pull
       - database: rails db
