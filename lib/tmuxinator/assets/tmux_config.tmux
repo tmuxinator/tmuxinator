@@ -6,10 +6,8 @@ if ! $(tmux has-session -t <%=s @project_name %>); then
 tmux set-option base-index 1
 tmux new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 
-<% @tabs.each do |tab| %>
-  <% unless @tabs.index(tab) == 0 %>
+<% @tabs[1..-1].each do |tab| %>
 tmux new-window -t <%=s @project_name %>:<%=s @tabs.index(tab) + 1 %> -n <%=s tab.name %>
-  <% end %>
 <% end %>
 
 <% @tabs.each do |tab| %>
