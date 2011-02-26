@@ -1,6 +1,7 @@
 module Tmuxinator
   
   class ConfigWriter
+    attr :file_name, :file_path, :project_name, :project_root, :rvm, :tabs
     
     include Tmuxinator::Helper
     
@@ -8,19 +9,26 @@ module Tmuxinator
       File.open("#{ENV["HOME"]}/.tmuxinator/scripts/tmuxinator", 'w') {|f| f.write(aliases.join("\n")) }
     end
     
-    def initialize(filename)
-      @filename  = filename
-      @file_path = "#{root_dir}#{@filename}.yml"
-      process_config!
+    def initialize(basename=nil)
+      file_name = basename and file_path = "#{root_dir}#{basename}.yml" if basename
+    end
+    
+    def file_path= full_path
+      @file_path = full_path
+      @file_name = File.basename full_path, '.yml'
+      process_config! if full_path && File.exist?(full_path)
     end
     
     def write!
-      template    = "#{File.dirname(__FILE__)}/assets/tmux_config.tmux"
-      erb         = ERB.new(IO.read(template)).result(binding)
-      config_path = "#{root_dir}#{@filename}.tmux"
+      raise "Unable to write with out a file_name defined" unless file_name
+      erb         = ERB.new(IO.read(TMUX_TEMPLATE)).result(binding)
       tmp         = File.open(config_path, 'w') {|f| f.write(erb) }
       
-      "alias start_#{@filename}='$SHELL #{config_path}'"
+      "alias start_#{file_name}='$SHELL #{config_path}'"
+    end
+    
+    def config_path
+      "#{root_dir}#{file_name}.tmux" if file_name
     end
     
     private
@@ -30,7 +38,7 @@ module Tmuxinator
     end
     
     def process_config!
-      yaml = YAML.load(File.read(@file_path))
+      yaml = YAML.load(File.read(file_path))
 
       exit!("Your configuration file should include some tabs.")        if yaml["tabs"].nil?
       exit!("Your configuration file didn't specify a 'project_root'")  if yaml["project_root"].nil?
