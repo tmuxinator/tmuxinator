@@ -5,12 +5,12 @@ module Tmuxinator
     
     include Tmuxinator::Helper
     
-    def self.write_aliases(aliases)
+    def self.write_aliases aliases
       File.open("#{ENV["HOME"]}/.tmuxinator/scripts/tmuxinator", 'w') {|f| f.write(aliases.join("\n")) }
     end
     
-    def initialize(basename=nil)
-      file_name = basename and file_path = "#{root_dir}#{basename}.yml" if basename
+    def initialize this_full_path=nil
+      self.file_path = this_full_path if this_full_path
     end
     
     def file_path= full_path
@@ -20,7 +20,7 @@ module Tmuxinator
     end
     
     def write!
-      raise "Unable to write with out a file_name defined" unless file_name
+      raise "Unable to write with out a file_name defined" unless self.file_name
       erb         = ERB.new(IO.read(TMUX_TEMPLATE)).result(binding)
       tmp         = File.open(config_path, 'w') {|f| f.write(erb) }
       
@@ -75,14 +75,14 @@ module Tmuxinator
       end
     end
 
-    def parse_tabs(tab_list)
+    def parse_tabs tab_list
     end
     
-    def write_alias(stuff)
+    def write_alias stuff
       File.open("#{root_dir}scripts/#{@filename}", 'w') {|f| f.write(stuff) }
     end
 
-    def shell_escape(str)
+    def shell_escape str
       "'#{str.to_s.gsub("'") { %('\'') }}'"
     end
     alias s shell_escape
@@ -91,7 +91,7 @@ module Tmuxinator
       "#{s @project_name}:#{i}"
     end
 
-    def send_keys(cmd, window_number)
+    def send_keys cmd, window_number
       return '' unless cmd
       "tmux send-keys -t #{window(window_number)} #{s cmd} C-m"
     end

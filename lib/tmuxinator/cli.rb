@@ -6,7 +6,7 @@ module Tmuxinator
     class << self
       include Tmuxinator::Helper
 
-      def start(*args)
+      def start *args
         if args.empty?
           self.usage
         else
@@ -40,7 +40,7 @@ module Tmuxinator
       alias :h :usage
 
       # Open a config file, it's created if it doesn't exist already.
-      def open(*args)
+      def open *args
         exit!("You must specify a name for the new project") unless args.size > 0
         puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
         @name = args.shift
@@ -56,7 +56,7 @@ module Tmuxinator
       end
       alias :o :open
 
-      def copy(*args)
+      def copy *args
         @copy = args.shift
         @name = args.shift
         @config_to_copy = "#{root_dir}#{@copy}.yml"
@@ -72,11 +72,11 @@ module Tmuxinator
             puts "Overwriting #{@name}"
           end
         end
-        open(@name)
+        open @name
       end
       alias :c :copy
 
-      def delete(*args)
+      def delete *args
         puts "warning: passing multiple arguments to delete will be ignored" if args.size > 1
         filename  = args.shift
         file_path = "#{root_dir}#{filename}.yml"
@@ -92,7 +92,7 @@ module Tmuxinator
       end
       alias :d :delete
 
-      def implode(*args)
+      def implode *args
         exit!("delete_all doesn't accapt any arguments!") unless args.empty?
         confirm!("Are you sure you want to delete all tmuxinator configs? (type yes or no):") do
           FileUtils.remove_dir(root_dir)
@@ -101,7 +101,7 @@ module Tmuxinator
       end
       alias :i :implode
 
-      def list(*args)
+      def list *args
         verbose = args.include?("-v")
         puts "tmuxinator configs:"
         Dir["#{root_dir}**"].each do |path|
@@ -123,7 +123,6 @@ module Tmuxinator
         Dir["#{root_dir}*.tmux"].each {|p| FileUtils.rm(p) }
         aliases = []
         Dir["#{root_dir}*.yml"].each do |path|
-          path = File.basename(path, '.yml')
           aliases << Tmuxinator::ConfigWriter.new(path).write!
         end
         Tmuxinator::ConfigWriter.write_aliases(aliases)
@@ -145,7 +144,7 @@ module Tmuxinator
 }
       end
 
-      def method_missing(method, *args, &block)
+      def method_missing method, *args, &block
         puts "There's no command called #{method} in tmuxinator"
         usage
       end
