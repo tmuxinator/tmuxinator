@@ -4,25 +4,25 @@ tmux start-server
 
 if ! $(tmux has-session -t <%=s @project_name %>); then
 
-tmux set-option base-index 1
 tmux new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
+tmux set-option base-index 1
 
 <% @tabs[1..-1].each_with_index do |tab, i| %>
-tmux new-window -t <%= window(i+1) %> -n <%=s tab.name %>
+tmux new-window -t <%= window(i+2) %> -n <%=s tab.name %>
 <% end %>
 
 # set up tabs and panes
 <% @tabs.each_with_index do |tab, i| %>
 # tab "<%= tab.name %>"
 <%   if tab.command %>
-<%=    send_keys(tab.command, i) %>
+<%=    send_keys(tab.command, i+1) %>
 <%   elsif tab.panes %>
-<%=    send_keys(tab.panes.shift, i) %>
+<%=    send_keys(tab.panes.shift, i+1) %>
 <%     tab.panes.each do |pane| %>
-tmux splitw -t <%= window(i) %>
-<%=      send_keys(pane, i) %>
+tmux splitw -t <%= window(i+1) %>
+<%=      send_keys(pane, i+1) %>
 <%     end %>
-tmux select-layout -t <%= window(i) %> <%=s tab.layout %>
+tmux select-layout -t <%= window(i+1) %> <%=s tab.layout %>
 <%   end %>
 <% end %>
 
