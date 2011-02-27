@@ -10,12 +10,19 @@ describe Tmuxinator::ConfigWriter do
     its(:config_path){ should be_nil }
   end
   
+  context "While Defining the filename on init" do
+    subject{ Tmuxinator::ConfigWriter.new(SAMPLE_CONFIG) }
+    its(:file_path){ should eql SAMPLE_CONFIG }
+    its(:file_name){ should eql "sample" }
+  end
+  
   context "After filename has been defined" do
     before do
       subject.file_path = SAMPLE_CONFIG
     end
     
     its(:file_path){ should eql SAMPLE_CONFIG }
+    its(:file_name){ should eql File.basename(SAMPLE_CONFIG, '.yml')}
     its(:project_name){ should eql 'Tmuxinator' }
     its(:project_root){ should eql '~/code/rails_project' }
     its(:rvm){ should eql '1.9.2@rails_project' }
