@@ -51,11 +51,25 @@ Create or edit your projects with this command. aliased to `o`. Your default edi
         - cd logs
         - tail -f development.log
       - ssh: ssh me@myhost
-
+      - window_with_panes
+          layout: main-vertical
+          panes:
+            - vim
+            - #empty, will just run plain bash
+            - top
 
 If a tab contains multiple commands, they will be 'joined' together with '&&'.
-
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
+
+## Panes Support
+you can define your own panes inside a window likes this:
+
+    - window_with_panes
+        layout: main-vertical
+        panes:
+          - vim
+          - #empty, will just run plain bash
+          - top
 
 
 ## Starting a project
@@ -111,6 +125,19 @@ shows tmuxinator's help. aliased to `h`
 ## Questions? Comments? Feature Request?
 
 I would love to hear your feedback on this project!  Send me a message!
+
+## Contributors:
+
+* [Aaron Spiegel](https://github.com/spiegela)
+* [Jay Adkisson](https://github.com/jayferd)
+* [Chris Lerum](https://github.com/chrislerum)
+* [David Bolton](https://github.com/lightningdb)
+* [Thibault Duplessis](https://github.com/ornicar)
+
+## History
+###v. 0.2.0
+* added pane support (Thanks to Aaron Spiegel)
+* RVM support (Thanks to Jay Adkisoon)
 
 ## Contributing to tmuxinator
 
