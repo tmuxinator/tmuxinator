@@ -1,7 +1,7 @@
 module Tmuxinator
   
   class ConfigWriter
-    attr :file_name, :file_path, :project_name, :project_root, :rvm, :tabs
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs
     
     include Tmuxinator::Helper
     
