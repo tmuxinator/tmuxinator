@@ -55,6 +55,8 @@ module Tmuxinator
         update_scripts
       end
       alias :o :open
+      alias :new :open
+      alias :n :open
 
       def copy *args
         @copy = args.shift
@@ -130,17 +132,17 @@ module Tmuxinator
 
       def doctor
         print "  cheking if tmux is installed ==> "
-        puts system("which tmux > /dev/null") ?  "Yes" : "No" 
+        puts system("which tmux > /dev/null") ?  "Yes" : "No"
         print "  cheking if $EDITOR is set ==> "
         puts ENV['EDITOR'] ? "Yes" : "No"
         print "  cheking if $SHELL is set ==> "
         puts ENV['SHELL'] ? "Yes" : "No"
         puts %{
   make sure you have this line in your ~/.bashrc file:
-  
+
   [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-      
-      
+
+
 }
       end
 

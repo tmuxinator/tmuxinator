@@ -33,30 +33,31 @@ It also uses $SHELL variable. which is always set by your shell.
 
 ### Create a project ###
 
-    $ tmuxinator open project_name
+    $ tmuxinator new project_name
 
-Create or edit your projects with this command. aliased to `o`. Your default editor ($EDITOR) is used to open the file. If this is a new project you will see this default config:
+Create or edit your projects with this command, for editing you can also use `tmuxinator open project_name`. `new` aliased to `o`,`open` and `n`. Your default editor ($EDITOR) is used to open the file. If this is a new project you will see this default config:
 
     # ~/.tmuxinator/project_name.yml
     # you can make as many tabs as you wish...
 
-    project_name: tmuxinator
+    project_name: Tmuxinator
     project_root: ~/code/rails_project
     rvm: 1.9.2@rails_project
     tabs:
-      - shell: git pull
-      - database: rails db
-      - console: rails c
-      - logs:
-        - cd logs
-        - tail -f development.log
-      - ssh: ssh me@myhost
-      - window_with_panes
+      - editor:
           layout: main-vertical
           panes:
             - vim
             - #empty, will just run plain bash
             - top
+      - shell: git pull
+      - database: rails db
+      - server: rails s
+      - logs: tail -f logs/development.log
+      - console: rails c
+      - capistrano:
+      - server: ssh me@myhost
+
 
 If a tab contains multiple commands, they will be 'joined' together with '&&'.
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
