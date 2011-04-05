@@ -1,10 +1,10 @@
 #!<%= ENV['SHELL'] || '/bin/bash' %>
-cd <%=s @project_root %>
 tmux start-server
 
 if ! $(tmux has-session -t <%=s @project_name %>); then
 
 tmux new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
+tmux set default-path <%= @project_root %>
 tmux set-option base-index 1
 
 <% @tabs[1..-1].each_with_index do |tab, i| %>
