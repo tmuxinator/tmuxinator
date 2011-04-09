@@ -5,12 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tmuxinator}
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Allen Bargi"]
-  s.date = %q{2011-03-10}
-  s.default_executable = %q{tmuxinator}
+  s.date = %q{2011-04-09}
   s.description = %q{Create and manage complex tmux sessions easily.}
   s.email = %q{allen.bargi@gmail.com}
   s.executables = ["tmuxinator"]
@@ -63,7 +62,7 @@ Gem::Specification.new do |s|
   
   }
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.1}
+  s.rubygems_version = %q{1.7.2}
   s.summary = %q{Create and manage complex tmux sessions easily.}
   s.test_files = [
     "spec/spec_helper.rb",
