@@ -43,6 +43,7 @@ Create or edit your projects with this command, for editing you can also use `tm
     project_name: Tmuxinator
     project_root: ~/code/rails_project
     rvm: 1.9.2@rails_project
+    pre: sudo /etc/rc.d/mysqld start
     tabs:
       - editor:
           layout: main-vertical
@@ -61,6 +62,8 @@ Create or edit your projects with this command, for editing you can also use `tm
 
 If a tab contains multiple commands, they will be 'joined' together with '&&'.
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
+
+The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running.  
 
 ## Panes Support
 you can define your own panes inside a window likes this:
@@ -134,8 +137,15 @@ I would love to hear your feedback on this project!  Send me a message!
 * [Chris Lerum](https://github.com/chrislerum)
 * [David Bolton](https://github.com/lightningdb)
 * [Thibault Duplessis](https://github.com/ornicar)
+* [Ian Yang](https://github.com/doitian)
+
 
 ## History
+###v. 0.3.0
+* added pre command (Thanks to Ian Yang)
+* using tmux set default-path for project root
+* new aliases
+
 ###v. 0.2.0
 * added pane support (Thanks to Aaron Spiegel)
 * RVM support (Thanks to Jay Adkisoon)
