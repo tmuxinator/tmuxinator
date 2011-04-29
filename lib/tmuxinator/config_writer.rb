@@ -1,7 +1,7 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre
 
     include Tmuxinator::Helper
 
@@ -47,6 +47,7 @@ module Tmuxinator
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
+      @pre          = yaml["pre"]
       @tabs         = []
 
       yaml["tabs"].each do |tab|
