@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tmuxinator}
-  s.version = "0.3.1"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Allen Bargi"]
-  s.date = %q{2011-04-09}
+  s.date = %q{2011-04-29}
   s.description = %q{Create and manage complex tmux sessions easily.}
   s.email = %q{allen.bargi@gmail.com}
   s.executables = ["tmuxinator"]
