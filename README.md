@@ -63,7 +63,7 @@ Create or edit your projects with this command, for editing you can also use `tm
 If a tab contains multiple commands, they will be 'joined' together with '&&'.
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
 
-The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running.  
+The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running. Multiple commands can be specified, just like for tabs.
 
 ## Panes Support
 you can define your own panes inside a window likes this:
