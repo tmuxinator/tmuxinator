@@ -138,11 +138,13 @@ I would love to hear your feedback on this project!  Send me a message!
 * [David Bolton](https://github.com/lightningdb)
 * [Thibault Duplessis](https://github.com/ornicar)
 * [Ian Yang](https://github.com/doitian)
+* [Bjørn Arild Mæland](https://github.com/bmaland)
 
 
 ## History
 ###v. 0.3.0
 * added pre command (Thanks to Ian Yang)
+* added multiple pre command (Thanks to Bjørn Arild Mæland)
 * using tmux set default-path for project root
 * new aliases
 
