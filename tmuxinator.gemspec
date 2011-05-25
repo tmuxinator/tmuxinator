@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   ..........................................................
 
   Thank you for installing tmuxinator
-  Please be sure to to drop a line in your ~/.bashrc file, similar 
+  Please be sure to drop a line in your ~/.bashrc file, similar 
   to RVM if you've used that before:
 
   [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
