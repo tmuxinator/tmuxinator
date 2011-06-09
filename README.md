@@ -116,6 +116,10 @@ Remove a project
 
 Remove all tmuxinator configs, aliases and scripts. aliased to `i`
 
+	$ tmuxinator doctor
+
+Examines your environment and identifies problems with your configuration
+
 
     $ tmuxinator version
 

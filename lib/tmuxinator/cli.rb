@@ -26,10 +26,14 @@ module Tmuxinator
       copy source_project project file to a new project called new_project
   delete [project_name]
       deletes the project called project_name
+  update_scripts
+	  re-create the tmux scripts and aliases from the configs
   implode
       deletes all existing projects!
   list [-v]
       list all existing projects
+  doctor
+	  look for problems in your configuration
   help
       shows this help document
   version
@@ -83,7 +87,7 @@ module Tmuxinator
         filename  = args.shift
         file_path = "#{root_dir}#{filename}.yml"
 
-        if File.exists?(file_path)
+        if File .exists?(file_path)
           confirm!("Are you sure you want to delete #{filename}? (type yes or no):") do
             FileUtils.rm(file_path)
             puts "Deleted #{filename}"
