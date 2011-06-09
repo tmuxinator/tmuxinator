@@ -87,7 +87,7 @@ module Tmuxinator
         filename  = args.shift
         file_path = "#{root_dir}#{filename}.yml"
 
-        if File .exists?(file_path)
+        if File.exists?(file_path)
           confirm!("Are you sure you want to delete #{filename}? (type yes or no):") do
             FileUtils.rm(file_path)
             puts "Deleted #{filename}"
