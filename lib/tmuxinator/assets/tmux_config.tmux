@@ -5,7 +5,7 @@ if ! $(tmux has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
 <%= @pre.kind_of?(Array) ? @pre.join(" && ") : @pre %>
 env TMUX= tmux start-server \; set-option -g base-index 1 \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
-tmux set default-path <%= @project_root %>
+tmux set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
 <% @tabs[1..-1].each_with_index do |tab, i| %>
 tmux new-window -t <%= window(i+2) %> -n <%=s tab.name %>
