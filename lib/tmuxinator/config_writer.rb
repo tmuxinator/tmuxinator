@@ -47,7 +47,7 @@ module Tmuxinator
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
-      @pre          = yaml["pre"]
+      @pre          = build_command(yaml["pre"])
       @tabs         = []
 
       yaml["tabs"].each do |tab|
