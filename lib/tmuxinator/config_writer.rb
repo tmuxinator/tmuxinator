@@ -47,30 +47,22 @@ module Tmuxinator
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
-      @pre          = yaml["pre"]
+      @pre          = build_command(yaml["pre"])
       @tabs         = []
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
         t.name  = tab.keys.first
         value   = tab.values.first
+
         case value
-        when Array
-          value.unshift "rvm use #{@rvm}" if @rvm
-          t.command = value.join(" && ")
-        when String
-          value = "rvm use #{@rvm} && #{value}" if @rvm
-          t.command = value
         when Hash
           t.panes = (value["panes"] || ['']).map do |pane|
-            if pane.is_a? Array
-              pane.unshift! "rvm use #{@rvm}" if @rvm
-              pane = pane.join(' && ')
-            end
-            pane = "rvm use #{@rvm} && #{pane}" if @rvm
-            pane
+            build_command(pane)
           end
           t.layout = value["layout"]
+        else
+          t.command = build_command(value)
         end
         @tabs << t
       end
@@ -95,6 +87,15 @@ module Tmuxinator
     def send_keys cmd, window_number
       return '' unless cmd
       "tmux send-keys -t #{window(window_number)} #{s cmd} C-m"
+    end
+
+    def build_command(value)
+      commands = [value].flatten.compact.reject { |c| c.strip.empty? }
+      if @rvm
+        commands.unshift "rvm use #{@rvm}"
+      end
+
+      commands.join ' && '
     end
   end
 
