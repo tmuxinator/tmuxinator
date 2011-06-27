@@ -48,7 +48,6 @@ module Tmuxinator
         exit!("You must specify a name for the new project") unless args.size > 0
         puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
         @name = args.shift
-        FileUtils.mkdir_p(root_dir+"scripts")
         config_path = "#{root_dir}#{@name}.yml"
         unless File.exists?(config_path)
           template = File.exists?(user_config) ? user_config : "#{File.dirname(__FILE__)}/assets/sample.yml"
@@ -56,7 +55,6 @@ module Tmuxinator
           tmp      = File.open(config_path, 'w') {|f| f.write(erb) }
         end
         system("$EDITOR #{config_path}")
-        update_scripts
       end
       alias :o :open
       alias :new :open
@@ -125,15 +123,6 @@ module Tmuxinator
       end
       alias :v :version
 
-      def update_scripts
-        Dir["#{root_dir}*.tmux"].each {|p| FileUtils.rm(p) }
-        aliases = []
-        Dir["#{root_dir}*.yml"].each do |path|
-          aliases << Tmuxinator::ConfigWriter.new(path).write!
-        end
-        Tmuxinator::ConfigWriter.write_aliases(aliases)
-      end
-
       def doctor
         print "  cheking if tmux is installed ==> "
         puts system("which tmux > /dev/null") ?  "Yes" : "No"
@@ -141,13 +130,7 @@ module Tmuxinator
         puts ENV['EDITOR'] ? "Yes" : "No"
         print "  cheking if $SHELL is set ==> "
         puts ENV['SHELL'] ? "Yes" : "No"
-        puts %{
-  make sure you have this line in your ~/.bashrc file:
 
-  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-
-
-}
       end
 
       def method_missing method, *args, &block
