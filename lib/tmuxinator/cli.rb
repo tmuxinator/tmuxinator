@@ -17,17 +17,19 @@ module Tmuxinator
       # print the usage string, this is a fall through method.
       def usage
         puts %{
-  Usage: tmuxinator ACTION [Arg]
+  Usage: tmuxinator ACTION [Arg] 
+  or 
+  tmuxinator [project_name]
 
   ACTIONS:
+  start [project_name]
+      start a tmux session using project's tmuxinator config
   open [project_name]
       create a new project file and open it in your editor
   copy [source_project] [new_project]
       copy source_project project file to a new project called new_project
   delete [project_name]
       deletes the project called project_name
-  update_scripts
-	  re-create the tmux scripts and aliases from the configs
   implode
       deletes all existing projects!
   list [-v]
