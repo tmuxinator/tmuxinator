@@ -130,9 +130,15 @@ I would love to hear your feedback on this project!  Send me a message!
 * [Thibault Duplessis](https://github.com/ornicar)
 * [Ian Yang](https://github.com/doitian)
 * [Bjørn Arild Mæland](https://github.com/bmaland)
+* [Dane O'Connor](https://github.com/thedeeno)
 
 
 ## History
+###v. 0.4.0
+* removed clunky scripts & shell aliases (Thanks to Dane O'Connor)
+* config files are now rendered JIT (Thanks to Dane O'Connor)
+* can now start sessions from cli (Thanks to Dane O'Connor)
+
 ###v. 0.3.0
 * added pre command (Thanks to Ian Yang)
 * added multiple pre command (Thanks to Bjørn Arild Mæland)
