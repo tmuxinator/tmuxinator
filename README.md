@@ -11,10 +11,6 @@ Create and manage tmux sessions easily. Inspired by Jon Druse's ([Screeninator](
 
     $ gem install tmuxinator
 
-Then follow the instructions.  You just have to drop a line in your ~/.bashrc file, similar to RVM if you've used that before:
-
-    [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-
 ## Editor and Shell
 
 tmuxinator uses your shell's default editor for opening files.  If you're not sure what that is type:
@@ -25,8 +21,6 @@ For me that produces "mate -w"
 If you want to change your default editor simple put a line in ~/.bashrc that changes it. Mine looks like this:
 
     export EDITOR='mate -w'
-
-It also uses $SHELL variable. which is always set by your shell.
 
 ## Usage
 
@@ -78,28 +72,21 @@ you can define your own panes inside a window likes this:
 
 ## Starting a project
 
-    $ start_project_name
+    $ tmuxinator [project_name]
+
+## Shorthand
+
+You can also use this shorthand alias to execute tor
+
+    $ tor [command/project_name]
 
 This will fire up tmux with all the tabs you configured.
-
-### Limitations ###
-
-After you create a project, you will have to open a new shell window. This is because tmuxinator adds an
-alias to bash (or any other shell you use, like zsh) to open tmux with the project config. You can reload your shell rc file
-instead of openning a new window like this, for instance in bash you could do this:
-
-    $ source ~/.bashrc
 
 ## Other Commands
 
     $ tmuxinator copy existing_project new_project
 
 Copy an existing project. aliased to `c`
-
-
-    $ tmuxinator update_scripts
-
-Re-create the tmux scripts and aliases from the configs. Use this only if you edit your project configs outside of tmuxinator, i.e. not using "tmuxinator open xxx".
 
 
     $ tmuxinator list
