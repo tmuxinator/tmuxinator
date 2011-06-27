@@ -17,9 +17,11 @@ module Tmuxinator
 
     def write!
       raise "Unable to write with out a file_name defined" unless self.file_name
-      erb         = ERB.new(IO.read(TMUX_TEMPLATE)).result(binding)
-      tmp         = File.open(config_path, 'w') {|f| f.write(erb) }
+      tmp = File.open(config_path, 'w') {|f| f.write(render) }
+    end
 
+    def render
+      ERB.new(IO.read(TMUX_TEMPLATE)).result(binding)
     end
 
     def config_path
