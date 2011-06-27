@@ -145,7 +145,8 @@ module Tmuxinator
       alias :s :start
 
       def method_missing method, *args, &block
-        puts "There's no command called #{method} in tmuxinator"
+        start method if File.exists?("#{root_dir}#{method}.yml")
+        puts "There's no command or project '#{method}' in tmuxinator"
         usage
       end
 
