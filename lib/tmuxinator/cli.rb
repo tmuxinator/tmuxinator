@@ -6,7 +6,7 @@ module Tmuxinator
     class << self
       include Tmuxinator::Helper
 
-      def start *args
+      def run *args
         if args.empty?
           self.usage
         else
