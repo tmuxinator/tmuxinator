@@ -76,9 +76,9 @@ you can define your own panes inside a window likes this:
 
 ## Shorthand
 
-You can also use this shorthand alias to execute tor
+You can also use this shorthand alias for tmuxinator 
 
-    $ tor [command/project_name]
+    $ mux [command/project_name]
 
 This will fire up tmux with all the tabs you configured.
 
