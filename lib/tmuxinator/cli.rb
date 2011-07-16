@@ -6,7 +6,7 @@ module Tmuxinator
     class << self
       include Tmuxinator::Helper
 
-      def start *args
+      def run *args
         if args.empty?
           self.usage
         else
@@ -17,17 +17,19 @@ module Tmuxinator
       # print the usage string, this is a fall through method.
       def usage
         puts %{
-  Usage: tmuxinator ACTION [Arg]
+  Usage: tmuxinator ACTION [Arg] 
+  or 
+  tmuxinator [project_name]
 
   ACTIONS:
+  start [project_name]
+      start a tmux session using project's tmuxinator config
   open [project_name]
       create a new project file and open it in your editor
   copy [source_project] [new_project]
       copy source_project project file to a new project called new_project
   delete [project_name]
       deletes the project called project_name
-  update_scripts
-	  re-create the tmux scripts and aliases from the configs
   implode
       deletes all existing projects!
   list [-v]
@@ -48,7 +50,6 @@ module Tmuxinator
         exit!("You must specify a name for the new project") unless args.size > 0
         puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
         @name = args.shift
-        FileUtils.mkdir_p(root_dir+"scripts")
         config_path = "#{root_dir}#{@name}.yml"
         unless File.exists?(config_path)
           template = File.exists?(user_config) ? user_config : "#{File.dirname(__FILE__)}/assets/sample.yml"
@@ -56,7 +57,6 @@ module Tmuxinator
           tmp      = File.open(config_path, 'w') {|f| f.write(erb) }
         end
         system("$EDITOR #{config_path}")
-        update_scripts
       end
       alias :o :open
       alias :new :open
@@ -125,15 +125,6 @@ module Tmuxinator
       end
       alias :v :version
 
-      def update_scripts
-        Dir["#{root_dir}*.tmux"].each {|p| FileUtils.rm(p) }
-        aliases = []
-        Dir["#{root_dir}*.yml"].each do |path|
-          aliases << Tmuxinator::ConfigWriter.new(path).write!
-        end
-        Tmuxinator::ConfigWriter.write_aliases(aliases)
-      end
-
       def doctor
         print "  cheking if tmux is installed ==> "
         puts system("which tmux > /dev/null") ?  "Yes" : "No"
@@ -141,17 +132,23 @@ module Tmuxinator
         puts ENV['EDITOR'] ? "Yes" : "No"
         print "  cheking if $SHELL is set ==> "
         puts ENV['SHELL'] ? "Yes" : "No"
-        puts %{
-  make sure you have this line in your ~/.bashrc file:
-
-  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-
-
-}
       end
 
+      # build script and run it
+      def start *args
+        exit!("You must specify a name for the new project") unless args.size > 0
+        puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
+        project_name = args.shift
+        config_path = "#{root_dir}#{project_name}.yml"
+        config = Tmuxinator::ConfigWriter.new(config_path).render
+        # replace current proccess by running compiled tmux config
+        exec(config)
+      end
+      alias :s :start
+
       def method_missing method, *args, &block
-        puts "There's no command called #{method} in tmuxinator"
+        start method if File.exists?("#{root_dir}#{method}.yml")
+        puts "There's no command or project '#{method}' in tmuxinator"
         usage
       end
 

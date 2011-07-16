@@ -28,7 +28,7 @@ describe Tmuxinator::ConfigWriter do
     its(:project_root){ should eql '~/code/rails_project' }
     its(:rvm){ should eql '1.9.2@rails_project' }
     its(:tabs){ should be_an Array  }
-    its(:pre){ should eql 'sudo /etc/rc.d/mysqld start' }
+    its(:pre){ should eql 'rvm use 1.9.2@rails_project && sudo /etc/rc.d/mysqld start' }
 
     let(:first_tab){ subject.tabs[0] }
 

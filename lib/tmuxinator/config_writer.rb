@@ -5,10 +5,6 @@ module Tmuxinator
 
     include Tmuxinator::Helper
 
-    def self.write_aliases aliases
-      File.open("#{ENV["HOME"]}/.tmuxinator/scripts/tmuxinator", 'w') {|f| f.write(aliases.join("\n")) }
-    end
-
     def initialize this_full_path=nil
       self.file_path = this_full_path if this_full_path
     end
@@ -21,10 +17,11 @@ module Tmuxinator
 
     def write!
       raise "Unable to write with out a file_name defined" unless self.file_name
-      erb         = ERB.new(IO.read(TMUX_TEMPLATE)).result(binding)
-      tmp         = File.open(config_path, 'w') {|f| f.write(erb) }
+      tmp = File.open(config_path, 'w') {|f| f.write(render) }
+    end
 
-      "alias start_#{file_name}='$SHELL #{config_path}'"
+    def render
+      ERB.new(IO.read(TMUX_TEMPLATE)).result(binding)
     end
 
     def config_path
@@ -69,10 +66,6 @@ module Tmuxinator
     end
 
     def parse_tabs tab_list
-    end
-
-    def write_alias stuff
-      File.open("#{root_dir}scripts/#{@filename}", 'w') {|f| f.write(stuff) }
     end
 
     def shell_escape str
