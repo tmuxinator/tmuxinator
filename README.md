@@ -72,15 +72,7 @@ you can define your own panes inside a window likes this:
 
 ## Starting a project
 
-    $ tmuxinator [project_name]
-
-## Shorthand
-
-You can also use this shorthand alias for tmuxinator 
-
-    $ mux [command/project_name]
-
-This will fire up tmux with all the tabs you configured.
+    $ start_[project_name]
 
 ## Other Commands
 
