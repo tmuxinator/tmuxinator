@@ -22,6 +22,12 @@ If you want to change your default editor simple put a line in ~/.bashrc that ch
 
     export EDITOR='mate -w'
 
+## Environment Integration
+
+Add this to your ~/.bashrc (or similar)
+
+[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+
 ## Usage
 
 
@@ -72,7 +78,7 @@ you can define your own panes inside a window likes this:
 
 ## Starting a project
 
-    $ tmuxinator [project_name]
+    $ start_[project_name]
 
 ## Shorthand
 
@@ -131,6 +137,7 @@ I would love to hear your feedback on this project!  Send me a message!
 * [Ian Yang](https://github.com/doitian)
 * [Bjørn Arild Mæland](https://github.com/bmaland)
 * [Dane O'Connor](https://github.com/thedeeno)
+* [Eric Marden](https://github.com/xentek)
 
 
 ## History
