@@ -25,8 +25,8 @@ _tmuxinator_open_complete()
   return 0
 }
 
-alias tx='tmuxinator'
-alias txo='tmuxinator open'
+alias mux='tmuxinator'
+alias muxo='tmuxinator open'
 
-complete -F _tmuxinator_commands_complete -o default tmuxinator tx
-complete -F _tmuxinator_open_complete -o default txo
+complete -F _tmuxinator_commands_complete -o default tmuxinator mux
+complete -F _tmuxinator_open_complete -o default muxo

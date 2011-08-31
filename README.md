@@ -30,8 +30,8 @@ That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
 
 It will also add a couple of aliases to your environment:
 
-* `tx`: for commands.
-* `txo`: for `opening` your `.yml` configs.
+* `mux` or `tmuxinator` + Tab: for commands.
+* `muxo` + Tab: for `.yml` configs.
 
 ## Usage
 
