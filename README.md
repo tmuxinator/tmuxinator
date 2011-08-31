@@ -22,6 +22,17 @@ If you want to change your default editor simple put a line in ~/.bashrc that ch
 
     export EDITOR='mate -w'
 
+For command line completion you can put the `tmuxinator_completion` file somewhere in your `$HOME` path and add the following to your `~/.bashrc`
+
+    source ~/bin/completions/tmuxinator_completion
+
+That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
+
+It will also add a couple of aliases to your environment:
+
+* `tx`: for commands.
+* `txo`: for `opening` your `.yml` configs.
+
 ## Usage
 
 
@@ -76,7 +87,7 @@ you can define your own panes inside a window likes this:
 
 ## Shorthand
 
-You can also use this shorthand alias for tmuxinator 
+You can also use this shorthand alias for tmuxinator
 
     $ mux [command/project_name]
 
