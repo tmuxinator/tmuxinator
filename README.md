@@ -142,15 +142,16 @@ I would love to hear your feedback on this project!  Send me a message!
 
 ## History
 ###v. 0.4.0
-* removed clunky scripts & shell aliases (Thanks to Dane O'Connor)
-* config files are now rendered JIT (Thanks to Dane O'Connor)
-* can now start sessions from cli (Thanks to Dane O'Connor)
+* Does not crash if given an invalid yaml file format. report it and exit gracefully.
+* Removed clunky scripts & shell aliases (Thanks to Dane O'Connor)
+* Config files are now rendered JIT (Thanks to Dane O'Connor)
+* Can now start sessions from cli (Thanks to Dane O'Connor)
 
 ###v. 0.3.0
-* added pre command (Thanks to Ian Yang)
-* added multiple pre command (Thanks to Bjørn Arild Mæland)
-* using tmux set default-path for project root
-* new aliases
+* Added pre command (Thanks to Ian Yang)
+* Added multiple pre command (Thanks to Bjørn Arild Mæland)
+* Using tmux set default-path for project root
+* New aliases
 
 ###v. 0.2.0
 * added pane support (Thanks to Aaron Spiegel)
