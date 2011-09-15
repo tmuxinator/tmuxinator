@@ -4,16 +4,15 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{tmuxinator}
-  s.version = "0.3.4"
+  s.name = "tmuxinator"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Allen Bargi"]
-  s.date = %q{2011-06-20}
-  s.default_executable = %q{tmuxinator}
-  s.description = %q{Create and manage complex tmux sessions easily.}
-  s.email = %q{allen.bargi@gmail.com}
-  s.executables = ["tmuxinator"]
+  s.date = "2011-09-15"
+  s.description = "Create and manage complex tmux sessions easily."
+  s.email = "allen.bargi@gmail.com"
+  s.executables = ["mux", "tmuxinator"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md",
@@ -28,6 +27,7 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "bin/mux",
     "bin/tmuxinator",
     "lib/tmuxinator.rb",
     "lib/tmuxinator/assets/sample.yml",
@@ -39,56 +39,32 @@ Gem::Specification.new do |s|
     "spec/tmuxinator_spec.rb",
     "tmuxinator.gemspec"
   ]
-  s.homepage = %q{http://github.com/aziz/tmuxinator}
+  s.homepage = "http://github.com/aziz/tmuxinator"
   s.licenses = ["MIT"]
-  s.post_install_message = %q{
-  __________________________________________________________
-  ..........................................................
-
-  Thank you for installing tmuxinator
-  Please be sure to to drop a line in your ~/.bashrc file, similar 
-  to RVM if you've used that before:
-
-  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-  
-  also ensure that you've set these variables in your ENV:
-  
-  $EDITOR, $SHELL
-  
-  you can run `tmuxinator doctor` to make sure everything is set.
-  happy tmuxing with tmuxinator!
-
-  ..........................................................
-  __________________________________________________________
-  
-  }
+  s.post_install_message = "\n  __________________________________________________________\n  ..........................................................\n\n  Thank you for installing tmuxinator\n  Please be sure to to drop a line in your ~/.bashrc file, similar \n  to RVM if you've used that before:\n\n  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator\n  \n  also ensure that you've set these variables in your ENV:\n  \n  $EDITOR, $SHELL\n  \n  you can run `tmuxinator doctor` to make sure everything is set.\n  happy tmuxing with tmuxinator!\n\n  ..........................................................\n  __________________________________________________________\n  \n  "
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.2}
-  s.summary = %q{Create and manage complex tmux sessions easily.}
-  s.test_files = [
-    "spec/spec_helper.rb",
-    "spec/tmuxinator_spec.rb"
-  ]
+  s.rubygems_version = "1.8.10"
+  s.summary = "Create and manage complex tmux sessions easily."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rspec>, ["~> 2.1.0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.5.1"])
-      s.add_development_dependency(%q<rcov>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.6.0"])
+      s.add_development_dependency(%q<bundler>, ["~> 1.0.18"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_development_dependency(%q<rcov>, ["~> 0.9.10"])
     else
-      s.add_dependency(%q<rspec>, ["~> 2.1.0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.5.1"])
-      s.add_dependency(%q<rcov>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["~> 2.6.0"])
+      s.add_dependency(%q<bundler>, ["~> 1.0.18"])
+      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_dependency(%q<rcov>, ["~> 0.9.10"])
     end
   else
-    s.add_dependency(%q<rspec>, ["~> 2.1.0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.5.1"])
-    s.add_dependency(%q<rcov>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["~> 2.6.0"])
+    s.add_dependency(%q<bundler>, ["~> 1.0.18"])
+    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+    s.add_dependency(%q<rcov>, ["~> 0.9.10"])
   end
 end
 
