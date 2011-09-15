@@ -31,7 +31,7 @@ module Tmuxinator
     private
 
     def root_dir
-      "#{ENV["HOME"]}/.tmuxinator/"
+      "$HOME/.tmuxinator/"
     end
 
     def process_config!
