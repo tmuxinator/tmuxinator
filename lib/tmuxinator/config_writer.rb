@@ -35,7 +35,11 @@ module Tmuxinator
     end
 
     def process_config!
-      yaml = YAML.load(File.read(file_path))
+      begin 
+        yaml = YAML.load(File.read(file_path))
+      rescue
+        exit!("Invalid YAML file format.")
+      end
 
       exit!("Your configuration file should include some tabs.")        if yaml["tabs"].nil?
       exit!("Your configuration file didn't specify a 'project_root'")  if yaml["project_root"].nil?
