@@ -126,11 +126,11 @@ module Tmuxinator
       alias :v :version
 
       def doctor
-        print "  cheking if tmux is installed ==> "
+        print "  checking if tmux is installed ==> "
         puts system("which tmux > /dev/null") ?  "Yes" : "No"
-        print "  cheking if $EDITOR is set ==> "
+        print "  checking if $EDITOR is set ==> "
         puts ENV['EDITOR'] ? "Yes" : "No"
-        print "  cheking if $SHELL is set ==> "
+        print "  checking if $SHELL is set ==> "
         puts ENV['SHELL'] ? "Yes" : "No"
       end
 
