@@ -6,7 +6,6 @@ Create and manage tmux sessions easily.
 
 ![Screenshot](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
-
 ### Installation
 
     $ gem install tmuxinator
@@ -34,7 +33,7 @@ For command line completion you can source the `tmuxinator_completion` file, whi
 
 ### Usage
 
-#### Create a project ####
+#### Create a project
 
     $ tmuxinator new project_name
 
