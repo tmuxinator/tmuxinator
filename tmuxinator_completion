@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Tmuxinator command line completion.
+
+have=$(command -v tmuxinator)
+
+test -n "$have" &&
+_tmuxinator_commands_complete()
+{
+  COMPREPLY=()
+  if [ $COMP_CWORD = 1 ]; then
+    local commands="open copy delete update_scripts implode list doctor help version"
+    COMPREPLY=(`compgen -W "$commands" -- $2`)
+  fi
+  return 0
+}
+
+_tmuxinator_open_complete()
+{
+  COMPREPLY=()
+  if [ $COMP_CWORD = 1 ]; then
+    local configs=`find ~/.tmuxinator/ -name *.yml | cut -d/ -f5 | sed s:.yml::g`
+    COMPREPLY=(`compgen -W "$configs" -- $2`)
+  fi
+  return 0
+}
+
+alias mux='tmuxinator'
+alias muxo='tmuxinator open'
+
+complete -F _tmuxinator_commands_complete -o default tmuxinator mux
+complete -F _tmuxinator_open_complete -o default muxo
