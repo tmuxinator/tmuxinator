@@ -5,14 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = "tmuxinator"
-  s.version = "0.4.0"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Allen Bargi"]
-  s.date = "2011-09-15"
+  s.date = "2011-10-10"
   s.description = "Create and manage complex tmux sessions easily."
   s.email = "allen.bargi@gmail.com"
-  s.executables = ["mux", "tmuxinator"]
+  s.executables = ["mux", "tmuxinator", "tmuxinator_completion"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md",
@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "bin/mux",
     "bin/tmuxinator",
+    "bin/tmuxinator_completion",
     "lib/tmuxinator.rb",
     "lib/tmuxinator/assets/sample.yml",
     "lib/tmuxinator/assets/tmux_config.tmux",
@@ -43,7 +44,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.post_install_message = "\n  __________________________________________________________\n  ..........................................................\n\n  Thank you for installing tmuxinator\n  Please be sure to to drop a line in your ~/.bashrc file, similar \n  to RVM if you've used that before:\n\n  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator\n  \n  also ensure that you've set these variables in your ENV:\n  \n  $EDITOR, $SHELL\n  \n  you can run `tmuxinator doctor` to make sure everything is set.\n  happy tmuxing with tmuxinator!\n\n  ..........................................................\n  __________________________________________________________\n  \n  "
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.10"
+  s.rubygems_version = "1.8.11"
   s.summary = "Create and manage complex tmux sessions easily."
 
   if s.respond_to? :specification_version then
