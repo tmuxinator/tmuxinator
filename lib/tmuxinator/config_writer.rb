@@ -28,6 +28,10 @@ module Tmuxinator
       "#{root_dir}#{file_name}.tmux" if file_name
     end
 
+    def socket
+      "-L #{@socket_name}" if @socket_name
+    end
+
     private
 
     def root_dir
@@ -50,6 +54,7 @@ module Tmuxinator
       @rvm          = yaml["rvm"]
       @pre          = build_command(yaml["pre"])
       @tabs         = []
+      @socket_name  = yaml['socket_name']
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
@@ -83,7 +88,7 @@ module Tmuxinator
 
     def send_keys cmd, window_number
       return '' unless cmd
-      "tmux send-keys -t #{window(window_number)} #{s cmd} C-m"
+      "tmux #{socket} send-keys -t #{window(window_number)} #{s cmd} C-m"
     end
 
     def build_command(value)
