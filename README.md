@@ -2,16 +2,16 @@
 
 Create and manage tmux sessions easily.
 
-## Example
+### Example
 
 ![Screenshot](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
 
-## Installation
+### Installation
 
     $ gem install tmuxinator
 
-## Editor and Shell
+### Editor and Shell
 
 tmuxinator uses your shell's default editor for opening files.  If you're not sure what that is type:
 
@@ -23,23 +23,18 @@ If you want to change your default editor simple put a line in ~/.bashrc that ch
     export EDITOR='mate -w'
 
 
-## Environment Integration
+### Environment Integration
 
 Add this to your ~/.bashrc (or similar)
 
-[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+    [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 
-For command line completion you can put the `tmuxinator_completion` file somewhere in your `$HOME` path and add the
- following to your `~/.bashrc`
+For command line completion you can source the `tmuxinator_completion` file, which is in the same directory as
+`tmuxinator` binary file. That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
 
-    source ~/bin/completions/tmuxinator_completion
+### Usage
 
-That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
-
-
-## Usage
-
-### Create a project ###
+#### Create a project ####
 
     $ tmuxinator new project_name
 
@@ -74,7 +69,7 @@ If you want to have your own default config, place it into $HOME/.tmuxinator/def
 
 The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running. Multiple commands can be specified, just like for tabs.
 
-## Panes Support
+### Panes Support
 you can define your own panes inside a window likes this:
 
     - window_with_panes
@@ -84,11 +79,11 @@ you can define your own panes inside a window likes this:
           - #empty, will just run plain bash
           - top
 
-## Starting a project
+### Starting a project
 
     $ start_[project_name]
 
-## Shorthand
+### Shorthand
 
 You can also use this shorthand alias for tmuxinator
 
@@ -96,7 +91,7 @@ You can also use this shorthand alias for tmuxinator
 
 This will fire up tmux with all the tabs you configured.
 
-## Other Commands
+### Other Commands
 
     $ tmuxinator copy existing_project new_project
 
@@ -117,7 +112,7 @@ Remove a project
 
 Remove all tmuxinator configs, aliases and scripts. aliased to `i`
 
-	$ tmuxinator doctor
+    $ tmuxinator doctor
 
 Examines your environment and identifies problems with your configuration
 
@@ -131,41 +126,41 @@ shows tmuxinator's version. aliased to `v`
 
 shows tmuxinator's help. aliased to `h`
 
-## Questions? Comments? Feature Request?
+### Questions? Comments? Feature Request?
 
-I would love to hear your feedback on this project! head over to [issues](https://github.com/aziz/tmuxinator/issues) and
-lets
+I would love to hear your feedback on this project! head over to [issues](https://github.com/aziz/tmuxinator/issues)
+section and make a ticket.
 
-## Contributors
+### Contributors
 
 [See the full list of contributors](https://github.com/aziz/tmuxinator/contributors)
 
-## History
-### v. 0.5.0
+### History
+#### v. 0.5.0
 * Added optional socket name support (Thanks to Adam Walters)
 * Added auto completion (Thanks to Jose Pablo Barrantes)
 
-###v. 0.4.0
+####v. 0.4.0
 * Does not crash if given an invalid yaml file format. report it and exit gracefully.
 * Removed clunky scripts & shell aliases (Thanks to Dane O'Connor)
 * Config files are now rendered JIT (Thanks to Dane O'Connor)
 * Can now start sessions from cli (Thanks to Dane O'Connor)
 
-###v. 0.3.0
+####v. 0.3.0
 * Added pre command (Thanks to Ian Yang)
 * Added multiple pre command (Thanks to Bjørn Arild Mæland)
 * Using tmux set default-path for project root
 * New aliases
 
-###v. 0.2.0
+####v. 0.2.0
 * added pane support (Thanks to Aaron Spiegel)
 * RVM support (Thanks to Jay Adkisoon)
 
-## Inspiration and Thanks
+### Inspiration and Thanks
 
 Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator)) and Arthur Chiu's ([Terminitor](http://github.com/achiu/terminitor))
 
-## Contributing to tmuxinator
+### Contributing to tmuxinator
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
@@ -176,6 +171,6 @@ Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is
   otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
-## Copyright
+### Copyright
 
 Copyright (c) 2010--2011 Allen Bargi. See LICENSE.txt for further details.
