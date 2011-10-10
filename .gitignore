@@ -5,6 +5,6 @@ doc
 .bundle
 pkg
 TODO
-
+.rake_tasks~
 # vim swaps
 .*.sw[a-z]

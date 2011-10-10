@@ -1,10 +1,10 @@
 # Tmuxinator
 
-Create and manage tmux sessions easily. Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator)) and Arthur Chiu's ([Terminitor](http://github.com/achiu/terminitor))
+Create and manage tmux sessions easily.
 
 ## Example
 
-![Sample](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
+![Screenshot](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
 
 ## Installation
@@ -29,19 +29,15 @@ Add this to your ~/.bashrc (or similar)
 
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 
-For command line completion you can put the `tmuxinator_completion` file somewhere in your `$HOME` path and add the following to your `~/.bashrc`
+For command line completion you can put the `tmuxinator_completion` file somewhere in your `$HOME` path and add the
+ following to your `~/.bashrc`
 
     source ~/bin/completions/tmuxinator_completion
 
 That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
 
-It will also add a couple of aliases to your environment:
-
-* `mux` or `tmuxinator` + Tab: for commands.
-* `muxo` + Tab: for `.yml` configs.
 
 ## Usage
-
 
 ### Create a project ###
 
@@ -54,6 +50,7 @@ Create or edit your projects with this command, for editing you can also use `tm
 
     project_name: Tmuxinator
     project_root: ~/code/rails_project
+    socket_name: foo # Not needed. Remove to use default socket
     rvm: 1.9.2@rails_project
     pre: sudo /etc/rc.d/mysqld start
     tabs:
@@ -86,7 +83,6 @@ you can define your own panes inside a window likes this:
           - vim
           - #empty, will just run plain bash
           - top
-
 
 ## Starting a project
 
@@ -137,22 +133,18 @@ shows tmuxinator's help. aliased to `h`
 
 ## Questions? Comments? Feature Request?
 
-I would love to hear your feedback on this project!  Send me a message!
+I would love to hear your feedback on this project! head over to [issues](https://github.com/aziz/tmuxinator/issues) and
+lets
 
-## Contributors:
+## Contributors
 
-* [Aaron Spiegel](https://github.com/spiegela)
-* [Jay Adkisson](https://github.com/jayferd)
-* [Chris Lerum](https://github.com/chrislerum)
-* [David Bolton](https://github.com/lightningdb)
-* [Thibault Duplessis](https://github.com/ornicar)
-* [Ian Yang](https://github.com/doitian)
-* [Bjørn Arild Mæland](https://github.com/bmaland)
-* [Dane O'Connor](https://github.com/thedeeno)
-* [Eric Marden](https://github.com/xentek)
-
+[See the full list of contributors](https://github.com/aziz/tmuxinator/contributors)
 
 ## History
+### v. 0.5.0
+* Added optional socket name support (Thanks to Adam Walters)
+* Added auto completion (Thanks to Jose Pablo Barrantes)
+
 ###v. 0.4.0
 * Does not crash if given an invalid yaml file format. report it and exit gracefully.
 * Removed clunky scripts & shell aliases (Thanks to Dane O'Connor)
@@ -169,6 +161,10 @@ I would love to hear your feedback on this project!  Send me a message!
 * added pane support (Thanks to Aaron Spiegel)
 * RVM support (Thanks to Jay Adkisoon)
 
+## Inspiration and Thanks
+
+Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator)) and Arthur Chiu's ([Terminitor](http://github.com/achiu/terminitor))
+
 ## Contributing to tmuxinator
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
@@ -177,8 +173,9 @@ I would love to hear your feedback on this project!  Send me a message!
 * Start a feature/bugfix branch
 * Commit and push until you are happy with your contribution
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is
+  otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
 ## Copyright
 
-Copyright (c) 2010 Allen Bargi. See LICENSE.txt for further details.
+Copyright (c) 2010--2011 Allen Bargi. See LICENSE.txt for further details.

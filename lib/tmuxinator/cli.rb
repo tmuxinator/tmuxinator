@@ -35,11 +35,11 @@ module Tmuxinator
   list [-v]
       list all existing projects
   doctor
-	  look for problems in your configuration
+    look for problems in your configuration
   help
       shows this help document
   version
-
+      shows tmuxinator version number
 }
       end
       alias :help :usage
@@ -52,7 +52,7 @@ module Tmuxinator
         @name = args.shift
         config_path = "#{root_dir}#{@name}.yml"
         unless File.exists?(config_path)
-          template = File.exists?(user_config) ? user_config : "#{File.dirname(__FILE__)}/assets/sample.yml"
+          template = File.exists?(user_config) ? user_config : sample_config
           erb      = ERB.new(File.read(template)).result(binding)
           tmp      = File.open(config_path, 'w') {|f| f.write(erb) }
         end
@@ -155,6 +155,8 @@ module Tmuxinator
       private #==============================
 
       def root_dir
+        # create ~/.tmuxinator directory if it doesn't exist
+        Dir.mkdir("#{ENV["HOME"]}/.tmuxinator/") unless File.directory?(File.expand_path("~/.tmuxinator"))
         "#{ENV["HOME"]}/.tmuxinator/"
       end
 
