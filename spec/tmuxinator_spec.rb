@@ -9,6 +9,7 @@ describe Tmuxinator::ConfigWriter do
     its(:tabs){ should be_nil }
     its(:config_path){ should be_nil }
     its(:pre){ should be_nil }
+    its(:socket){ should be_nil }
   end
 
   context "While Defining the filename on init" do
@@ -29,6 +30,7 @@ describe Tmuxinator::ConfigWriter do
     its(:rvm){ should eql '1.9.2@rails_project' }
     its(:tabs){ should be_an Array  }
     its(:pre){ should eql 'rvm use 1.9.2@rails_project && sudo /etc/rc.d/mysqld start' }
+    its(:socket){ should eql '-L foo' }
 
     let(:first_tab){ subject.tabs[0] }
 
