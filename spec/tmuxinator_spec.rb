@@ -10,6 +10,13 @@ describe Tmuxinator::ConfigWriter do
     its(:config_path){ should be_nil }
     its(:pre){ should be_nil }
     its(:socket){ should be_nil }
+    its(:rbenv){ should be_nil }
+  end
+
+  context "When :rvm and :rbenv are both defined in the config file" do
+    it "should exit with an error message" do
+      lambda { Tmuxinator::ConfigWriter.new(INVALID_CONFIG) }.should raise_error SystemExit
+    end
   end
 
   context "While Defining the filename on init" do
@@ -59,4 +66,25 @@ describe Tmuxinator::ConfigWriter do
     specify{ third_tab.panes.should be_an Array }
     specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
   end
+
+  context "when using a configuration that includes rbenv" do
+    before do
+      subject.file_path = RBENV_SAMPLE_CONFIG
+    end
+
+    its(:rbenv){ should eql '1.9.2-p290' }
+    its(:pre){ should eql 'rbenv shell 1.9.2-p290 && sudo /etc/rc.d/mysqld start' }
+
+    let(:first_tab){ subject.tabs[0] }
+
+    it "should prepend each pane with the rvm string" do
+      first_tab.panes.map{|p| p.split(/ && /)[0] }.should eql ["rbenv shell 1.9.2-p290"] * 3
+    end
+
+    let(:second_tab){ subject.tabs[1] }
+    specify{ second_tab.name.should eql "shell" }
+    specify{ second_tab.command.should eql "rbenv shell 1.9.2-p290 && git pull"}
+
+  end
+
 end
