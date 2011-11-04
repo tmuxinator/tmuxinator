@@ -67,6 +67,10 @@ module Tmuxinator
             build_command(pane)
           end
           t.layout = value["layout"]
+          str = ( ( value["pre"] if value["pre"] && value["pre"].kind_of?(Array) ) || ([value["pre"]] if value["pre"] && value["pre"].kind_of?(String)) || ['']).map do |cmds|
+            build_command(cmds, false)
+          end.join ' && '
+          t.pre = build_command(str)
         else
           t.command = build_command(value)
         end
@@ -91,12 +95,11 @@ module Tmuxinator
       "tmux #{socket} send-keys -t #{window(window_number)} #{s cmd} C-m"
     end
 
-    def build_command(value)
+    def build_command(value, rvm_prepend=true)
       commands = [value].flatten.compact.reject { |c| c.strip.empty? }
-      if @rvm
+      if @rvm && rvm_prepend
         commands.unshift "rvm use #{@rvm}"
       end
-
       commands.join ' && '
     end
   end
