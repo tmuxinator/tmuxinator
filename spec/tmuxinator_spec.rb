@@ -38,6 +38,7 @@ describe Tmuxinator::ConfigWriter do
     specify{ first_tab.name.should eql "editor" }
     specify{ first_tab.layout.should eql "main-vertical" }
     specify{ first_tab.panes.should be_an Array }
+    specify{ first_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.  Before each pane command!'" }
 
     it "should prepend each pane with the rvm string" do
       first_tab.panes.map{|p| p.split(/ && /)[0] }.should eql ["rvm use 1.9.2@rails_project"] * 3
@@ -50,5 +51,12 @@ describe Tmuxinator::ConfigWriter do
     let(:second_tab){ subject.tabs[1] }
     specify{ second_tab.name.should eql "shell" }
     specify{ second_tab.command.should eql "rvm use 1.9.2@rails_project && git pull"}
+
+    let(:third_tab){ subject.tabs[2] }
+    specify{ third_tab.should be_an OpenStruct }
+    specify{ third_tab.name.should eql "guard" }
+    specify{ third_tab.layout.should eql "tiled" }
+    specify{ third_tab.panes.should be_an Array }
+    specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
   end
 end
