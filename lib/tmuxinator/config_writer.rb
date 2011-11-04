@@ -1,7 +1,7 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :rbenv
 
     include Tmuxinator::Helper
 
@@ -49,9 +49,14 @@ module Tmuxinator
       exit!("Your configuration file didn't specify a 'project_root'")  if yaml["project_root"].nil?
       exit!("Your configuration file didn't specify a 'project_name'")  if yaml["project_name"].nil?
 
+      if (yaml.has_key?("rvm") && yaml.has_key?("rbenv"))
+        exit!("Your configuration file specifies both 'rvm' and 'rbenv' - please specify either but not both") 
+      end
+
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
+      @rbenv        = yaml["rbenv"]
       @pre          = build_command(yaml["pre"])
       @tabs         = []
       @socket_name  = yaml['socket_name']
@@ -95,8 +100,9 @@ module Tmuxinator
       commands = [value].flatten.compact.reject { |c| c.strip.empty? }
       if @rvm
         commands.unshift "rvm use #{@rvm}"
+      elsif @rbenv
+        commands.unshift "rbenv shell #{@rbenv}"
       end
-
       commands.join ' && '
     end
   end
