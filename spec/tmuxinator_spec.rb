@@ -50,5 +50,13 @@ describe Tmuxinator::ConfigWriter do
     let(:second_tab){ subject.tabs[1] }
     specify{ second_tab.name.should eql "shell" }
     specify{ second_tab.command.should eql "rvm use 1.9.2@rails_project && git pull"}
+
+    context "When socket path has been defined" do
+      before do
+        subject.socket_path = "/tmp/tmux/foo"
+      end
+
+      its(:socket) {should eql '-S /tmp/tmux/foo'}
+    end
   end
 end

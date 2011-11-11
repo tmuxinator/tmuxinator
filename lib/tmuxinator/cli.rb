@@ -17,8 +17,8 @@ module Tmuxinator
       # print the usage string, this is a fall through method.
       def usage
         puts %{
-  Usage: tmuxinator ACTION [Arg] 
-  or 
+  Usage: tmuxinator ACTION [Arg]
+  or
   tmuxinator [project_name]
 
   ACTIONS:

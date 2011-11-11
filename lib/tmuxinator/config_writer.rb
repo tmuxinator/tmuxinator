@@ -1,7 +1,7 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :socket_name, :socket_path
 
     include Tmuxinator::Helper
 
@@ -29,6 +29,7 @@ module Tmuxinator
     end
 
     def socket
+      return "-S #{@socket_path}" if @socket_path
       "-L #{@socket_name}" if @socket_name
     end
 
@@ -39,7 +40,7 @@ module Tmuxinator
     end
 
     def process_config!
-      begin 
+      begin
         yaml = YAML.load(File.read(file_path))
       rescue
         exit!("Invalid YAML file format.")
@@ -55,6 +56,7 @@ module Tmuxinator
       @pre          = build_command(yaml["pre"])
       @tabs         = []
       @socket_name  = yaml['socket_name']
+      @socket_path  = yaml['socket_path']
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
