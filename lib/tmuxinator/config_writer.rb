@@ -1,7 +1,9 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :settings, :hotkeys, :cli_args
+
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs,
+                  :pre, :socket_name, :socket_path, :settings, :hotkeys, :cli_args
 
     include Tmuxinator::Helper
 
@@ -29,6 +31,7 @@ module Tmuxinator
     end
 
     def socket
+      return "-S #{@socket_path}" if @socket_path
       "-L #{@socket_name}" if @socket_name
     end
 
@@ -55,8 +58,9 @@ module Tmuxinator
       @pre          = build_command(yaml["pre"])
       @tabs         = []
       @socket_name  = yaml['socket_name']
+      @socket_path  = yaml['socket_path']
       @settings     = ensure_list(yaml['settings'])
-      @hotkeys     = ensure_list(yaml['hotkeys'])
+      @hotkeys      = ensure_list(yaml['hotkeys'])
       @cli_args     = yaml["cli_args"]
 
       yaml["tabs"].each do |tab|

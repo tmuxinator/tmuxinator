@@ -60,5 +60,12 @@ describe Tmuxinator::ConfigWriter do
     specify{ third_tab.layout.should eql "tiled" }
     specify{ third_tab.panes.should be_an Array }
     specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
+    context "When socket path has been defined" do
+      before do
+        subject.socket_path = "/tmp/tmux/foo"
+      end
+
+      its(:socket) {should eql '-S /tmp/tmux/foo'}
+    end
   end
 end
