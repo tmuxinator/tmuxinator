@@ -11,6 +11,11 @@ describe Tmuxinator::ConfigWriter do
     its(:pre){ should be_nil }
     its(:socket){ should be_nil }
     its(:rbenv){ should be_nil }
+    its(:server_options){ should be_nil }
+    its(:global_session_options){ should be_nil }
+    its(:global_window_options){ should be_nil }
+    its(:session_options){ should be_nil }
+    its(:window_options){ should be_nil }
   end
 
   context "When :rvm and :rbenv are both defined in the config file" do
@@ -25,7 +30,7 @@ describe Tmuxinator::ConfigWriter do
     its(:file_name){ should eql "sample" }
   end
 
-  context "After filename has been defined" do
+  context "After filename has been defined without options" do
     before do
       subject.file_path = SAMPLE_CONFIG
     end
@@ -38,6 +43,11 @@ describe Tmuxinator::ConfigWriter do
     its(:tabs){ should be_an Array  }
     its(:pre){ should eql 'rvm use 1.9.2@rails_project && sudo /etc/rc.d/mysqld start' }
     its(:socket){ should eql '-L foo' }
+    its(:global_session_options){ should be_a NilClass  }
+    its(:global_window_options){ should be_a NilClass  }
+    its(:server_options){ should be_a NilClass  }
+    its(:session_options){ should be_an NilClass  }
+    its(:window_options){ should be_an NilClass  }
 
     let(:first_tab){ subject.tabs[0] }
 
@@ -86,5 +96,89 @@ describe Tmuxinator::ConfigWriter do
     specify{ second_tab.command.should eql "rbenv shell 1.9.2-p290 && git pull"}
 
   end
+
+  describe "A configuration that uses options" do
+    before do
+      subject.file_path = RBENV_SAMPLE_CONFIG
+    end
+
+    its(:server_options){ should be_a Hash  }
+    its(:global_session_options){ should be_a Hash  }
+    its(:global_window_options){ should be_a Hash  }
+    its(:session_options){ should be_an Hash  }
+    its(:window_options){ should be_an Hash  }
+
+
+    context "when configuring the tmux server" do
+      before do
+        subject.file_path = RBENV_SAMPLE_CONFIG
+      end
+
+      let(:first_option){ subject.server_options.shift }
+      specify{ first_option.should be_an Array }
+      specify{ first_option.first.should eql "opt-name-1" }
+      specify{ first_option.last.should eql "value 1" }
+
+    end
+    context "when configuring sessions globally" do
+      before do
+        subject.file_path = RBENV_SAMPLE_CONFIG
+      end
+
+      let(:first_option){ subject.global_session_options.shift }
+      specify{ first_option.should be_an Array }
+      specify{ first_option.first.should eql "opt-name-1" }
+      specify{ first_option.last.should eql "value 1" }
+
+    end
+
+    context "when configuring windows globally" do
+      before do
+        subject.file_path = RBENV_SAMPLE_CONFIG
+      end
+
+      let(:first_option){ subject.global_window_options.shift }
+      specify{ first_option.should be_an Array }
+      specify{ first_option.first.should eql "opt-name-1" }
+      specify{ first_option.last.should eql "value 1" }
+
+    end
+    context "when configuring windows globally" do
+      before do
+        subject.file_path = RBENV_SAMPLE_CONFIG
+      end
+
+      let(:first_option){ subject.global_window_options.shift }
+      specify{ first_option.should be_an Array }
+      specify{ first_option.first.should eql "opt-name-1" }
+      specify{ first_option.last.should eql "value 1" }
+    end
+
+    context "when configuring specific sessions" do
+        before do
+          subject.file_path = RBENV_SAMPLE_CONFIG
+        end
+
+        let(:first_option){ subject.session_options.shift }
+        specify{ first_option.should be_an Array }
+        specify{ first_option.first.should eql "Tmuxinator" }
+        specify{ first_option.last.should eql({"opt-name-1"=>"value 1", "opt-name-2"=>"val2"}) }
+
+    end
+
+    context "when configuring specific windows" do
+      before do
+        subject.file_path = RBENV_SAMPLE_CONFIG
+      end
+
+      let(:first_option){ subject.window_options.shift }
+      specify{ first_option.should be_an Array }
+      specify{ first_option.first.should eql "editor" }
+      specify{ first_option.last.should eql({"opt-name-1"=>"value 1", "opt-name-2"=>"val2"}) }
+
+    end
+
+  end
+
 
 end

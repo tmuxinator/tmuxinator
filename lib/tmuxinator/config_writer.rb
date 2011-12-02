@@ -1,7 +1,10 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :rbenv
+    attr_accessor :file_name, :file_path, :pre, :project_name, :project_root,
+                  :rbenv, :rvm, :tabs, :global_session_options,
+                  :global_window_options, :server_options, :session_options,
+                  :window_options
 
     include Tmuxinator::Helper
 
@@ -61,6 +64,12 @@ module Tmuxinator
       @tabs         = []
       @socket_name  = yaml['socket_name']
 
+      @server_options = parse_options(yaml['server_options'])
+      @global_session_options = parse_options(yaml['global_session_options'])
+      @global_window_options = parse_options(yaml['global_window_options'])
+      @session_options = parse_named_options(yaml['session_options'])
+      @window_options = parse_named_options(yaml['window_options'])
+
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
         t.name  = tab.keys.first
@@ -80,6 +89,21 @@ module Tmuxinator
           t.command = build_command(value)
         end
         @tabs << t
+      end
+    end
+
+    def parse_options(yaml, defaults = {})
+      unless yaml.nil? || yaml.empty?
+        yaml.inject(defaults) { |m, h| m.update(h); m }
+      end
+    end
+
+    def parse_named_options(yaml, defaults = Hash.new({}))
+      if yaml.is_a?(Array)
+        yaml.inject(defaults) do |mm, h|
+          h.each { |k, v| mm[k]=parse_options(v) } if h.is_a?(Hash)
+          mm
+        end
       end
     end
 
@@ -109,6 +133,31 @@ module Tmuxinator
       end
       commands.join ' && '
     end
+
+    def server_option(name, value)
+      "tmux #{socket} set-option -s #{s name} #{value}"
+    end
+
+    def global_session_option(name, value)
+      "tmux #{socket} set-option -g -t #{s @project_name} #{name} #{value}"
+    end
+
+    def global_window_option(name, value)
+      "tmux #{socket} set-window-option -g #{name} #{value}"
+    end
+
+    def session_option(name, hash)
+      hash.each do |k, v|
+        "tmux #{socket} set-option -t #{s name} #{k} #{v}"
+      end
+    end
+
+    def window_option(name, hash)
+      hash.each do |k, v|
+        "tmux #{socket} set-window-option -t #{s name} #{k} #{v}"
+      end
+    end
+
   end
 
 end

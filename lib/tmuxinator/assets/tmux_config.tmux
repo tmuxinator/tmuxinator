@@ -5,7 +5,46 @@ if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
 <%= @pre.kind_of?(Array) ? @pre.join(" && ") : @pre %>
 env TMUX= tmux <%= socket %> start-server \; set-option -g base-index 1 \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
+
+# set up tabs and panes
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
+
+# Set up server options
+<% unless @global_session_options.nil? %>
+<%   @server_options.each do |k, v| %>
+<%=    set_server_option(k, v) %>
+<%   end %>
+<% end %>
+
+# Set up global session options
+<% unless @global_session_options.nil? %>
+<%   @global_session_options.each do |k, v| %>
+<%=    set_global_session_option(k, v) %>
+<%   end %>
+<% end %>
+
+# Set up global window options
+<% unless @global_window_options.nil? %>
+<%   @global_window_options.each do |k, v| %>
+<%=    set_global_window_option(k, v) %>
+<%   end %>
+<% end %>
+
+# Set up session options
+<% unless @session_options.nil? %>
+<%   @session_options.each do |k, v| %>
+#   session "<%= k %>"
+<%=    set_session_option(k, v) %>
+<%   end %>
+<% end %>
+
+# Set up window options
+<% unless @window_options.nil? %>
+<%   @window_options.each do |k, v| %>
+#   window "<%= k %>"
+<%=    set_window_option(k, v) %>
+<%   end %>
+<% end %>
 
 <% @tabs[1..-1].each_with_index do |tab, i| %>
 tmux <%= socket %> new-window -t <%= window(i+2) %> -n <%=s tab.name %>
