@@ -147,7 +147,7 @@ module Tmuxinator
       def debug *args
         config = parse_configuration(args)
         # writeout the tmux script to ttmux.sh (ttmux is not a typo)
-        tmux_script = File.join(root_dir, 'ttmux.sh')
+        tmux_script = File.join(root_dir, "#{@project_name}_ttmux.sh")
         File.open(tmux_script, 'w') { |io| io.write(config) }
         # replace current proccess by running compiled tmux config
         exec(config)
@@ -156,8 +156,8 @@ module Tmuxinator
       def parse_configuration(args)
         exit!("You must specify a name for the new project") unless args.size > 0
         puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
-        project_name = args.shift
-        config_path = "#{root_dir}#{project_name}.yml"
+        @project_name = args.shift
+        config_path = "#{root_dir}#{@project_name}.yml"
         config = Tmuxinator::ConfigWriter.new(config_path).render
       end
 
