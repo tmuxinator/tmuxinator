@@ -1,0 +1,44 @@
+# ~/.tmuxinator/<%= @name %>.yml
+# you can make as many tabs as you wish...
+
+project_name: Tmuxinator
+project_root: ~/code/rails_project
+socket_name: foo # Not needed.  Remove to use default socket
+rbenv: "1.9.2-p290"
+pre: sudo /etc/rc.d/mysqld start
+server_options:
+  - opt-name-1: value 1 # See
+  - opt-name-2: val2
+global_session_options:
+  - opt-name-1: value 1
+  - opt-name-2: val2
+global_window_options:
+  - opt-name-1: value 1
+  - opt-name-2: val2
+session_options:
+  - Tmuxinator:
+      - opt-name-1: value 1
+      - opt-name-2: val2
+window_options:
+  - editor:
+      - opt-name-1: value 1
+      - opt-name-2: val2
+global_session_environment:
+  - ENV_VAR_A: value1
+session_environment:
+  - Tmuxinator:
+      - ENV_VAR_A: value1
+tabs:
+  - editor:
+      layout: main-vertical
+      panes:
+        - vim
+        - #empty, will just run plain bash
+        - top
+  - shell: git pull
+  - database: rails db
+  - server: rails s
+  - logs: tail -f logs/development.log
+  - console: rails c
+  - capistrano:
+  - server: ssh me@myhost

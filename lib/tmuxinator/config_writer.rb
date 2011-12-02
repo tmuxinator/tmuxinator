@@ -1,7 +1,11 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre
+    attr_accessor :debug, :file_name, :file_path, :global_session_environment,
+                  :pre, :project_name, :project_root,
+                  :rbenv, :rvm, :session_environment, :tabs, :global_session_options,
+                  :global_window_options, :server_options, :session_options,
+                  :window_options
 
     include Tmuxinator::Helper
 
@@ -49,12 +53,25 @@ module Tmuxinator
       exit!("Your configuration file didn't specify a 'project_root'")  if yaml["project_root"].nil?
       exit!("Your configuration file didn't specify a 'project_name'")  if yaml["project_name"].nil?
 
+      if (yaml.has_key?("rvm") && yaml.has_key?("rbenv"))
+        exit!("Your configuration file specifies both 'rvm' and 'rbenv' - please specify either but not both") 
+      end
+
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
+      @rbenv        = yaml["rbenv"]
       @pre          = build_command(yaml["pre"])
       @tabs         = []
       @socket_name  = yaml['socket_name']
+
+      @server_options             = parse_options(yaml['server_options'])
+      @global_session_options     = parse_options(yaml['global_session_options'])
+      @global_window_options      = parse_options(yaml['global_window_options'])
+      @session_options            = parse_named_options(yaml['session_options'])
+      @window_options             = parse_named_options(yaml['window_options'])
+      @global_session_environment = parse_options(yaml['global_session_environment'])
+      @session_environment        = parse_named_options(yaml['session_environment'])
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
@@ -75,6 +92,21 @@ module Tmuxinator
           t.command = build_command(value)
         end
         @tabs << t
+      end
+    end
+
+    def parse_options(yaml, defaults = {})
+      unless yaml.nil? || yaml.empty?
+        yaml.inject(defaults) { |m, h| m.update(h); m }
+      end
+    end
+
+    def parse_named_options(yaml, defaults = Hash.new({}))
+      if yaml.is_a?(Array)
+        yaml.inject(defaults) do |mm, h|
+          h.each { |k, v| mm[k]=parse_options(v) } if h.is_a?(Hash)
+          mm
+        end
       end
     end
 
@@ -99,9 +131,46 @@ module Tmuxinator
       commands = [value].flatten.compact.reject { |c| c.strip.empty? }
       if @rvm && rvm_prepend
         commands.unshift "rvm use #{@rvm}"
+      elsif @rbenv
+        commands.unshift "rbenv shell #{@rbenv}"
       end
       commands.join ' && '
     end
+
+    def set_server_option(name, value)
+      "tmux #{socket} set-option -s #{s name} #{value}"
+    end
+
+    def set_global_session_option(name, value)
+      "tmux #{socket} set-option -g -t #{s @project_name} #{name} #{value}"
+    end
+
+    def set_global_window_option(name, value)
+      "tmux #{socket} set-window-option -g #{name} #{value}"
+    end
+
+    def set_session_option(name, hash)
+      hash.each do |k, v|
+        "tmux #{socket} set-option -t #{s name} #{k} #{v}"
+      end
+    end
+
+    def set_window_option(name, hash)
+      hash.each do |k, v|
+        "tmux #{socket} set-window-option -t #{s name} #{k} #{v}"
+      end
+    end
+
+    def set_global_session_environment(name, value)
+      "tmux #{socket} set-environment -g -t #{s @project_name} #{name} #{value}"
+    end
+
+    def set_session_environment(name, hash)
+      hash.each do |k, v|
+        "tmux #{socket} set-environment -t #{s name} #{k} #{s v}"
+      end
+    end
+
   end
 
 end

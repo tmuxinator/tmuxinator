@@ -24,6 +24,8 @@ module Tmuxinator
   ACTIONS:
   start [project_name]
       start a tmux session using project's tmuxinator config
+  debug [project_name]
+      start a tmux session using project's tmuxinator config and echo the commands used
   open [project_name]
       create a new project file and open it in your editor
   copy [source_project] [new_project]
@@ -136,15 +138,28 @@ module Tmuxinator
 
       # build script and run it
       def start *args
-        exit!("You must specify a name for the new project") unless args.size > 0
-        puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
-        project_name = args.shift
-        config_path = "#{root_dir}#{project_name}.yml"
-        config = Tmuxinator::ConfigWriter.new(config_path).render
+        config = parse_configuration(args)
         # replace current proccess by running compiled tmux config
         exec(config)
       end
       alias :s :start
+
+      def debug *args
+        config = parse_configuration(args)
+        # writeout the tmux script to ttmux.sh (ttmux is not a typo)
+        tmux_script = File.join(root_dir, "#{@project_name}_ttmux.sh")
+        File.open(tmux_script, 'w') { |io| io.write(config) }
+        # replace current proccess by running compiled tmux config
+        exec(config)
+      end
+
+      def parse_configuration(args)
+        exit!("You must specify a name for the new project") unless args.size > 0
+        puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
+        @project_name = args.shift
+        config_path = "#{root_dir}#{@project_name}.yml"
+        config = Tmuxinator::ConfigWriter.new(config_path).render
+      end
 
       def method_missing method, *args, &block
         start method if File.exists?("#{root_dir}#{method}.yml")
