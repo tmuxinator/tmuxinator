@@ -7,22 +7,27 @@ socket_name: foo # Not needed.  Remove to use default socket
 rbenv: "1.9.2-p290"
 pre: sudo /etc/rc.d/mysqld start
 server_options:
- - opt-name-1: value 1 # See
- - opt-name-2: val2
+  - opt-name-1: value 1 # See
+  - opt-name-2: val2
 global_session_options:
- - opt-name-1: value 1
- - opt-name-2: val2
+  - opt-name-1: value 1
+  - opt-name-2: val2
 global_window_options:
- - opt-name-1: value 1
- - opt-name-2: val2
+  - opt-name-1: value 1
+  - opt-name-2: val2
 session_options:
- - Tmuxinator:
-     - opt-name-1: value 1
-     - opt-name-2: val2
+  - Tmuxinator:
+      - opt-name-1: value 1
+      - opt-name-2: val2
 window_options:
- - editor:
-     - opt-name-1: value 1
-     - opt-name-2: val2
+  - editor:
+      - opt-name-1: value 1
+      - opt-name-2: val2
+global_session_environment:
+  - ENV_VAR_A: value1
+session_environment:
+  - Tmuxinator:
+      - ENV_VAR_A: value1
 tabs:
   - editor:
       layout: main-vertical

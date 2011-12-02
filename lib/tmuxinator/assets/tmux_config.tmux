@@ -10,7 +10,7 @@ env TMUX= tmux <%= socket %> start-server \; set-option -g base-index 1 \; new-s
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
 # Set up server options
-<% unless @global_session_options.nil? %>
+<% unless @server_options.nil? %>
 <%   @server_options.each do |k, v| %>
 <%=    set_server_option(k, v) %>
 <%   end %>
@@ -43,6 +43,21 @@ tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project
 <%   @window_options.each do |k, v| %>
 #   window "<%= k %>"
 <%=    set_window_option(k, v) %>
+<%   end %>
+<% end %>
+
+# Set up global session environment
+<% unless @global_session_environment.nil? %>
+<%   @global_session_environment.each do |k, v| %>
+<%=    set_global_session_environment(k, v) %>
+<%   end %>
+<% end %>
+
+# Set up session environment
+<% unless @session_environment.nil? %>
+<%   @session_environment.each do |k, v| %>
+#   session "<%= k %>"
+<%=    set_session_environment(k, v) %>
 <%   end %>
 <% end %>
 

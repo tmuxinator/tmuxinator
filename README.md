@@ -33,6 +33,8 @@ For command line completion you can source the `tmuxinator_completion` file, whi
 
 ### Usage
 
+Please read the section 'Warnings and Caveats' at the end of the Usage section
+
 #### Create a project
 
     $ tmuxinator new project_name
@@ -124,6 +126,15 @@ shows tmuxinator's version. aliased to `v`
     $ tmuxinator help
 
 shows tmuxinator's help. aliased to `h`
+
+### Warnings and Caveats
+
+The environmant variable TERM *must* be set to screen or one of its derivatives.
+Please ensure that TERM is not reset in files that are loaded by your shell, e.g.
+`~/.bashrc`, `~/.bash_profile`, etc.  While you can pass in the tmux option
+`default-term`, the TERM environment variable in your shell must be correctly
+set.  The reason is this is often accessed by application running within a tmux
+session.
 
 ### Questions? Comments? Feature Request?
 

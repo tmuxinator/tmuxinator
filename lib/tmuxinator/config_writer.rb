@@ -1,8 +1,9 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :pre, :project_name, :project_root,
-                  :rbenv, :rvm, :tabs, :global_session_options,
+    attr_accessor :debug, :file_name, :file_path, :global_session_environment,
+                  :pre, :project_name, :project_root,
+                  :rbenv, :rvm, :session_environment, :tabs, :global_session_options,
                   :global_window_options, :server_options, :session_options,
                   :window_options
 
@@ -64,11 +65,13 @@ module Tmuxinator
       @tabs         = []
       @socket_name  = yaml['socket_name']
 
-      @server_options = parse_options(yaml['server_options'])
-      @global_session_options = parse_options(yaml['global_session_options'])
-      @global_window_options = parse_options(yaml['global_window_options'])
-      @session_options = parse_named_options(yaml['session_options'])
-      @window_options = parse_named_options(yaml['window_options'])
+      @server_options             = parse_options(yaml['server_options'])
+      @global_session_options     = parse_options(yaml['global_session_options'])
+      @global_window_options      = parse_options(yaml['global_window_options'])
+      @session_options            = parse_named_options(yaml['session_options'])
+      @window_options             = parse_named_options(yaml['window_options'])
+      @global_session_environment = parse_options(yaml['global_session_environment'])
+      @session_environment        = parse_named_options(yaml['session_environment'])
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
@@ -134,27 +137,37 @@ module Tmuxinator
       commands.join ' && '
     end
 
-    def server_option(name, value)
+    def set_server_option(name, value)
       "tmux #{socket} set-option -s #{s name} #{value}"
     end
 
-    def global_session_option(name, value)
+    def set_global_session_option(name, value)
       "tmux #{socket} set-option -g -t #{s @project_name} #{name} #{value}"
     end
 
-    def global_window_option(name, value)
+    def set_global_window_option(name, value)
       "tmux #{socket} set-window-option -g #{name} #{value}"
     end
 
-    def session_option(name, hash)
+    def set_session_option(name, hash)
       hash.each do |k, v|
         "tmux #{socket} set-option -t #{s name} #{k} #{v}"
       end
     end
 
-    def window_option(name, hash)
+    def set_window_option(name, hash)
       hash.each do |k, v|
         "tmux #{socket} set-window-option -t #{s name} #{k} #{v}"
+      end
+    end
+
+    def set_global_session_environment(name, value)
+      "tmux #{socket} set-environment -g -t #{s @project_name} #{name} #{value}"
+    end
+
+    def set_session_environment(name, hash)
+      hash.each do |k, v|
+        "tmux #{socket} set-environment -t #{s name} #{k} #{v}"
       end
     end
 

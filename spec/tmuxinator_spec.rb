@@ -48,6 +48,7 @@ describe Tmuxinator::ConfigWriter do
     its(:server_options){ should be_a NilClass  }
     its(:session_options){ should be_an NilClass  }
     its(:window_options){ should be_an NilClass  }
+    its(:session_environment){ should be_an NilClass  }
 
     let(:first_tab){ subject.tabs[0] }
 
@@ -107,6 +108,7 @@ describe Tmuxinator::ConfigWriter do
     its(:global_window_options){ should be_a Hash  }
     its(:session_options){ should be_an Hash  }
     its(:window_options){ should be_an Hash  }
+    its(:session_environment){ should be_an Hash  }
 
 
     context "when configuring the tmux server" do
@@ -175,6 +177,30 @@ describe Tmuxinator::ConfigWriter do
       specify{ first_option.should be_an Array }
       specify{ first_option.first.should eql "editor" }
       specify{ first_option.last.should eql({"opt-name-1"=>"value 1", "opt-name-2"=>"val2"}) }
+
+    end
+
+    context "when configuring global session environment variables" do
+      before do
+        subject.file_path = RBENV_SAMPLE_CONFIG
+      end
+
+      let(:first_env_var){ subject.global_session_environment.shift }
+      specify{ first_env_var.should be_an Array }
+      specify{ first_env_var.first.should eql "ENV_VAR_A" }
+      specify{ first_env_var.last.should eql "value1" }
+
+    end
+
+    context "when configuring specific session environments" do
+      before do
+        subject.file_path = RBENV_SAMPLE_CONFIG
+      end
+
+      let(:first_env_var){ subject.session_environment.shift }
+      specify{ first_env_var.should be_an Array }
+      specify{ first_env_var.first.should eql "Tmuxinator" }
+      specify{ first_env_var.last.should eql({"ENV_VAR_A"=>"value1"}) }
 
     end
 
