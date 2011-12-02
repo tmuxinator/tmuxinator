@@ -167,7 +167,7 @@ module Tmuxinator
 
     def set_session_environment(name, hash)
       hash.each do |k, v|
-        "tmux #{socket} set-environment -t #{s name} #{k} #{v}"
+        "tmux #{socket} set-environment -t #{s name} #{k} #{s v}"
       end
     end
 

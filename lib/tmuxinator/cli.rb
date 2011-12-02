@@ -146,7 +146,9 @@ module Tmuxinator
 
       def debug *args
         config = parse_configuration(args)
-        puts config
+        # writeout the tmux script to ttmux.sh (ttmux is not a typo)
+        tmux_script = File.join(root_dir, 'ttmux.sh')
+        File.open(tmux_script, 'w') { |io| io.write(config) }
         # replace current proccess by running compiled tmux config
         exec(config)
       end
