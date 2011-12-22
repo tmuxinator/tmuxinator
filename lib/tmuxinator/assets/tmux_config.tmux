@@ -7,6 +7,10 @@ cd <%= @project_root || "." %>
 env TMUX= tmux <%= socket %> start-server \; set-option -g base-index 1 \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
+<% settings.each do |setting| %>
+tmux <%= socket %> set-option -t <%=s @project_name%> <%= setting %>
+<% end %>
+
 <% @tabs[1..-1].each_with_index do |tab, i| %>
 tmux <%= socket %> new-window -t <%= window(i+2) %> -n <%=s tab.name %>
 <% end %>

@@ -1,7 +1,7 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :settings
 
     include Tmuxinator::Helper
 
@@ -55,6 +55,7 @@ module Tmuxinator
       @pre          = build_command(yaml["pre"])
       @tabs         = []
       @socket_name  = yaml['socket_name']
+      @settings     = ensure_list(yaml['settings'])
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
@@ -95,8 +96,12 @@ module Tmuxinator
       "tmux #{socket} send-keys -t #{window(window_number)} #{s cmd} C-m"
     end
 
+    def ensure_list(value)
+      [value].flatten.compact.reject { |c| c.strip.empty? }
+    end
+
     def build_command(value, rvm_prepend=true)
-      commands = [value].flatten.compact.reject { |c| c.strip.empty? }
+      commands = ensure_list(value)
       if @rvm && rvm_prepend
         commands.unshift "rvm use #{@rvm}"
       end
