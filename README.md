@@ -7,26 +7,30 @@ Create and manage tmux sessions easily.
 ![Screenshot](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
 ### Installation
-
-    $ gem install tmuxinator
-
+``` bash
+$ gem install tmuxinator
+```
 ### Editor and Shell
 
 tmuxinator uses your shell's default editor for opening files.  If you're not sure what that is type:
 
-    $ echo $EDITOR
-
+``` bash
+$ echo $EDITOR
+```
 For me that produces "mate -w"
 If you want to change your default editor simple put a line in ~/.bashrc that changes it. Mine looks like this:
 
-    export EDITOR='mate -w'
-
+``` bash
+export EDITOR='mate -w'
+```
 
 ### Environment Integration
 
 Add this to your ~/.bashrc (or similar)
 
-    [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+``` bash
+[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+```
 
 For command line completion you can source the `tmuxinator_completion` file, which is in the same directory as
 `tmuxinator` binary file. That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
@@ -35,33 +39,36 @@ For command line completion you can source the `tmuxinator_completion` file, whi
 
 #### Create a project
 
-    $ tmuxinator new project_name
+``` bash
+$ tmuxinator new project_name
+```
 
 Create or edit your projects with this command, for editing you can also use `tmuxinator open project_name`. `new` aliased to `o`,`open` and `n`. Your default editor ($EDITOR) is used to open the file. If this is a new project you will see this default config:
 
-    # ~/.tmuxinator/project_name.yml
-    # you can make as many tabs as you wish...
+``` yaml
+# ~/.tmuxinator/project_name.yml
+# you can make as many tabs as you wish...
 
-    project_name: Tmuxinator
-    project_root: ~/code/rails_project
-    socket_name: foo # Not needed. Remove to use default socket
-    rvm: 1.9.2@rails_project
-    pre: sudo /etc/rc.d/mysqld start
-    tabs:
-      - editor:
-          layout: main-vertical
-          panes:
-            - vim
-            - #empty, will just run plain bash
-            - top
-      - shell: git pull
-      - database: rails db
-      - server: rails s
-      - logs: tail -f logs/development.log
-      - console: rails c
-      - capistrano:
-      - server: ssh me@myhost
-
+project_name: Tmuxinator
+project_root: ~/code/rails_project
+socket_name: foo # Not needed. Remove to use default socket
+rvm: 1.9.2@rails_project
+pre: sudo /etc/rc.d/mysqld start
+tabs:
+  - editor:
+      layout: main-vertical
+      panes:
+        - vim
+        - #empty, will just run plain bash
+        - top
+  - shell: git pull
+  - database: rails db
+  - server: rails s
+  - logs: tail -f logs/development.log
+  - console: rails c
+  - capistrano:
+  - server: ssh me@myhost
+```
 
 If a tab contains multiple commands, they will be 'joined' together with '&&'.
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
@@ -71,58 +78,55 @@ The `pre` command allows you to run anything before starting the tmux session. C
 ### Panes Support
 you can define your own panes inside a window likes this:
 
-    - window_with_panes
-        layout: main-vertical
-        panes:
-          - vim
-          - #empty, will just run plain bash
-          - top
+``` yaml
+- window_with_panes
+    layout: main-vertical
+    panes:
+      - vim
+      - #empty, will just run plain bash
+      - top
+```
 
 ### Starting a project
-
-    $ start_[project_name]
-
+``` bash
+$ start_[project_name]
+```
 ### Shorthand
 
 You can also use this shorthand alias for tmuxinator
-
-    $ mux [command/project_name]
-
+``` bash
+$ mux [command/project_name]
+```
 This will fire up tmux with all the tabs you configured.
 
 ### Other Commands
-
-    $ tmuxinator copy existing_project new_project
-
+``` bash
+$ tmuxinator copy existing_project new_project
+```
 Copy an existing project. aliased to `c`
-
-
-    $ tmuxinator list
-
+``` bash
+$ tmuxinator list
+```
 List all the projects you have configured. aliased to `l`
-
-
-    $ tmuxinator delete project_name
-
+``` bash
+$ tmuxinator delete project_name
+```
 Remove a project
-
-
-    $ tmuxinator implode
-
+``` bash
+$ tmuxinator implode
+```
 Remove all tmuxinator configs, aliases and scripts. aliased to `i`
-
-    $ tmuxinator doctor
-
+``` bash
+$ tmuxinator doctor
+```
 Examines your environment and identifies problems with your configuration
-
-
-    $ tmuxinator version
-
+``` bash
+$ tmuxinator version
+```
 shows tmuxinator's version. aliased to `v`
-
-
-    $ tmuxinator help
-
+``` bash
+$ tmuxinator help
+```
 shows tmuxinator's help. aliased to `h`
 
 ### Questions? Comments? Feature Request?
