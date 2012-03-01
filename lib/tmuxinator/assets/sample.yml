@@ -26,7 +26,7 @@ tabs:
         -
   - database: rails db
   - server: rails s
-  - logs: tail -f logs/development.log
+  - logs: tail -f log/development.log
   - console: rails c
   - capistrano:
   - server: ssh me@myhost
