@@ -75,6 +75,23 @@ If you want to have your own default config, place it into $HOME/.tmuxinator/def
 
 The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running. Multiple commands can be specified, just like for tabs.
 
+### Config Arguments
+You can define configs that reference the `@argv` array using ERB syntax.
+
+``` yaml
+project_name: <%= @argv[0] %>
+project_root: <%= @argv[1] %>/rails_project
+tabs:
+  - greeting: echo 'Welcome back, <%= argv[2] %>'
+```
+
+This project can be launched like so:
+
+``` bash
+$ mux start my_project "Super Fun Time Project" /the/place/where/projects/live Brosef
+```
+Note that tmuxinator will refuse to launch the project if you have not supplied arguments to prevent unexpected behavior.
+
 ### Panes Support
 you can define your own panes inside a window likes this:
 
