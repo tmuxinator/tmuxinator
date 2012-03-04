@@ -2,10 +2,12 @@ module Tmuxinator
 
   class ConfigWriter
     attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :settings, :hotkeys
+    attr_reader :argv
 
     include Tmuxinator::Helper
 
-    def initialize this_full_path=nil
+    def initialize this_full_path=nil, *argv
+      @argv = strict_argv(argv)
       self.file_path = this_full_path if this_full_path
     end
 
@@ -38,9 +40,23 @@ module Tmuxinator
       "$HOME/.tmuxinator/"
     end
 
+    def processed_yaml
+      interpolated = ERB.new(File.read(file_path)).result(binding)
+      YAML.load(interpolated)
+    end
+
+    # Set up an array-like hash that raises on missing indices
+    def strict_argv(args)
+      strict = Hash.new {|_, key| raise IndexError, key}
+      args.each_with_index {|arg, idx| strict[idx] = arg}
+      strict
+    end
+
     def process_config!
       begin 
-        yaml = YAML.load(File.read(file_path))
+        yaml = processed_yaml
+      rescue IndexError => e
+        exit!("argv missing index #{e.message}")
       rescue
         exit!("Invalid YAML file format.")
       end

@@ -1,0 +1,7 @@
+# ~/.tmuxinator/<%= @name %>.yml
+# you can make as many tabs as you wish...
+
+project_name: <%= @argv[0] %>
+project_root: ~/<%= @argv[1] %>/rails_project
+tabs:
+  - greeting: echo 'Welcome back, <%= argv[2] %>'
