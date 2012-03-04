@@ -30,8 +30,8 @@ tmux <%= socket %> new-window -t <%= window(i+2) %> -n <%=s tab.name %>
 tmux <%= socket %> splitw -t <%= window(i+1) %>
 <%=      send_keys(tab.pre, i+1) if tab.pre %>
 <%=      send_keys(pane, i+1) %>
-<%     end %>
 tmux <%= socket %> select-layout -t <%= window(i+1) %> <%=s tab.layout %>
+<%     end %>
 <%   end %>
 <% end %>
 
