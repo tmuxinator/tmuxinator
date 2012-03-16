@@ -1,0 +1,4 @@
+project_name: <%= "test#{1+2}" %>
+project_root: <%= '/tmp' %>
+tabs:
+  - test: echo <%= 'Hello world' %>

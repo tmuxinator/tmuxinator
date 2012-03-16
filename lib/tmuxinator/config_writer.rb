@@ -39,8 +39,8 @@ module Tmuxinator
     end
 
     def process_config!
-      begin 
-        yaml = YAML.load(File.read(file_path))
+      begin
+        yaml = YAML.load(ERB.new(File.read(file_path)).result(nil))
       rescue
         exit!("Invalid YAML file format.")
       end
