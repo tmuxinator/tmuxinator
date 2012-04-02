@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'shellwords'
 
 module Tmuxinator
   class Cli
@@ -74,6 +73,7 @@ module Tmuxinator
         config_path = "#{root_dir}#{@name}.yml"
         puts config_path
 
+        # do we have a config?
         begin
           config = YAML::load_file(config_path)
         rescue
@@ -81,7 +81,6 @@ module Tmuxinator
         end
 
         @session_name = config['project_name']
-        puts @session_name
 
         exit!("No project name in config for #{@session_name}") if @session_name.nil? or @session_name.empty?
 
@@ -90,12 +89,11 @@ module Tmuxinator
         # if a session is running - join it so that two terminals can be used
         # independently
         if %x( tmux ls ).split("\n").select { |l| l =~ /#{@session_name}/}.empty?
-          puts "No #{@session_name} session, starting:"
+          puts "No #{@session_name} session, lets start it"
           start *args
         else
-          shell_name = Shellwords.shellescape @session_name # FIXME what if no Shellwords?
+          shell_name = shellescape @session_name
           cmd = "tmux new-session -t #{shell_name}"
-          puts cmd
           exec(cmd)
         end
 
@@ -218,6 +216,15 @@ module Tmuxinator
         @config_to_copy || "#{ENV["HOME"]}/.tmuxinator/default.yml"
       end
 
+
+      def shellescape string
+        begin
+          require 'shellwords'
+          Shellwords.shellescape string
+        rescue
+          ConfigWriter.new.shell_escape string
+        end
+      end
     end
 
   end
