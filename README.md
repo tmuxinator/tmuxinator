@@ -91,10 +91,10 @@ The layout setting gets handed down to tmux directly, so you can choose from one
 
 ## Starting a project
 ``` bash
-$ start_[project_name]
+$ mux start [project_name]
 ```
-## Shorthand
 
+## Shorthand
 You can also use this shorthand alias for tmuxinator
 ``` bash
 $ mux [command/project_name]
@@ -102,30 +102,41 @@ $ mux [command/project_name]
 This will fire up tmux with all the tabs you configured.
 
 ## Other Commands
+```bash
+$ mux join [project_name]
+```
+Join an existing project session. aliased to `j`
+
 ``` bash
 $ tmuxinator copy existing_project new_project
 ```
 Copy an existing project. aliased to `c` and `cp`
+
 ``` bash
 $ tmuxinator list
 ```
 List all the projects you have configured. aliased to `l`
+
 ``` bash
 $ tmuxinator delete project_name
 ```
 Remove a project. aliased to `rm`
+
 ``` bash
 $ tmuxinator implode
 ```
 Remove all tmuxinator configs, aliases and scripts. aliased to `i`
+
 ``` bash
 $ tmuxinator doctor
 ```
 Examines your environment and identifies problems with your configuration
+
 ``` bash
 $ tmuxinator version
 ```
 shows tmuxinator's version. aliased to `v`
+
 ``` bash
 $ tmuxinator help
 ```
@@ -143,7 +154,7 @@ section and make a ticket.
 ## History
 #### v. 0.6.0
 * Removed base-index option when starting up the tmux server, so that users can use their base-index settings in tmux.conf (sevenpg)
- 
+
 #### v. 0.5.0
 * Added optional socket name support (Thanks to Adam Walters)
 * Added auto completion (Thanks to Jose Pablo Barrantes)

@@ -96,12 +96,8 @@ module Tmuxinator
           cmd = "tmux new-session -t #{shell_name}"
           exec(cmd)
         end
-
-        alias :j :join
-
-
       end
-
+      alias :j :join
 
       def copy *args
         @copy = args.shift
