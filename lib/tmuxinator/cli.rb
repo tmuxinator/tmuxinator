@@ -84,14 +84,18 @@ module Tmuxinator
 
         exit!("No project name in config for #{@session_name}") if @session_name.nil? or @session_name.empty?
 
+        # detect if a session is already running
+        # if not - start a session matching the config name (usual mux start #name)
+        # if a session is running - join it so that two terminals can be used
+        # independently
         if %x( tmux ls ).split("\n").select { |l| l =~ /#{@session_name}/}.empty?
+          puts "No #{@session_name} session, starting:"
+          start *args
+        else
           shell_name = Shellwords.shellescape @session_name # FIXME what if no Shellwords?
           cmd = "tmux new-session -t #{shell_name}"
           puts cmd
           exec(cmd)
-        else
-          puts "No #{@session_name} session, starting:"
-          start *args
         end
 
         alias :j :join
