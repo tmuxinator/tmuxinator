@@ -24,12 +24,11 @@ module Tmuxinator
   ACTIONS:
   start [project_name]
       start a tmux session using project's tmuxinator config
+  join [project_name]
+      joins an already running session without slaving to it
   open [project_name]
   new  [project_name]
       create a new project file and open it in your editor, aliases: new, n, o
-  join [project_name]
-      joins already running session created by 'open'
-      (useful if you're attaching two different terminals)
   copy [source_project] [new_project]
       copy source_project project file to a new project called new_project
   delete [project_name]
