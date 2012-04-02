@@ -89,8 +89,20 @@ you can define your own panes inside a window likes this:
 
 ### Starting a project
 ``` bash
-$ start_[project_name]
+$ mux start [project_name]
 ```
+
+#### Joining a project
+
+If you want to join existing project session use:
+
+```bash
+$ mux join [project_name]
+```
+
+*note:* This allows you to attach to terminals independently. It's really usefull in 2+ monitor setup.
+The only limitation is that tmux will reduce the size of attached sessions to the size of smallest terminal window.
+
 ### Shorthand
 
 You can also use this shorthand alias for tmuxinator
