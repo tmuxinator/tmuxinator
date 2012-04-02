@@ -17,8 +17,8 @@ module Tmuxinator
       # print the usage string, this is a fall through method.
       def usage
         puts %{
-  Usage: tmuxinator ACTION [Arg] 
-  or 
+  Usage: tmuxinator ACTION [Arg]
+  or
   tmuxinator [project_name]
 
   ACTIONS:
@@ -26,6 +26,9 @@ module Tmuxinator
       start a tmux session using project's tmuxinator config
   open [project_name]
       create a new project file and open it in your editor
+  join [project_name]
+      joins already running session created by 'open'
+      (useful if you're attaching two different terminals)
   copy [source_project] [new_project]
       copy source_project project file to a new project called new_project
   delete [project_name]
@@ -61,6 +64,36 @@ module Tmuxinator
       alias :o :open
       alias :new :open
       alias :n :open
+
+      def join *args
+        exit!("You must specify a name for the session you want to join") unless args.size > 0
+        @name = args.shift
+
+        config_path = "#{root_dir}#{@name}.yml"
+
+        begin
+          config = YAML::load_file(config_path)
+        rescue
+          exit! "No config for #{@name}!"
+        end
+
+        session_name = config['project_name']
+
+        exit!("No project name in config for #{@name}") if session_name.nil? or session_name.empty?
+
+        if %x( tmux ls ).split("\n").select { |l| l =~ /#{@name}/}.empty?
+          shell_name = Shellwords.shellescape @name # FIXME what if no Shellwords?
+          exec("tmux new-session -t #{shell_name}")
+        else
+          puts "No #{@name} session, starting:"
+          start *args
+        end
+
+        alias :j :join
+
+
+      end
+
 
       def copy *args
         @copy = args.shift
