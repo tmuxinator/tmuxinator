@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'shellwords'
 
 module Tmuxinator
   class Cli
@@ -68,9 +69,10 @@ module Tmuxinator
 
       def join *args
         exit!("You must specify a name for the session you want to join") unless args.size > 0
-        @name = args.shift
+        @name = args.first
 
         config_path = "#{root_dir}#{@name}.yml"
+        puts config_path
 
         begin
           config = YAML::load_file(config_path)
@@ -78,15 +80,18 @@ module Tmuxinator
           exit! "No config for #{@name}!"
         end
 
-        session_name = config['project_name']
+        @session_name = config['project_name']
+        puts @session_name
 
-        exit!("No project name in config for #{@name}") if session_name.nil? or session_name.empty?
+        exit!("No project name in config for #{@session_name}") if @session_name.nil? or @session_name.empty?
 
-        if %x( tmux ls ).split("\n").select { |l| l =~ /#{@name}/}.empty?
-          shell_name = Shellwords.shellescape @name # FIXME what if no Shellwords?
-          exec("tmux new-session -t #{shell_name}")
+        if %x( tmux ls ).split("\n").select { |l| l =~ /#{@session_name}/}.empty?
+          shell_name = Shellwords.shellescape @session_name # FIXME what if no Shellwords?
+          cmd = "tmux new-session -t #{shell_name}"
+          puts cmd
+          exec(cmd)
         else
-          puts "No #{@name} session, starting:"
+          puts "No #{@session_name} session, starting:"
           start *args
         end
 
