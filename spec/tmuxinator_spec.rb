@@ -59,4 +59,22 @@ describe Tmuxinator::ConfigWriter do
     specify{ third_tab.panes.should be_an Array }
     specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
   end
+
+  context "with virtualenv configured" do
+    before do
+      subject.file_path = VIRTUALENV_SAMPLE_CONFIG
+    end
+
+    its(:virtualenv){ should eql 'foobar' }
+
+    let(:first_tab){ subject.tabs[0] }
+
+    it "should prepend each pane with the virtualenv string" do
+      first_tab.panes.map{|p| p.split(/ && /)[1] }.should eql ["workon foobar"] * 3
+    end
+
+    let(:second_tab){ subject.tabs[1] }
+    specify{ second_tab.name.should eql "shell" }
+    specify{ second_tab.command.should eql "rvm use 1.9.2@rails_project && workon foobar && git pull"}
+  end
 end
