@@ -1,7 +1,7 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :settings, :hotkeys
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :settings, :hotkeys, :virtualenv
 
     include Tmuxinator::Helper
 
@@ -39,7 +39,7 @@ module Tmuxinator
     end
 
     def process_config!
-      begin 
+      begin
         yaml = YAML.load(File.read(file_path))
       rescue
         exit!("Invalid YAML file format.")
@@ -52,6 +52,7 @@ module Tmuxinator
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
+      @virtualenv   = yaml["virtualenv"]
       @pre          = build_command(yaml["pre"])
       @tabs         = []
       @socket_name  = yaml['socket_name']
@@ -103,8 +104,13 @@ module Tmuxinator
 
     def build_command(value, rvm_prepend=true)
       commands = ensure_list(value)
-      if @rvm && rvm_prepend
-        commands.unshift "rvm use #{@rvm}"
+      if rvm_prepend
+        if @virtualenv
+          commands.unshift "workon #{@virtualenv}"
+        end
+        if @rvm
+          commands.unshift "rvm use #{@rvm}"
+        end
       end
       commands.join ' && '
     end
