@@ -59,4 +59,15 @@ describe Tmuxinator::ConfigWriter do
     specify{ third_tab.panes.should be_an Array }
     specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
   end
+
+  context 'with erb-enabled config file' do
+    before do
+      subject.file_path = SAMPLE_ERB_CONFIG
+    end
+    its(:project_name){ should eql 'test3' }
+    its(:project_root){ should eql '/tmp' }
+    its(:tabs){ should be_an Array  }
+    let(:first_tab){ subject.tabs[0] }
+    specify{ first_tab.command.should eql 'echo Hello world' }
+  end
 end
