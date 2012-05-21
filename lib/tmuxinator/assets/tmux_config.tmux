@@ -1,5 +1,5 @@
 #!<%= ENV['SHELL'] || '/bin/bash' %>
-tmux <%= socket %> start-server
+tmux <%= socket %> <%= cli_args %> start-server
 
 if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
