@@ -1,5 +1,5 @@
 #!<%= ENV['SHELL'] || '/bin/bash' %>
-tmux <%= socket %> <%= @cli_args %> start-server
+tmux <%= socket %> start-server
 
 if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
@@ -40,7 +40,7 @@ tmux <%= socket %> select-window -t <%= window(1) %>
 fi
 
 if [ -z $TMUX ]; then
-    tmux <%= socket %> -u attach-session -t <%=s @project_name %>
+    tmux <%= cli_args %> <%= socket %> -u attach-session -t <%=s @project_name %>
 else
     tmux <%= socket %> -u switch-client -t <%=s @project_name %>
 fi

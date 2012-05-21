@@ -57,7 +57,7 @@ module Tmuxinator
       @socket_name  = yaml['socket_name']
       @settings     = ensure_list(yaml['settings'])
       @hotkeys     = ensure_list(yaml['hotkeys'])
-      @cli_args     = yaml["cli_args"].to_s
+      @cli_args     = yaml["cli_args"]
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
