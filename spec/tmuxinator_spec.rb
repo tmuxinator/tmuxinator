@@ -59,4 +59,39 @@ describe Tmuxinator::ConfigWriter do
     specify{ third_tab.panes.should be_an Array }
     specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
   end
+
+  context "Using with additional arguments" do
+    subject do
+      Tmuxinator::ConfigWriter.new(SAMPLE_CONFIG_WITH_ERB,
+                                   "My Project Name",
+                                   "base/path",
+                                   "Brosef")
+    end
+
+    its(:project_name) { should eql 'My Project Name'}
+    its(:project_root) { should eql '~/base/path/rails_project'}
+
+    let(:first_tab) { subject.tabs[0] }
+
+    specify { first_tab.should be_an OpenStruct                          }
+    specify { first_tab.name.should eql 'greeting'                       }
+    specify { first_tab.command.should eql "echo 'Welcome back, Brosef'" }
+  end
+
+  context "not enough args provided" do
+    class FakeSystemExit < StandardError; end
+
+    class Tmuxinator::ConfigWriter
+      def exit!(msg)
+        raise FakeSystemExit, msg
+      end
+    end
+
+    it "exits with an error message" do
+      expect {
+        Tmuxinator::ConfigWriter.new(SAMPLE_CONFIG_WITH_ERB,
+                                    "My Project Name")
+      }.to raise_error(FakeSystemExit, "argv missing index 1")
+    end
+  end
 end

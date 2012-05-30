@@ -8,6 +8,7 @@ require 'tmuxinator'
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 SAMPLE_CONFIG = File.join(File.dirname(__FILE__), '..', 'lib', 'tmuxinator', 'assets', 'sample.yml')
+SAMPLE_CONFIG_WITH_ERB = File.join(File.dirname(__FILE__), '..', 'lib', 'tmuxinator', 'assets', 'sample_with_erb.yml')
 
 RSpec.configure do |config|
 
