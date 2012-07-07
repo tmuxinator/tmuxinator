@@ -15,8 +15,7 @@ Gem::Specification.new do |s|
   s.executables = ["mux", "tmuxinator", "tmuxinator_completion"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.md",
-    "TODO"
+    "README.md"
   ]
   s.files = [
     ".document",
