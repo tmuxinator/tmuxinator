@@ -92,9 +92,9 @@ module Tmuxinator
       "#{s @project_name}:#{i}"
     end
 
-    def send_keys cmd, window_number
+    def send_keys cmd, window_id
       return '' unless cmd
-      "tmux #{socket} send-keys -t #{window(window_number)} #{s cmd} C-m"
+      "tmux #{socket} send-keys -t #{window(window_id)} #{s cmd} C-m"
     end
 
     def ensure_list(value)
