@@ -8,7 +8,7 @@ env TMUX= tmux <%= socket %> start-server \; new-session -d -s <%=s @project_nam
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
 <% @tabs[1..-1].each_with_index do |tab, i| %>
-tmux <%= socket %> new-window -t <%= window(i) %> -n <%=s tab.name %>
+tmux <%= socket %> new-window -t <%= window(i+1) %> -n <%=s tab.name %>
 <% end %>
 
 # set up tabs and panes
