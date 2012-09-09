@@ -17,7 +17,7 @@ module Tmuxinator
 
     def write!
       raise "Unable to write with out a file_name defined" unless self.file_name
-      tmp = File.open(config_path, 'w') {|f| f.write(render) }
+      File.open(config_path, 'w') {|f| f.write(render) }
     end
 
     def render
@@ -39,7 +39,7 @@ module Tmuxinator
     end
 
     def process_config!
-      begin 
+      begin
         yaml = YAML.load(File.read(file_path))
       rescue
         exit!("Invalid YAML file format.")
