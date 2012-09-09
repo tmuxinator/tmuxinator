@@ -25,7 +25,8 @@ module Tmuxinator
   start [project_name]
       start a tmux session using project's tmuxinator config
   open [project_name]
-      create a new project file and open it in your editor
+  new  [project_name]
+      create a new project file and open it in your editor, aliases: new, n, o
   copy [source_project] [new_project]
       copy source_project project file to a new project called new_project
   delete [project_name]
@@ -35,7 +36,7 @@ module Tmuxinator
   list [-v]
       list all existing projects
   doctor
-    look for problems in your configuration
+      look for problems in your configuration
   help
       shows this help document
   version
