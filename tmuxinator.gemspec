@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Allen Bargi"]
-  s.date = "2011-10-10"
+  s.date = "2012-09-09"
   s.description = "Create and manage complex tmux sessions easily."
   s.email = "allen.bargi@gmail.com"
   s.executables = ["mux", "tmuxinator", "tmuxinator_completion"]
@@ -41,30 +41,27 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/aziz/tmuxinator"
   s.licenses = ["MIT"]
-  s.post_install_message = "\n  __________________________________________________________\n  ..........................................................\n\n  Thank you for installing tmuxinator\n  Please be sure to to drop a line in your ~/.bashrc file, similar \n  to RVM if you've used that before:\n\n  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator\n  \n  also ensure that you've set these variables in your ENV:\n  \n  $EDITOR, $SHELL\n  \n  you can run `tmuxinator doctor` to make sure everything is set.\n  happy tmuxing with tmuxinator!\n\n  ..........................................................\n  __________________________________________________________\n  \n  "
+  s.post_install_message = "\n  __________________________________________________________\n  ..........................................................\n\n  Thank you for installing tmuxinator\n  Please be sure to to drop a line in your ~/.bashrc file, similar\n  to RVM if you've used that before:\n\n  [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator\n\n  also ensure that you've set these variables in your ENV:\n\n  $EDITOR, $SHELL\n\n  you can run `tmuxinator doctor` to make sure everything is set.\n  happy tmuxing with tmuxinator!\n\n  ..........................................................\n  __________________________________________________________\n\n  "
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.11"
+  s.rubygems_version = "1.8.23"
   s.summary = "Create and manage complex tmux sessions easily."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rspec>, ["~> 2.6.0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.18"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_development_dependency(%q<rcov>, ["~> 0.9.10"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.11.0"])
+      s.add_development_dependency(%q<bundler>, ["~> 1.2.0"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
     else
-      s.add_dependency(%q<rspec>, ["~> 2.6.0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.18"])
-      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_dependency(%q<rcov>, ["~> 0.9.10"])
+      s.add_dependency(%q<rspec>, ["~> 2.11.0"])
+      s.add_dependency(%q<bundler>, ["~> 1.2.0"])
+      s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
     end
   else
-    s.add_dependency(%q<rspec>, ["~> 2.6.0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.18"])
-    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-    s.add_dependency(%q<rcov>, ["~> 0.9.10"])
+    s.add_dependency(%q<rspec>, ["~> 2.11.0"])
+    s.add_dependency(%q<bundler>, ["~> 1.2.0"])
+    s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
   end
 end
 

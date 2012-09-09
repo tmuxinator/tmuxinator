@@ -24,23 +24,23 @@ Jeweler::Tasks.new do |gem|
   ..........................................................
 
   Thank you for installing tmuxinator
-  Please be sure to to drop a line in your ~/.bashrc file, similar 
+  Please be sure to to drop a line in your ~/.bashrc file, similar
   to RVM if you've used that before:
 
   [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
-  
+
   also ensure that you've set these variables in your ENV:
-  
+
   $EDITOR, $SHELL
-  
+
   you can run `tmuxinator doctor` to make sure everything is set.
   happy tmuxing with tmuxinator!
 
   ..........................................................
   __________________________________________________________
-  
+
   }
-  
+
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
@@ -61,7 +61,7 @@ end
 
 task :default => :spec
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
