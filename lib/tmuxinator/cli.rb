@@ -24,6 +24,9 @@ module Tmuxinator
   ACTIONS:
   start [project_name]
       start a tmux session using project's tmuxinator config
+  join [project_name]
+      joins already running session created by 'start'
+      (useful if you're attaching two different terminals)
   open [project_name]
       create a new project file and open it in your editor
   copy [source_project] [new_project]
@@ -61,6 +64,43 @@ module Tmuxinator
       alias :o :open
       alias :new :open
       alias :n :open
+
+      def join *args
+        exit!("You must specify a name for the session you want to join") unless args.size > 0
+        @name = args.first
+
+        config_path = "#{root_dir}#{@name}.yml"
+        puts config_path
+
+        # do we have a config?
+        begin
+          config = YAML::load_file(config_path)
+        rescue
+          exit! "No config for #{@name}!"
+        end
+
+        @session_name = config['project_name']
+
+        exit!("No project name in config for #{@session_name}") if @session_name.nil? or @session_name.empty?
+
+        # detect if a session is already running
+        # if not - start a session matching the config name (usual mux start #name)
+        # if a session is running - join it so that two terminals can be used
+        # independently
+        if %x( tmux ls ).split("\n").select { |l| l =~ /#{@session_name}/}.empty?
+          puts "No #{@session_name} session, lets start it"
+          start *args
+        else
+          shell_name = shellescape @session_name
+          cmd = "tmux new-session -t #{shell_name}"
+          exec(cmd)
+        end
+
+        alias :j :join
+
+
+      end
+
 
       def copy *args
         @copy = args.shift
@@ -175,6 +215,15 @@ module Tmuxinator
         @config_to_copy || "#{ENV["HOME"]}/.tmuxinator/default.yml"
       end
 
+
+      def shellescape string
+        begin
+          require 'shellwords'
+          Shellwords.shellescape string
+        rescue
+          ConfigWriter.new.shell_escape string
+        end
+      end
     end
 
   end

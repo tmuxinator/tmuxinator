@@ -91,8 +91,22 @@ The layout setting gets handed down to tmux directly, so you can choose from one
 
 ### Starting a project
 ``` bash
-$ start_[project_name]
+$ mux start [project_name]
 ```
+
+#### Joining a project
+
+If you want to join an existing project session use:
+
+```bash
+$ mux join [project_name]
+```
+
+This allows you to attach multiple terminals independently to already existing session. It's different from `mux start [project_name]` in that it doesn't mirror the sessions.
+Quite useful if you're using 2 or more monitors.
+
+*note:* The only limitation is that tmux will reduce the size of attached sessions to the size of smallest terminal.
+
 ### Shorthand
 
 You can also use this shorthand alias for tmuxinator
