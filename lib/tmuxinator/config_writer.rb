@@ -1,7 +1,7 @@
 module Tmuxinator
 
   class ConfigWriter
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :settings, :hotkeys
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs, :pre, :settings, :hotkeys, :cli_args
 
     include Tmuxinator::Helper
 
@@ -57,6 +57,7 @@ module Tmuxinator
       @socket_name  = yaml['socket_name']
       @settings     = ensure_list(yaml['settings'])
       @hotkeys     = ensure_list(yaml['hotkeys'])
+      @cli_args     = yaml["cli_args"]
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
