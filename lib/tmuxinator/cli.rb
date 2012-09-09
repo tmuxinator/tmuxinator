@@ -81,6 +81,7 @@ module Tmuxinator
         open @name
       end
       alias :c :copy
+      alias :cp :copy
 
       def delete *args
         puts "warning: passing multiple arguments to delete will be ignored" if args.size > 1
@@ -97,6 +98,7 @@ module Tmuxinator
         end
       end
       alias :d :delete
+      alias :rm :delete
 
       def implode *args
         exit!("delete_all doesn't accapt any arguments!") unless args.empty?
