@@ -70,7 +70,7 @@ tabs:
   - server: ssh me@myhost
 ```
 
-If a tab contains multiple commands, they will be 'joined' together with '&&'.
+If a tab contains multiple commands, they will be joined together with `&&`.
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
 
 The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running. Multiple commands can be specified, just like for tabs.
@@ -105,7 +105,7 @@ This will fire up tmux with all the tabs you configured.
 ``` bash
 $ tmuxinator copy existing_project new_project
 ```
-Copy an existing project. aliased to `c`
+Copy an existing project. aliased to `c` and `cp`
 ``` bash
 $ tmuxinator list
 ```
@@ -113,7 +113,7 @@ List all the projects you have configured. aliased to `l`
 ``` bash
 $ tmuxinator delete project_name
 ```
-Remove a project
+Remove a project. aliased to `rm`
 ``` bash
 $ tmuxinator implode
 ```
@@ -141,6 +141,9 @@ section and make a ticket.
 [See the full list of contributors](https://github.com/aziz/tmuxinator/contributors)
 
 ### History
+#### v. 0.6.0
+* Removed base-index option when starting up the tmux server, so that users can use their base-index settings in tmux.conf (sevenpg)
+* 
 #### v. 0.5.0
 * Added optional socket name support (Thanks to Adam Walters)
 * Added auto completion (Thanks to Jose Pablo Barrantes)
