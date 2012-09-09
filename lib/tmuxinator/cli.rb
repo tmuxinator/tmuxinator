@@ -112,7 +112,7 @@ module Tmuxinator
       def list *args
         verbose = args.include?("-v")
         puts "tmuxinator configs:"
-        Dir["#{root_dir}**"].each do |path|
+        Dir["#{root_dir}**"].sort.each do |path|
           next unless verbose || File.extname(path) == ".yml"
           path = path.gsub(root_dir, '').gsub('.yml','') unless verbose
           puts "    #{path}"
