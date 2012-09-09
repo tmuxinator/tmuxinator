@@ -76,7 +76,7 @@ If you want to have your own default config, place it into $HOME/.tmuxinator/def
 The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running. Multiple commands can be specified, just like for tabs.
 
 ### Panes Support
-you can define your own panes inside a window likes this:
+You can define your own panes inside a window likes this:
 
 ``` yaml
 - window_with_panes
@@ -86,6 +86,8 @@ you can define your own panes inside a window likes this:
       - #empty, will just run plain bash
       - top
 ```
+
+The layout setting gets handed down to tmux directly, so you can choose from one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) or [specify your own](http://stackoverflow.com/a/9976282/183537).
 
 ### Starting a project
 ``` bash
