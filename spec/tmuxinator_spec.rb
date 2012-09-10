@@ -32,7 +32,7 @@ describe Tmuxinator::ConfigWriter do
     its(:tabs){ should be_an Array  }
     its(:pre){ should eql 'rvm use 1.9.2@rails_project && sudo /etc/rc.d/mysqld start' }
     its(:socket){ should eql '-L foo' }
-    its(:cli_args){ should eql '-2' }
+    its(:cli_args){ should eql "-v -2" }
 
     let(:first_tab){ subject.tabs[0] }
 
