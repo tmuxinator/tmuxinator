@@ -143,7 +143,7 @@ section and make a ticket.
 ### History
 #### v. 0.6.0
 * Removed base-index option when starting up the tmux server, so that users can use their base-index settings in tmux.conf (sevenpg)
-* 
+ 
 #### v. 0.5.0
 * Added optional socket name support (Thanks to Adam Walters)
 * Added auto completion (Thanks to Jose Pablo Barrantes)
