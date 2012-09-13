@@ -21,9 +21,9 @@ tmux <%= socket %> new-window -t <%= window(i+1) %> -n <%=s tab.name %>
 <%     tab.panes.each do |pane| %>
 tmux <%= socket %> splitw -t <%= window(i) %>
 <%=      send_keys(pane, i) %>
-tmux <%= socket %> select-pane -t <%= window(i) %>.0
 <%     end %>
 tmux <%= socket %> select-layout -t <%= window(i) %> <%=s tab.layout %>
+tmux <%= socket %> select-pane -t <%= window(i) %>.0
 <%   end %>
 <% end %>
 
