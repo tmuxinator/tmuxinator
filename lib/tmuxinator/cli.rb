@@ -71,19 +71,23 @@ module Tmuxinator
         project_name = args.shift
         config_path = "#{root_dir}#{project_name}.yml"
         config = Tmuxinator::ConfigWriter.new(config_path)
-        @session_name = config.session_name
 
-        # detect if a session is already running
-        # if not - start a session matching the config name (usual mux start #name)
-        # if a session is running - join it so that two terminals can be used
-        # independently
-        if %x( tmux ls ).split("\n").select { |l| l =~ /#{@session_name}/}.empty?
-          puts "No #{@session_name} session, lets start it"
-          start *args
-        else
-          shell_name = shellescape @session_name
-          cmd = "tmux new-session -t #{shell_name}"
+        # Search for a running session
+        sessions = %x(tmux list-sessions -F "#S").chomp.split("\n")
+        if sessions.include?(config.session_name)
+          # Since we have a running session, find the lowest number still available
+          session_number = 0
+          session_name = config.session_name
+          while sessions.include?(session_name)
+            session_number += 1
+            session_name = "#{config.session_name} #{session_number}"
+          end
+          cmd = "tmux new-session -s #{shellescape session_name} -t #{shellescape config.session_name}"
           exec(cmd)
+        else
+          # Since there isn't a session running yet, just delegate to start()
+          puts "No #{@session_name} session, starting a new one..."
+          start *args
         end
       end
       alias :j :join
