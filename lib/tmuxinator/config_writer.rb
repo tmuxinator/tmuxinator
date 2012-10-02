@@ -62,6 +62,7 @@ module Tmuxinator
       @settings     = ensure_list(yaml['settings'])
       @hotkeys      = ensure_list(yaml['hotkeys'])
       @cli_args     = yaml["cli_args"]
+      @base_index   = %x(tmux show-options -g base-index | cut -d ' ' -f 2).to_i
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
