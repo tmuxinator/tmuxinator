@@ -66,22 +66,12 @@ module Tmuxinator
       alias :n :open
 
       def join *args
-        exit!("You must specify a name for the session you want to join") unless args.size > 0
-        @name = args.first
-
-        config_path = "#{root_dir}#{@name}.yml"
-        puts config_path
-
-        # do we have a config?
-        begin
-          config = YAML::load_file(config_path)
-        rescue
-          exit! "No config for #{@name}!"
-        end
-
-        @session_name = config['project_name']
-
-        exit!("No project name in config for #{@session_name}") if @session_name.nil? or @session_name.empty?
+        exit!("You must specify a project name to join") unless args.size > 0
+        puts "warning: passing multiple arguments will be ignored" if args.size > 1
+        project_name = args.shift
+        config_path = "#{root_dir}#{project_name}.yml"
+        config = Tmuxinator::ConfigWriter.new(config_path)
+        @session_name = config.session_name
 
         # detect if a session is already running
         # if not - start a session matching the config name (usual mux start #name)
