@@ -29,7 +29,7 @@ tmux <%= socket %> select-pane -t <%= window(i) %>.0
 <%   end %>
 <% end %>
 
-tmux <%= socket %> select-window -t <%= window(0) %>
+tmux <%= socket %> select-window -t <%= window(@base_index) %>
 
 fi
 
