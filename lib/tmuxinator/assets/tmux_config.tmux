@@ -1,7 +1,7 @@
 #!<%= ENV['SHELL'] || '/bin/bash' %>
 tmux <%= socket %> start-server
 
-if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
+if ! $(tmux <%= socket %> start-server \\\; has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
 <%= @pre.kind_of?(Array) ? @pre.join(" && ") : @pre %>
 env TMUX= tmux <%= socket %> start-server \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
