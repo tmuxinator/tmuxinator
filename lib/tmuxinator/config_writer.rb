@@ -3,7 +3,7 @@ module Tmuxinator
   class ConfigWriter
 
     attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs,
-                  :pre, :socket_name, :socket_path, :settings, :hotkeys, :cli_args
+                  :pre, :socket_name, :socket_path, :settings, :hotkeys, :cli_args, :base_index
 
     include Tmuxinator::Helper
 
@@ -62,6 +62,7 @@ module Tmuxinator
       @settings     = ensure_list(yaml['settings'])
       @hotkeys      = ensure_list(yaml['hotkeys'])
       @cli_args     = yaml["cli_args"]
+      @base_index   = yaml["base_index"] || 0
 
       yaml["tabs"].each do |tab|
         t       = OpenStruct.new
@@ -94,7 +95,7 @@ module Tmuxinator
     alias s shell_escape
 
     def window(i)
-      "#{s @project_name}:#{i}"
+      "#{s @project_name}:#{i + @base_index}"
     end
 
     def send_keys cmd, window_number
