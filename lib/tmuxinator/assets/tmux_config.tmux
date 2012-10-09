@@ -17,6 +17,7 @@ tmux <%= socket %> new-window -t <%= window(i+1) %> -n <%=s tab.name %>
 <%   if tab.command %>
 <%=    send_keys(tab.command, i) %>
 <%   elsif tab.panes %>
+<%=    send_keys(tab.pre, i) if tab.pre %>
 <%=    send_keys(tab.panes.shift, i) %>
 <%     tab.panes.each do |pane| %>
 tmux <%= socket %> splitw -t <%= window(i) %>
