@@ -56,6 +56,7 @@ module Tmuxinator
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
       @pre          = build_command(yaml["pre"])
+      @save_history = yaml["save_history"]
       @tabs         = []
       @socket_name  = yaml['socket_name']
       @socket_path  = yaml['socket_path']
@@ -92,6 +93,11 @@ module Tmuxinator
       "'#{str.to_s.gsub("'") { %('\'') }}'"
     end
     alias s shell_escape
+
+    def shell_remove_quote_escape str
+      "\"#{str.to_s.gsub(/["'`:]/, "")}\""
+    end
+    alias S shell_remove_quote_escape
 
     def window(i)
       "#{s @project_name}:#{i}"
