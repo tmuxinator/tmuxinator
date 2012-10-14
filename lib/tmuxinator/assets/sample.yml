@@ -4,6 +4,7 @@
 project_name: Tmuxinator
 project_root: ~/code/rails_project
 socket_name: foo # Not needed.  Remove to use default socket
+save_history: true # Persist history for each pane
 rvm: 1.9.2@rails_project
 pre: sudo /etc/rc.d/mysqld start
 cli_args: -v -2
