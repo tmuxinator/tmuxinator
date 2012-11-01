@@ -10,6 +10,7 @@ describe Tmuxinator::ConfigWriter do
     its(:config_path){ should be_nil }
     its(:pre){ should be_nil }
     its(:socket){ should be_nil }
+    its(:cli_args){ should be_nil }
   end
 
   context "While Defining the filename on init" do
@@ -31,6 +32,7 @@ describe Tmuxinator::ConfigWriter do
     its(:tabs){ should be_an Array  }
     its(:pre){ should eql 'rvm use 1.9.2@rails_project && sudo /etc/rc.d/mysqld start' }
     its(:socket){ should eql '-L foo' }
+    its(:cli_args){ should eql "-v -2" }
 
     let(:first_tab){ subject.tabs[0] }
 
@@ -58,5 +60,12 @@ describe Tmuxinator::ConfigWriter do
     specify{ third_tab.layout.should eql "tiled" }
     specify{ third_tab.panes.should be_an Array }
     specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
+    context "When socket path has been defined" do
+      before do
+        subject.socket_path = "/tmp/tmux/foo"
+      end
+
+      its(:socket) {should eql '-S /tmp/tmux/foo'}
+    end
   end
 end

@@ -4,7 +4,7 @@ tmux <%= socket %> start-server
 if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
 <%= @pre.kind_of?(Array) ? @pre.join(" && ") : @pre %>
-env TMUX= tmux <%= socket %> start-server \; set-option -g base-index 1 \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
+env TMUX= tmux <%= socket %> start-server \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
 <% settings.each do |setting| %>
@@ -48,12 +48,12 @@ tmux <%= socket %> bind-key <%= hotkey %>
 	<% end%>
 <% end%>	
 
-tmux <%= socket %> select-window -t <%= window(1) %>
+tmux <%= socket %> select-window -t <%= window(0) %>
 
 fi
 
 if [ -z $TMUX ]; then
-    tmux <%= socket %> -u attach-session -t <%=s @project_name %>
+    tmux <%= cli_args %> <%= socket %> -u attach-session -t <%=s @project_name %>
 else
     tmux <%= socket %> -u switch-client -t <%=s @project_name %>
 fi

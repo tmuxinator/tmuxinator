@@ -17,15 +17,16 @@ module Tmuxinator
       # print the usage string, this is a fall through method.
       def usage
         puts %{
-  Usage: tmuxinator ACTION [Arg] 
-  or 
+  Usage: tmuxinator ACTION [Arg]
+  or
   tmuxinator [project_name]
 
   ACTIONS:
   start [project_name]
       start a tmux session using project's tmuxinator config
   open [project_name]
-      create a new project file and open it in your editor
+  new  [project_name]
+      create a new project file and open it in your editor, aliases: new, n, o
   copy [source_project] [new_project]
       copy source_project project file to a new project called new_project
   delete [project_name]
@@ -35,7 +36,7 @@ module Tmuxinator
   list [-v]
       list all existing projects
   doctor
-    look for problems in your configuration
+      look for problems in your configuration
   help
       shows this help document
   version
@@ -54,7 +55,7 @@ module Tmuxinator
         unless File.exists?(config_path)
           template = File.exists?(user_config) ? user_config : sample_config
           erb      = ERB.new(File.read(template)).result(binding)
-          tmp      = File.open(config_path, 'w') {|f| f.write(erb) }
+          File.open(config_path, 'w') {|f| f.write(erb) }
         end
         system("$EDITOR #{config_path}")
       end
@@ -81,6 +82,7 @@ module Tmuxinator
         open @name
       end
       alias :c :copy
+      alias :cp :copy
 
       def delete *args
         puts "warning: passing multiple arguments to delete will be ignored" if args.size > 1
@@ -97,6 +99,7 @@ module Tmuxinator
         end
       end
       alias :d :delete
+      alias :rm :delete
 
       def implode *args
         exit!("delete_all doesn't accapt any arguments!") unless args.empty?
@@ -110,7 +113,7 @@ module Tmuxinator
       def list *args
         verbose = args.include?("-v")
         puts "tmuxinator configs:"
-        Dir["#{root_dir}**"].each do |path|
+        Dir["#{root_dir}**"].sort.each do |path|
           next unless verbose || File.extname(path) == ".yml"
           path = path.gsub(root_dir, '').gsub('.yml','') unless verbose
           puts "    #{path}"

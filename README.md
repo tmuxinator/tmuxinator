@@ -6,11 +6,11 @@ Create and manage tmux sessions easily.
 
 ![Screenshot](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
-### Installation
+## Installation
 ``` bash
 $ gem install tmuxinator
 ```
-### Editor and Shell
+## Editor and Shell
 
 tmuxinator uses your shell's default editor for opening files.  If you're not sure what that is type:
 
@@ -24,7 +24,7 @@ If you want to change your default editor simple put a line in ~/.bashrc that ch
 export EDITOR='mate -w'
 ```
 
-### Environment Integration
+## Environment Integration
 
 Add this to your ~/.bashrc (or similar)
 
@@ -35,9 +35,9 @@ Add this to your ~/.bashrc (or similar)
 For command line completion you can source the `tmuxinator_completion` file, which is in the same directory as
 `tmuxinator` binary file. That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
 
-### Usage
+## Usage
 
-#### Create a project
+### Create a project
 
 ``` bash
 $ tmuxinator new project_name
@@ -70,13 +70,13 @@ tabs:
   - server: ssh me@myhost
 ```
 
-If a tab contains multiple commands, they will be 'joined' together with '&&'.
+If a tab contains multiple commands, they will be joined together with `&&`.
 If you want to have your own default config, place it into $HOME/.tmuxinator/default.yml
 
 The `pre` command allows you to run anything before starting the tmux session. Could be handy to make sure you database daemons are running. Multiple commands can be specified, just like for tabs.
 
-### Panes Support
-you can define your own panes inside a window likes this:
+## Panes Support
+You can define your own panes inside a window likes this:
 
 ``` yaml
 - window_with_panes
@@ -87,11 +87,13 @@ you can define your own panes inside a window likes this:
       - top
 ```
 
-### Starting a project
+The layout setting gets handed down to tmux directly, so you can choose from one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) or [specify your own](http://stackoverflow.com/a/9976282/183537).
+
+## Starting a project
 ``` bash
 $ start_[project_name]
 ```
-### Shorthand
+## Shorthand
 
 You can also use this shorthand alias for tmuxinator
 ``` bash
@@ -99,11 +101,11 @@ $ mux [command/project_name]
 ```
 This will fire up tmux with all the tabs you configured.
 
-### Other Commands
+## Other Commands
 ``` bash
 $ tmuxinator copy existing_project new_project
 ```
-Copy an existing project. aliased to `c`
+Copy an existing project. aliased to `c` and `cp`
 ``` bash
 $ tmuxinator list
 ```
@@ -111,7 +113,7 @@ List all the projects you have configured. aliased to `l`
 ``` bash
 $ tmuxinator delete project_name
 ```
-Remove a project
+Remove a project. aliased to `rm`
 ``` bash
 $ tmuxinator implode
 ```
@@ -129,16 +131,19 @@ $ tmuxinator help
 ```
 shows tmuxinator's help. aliased to `h`
 
-### Questions? Comments? Feature Request?
+## Questions? Comments? Feature Request?
 
 I would love to hear your feedback on this project! head over to [issues](https://github.com/aziz/tmuxinator/issues)
 section and make a ticket.
 
-### Contributors
+## Contributors
 
 [See the full list of contributors](https://github.com/aziz/tmuxinator/contributors)
 
-### History
+## History
+#### v. 0.6.0
+* Removed base-index option when starting up the tmux server, so that users can use their base-index settings in tmux.conf (sevenpg)
+ 
 #### v. 0.5.0
 * Added optional socket name support (Thanks to Adam Walters)
 * Added auto completion (Thanks to Jose Pablo Barrantes)
@@ -159,11 +164,11 @@ section and make a ticket.
 * added pane support (Thanks to Aaron Spiegel)
 * RVM support (Thanks to Jay Adkisoon)
 
-### Inspiration and Thanks
+## Inspiration and Thanks
 
 Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator)) and Arthur Chiu's ([Terminitor](http://github.com/achiu/terminitor))
 
-### Contributing to tmuxinator
+## Contributing to tmuxinator
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
@@ -174,6 +179,6 @@ Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is
   otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
-### Copyright
+## Copyright
 
-Copyright (c) 2010--2011 Allen Bargi. See LICENSE.txt for further details.
+Copyright (c) 2010-2012 Allen Bargi. See LICENSE.txt for further details.

@@ -6,6 +6,7 @@ project_root: ~/code/rails_project
 socket_name: foo # Not needed.  Remove to use default socket
 rvm: 1.9.2@rails_project
 pre: sudo /etc/rc.d/mysqld start
+cli_args: -v -2
 tabs:
   - editor:
       pre: echo 'I get run in each pane.  Before each pane command!'
