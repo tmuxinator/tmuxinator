@@ -2,7 +2,7 @@ module Tmuxinator
 
   class ConfigWriter
 
-    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs,
+    attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :rbenv, :tabs,
                   :pre, :socket_name, :socket_path, :settings, :hotkeys, :cli_args
 
     include Tmuxinator::Helper
@@ -55,6 +55,7 @@ module Tmuxinator
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
+      @rbenv        = yaml["rbenv"]
       @pre          = build_command(yaml["pre"])
       @tabs         = []
       @socket_name  = yaml['socket_name']
@@ -109,8 +110,12 @@ module Tmuxinator
 
     def build_command(value, rvm_prepend=true)
       commands = ensure_list(value)
-      if @rvm && rvm_prepend
-        commands.unshift "rvm use #{@rvm}"
+      if rvm_prepend
+        if @rbenv
+          commands.unshift "rbenv shell #{@rbenv}"
+        elsif @rvm
+          commands.unshift "rvm use #{@rvm}"
+        end
       end
       commands.join ' && '
     end
