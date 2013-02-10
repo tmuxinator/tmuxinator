@@ -1,18 +1,20 @@
 #!<%= ENV['SHELL'] || '/bin/bash' %>
 tmux <%= socket %> start-server
 
-if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
+if ! $(tmux <%= socket %> start-server \\\; has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
 <%= @pre.kind_of?(Array) ? @pre.join(" && ") : @pre %>
 env TMUX= tmux <%= socket %> start-server \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
-<% @tabs[1..-1].each_with_index do |tab, i| %>
-tmux <%= socket %> new-window -t <%= window(i+1) %> -n <%=s tab.name %>
+<% @tabs[1..-1].each_with_index do |tab, ti| %>
+<% i = ti + @base_index + 1 %>
+tmux <%= socket %> new-window -t <%= window(i) %> -n <%=s tab.name %>
 <% end %>
 
 # set up tabs and panes
-<% @tabs.each_with_index do |tab, i| %>
+<% @tabs.each_with_index do |tab, ti| %>
+<% i = ti + @base_index %>
 # tab "<%= tab.name %>"
 <%   if tab.command %>
 <%=    send_keys(tab.command, i) %>
@@ -27,7 +29,7 @@ tmux <%= socket %> select-pane -t <%= window(i) %>.0
 <%   end %>
 <% end %>
 
-tmux <%= socket %> select-window -t <%= window(0) %>
+tmux <%= socket %> select-window -t <%= window(@base_index) %>
 
 fi
 

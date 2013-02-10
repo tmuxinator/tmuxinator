@@ -68,4 +68,22 @@ describe Tmuxinator::ConfigWriter do
       its(:socket) {should eql '-S /tmp/tmux/foo'}
     end
   end
+
+  context "with rbenv configured" do
+    before do
+      subject.file_path = RBENV_SAMPLE_CONFIG
+    end
+
+    its(:rbenv){ should eql '1.9.2-p290' }
+
+    let(:first_tab){ subject.tabs[0] }
+
+    it "should prepend each pane with the rbenv string" do
+      first_tab.panes.map{|p| p.split(/ && /)[0] }.should eql ["rbenv shell 1.9.2-p290"] * 3
+    end
+
+    let(:second_tab){ subject.tabs[1] }
+    specify{ second_tab.name.should eql "shell" }
+    specify{ second_tab.command.should eql "rbenv shell 1.9.2-p290 && git pull"}
+  end
 end
