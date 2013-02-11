@@ -11,6 +11,7 @@ tabs:
   - editor:
       pre: echo 'I get run in each pane.  Before each pane command!'
       layout: main-vertical
+      synchronize: true
       panes:
         - vim
         - #empty, will just run plain bash

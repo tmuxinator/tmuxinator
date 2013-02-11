@@ -3,7 +3,8 @@ module Tmuxinator
   class ConfigWriter
 
     attr_accessor :file_name, :file_path, :project_name, :project_root, :rvm, :tabs,
-                  :pre, :socket_name, :socket_path, :settings, :hotkeys, :cli_args
+                  :pre, :socket_name, :socket_path, :settings, :hotkeys, :cli_args,
+                  :synchronize
 
     include Tmuxinator::Helper
 
@@ -78,6 +79,7 @@ module Tmuxinator
             build_command(cmds, false)
           end.join ' && '
           t.pre = build_command(str)
+          t.synchronize = value["synchronize"] || false
         else
           t.command = build_command(value)
         end

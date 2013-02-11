@@ -11,6 +11,7 @@ describe Tmuxinator::ConfigWriter do
     its(:pre){ should be_nil }
     its(:socket){ should be_nil }
     its(:cli_args){ should be_nil }
+    its(:synchronize){ should be_nil }
   end
 
   context "While Defining the filename on init" do
@@ -39,6 +40,7 @@ describe Tmuxinator::ConfigWriter do
     specify{ first_tab.should be_an OpenStruct }
     specify{ first_tab.name.should eql "editor" }
     specify{ first_tab.layout.should eql "main-vertical" }
+    specify{ first_tab.synchronize.should eql true }
     specify{ first_tab.panes.should be_an Array }
     specify{ first_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.  Before each pane command!'" }
 
@@ -58,6 +60,7 @@ describe Tmuxinator::ConfigWriter do
     specify{ third_tab.should be_an OpenStruct }
     specify{ third_tab.name.should eql "guard" }
     specify{ third_tab.layout.should eql "tiled" }
+    specify{ third_tab.synchronize.should eql false }
     specify{ third_tab.panes.should be_an Array }
     specify{ third_tab.pre.should eql "rvm use 1.9.2@rails_project && echo 'I get run in each pane.' && echo 'Before each pane command!'"}
     context "When socket path has been defined" do
