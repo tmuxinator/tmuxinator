@@ -81,6 +81,7 @@ You can define your own panes inside a window likes this:
 ``` yaml
 - window_with_panes
     layout: main-vertical
+    synchronize: true
     panes:
       - vim
       - #empty, will just run plain bash
@@ -88,6 +89,8 @@ You can define your own panes inside a window likes this:
 ```
 
 The layout setting gets handed down to tmux directly, so you can choose from one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) or [specify your own](http://stackoverflow.com/a/9976282/183537).
+
+The synchronize setting gets handed down to tmux as if you `:set-window-option synchronize-panes on` in your current window.
 
 ## Starting a project
 ``` bash
