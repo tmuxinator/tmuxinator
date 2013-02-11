@@ -79,7 +79,7 @@ module Tmuxinator
             build_command(cmds, false)
           end.join ' && '
           t.pre = build_command(str)
-          t.synchronize = value["synchronize"]
+          t.synchronize = value["synchronize"] || false
         else
           t.command = build_command(value)
         end
