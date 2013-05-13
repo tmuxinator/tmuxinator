@@ -8,7 +8,11 @@ module Tmuxinator
 
       def run *args
         if args.empty?
-          self.usage
+          if File.exists?(".tmuxinator")
+            self.start_with_defaults 
+          else
+            self.usage
+          end
         else
           self.send(args.shift, *args)
         end
@@ -149,8 +153,16 @@ module Tmuxinator
       end
       alias :s :start
 
+      # use a .tmuxinator default file
+      def start_with_defaults
+        config_path = ".tmuxinator"
+        config = Tmuxinator::ConfigWriter.new(config_path).render
+        exec(config)
+      end
+
       def method_missing method, *args, &block
         start method if File.exists?("#{root_dir}#{method}.yml")
+        start_with_defaults if File.exists?(".tmuxinator")
         puts "There's no command or project '#{method}' in tmuxinator"
         usage
       end
