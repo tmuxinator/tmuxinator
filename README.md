@@ -1,4 +1,4 @@
-# Tmuxinator
+# Tmuxinator [![Build Status](https://secure.travis-ci.org/aziz/tmuxinator.png)](http://travis-ci.org/aziz/tmuxinator?branch=master) [![Coverage Status](https://coveralls.io/repos/aziz/tmuxinator/badge.png)](https://coveralls.io/r/aziz/tmuxinator) [![Code Climate](https://codeclimate.com/github/aziz/tmuxinator.png)](https://codeclimate.com/github/aziz/tmuxinator) [![Dependency Status](https://gemnasium.com/aziz/tmuxinator.png)](https://gemnasium.com/aziz/tmuxinator)
 
 Create and manage tmux sessions easily.
 
@@ -7,9 +7,11 @@ Create and manage tmux sessions easily.
 ![Screenshot](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
 
 ## Installation
+
 ``` bash
 $ gem install tmuxinator
 ```
+
 ## Editor and Shell
 
 tmuxinator uses your shell's default editor for opening files.  If you're not sure what that is type:
@@ -26,7 +28,7 @@ export EDITOR='mate -w'
 
 ## Environment Integration
 
-Add this to your ~/.bashrc (or similar)
+Add this to your `~/.bashrc` (or similar)
 
 ``` bash
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
@@ -90,46 +92,57 @@ You can define your own panes inside a window likes this:
 The layout setting gets handed down to tmux directly, so you can choose from one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) or [specify your own](http://stackoverflow.com/a/9976282/183537).
 
 ## Starting a project
+
 ``` bash
 $ start_[project_name]
 ```
+
 ## Shorthand
 
 You can also use this shorthand alias for tmuxinator
+
 ``` bash
 $ mux [command/project_name]
 ```
+
 This will fire up tmux with all the tabs you configured.
 
 ## Other Commands
+
+Copy an existing project. aliased to `c` and `cp`
 ``` bash
 $ tmuxinator copy existing_project new_project
 ```
-Copy an existing project. aliased to `c` and `cp`
+
+List all the projects you have configured. aliased to `l`
 ``` bash
 $ tmuxinator list
 ```
-List all the projects you have configured. aliased to `l`
+
+Remove a project. aliased to `rm`
 ``` bash
 $ tmuxinator delete project_name
 ```
-Remove a project. aliased to `rm`
+
+Remove all tmuxinator configs, aliases and scripts. aliased to `i`
 ``` bash
 $ tmuxinator implode
 ```
-Remove all tmuxinator configs, aliases and scripts. aliased to `i`
+
+Examines your environment and identifies problems with your configuration
 ``` bash
 $ tmuxinator doctor
 ```
-Examines your environment and identifies problems with your configuration
+
+Shows tmuxinator's version. aliased to `v`
 ``` bash
 $ tmuxinator version
 ```
-shows tmuxinator's version. aliased to `v`
+
+Shows tmuxinator's help. aliased to `h`
 ``` bash
 $ tmuxinator help
 ```
-shows tmuxinator's help. aliased to `h`
 
 ## Questions? Comments? Feature Request?
 
@@ -139,30 +152,6 @@ section and make a ticket.
 ## Contributors
 
 [See the full list of contributors](https://github.com/aziz/tmuxinator/contributors)
-
-## History
-#### v. 0.6.0
-* Removed base-index option when starting up the tmux server, so that users can use their base-index settings in tmux.conf (sevenpg)
- 
-#### v. 0.5.0
-* Added optional socket name support (Thanks to Adam Walters)
-* Added auto completion (Thanks to Jose Pablo Barrantes)
-
-####v. 0.4.0
-* Does not crash if given an invalid yaml file format. report it and exit gracefully.
-* Removed clunky scripts & shell aliases (Thanks to Dane O'Connor)
-* Config files are now rendered JIT (Thanks to Dane O'Connor)
-* Can now start sessions from cli (Thanks to Dane O'Connor)
-
-####v. 0.3.0
-* Added pre command (Thanks to Ian Yang)
-* Added multiple pre command (Thanks to Bjørn Arild Mæland)
-* Using tmux set default-path for project root
-* New aliases
-
-####v. 0.2.0
-* added pane support (Thanks to Aaron Spiegel)
-* RVM support (Thanks to Jay Adkisoon)
 
 ## Inspiration and Thanks
 
