@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
     "bin/tmuxinator_completion",
     "lib/tmuxinator.rb",
     "lib/tmuxinator/assets/sample.yml",
-    "lib/tmuxinator/assets/tmux_config.tmux",
+    "lib/tmuxinator/assets/tmux_config.tmux.erb",
     "lib/tmuxinator/cli.rb",
     "lib/tmuxinator/config_writer.rb",
     "lib/tmuxinator/helper.rb",
