@@ -1,10 +1,16 @@
-coverage
-rdoc
-doc
-.yardoc
+*.gem
+*.rbc
 .bundle
+.config
+.yardoc
+Gemfile.lock
+InstalledFiles
+_yardoc
+coverage
+doc/
+lib/bundler/man
 pkg
-TODO.todo
-.rake_tasks~
-# vim swaps
-.*.sw[a-z]
+rdoc
+spec/reports
+tmp
+db
