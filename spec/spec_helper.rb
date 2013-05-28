@@ -1,15 +1,7 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'rspec'
-require 'tmuxinator'
+require "tmuxinator"
 
-# Requires supporting files with custom matchers and macros, etc,
-# in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
-
-SAMPLE_CONFIG = File.join(File.dirname(__FILE__), '..', 'lib', 'tmuxinator', 'assets', 'sample.yml')
-RBENV_SAMPLE_CONFIG = File.join(File.dirname(__FILE__), '..', 'lib', 'tmuxinator', 'assets', 'rbenv_sample.yml')
+SAMPLE_CONFIG = File.join(File.dirname(__FILE__), "..", "lib", "tmuxinator", "assets", "sample.yml")
+RBENV_SAMPLE_CONFIG = File.join(File.dirname(__FILE__), "..", "lib", "tmuxinator", "assets", "rbenv_sample.yml")
 
 RSpec.configure do |config|
-
 end
