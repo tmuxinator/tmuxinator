@@ -181,4 +181,4 @@ Inspired by Jon Druse's ([Screeninator](https://github.com/jondruse/screeninator
 
 ## Copyright
 
-Copyright (c) 2010-2012 Allen Bargi. See LICENSE.txt for further details.
+Copyright (c) 2010-2012 Allen Bargi. See LICENSE for further details.
