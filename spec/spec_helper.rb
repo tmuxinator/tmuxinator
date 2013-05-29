@@ -13,4 +13,5 @@ SAMPLE_CONFIG = File.join(File.dirname(__FILE__), "..", "lib", "tmuxinator", "as
 RBENV_SAMPLE_CONFIG = File.join(File.dirname(__FILE__), "..", "lib", "tmuxinator", "assets", "rbenv_sample.yml")
 
 RSpec.configure do |config|
+  config.order = "random"
 end
