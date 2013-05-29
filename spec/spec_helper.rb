@@ -1,5 +1,6 @@
 require "coveralls"
 require "simplecov"
+require "pry"
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
