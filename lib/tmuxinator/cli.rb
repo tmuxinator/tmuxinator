@@ -1,183 +1,124 @@
-require 'fileutils'
-
+require "thor"
 module Tmuxinator
-  class Cli
+  class Cli < Thor
+    include Thor::Actions
+    include Tmuxinator::Helper
 
-    class << self
-      include Tmuxinator::Helper
+    package_name "tmuxinator"
 
-      def run *args
-        if args.empty?
-          self.usage
-        else
-          self.send(args.shift, *args)
-        end
+    desc "new [PROJECT]", "Create a new project file and open it in your editor"
+    map "open" => :new
+    map "o" => :new
+    map "n" => :new
+
+    def new(project)
+      config = "#{Tmuxinator::Config.root}#{project}.yml"
+
+      unless File.exists?(config)
+        template = File.exists?(Tmuxinator::Config.default) ? Tmuxinator::Config.default : Tmuxinator::Config.sample
+        erb  = ERB.new(File.read(template)).result(binding)
+        File.open(config, "w") { |f| f.write(erb) }
       end
 
-      # print the usage string, this is a fall through method.
-      def usage
-        puts %{
-  Usage: tmuxinator ACTION [Arg]
-  or
-  tmuxinator [project_name]
-
-  ACTIONS:
-  start [project_name]
-      start a tmux session using project's tmuxinator config
-  open [project_name]
-  new  [project_name]
-      create a new project file and open it in your editor, aliases: new, n, o
-  copy [source_project] [new_project]
-      copy source_project project file to a new project called new_project
-  delete [project_name]
-      deletes the project called project_name
-  implode
-      deletes all existing projects!
-  list [-v]
-      list all existing projects
-  doctor
-      look for problems in your configuration
-  help
-      shows this help document
-  version
-      shows tmuxinator version number
-}
-      end
-      alias :help :usage
-      alias :h :usage
-
-      # Open a config file, it's created if it doesn't exist already.
-      def open *args
-        exit!("You must specify a name for the new project") unless args.size > 0
-        puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
-        @name = args.shift
-        config_path = "#{root_dir}#{@name}.yml"
-        unless File.exists?(config_path)
-          template = File.exists?(user_config) ? user_config : sample_config
-          erb      = ERB.new(File.read(template)).result(binding)
-          File.open(config_path, 'w') {|f| f.write(erb) }
-        end
-        system("$EDITOR #{config_path}")
-      end
-      alias :o :open
-      alias :new :open
-      alias :n :open
-
-      def copy *args
-        @copy = args.shift
-        @name = args.shift
-        @config_to_copy = "#{root_dir}#{@copy}.yml"
-
-        exit!("Project #{@copy} doesn't exist!")             unless File.exists?(@config_to_copy)
-        exit!("You must specify a name for the new project") unless @name
-
-        file_path = "#{root_dir}#{@name}.yml"
-
-        if File.exists?(file_path)
-          confirm!("#{@name} already exists, would you like to overwrite it? (type yes or no):") do
-            FileUtils.rm(file_path)
-            puts "Overwriting #{@name}"
-          end
-        end
-        open @name
-      end
-      alias :c :copy
-      alias :cp :copy
-
-      def delete *args
-        puts "warning: passing multiple arguments to delete will be ignored" if args.size > 1
-        filename  = args.shift
-        file_path = "#{root_dir}#{filename}.yml"
-
-        if File.exists?(file_path)
-          confirm!("Are you sure you want to delete #{filename}? (type yes or no):") do
-            FileUtils.rm(file_path)
-            puts "Deleted #{filename}"
-          end
-        else
-          exit! "That file doesn't exist."
-        end
-      end
-      alias :d :delete
-      alias :rm :delete
-
-      def implode *args
-        exit!("delete_all doesn't accapt any arguments!") unless args.empty?
-        confirm!("Are you sure you want to delete all tmuxinator configs? (type yes or no):") do
-          FileUtils.remove_dir(root_dir)
-          puts "Deleted #{root_dir}"
-        end
-      end
-      alias :i :implode
-
-      def list *args
-        verbose = args.include?("-v")
-        puts "tmuxinator configs:"
-        Dir["#{root_dir}**"].sort.each do |path|
-          next unless verbose || File.extname(path) == ".yml"
-          path = path.gsub(root_dir, '').gsub('.yml','') unless verbose
-          puts "    #{path}"
-        end
-      end
-      alias :l :list
-      alias :ls :list
-
-      def version
-        system("cat #{File.dirname(__FILE__) + '/../../VERSION'}")
-        puts
-      end
-      alias :v :version
-
-      def doctor
-        print "  checking if tmux is installed ==> "
-        puts system("which tmux > /dev/null") ?  "Yes" : "No"
-        print "  checking if $EDITOR is set ==> "
-        puts ENV['EDITOR'] ? "Yes" : "No"
-        print "  checking if $SHELL is set ==> "
-        puts ENV['SHELL'] ? "Yes" : "No"
-      end
-
-      # build script and run it
-      def start *args
-        exit!("You must specify a name for the new project") unless args.size > 0
-        puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
-        project_name = args.shift
-        config_path = "#{root_dir}#{project_name}.yml"
-        config = Tmuxinator::ConfigWriter.new(config_path).render
-        # replace current proccess with running compiled tmux config
-        exec(config)
-      end
-      alias :s :start
-
-      def method_missing method, *args, &block
-        start method if File.exists?("#{root_dir}#{method}.yml")
-        puts "There's no command or project '#{method}' in tmuxinator"
-        usage
-      end
-
-      private #==============================
-
-      def root_dir
-        # create ~/.tmuxinator directory if it doesn't exist
-        Dir.mkdir("#{ENV["HOME"]}/.tmuxinator/") unless File.directory?(File.expand_path("~/.tmuxinator"))
-        sub_dir = File.join(File.expand_path(Dir.pwd), '.tmuxinator/')
-        if File.directory?(sub_dir)
-          return sub_dir
-        else
-          return "#{ENV["HOME"]}/.tmuxinator/"
-        end
-      end
-
-      def sample_config
-        "#{File.dirname(__FILE__)}/assets/sample.yml"
-      end
-
-      def user_config
-        @config_to_copy || "#{ENV["HOME"]}/.tmuxinator/default.yml"
-      end
-
+      Kernel.system("$EDITOR #{config}")
     end
 
+    desc "start [PROJECT]", "Start a tmux session using a project's tmuxinator config"
+    map "s" => :start
+
+    def start(project)
+      config = "#{Tmuxinator::Config.root}#{project}.yml"
+      tmux = Tmuxinator::ConfigWriter.new(config).render
+
+      Kernel.exec(tmux)
+    end
+
+    desc "copy [EXISTING] [NEW]", "Copy an existing project to a new project and open it in your editor"
+    map "c" => :copy
+    map "cp" => :copy
+
+    def copy(existing, new)
+      existing_config_path = "#{Tmuxinator::Config.root}#{existing}.yml"
+
+      exit!("Project #{existing} doesn't exist!") unless File.exists?(existing_config_path)
+
+      new_config_path = "#{Tmuxinator::Config.root}#{new}.yml"
+
+      if File.exists?(new_config_path)
+        if yes?("#{new} already exists, would you like to overwrite it?", :red)
+          FileUtils.rm(new_config_path)
+          say "Overwriting #{new}"
+        end
+      end
+
+      Kernel.system("$EDITOR #{new_config_path}")
+    end
+
+    desc "delete [PROJECT]", "Deletes given project"
+    map "d" => :delete
+    map "rm" => :delete
+
+    def delete(project)
+      config =  "#{Tmuxinator::Config.root}#{project}.yml"
+
+      if File.exists?(config)
+        if yes?("Are you sure you want to delete #{filename}?", :red)
+          FileUtils.rm(config)
+          say "Deleted #{project}"
+        end
+      else
+        exit! "That file doesn't exist."
+      end
+    end
+
+    desc "implode", "Delets all tmuxinator projects"
+    map "i" => :implode
+
+    def implode
+      if yes?("Are you sure you want to delete all tmuxinator configs?", :red)
+        FileUtils.remove_dir(Tmuxinator::Config.root)
+        say "Deleted #{root_dir}"
+      end
+    end
+
+    desc "list", "Lists all tmuxinator projects"
+    map "l" => :list
+    map "ls" => :list
+
+    def list
+      say "tmuxinator projects:"
+
+      configs = Dir["#{Tmuxinator::Config.root}*.yml"].sort.map do |path|
+        path.gsub(Tmuxinator::Config.root, "").gsub(".yml","") unless options.verbose?
+      end
+
+      print_in_columns configs
+    end
+
+    desc "version", "Display installed tmuxinator version"
+    map "-v" => :version
+
+    def version
+      say "tmuxinator #{Tmuxinator::VERSION}"
+    end
+
+    desc "doctor", "Look for problems in your configuration"
+
+    def doctor
+      say "Checking if tmux is installed ==> "
+      say_with_color Tmuxinator::Config.installed?
+
+      say "Checking if $EDITOR is set ==> "
+      say_with_color Tmuxinator::Config.editor?
+
+      say "Checking if $SHELL is set ==> "
+      say_with_color Tmuxinator::Config.shell?
+    end
+
+    no_tasks do
+      def say_with_color(test)
+        test ? say("Yes", :green) : say("No", :red)
+      end
+    end
   end
 end
-

@@ -1,6 +1,5 @@
 module Tmuxinator
   module Helper
-
     def exit!(msg)
       puts msg
       Kernel.exit(1)
@@ -14,6 +13,5 @@ module Tmuxinator
         exit! "Aborting."
       end
     end
-
   end
 end
