@@ -32,6 +32,8 @@ Add this to your ~/.bashrc (or similar)
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
 ```
 
+If tabs (windows) names are not displayed properly add also `export DISABLE_AUTO_TITLE=true` there.
+
 For command line completion you can source the `tmuxinator_completion` file, which is in the same directory as
 `tmuxinator` binary file. That will auto-complete `tmuxinator` commands, plus your `.yml` config files.
 
@@ -143,7 +145,7 @@ section and make a ticket.
 ## History
 #### v. 0.6.0
 * Removed base-index option when starting up the tmux server, so that users can use their base-index settings in tmux.conf (sevenpg)
- 
+
 #### v. 0.5.0
 * Added optional socket name support (Thanks to Adam Walters)
 * Added auto completion (Thanks to Jose Pablo Barrantes)
