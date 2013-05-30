@@ -1,4 +1,6 @@
 require "thor"
+require "pry"
+
 module Tmuxinator
   class Cli < Thor
     include Thor::Actions
@@ -51,6 +53,7 @@ module Tmuxinator
         end
       end
 
+      FileUtils.copy_file(existing_config_path, new_config_path)
       Kernel.system("$EDITOR #{new_config_path}")
     end
 
@@ -62,7 +65,7 @@ module Tmuxinator
       config =  "#{Tmuxinator::Config.root}#{project}.yml"
 
       if File.exists?(config)
-        if yes?("Are you sure you want to delete #{filename}?", :red)
+        if yes?("Are you sure you want to delete #{project}?", :red)
           FileUtils.rm(config)
           say "Deleted #{project}"
         end
@@ -77,7 +80,7 @@ module Tmuxinator
     def implode
       if yes?("Are you sure you want to delete all tmuxinator configs?", :red)
         FileUtils.remove_dir(Tmuxinator::Config.root)
-        say "Deleted #{root_dir}"
+        say "Deleted all tmuxinator projects."
       end
     end
 
