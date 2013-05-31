@@ -24,6 +24,8 @@ module Tmuxinator
   ACTIONS:
   start [project_name]
       start a tmux session using project's tmuxinator config
+  join [project_name]
+      joins an already running session without slaving to it
   open [project_name]
   new  [project_name]
       create a new project file and open it in your editor, aliases: new, n, o
@@ -62,6 +64,33 @@ module Tmuxinator
       alias :o :open
       alias :new :open
       alias :n :open
+
+      def join *args
+        exit!("You must specify a project name to join") unless args.size > 0
+        puts "warning: passing multiple arguments will be ignored" if args.size > 1
+        project_name = args.shift
+        config_path = "#{root_dir}#{project_name}.yml"
+        config = Tmuxinator::ConfigWriter.new(config_path)
+
+        # Search for a running session
+        sessions = %x(tmux list-sessions -F "#S").chomp.split("\n")
+        if sessions.include?(config.session_name)
+          # Since we have a running session, find the lowest number still available
+          session_number = 0
+          session_name = config.session_name
+          while sessions.include?(session_name)
+            session_number += 1
+            session_name = "#{config.session_name} #{session_number}"
+          end
+          cmd = "tmux new-session -s #{shellescape session_name} -t #{shellescape config.session_name}"
+          exec(cmd)
+        else
+          # Since there isn't a session running yet, just delegate to start()
+          puts "No #{@session_name} session, starting a new one..."
+          start *args
+        end
+      end
+      alias :j :join
 
       def copy *args
         @copy = args.shift
@@ -140,7 +169,7 @@ module Tmuxinator
       # build script and run it
       def start *args
         exit!("You must specify a name for the new project") unless args.size > 0
-        puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
+        puts "warning: passing multiple arguments to start will be ignored" if args.size > 1
         project_name = args.shift
         config_path = "#{root_dir}#{project_name}.yml"
         config = Tmuxinator::ConfigWriter.new(config_path).render
@@ -176,6 +205,15 @@ module Tmuxinator
         @config_to_copy || "#{ENV["HOME"]}/.tmuxinator/default.yml"
       end
 
+
+      def shellescape string
+        begin
+          require 'shellwords'
+          Shellwords.shellescape string
+        rescue
+          ConfigWriter.new.shell_escape string
+        end
+      end
     end
 
   end

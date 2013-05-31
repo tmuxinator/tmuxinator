@@ -8,3 +8,4 @@ TODO.todo
 .rake_tasks~
 # vim swaps
 .*.sw[a-z]
+vendor/bundle
