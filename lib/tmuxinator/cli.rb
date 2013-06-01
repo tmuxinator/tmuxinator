@@ -8,7 +8,7 @@ module Tmuxinator
 
       def run *args
         if args.empty?
-          self.usage
+          self.send('tmuxinator', *args)
         else
           self.send(args.shift, *args)
         end
@@ -142,7 +142,8 @@ module Tmuxinator
         exit!("You must specify a name for the new project") unless args.size > 0
         puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
         project_name = args.shift
-        config_path = "#{root_dir}#{project_name}.yml"
+        config_path = "#{Dir.pwd}/#{project_name}.yml"
+        config_path = "#{root_dir}#{project_name}.yml" unless File.exists?(config_path)
         config = Tmuxinator::ConfigWriter.new(config_path).render
         # replace current proccess with running compiled tmux config
         exec(config)
@@ -150,7 +151,7 @@ module Tmuxinator
       alias :s :start
 
       def method_missing method, *args, &block
-        start method if File.exists?("#{root_dir}#{method}.yml")
+        start method if (File.exists?("#{root_dir}#{method}.yml") or File.exists?("#{Dir.pwd}/#{method}.yml"))
         puts "There's no command or project '#{method}' in tmuxinator"
         usage
       end
