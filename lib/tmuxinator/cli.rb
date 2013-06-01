@@ -28,7 +28,7 @@ module Tmuxinator
       exit!("Project #{name} doesn't exist.") unless Tmuxinator::Config.exists?(name)
 
       config = Tmuxinator::Config.project(name)
-      tmux = Tmuxinator::Project.new(File.read(config)).render
+      tmux = Tmuxinator::Project.new(File.open(config)).render
 
       Kernel.exec(tmux)
     end
