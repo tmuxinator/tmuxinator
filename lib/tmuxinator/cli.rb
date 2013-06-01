@@ -1,9 +1,5 @@
-require "thor"
-require "pry"
-
 module Tmuxinator
   class Cli < Thor
-    include Thor::Actions
     include Tmuxinator::Helper
 
     package_name "tmuxinator"
@@ -115,12 +111,6 @@ module Tmuxinator
 
       say "Checking if $SHELL is set ==> "
       yes_no  Tmuxinator::Config.shell?
-    end
-
-    no_tasks do
-      def yes_no(condition)
-        condition ? say("Yes", :green) : say("No", :red)
-      end
     end
   end
 end

@@ -5,8 +5,12 @@ module Tmuxinator
     include Thor::Actions
 
     def exit!(msg)
-      say msg, :red
+      puts msg
       Kernel.exit(1)
+    end
+
+    def yes_no(condition)
+      condition ? say("Yes", :green) : say("No", :red)
     end
   end
 end
