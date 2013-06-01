@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Tmuxinator::Project do
   let(:yml) do
-    StringIO.new("project_name: Test\nproject_root: ~/code\ntabs:\n  - editor:\n  - shell:")
+    StringIO.new("base_index: 1\nproject_name: Test\nproject_root: ~/code\ntabs:\n  - editor:\n  - shell:")
   end
   let(:project) { Tmuxinator::Project.new(yml) }
 
@@ -19,6 +19,12 @@ describe Tmuxinator::Project do
       it "raises an error" do
         expect { capture_io { Tmuxinator::Project.new(yml) } }.to raise_error SystemExit
       end
+    end
+  end
+
+  describe "#render" do
+    it "renders the tmux config" do
+      expect(project.render).to_not be_empty
     end
   end
 

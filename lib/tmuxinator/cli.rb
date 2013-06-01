@@ -1,6 +1,6 @@
 module Tmuxinator
   class Cli < Thor
-    include Tmuxinator::Helper
+    include Tmuxinator::Util
 
     package_name "tmuxinator"
 
@@ -25,8 +25,10 @@ module Tmuxinator
     map "s" => :start
 
     def start(name)
+      exit!("Project #{name} doesn't exist.") unless Tmuxinator::Config.exists?(name)
+
       config = Tmuxinator::Config.project(name)
-      tmux = Tmuxinator::ConfigWriter.new(config).render
+      tmux = Tmuxinator::Project.new(File.read(config)).render
 
       Kernel.exec(tmux)
     end

@@ -1,7 +1,5 @@
-require "thor"
-
 module Tmuxinator
-  module Helper
+  module Util
     include Thor::Actions
 
     def exit!(msg)

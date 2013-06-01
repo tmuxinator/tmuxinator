@@ -2,9 +2,8 @@
 # you can make as many tabs as you wish...
 
 project_name: Tmuxinator
-project_root: ~/code/rails_project
+project_root: ~/test
 socket_name: foo # Not needed.  Remove to use default socket
-rvm: 1.9.2@rails_project
 pre: sudo /etc/rc.d/mysqld start
 cli_args: -v -2
 tabs:

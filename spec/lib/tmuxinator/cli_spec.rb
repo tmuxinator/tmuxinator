@@ -50,8 +50,12 @@ describe Tmuxinator::Cli do
   end
 
   describe "#start" do
+    let(:project) { FactoryGirl.build(:project) }
+
     before do
-      Tmuxinator::ConfigWriter.stub_chain(:new, :render)
+      Tmuxinator::Config.stub(:exists? => true)
+      File.stub(:read)
+      Tmuxinator::Project.stub(:new => project)
       ARGV.replace(["start", "temp"])
     end
 
