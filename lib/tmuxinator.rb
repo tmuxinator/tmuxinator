@@ -1,6 +1,7 @@
 require "yaml"
 require "ostruct"
 require "erb"
+require "active_support/all"
 require "tmuxinator/util"
 require "tmuxinator/config"
 require "tmuxinator/cli"
