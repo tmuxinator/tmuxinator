@@ -22,7 +22,7 @@ describe Tmuxinator::Config do
   describe "#installed?" do
     context "tmux is installed" do
       before do
-        Kernel.stub(:system).with("which tmux > /dev/null") { true }
+        Kernel.stub(:system) { true }
       end
 
       it "returns true" do
@@ -30,13 +30,13 @@ describe Tmuxinator::Config do
       end
     end
 
-    context "tmux is installed" do
+    context "tmux is not installed" do
       before do
-        Kernel.stub(:system).with("which tmux > /dev/null") { false }
+        Kernel.stub(:system) { false }
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.installed?).to be_true
+        expect(Tmuxinator::Config.installed?).to be_false
       end
     end
   end

@@ -19,7 +19,7 @@ module Tmuxinator
       end
 
       def installed?
-        system("which tmux > /dev/null")
+        Kernel.system("which tmux > /dev/null")
       end
 
       def editor?
