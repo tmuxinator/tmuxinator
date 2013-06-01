@@ -17,7 +17,7 @@ RSpec.configure do |config|
   config.order = "random"
 end
 
-# Copies from minitest.
+# Copied from minitest.
 def capture_io
   require 'stringio'
 

@@ -1,11 +1,14 @@
 require "spec_helper"
-
 describe Tmuxinator::Cli do
   let(:cli) { Tmuxinator::Cli }
 
   before do
-    ARGV.replace([])
+    $0 = "vmc"
+    ARGV.clear
     Kernel.stub(:system)
+    FileUtils.stub(:copy_file)
+    FileUtils.stub(:rm)
+    FileUtils.stub(:remove_dir)
   end
 
   context "no arguments" do
@@ -25,7 +28,7 @@ describe Tmuxinator::Cli do
 
     context "existing project doesn't exist" do
       before do
-        File.stub(:exists? => false)
+        Tmuxinator::Config.stub(:exists? => false)
       end
 
       it "creates a new tmuxinator project file" do
@@ -59,58 +62,116 @@ describe Tmuxinator::Cli do
   end
 
   describe "#copy" do
-    it "copies the config" do
-      pending
+    before do
+      ARGV.replace(["copy", "foo", "bar"])
+      Tmuxinator::Config.stub(:exists?) { true }
     end
 
     context "new project already exists" do
+      before do
+        $stdin.should_receive(:gets).and_return("y")
+      end
+
       it "prompts user to confirm overwrite" do
-        pending
+        FileUtils.should_receive(:rm)
+        capture_io { cli.start }
+      end
+
+      it "copies the config" do
+        FileUtils.should_receive(:copy_file)
+        capture_io { cli.start }
       end
     end
 
     context "existing project doens't exist" do
+      before do
+        Tmuxinator::Config.stub(:exists?) { false }
+      end
+
       it "exit with error code" do
-        pending
+        expect { capture_io { cli.start } }.to raise_error SystemExit
       end
     end
   end
 
   describe "#delete" do
-    it "confirms deletion" do
-      pending
+    before do
+      ARGV.replace(["delete", "foo"])
     end
 
-    it "deletes the project" do
-      pending
+    context "project exists" do
+      before do
+        Tmuxinator::Config.stub(:exists?) { true }
+      end
+
+      it "confirms deletion" do
+        $stdin.should_receive(:gets).and_return("y")
+        capture_io { cli.start }
+      end
+
+      it "deletes the project" do
+        $stdin.should_receive(:gets).and_return("y")
+        FileUtils.should_receive(:rm)
+        capture_io { cli.start }
+      end
+    end
+
+    context "project doesn't exist" do
+      it "exits with error message" do
+        expect { capture_io { cli.start } }.to raise_error SystemExit
+      end
     end
   end
 
   describe "#implode" do
+    before do
+      ARGV.replace(["implode"])
+    end
+
     it "confirms deletion of all projects" do
-      pending
+      $stdin.should_receive(:gets).and_return("y")
+      capture_io { cli.start }
     end
 
     it "deletes all projects" do
-      pending
+      $stdin.should_receive(:gets).and_return("y")
+      FileUtils.should_receive(:remove_dir)
+      capture_io { cli.start }
     end
   end
 
   describe "#list" do
+    before do
+      ARGV.replace(["list"])
+      Dir.stub(:[] => ["/path/to/project.yml"])
+    end
+
     it "lists all projects" do
-      pending
+      expect { capture_io { cli.start } }.to_not raise_error
     end
   end
 
   describe "#version" do
+    before do
+      ARGV.replace(["version"])
+    end
+
     it "prints the current version" do
-      pending
+      out, _ = capture_io { cli.start }
+      expect(out).to eq "tmuxinator #{Tmuxinator::VERSION}\n"
     end
   end
 
   describe "#doctor" do
+    before do
+      ARGV.replace(["doctor"])
+    end
+
     it "checks requirements" do
-      pending
+      Tmuxinator::Config.should_receive(:installed?)
+      Tmuxinator::Config.should_receive(:editor?)
+      Tmuxinator::Config.should_receive(:shell?)
+      capture_io { cli.start }
     end
   end
 end

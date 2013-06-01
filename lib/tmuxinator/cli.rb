@@ -13,11 +13,11 @@ module Tmuxinator
     map "o" => :new
     map "n" => :new
 
-    def new(project)
-      config = "#{Tmuxinator::Config.root}#{project}.yml"
+    def new(name)
+      config = Tmuxinator::Config.project(name)
 
-      unless File.exists?(config)
-        template = File.exists?(Tmuxinator::Config.default) ? Tmuxinator::Config.default : Tmuxinator::Config.sample
+      unless Tmuxinator::Config.exists?(name)
+        template = Tmuxinator::Config.default? ? Tmuxinator::Config.default : Tmuxinator::Config.sample
         erb  = ERB.new(File.read(template)).result(binding)
         File.open(config, "w") { |f| f.write(erb) }
       end
@@ -28,8 +28,8 @@ module Tmuxinator
     desc "start [PROJECT]", "Start a tmux session using a project's tmuxinator config"
     map "s" => :start
 
-    def start(project)
-      config = "#{Tmuxinator::Config.root}#{project}.yml"
+    def start(name)
+      config = Tmuxinator::Config.project(name)
       tmux = Tmuxinator::ConfigWriter.new(config).render
 
       Kernel.exec(tmux)
@@ -40,13 +40,12 @@ module Tmuxinator
     map "cp" => :copy
 
     def copy(existing, new)
-      existing_config_path = "#{Tmuxinator::Config.root}#{existing}.yml"
+      existing_config_path = Tmuxinator::Config.project(existing)
+      new_config_path = Tmuxinator::Config.project(new)
 
-      exit!("Project #{existing} doesn't exist!") unless File.exists?(existing_config_path)
+      exit!("Project #{existing} doesn't exist!") unless Tmuxinator::Config.exists?(existing)
 
-      new_config_path = "#{Tmuxinator::Config.root}#{new}.yml"
-
-      if File.exists?(new_config_path)
+      if Tmuxinator::Config.exists?(new)
         if yes?("#{new} already exists, would you like to overwrite it?", :red)
           FileUtils.rm(new_config_path)
           say "Overwriting #{new}"
@@ -64,7 +63,7 @@ module Tmuxinator
     def delete(project)
       config =  "#{Tmuxinator::Config.root}#{project}.yml"
 
-      if File.exists?(config)
+      if Tmuxinator::Config.exists?(config)
         if yes?("Are you sure you want to delete #{project}?", :red)
           FileUtils.rm(config)
           say "Deleted #{project}"
@@ -92,7 +91,7 @@ module Tmuxinator
       say "tmuxinator projects:"
 
       configs = Dir["#{Tmuxinator::Config.root}*.yml"].sort.map do |path|
-        path.gsub(Tmuxinator::Config.root, "").gsub(".yml","") unless options.verbose?
+        path.gsub(Tmuxinator::Config.root, "").gsub(".yml","")
       end
 
       print_in_columns configs
@@ -109,18 +108,18 @@ module Tmuxinator
 
     def doctor
       say "Checking if tmux is installed ==> "
-      say_with_color Tmuxinator::Config.installed?
+      yes_no Tmuxinator::Config.installed?
 
       say "Checking if $EDITOR is set ==> "
-      say_with_color Tmuxinator::Config.editor?
+      yes_no Tmuxinator::Config.editor?
 
       say "Checking if $SHELL is set ==> "
-      say_with_color Tmuxinator::Config.shell?
+      yes_no  Tmuxinator::Config.shell?
     end
 
     no_tasks do
-      def say_with_color(test)
-        test ? say("Yes", :green) : say("No", :red)
+      def yes_no(condition)
+        condition ? say("Yes", :green) : say("No", :red)
       end
     end
   end
