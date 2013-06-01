@@ -7,8 +7,9 @@ module Tmuxinator
     def initialize(file)
       begin
         @yaml = YAML.load(file.read)
-      rescue
-        exit!("Invalid YAML file format.")
+      # We rescue SyntaxError explicitly due to https://github.com/tenderlove/psych/issues/23
+      rescue SyntaxError, StandardError
+        exit!("Failed to parse config file. Please check your formatting.")
       end
 
       exit!("You project file should specify a base_index") unless base_index?
