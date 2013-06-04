@@ -4,18 +4,8 @@ module Tmuxinator
 
     attr_reader :yaml
 
-    def initialize(file)
-      begin
-        @yaml = YAML.load(file.read)
-      # We rescue SyntaxError explicitly due to https://github.com/tenderlove/psych/issues/23
-      rescue SyntaxError, StandardError
-        exit!("Failed to parse config file. Please check your formatting.")
-      end
-
-      exit!("You project file should specify a base_index") unless base_index?
-      exit!("Your project file should include some tabs.") unless tabs?
-      exit!("Your project file didn't specify a 'project_root'") unless root?
-      exit!("Your project file didn't specify a 'project_name'") unless name?
+    def initialize(yaml)
+      @yaml = yaml
     end
 
     def render

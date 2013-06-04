@@ -27,10 +27,21 @@ module Tmuxinator
     def start(name)
       exit!("Project #{name} doesn't exist.") unless Tmuxinator::Config.exists?(name)
 
-      config = Tmuxinator::Config.project(name)
-      tmux = Tmuxinator::Project.new(File.open(config)).render
+      config_path = Tmuxinator::Config.project(name)
 
-      Kernel.exec(tmux)
+      yaml = begin
+        YAML.load(File.read(config_path))
+      rescue SyntaxError, StandardError
+        exit!("Failed to parse config file. Please check your formatting.")
+      end
+
+      project = Tmuxinator::Project.new(yaml)
+      exit!("Your project file should specify a base_index") unless project.base_index?
+      exit!("Your project file should include some tabs.") unless project.tabs?
+      exit!("Your project file didn't specify a 'project_root'") unless project.root?
+      exit!("Your project file didn't specify a 'project_name'") unless project.name?
+
+      Kernel.exec(project.render)
     end
 
     desc "copy [EXISTING] [NEW]", "Copy an existing project to a new project and open it in your editor"

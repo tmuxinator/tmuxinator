@@ -1,23 +1,12 @@
 require "spec_helper"
 
 describe Tmuxinator::Project do
-  let(:yml) do
-    StringIO.new("base_index: 1\nproject_name: Test\nproject_root: ~/code\ntabs:\n  - editor:\n  - shell:")
-  end
-  let(:project) { Tmuxinator::Project.new(yml) }
+  let(:project) { FactoryGirl.build(:project) }
 
   describe "#initialize" do
     context "valid yaml" do
       it "creates an instance" do
         expect(project).to be_a(Tmuxinator::Project)
-      end
-    end
-
-    context "invalid yaml" do
-      let(:yml) { StringIO.new("key:\n\nkey") }
-
-      it "raises an error" do
-        expect { capture_io { Tmuxinator::Project.new(yml) } }.to raise_error SystemExit
       end
     end
   end
@@ -36,13 +25,13 @@ describe Tmuxinator::Project do
 
   describe "#root" do
     it "gets the project_root" do
-      expect(project.root).to eq "~/code"
+      expect(project.root).to eq "~/test"
     end
   end
 
   describe "#name" do
     it "gets the project name" do
-      expect(project.name).to eq "Test"
+      expect(project.name).to eq "Tmuxinator"
     end
   end
 

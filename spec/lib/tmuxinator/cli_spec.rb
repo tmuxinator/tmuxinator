@@ -54,7 +54,6 @@ describe Tmuxinator::Cli do
 
     before do
       Tmuxinator::Config.stub(:exists? => true)
-      File.stub(:read)
       Tmuxinator::Project.stub(:new => project)
       ARGV.replace(["start", "temp"])
     end
