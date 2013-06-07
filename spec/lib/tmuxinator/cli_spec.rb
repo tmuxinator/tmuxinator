@@ -55,6 +55,8 @@ describe Tmuxinator::Cli do
     before do
       Tmuxinator::Config.stub(:exists? => true)
       Tmuxinator::Project.stub(:new => project)
+      File.stub(:read => true)
+      YAML.stub(:load => true)
       ARGV.replace(["start", "temp"])
     end
 
