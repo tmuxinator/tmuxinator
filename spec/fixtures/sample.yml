@@ -3,6 +3,7 @@
 
 project_name: Tmuxinator
 project_root: ~/test
+rbenv: 1.9.3-p392
 socket_name: foo # Not needed.  Remove to use default socket
 pre: sudo /etc/rc.d/mysqld start
 cli_args: -v -2

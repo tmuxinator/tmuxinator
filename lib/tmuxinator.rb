@@ -12,7 +12,5 @@ require "tmuxinator/project"
 require "tmuxinator/tab"
 require "tmuxinator/version"
 
-TMUX_TEMPLATE  = "#{File.dirname(__FILE__)}/tmuxinator/assets/tmux_config.tmux.erb"
-
 module Tmuxinator
 end

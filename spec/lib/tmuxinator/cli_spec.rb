@@ -49,23 +49,6 @@ describe Tmuxinator::Cli do
     end
   end
 
-  describe "#start" do
-    let(:project) { FactoryGirl.build(:project) }
-
-    before do
-      Tmuxinator::Config.stub(:exists? => true)
-      Tmuxinator::Project.stub(:new => project)
-      File.stub(:read => true)
-      YAML.stub(:load => true)
-      ARGV.replace(["start", "temp"])
-    end
-
-    it "starts a tmuxinator session" do
-      Kernel.should_receive(:exec)
-      capture_io { cli.start }
-    end
-  end
-
   describe "#copy" do
     before do
       ARGV.replace(["copy", "foo", "bar"])
