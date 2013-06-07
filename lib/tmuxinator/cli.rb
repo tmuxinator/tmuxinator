@@ -4,6 +4,24 @@ module Tmuxinator
 
     package_name "tmuxinator"
 
+    desc "commands", "Lists commands available in tmuxinator"
+
+    def commands
+      puts %w(commands copy debug delete doctor help implode list start version).join("\n")
+    end
+
+    desc "completions [arg1 arg2]", "Used for shell completion"
+
+    def completions(arg)
+      if %w(start open copy delete).include?(arg)
+        configs = Dir["#{Tmuxinator::Config.root}/*.yml"].sort.map do |path|
+          path.gsub("#{Tmuxinator::Config.root}/", "").gsub(".yml", "")
+        end
+
+        puts configs
+      end
+    end
+
     desc "new [PROJECT]", "Create a new project file and open it in your editor"
     map "open" => :new
     map "o" => :new
@@ -91,8 +109,8 @@ module Tmuxinator
     def list
       say "tmuxinator projects:"
 
-      configs = Dir["#{Tmuxinator::Config.root}*.yml"].sort.map do |path|
-        path.gsub(Tmuxinator::Config.root, "").gsub(".yml","")
+      configs = Dir["#{Tmuxinator::Config.root}/*.yml"].sort.map do |path|
+        path.gsub("#{Tmuxinator::Config.root}/", "").gsub(".yml", "")
       end
 
       print_in_columns configs

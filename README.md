@@ -28,6 +28,22 @@ put a line in ~/.bashrc that changes it. Mine looks like this:
 export EDITOR='vim'
 ```
 
+## Completion
+
+Download the appropriate completion file from the repo.
+
+### bash
+
+Add the following to your `~/.bashrc`:
+
+    source `which tmuxinator.zsh`
+
+### zsh
+
+Add the following to your `~/.zshrc`:
+
+    source `which tmuxinator.zsh`
+
 ## Usage
 
 ### Create a project
