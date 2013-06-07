@@ -1,5 +1,5 @@
 require "yaml"
-require "erb"
+require "erubis"
 require "shellwords"
 require "thor"
 require "active_support/all"

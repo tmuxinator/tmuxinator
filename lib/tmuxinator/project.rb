@@ -9,7 +9,8 @@ module Tmuxinator
     end
 
     def render
-      ERB.new(IO.read(TMUX_TEMPLATE)).result(binding)
+      template = File.read(Tmuxinator::Config.template)
+      Erubis::Eruby.new(template).result(binding)
     end
 
     def tabs
@@ -40,18 +41,27 @@ module Tmuxinator
       yaml["pre"]
     end
 
-    def socket_name
-      yaml["socket_name"]
+    def tmux
+      "tmux#{socket}"
+    end
+
+    def attach
+      cli_args.present? ? " #{cli_args}" : nil
+      "tmux#{cli_args}#{socket} -u attach-session -t #{name}"
     end
 
     def socket
       if socket_path.present?
-        "-S #{@socket_path}"
+        " -S #{socket_path}"
       elsif socket_name.present?
-        "-L #{@socket_name}"
+        " -L #{socket_name}"
       else
-        ""
+        nil
       end
+    end
+
+    def socket_name
+      yaml["socket_name"]
     end
 
     def socket_path
@@ -63,7 +73,7 @@ module Tmuxinator
     end
 
     def base_index
-      yaml["base_index"].to_i
+      %x[tmux show-window-options -g | grep pane-base-index].split(/\s/).last.to_i
     end
 
     def tabs?
@@ -78,10 +88,6 @@ module Tmuxinator
       name.present?
     end
 
-    def base_index?
-      base_index.present?
-    end
-
     def window(i)
       "#{name}:#{i}"
     end
@@ -90,7 +96,7 @@ module Tmuxinator
       if cmd.blank?
        ""
       else
-        "tmux #{socket} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
+        "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
       end
     end
   end
