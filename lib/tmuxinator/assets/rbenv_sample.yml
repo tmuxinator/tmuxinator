@@ -5,6 +5,7 @@ project_name: Tmuxinator
 project_root: ~/code/rails_project
 socket_name: foo # Not needed.  Remove to use default socket
 rbenv: 1.9.2-p290
+nvm: v0.8.24
 pre: sudo /etc/rc.d/mysqld start
 tabs:
   - editor:
