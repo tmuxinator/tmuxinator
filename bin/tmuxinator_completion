@@ -18,7 +18,7 @@ _tmuxinator_commands_complete()
   	case "${prev}" in
   		# complete any action [project_config]
   		start|open|copy|delete)
-			local configs=`find -L ~/.tmuxinator -name *.yml | cut -d/ -f5 | sed s:.yml::g`
+			local configs=`find -L ~/.tmuxinator -name *.yml | cut -d/ -f5- | sed s:.yml::g`
 			COMPREPLY=(`compgen -W "$configs" -- $2`)
 			;;
 		list)
