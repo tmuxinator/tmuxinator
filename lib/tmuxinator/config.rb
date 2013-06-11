@@ -7,7 +7,7 @@ module Tmuxinator
       end
 
       def sample
-        "#{File.expand_path("lib/tmuxinator/assets/sample.yml")}"
+        "#{File.dirname(__FILE__)}/assets/sample.yml"
       end
 
       def default
@@ -39,7 +39,7 @@ module Tmuxinator
       end
 
       def template
-        "#{File.expand_path("lib/tmuxinator/assets/template.erb")}"
+        "#{File.dirname(__FILE__)}/assets/template.erb"
       end
     end
   end

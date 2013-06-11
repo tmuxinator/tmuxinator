@@ -10,7 +10,7 @@ require "tmuxinator/config"
 require "tmuxinator/pane"
 require "tmuxinator/project"
 require "tmuxinator/tab"
-require "tmuxinator/version"
+require "tmuxinator/meta"
 
 module Tmuxinator
 end

@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "tmuxinator/version"
+require "tmuxinator/meta"
 
 Gem::Specification.new do |spec|
-  spec.name          = "tmuxinator"
+  spec.name          = Tmuxinator::NAME
   spec.version       = Tmuxinator::VERSION
   spec.authors       = ["Allen Bargi"]
   spec.email         = ["allen.bargi@gmail.com"]
@@ -23,12 +23,9 @@ Gem::Specification.new do |spec|
     ..........................................................
 
     Thank you for installing tmuxinator.
-    Please be sure to to drop a line in your ~/.bashrc file, similar
-    to RVM if you've used that before:
 
-    [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+    Make sure that you've set these variables in your ENV:
 
-    Also ensure that you've set these variables in your ENV:
       $EDITOR, $SHELL
 
     You can run `tmuxinator doctor` to make sure everything is set.
