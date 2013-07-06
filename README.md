@@ -66,8 +66,8 @@ If this is a new project you will see this default config:
 project_name: Tmuxinator
 project_root: ~/code/rails_project
 socket_name: foo # Not needed. Remove to use default socket
-rvm: 1.9.2@rails_project
 pre: sudo /etc/rc.d/mysqld start
+pre_tab: 1.9.2@rails_project
 tabs:
   - editor:
       layout: main-vertical
@@ -157,6 +157,11 @@ $ tmuxinator doctor
 Shows tmuxinator's help. Aliased to `h`
 ``` bash
 $ tmuxinator help
+```
+
+Shows the shell commands that get executed for a project
+```bash
+$ tmuxinator debug [project]
 ```
 
 Shows tmuxinator's version.
