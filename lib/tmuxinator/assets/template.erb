@@ -1,6 +1,5 @@
 #!<%= ENV["SHELL"] || "/bin/bash" %>
-<%= tmux %> start-server
-<%= tmux %> has-session -t <%= name %> 2>/dev/null
+<%= tmux %> start-server\; has-session -t <%= name %> 2>/dev/null
 
 if [ "$?" -eq 1 ]; then
   cd <%= root || "." %>
