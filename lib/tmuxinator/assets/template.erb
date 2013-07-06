@@ -25,10 +25,12 @@ if [ "$?" -eq 1 ]; then
 
   # Window "<%= tab.name %>"
     <%- unless tab.panes? -%>
+  <%= send_keys(pre_tab, i) %>
   <%= send_keys(tab.command, i) %>
     <%- else tab.panes -%>
       <%- tab.panes.each do |pane| -%>
   <%= tmux %> splitw -t <%= window(i) %>
+  <%= send_keys(pre_tab, i) %>
   <%= send_keys(pane.command, i) %>
   <%= tmux %> select-layout -t <%= window(i) %> <%= tab.layout %>
       <%- end -%>

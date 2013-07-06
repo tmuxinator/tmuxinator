@@ -31,7 +31,7 @@ describe Tmuxinator::Project do
 
   describe "#name" do
     it "gets the project name" do
-      expect(project.name).to eq "Tmuxinator"
+      expect(project.name).to eq "sample"
     end
   end
 

@@ -41,6 +41,10 @@ module Tmuxinator
       yaml["pre"]
     end
 
+    def pre_tab
+      yaml["pre_tab"]
+    end
+
     def tmux
       "tmux#{socket}"
     end
