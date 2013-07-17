@@ -4,7 +4,7 @@ $: << File.expand_path("../../lib/", __FILE__)
 require "thor"
 require "tmuxinator"
 
-if ARGV.length == 1 && (ARGV & Tmuxinator::Cli.command_list).empty?
+if ARGV.length == 1 && (ARGV & Tmuxinator::Cli.new.command_list).empty?
   Tmuxinator::Cli.new.start(ARGV[0])
 else
   Tmuxinator::Cli.start
