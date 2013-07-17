@@ -2,12 +2,19 @@ module Tmuxinator
   class Cli < Thor
     include Tmuxinator::Util
 
+    attr_reader :command_list
+
+    def initialize(*args)
+      super
+      @command_list = %w(commands copy debug delete doctor help implode list start version)
+    end
+
     package_name "tmuxinator"
 
     desc "commands", "Lists commands available in tmuxinator"
 
     def commands
-      puts %w(commands copy debug delete doctor help implode list start version).join("\n")
+      puts command_list.join("\n")
     end
 
     desc "completions [arg1 arg2]", "Used for shell completion"

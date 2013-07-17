@@ -3,7 +3,6 @@ describe Tmuxinator::Cli do
   let(:cli) { Tmuxinator::Cli }
 
   before do
-    $0 = "vmc"
     ARGV.clear
     Kernel.stub(:system)
     FileUtils.stub(:copy_file)
