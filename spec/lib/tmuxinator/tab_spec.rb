@@ -11,7 +11,7 @@ describe Tmuxinator::Tab do
     }
   end
 
-  let(:tab) { Tmuxinator::Tab.new(yaml) }
+  let(:tab) { Tmuxinator::Tab.new(yaml, 0, nil) }
 
   describe "#initialize" do
     it "creates an instance" do

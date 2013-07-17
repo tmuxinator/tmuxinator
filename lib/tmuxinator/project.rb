@@ -15,8 +15,8 @@ module Tmuxinator
 
     def tabs
       @tabs ||= if yaml["tabs"].present?
-        yaml["tabs"].map do |tab_yaml|
-          Tmuxinator::Tab.new(tab_yaml)
+        yaml["tabs"].map.with_index do |tab_yaml, index|
+          Tmuxinator::Tab.new(tab_yaml, index, self)
         end
       end
     end
@@ -94,6 +94,14 @@ module Tmuxinator
 
     def window(i)
       "#{name}:#{i}"
+    end
+
+    def send_pane_command(cmd, window_index, pane_index)
+      if cmd.blank?
+        ""
+      else
+        "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
+      end
     end
 
     def send_keys(cmd, window_index)

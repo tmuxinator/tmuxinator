@@ -14,28 +14,29 @@ if [ "$?" -eq 1 ]; then
   <%= tmux %> set-option -t <%= name %> default-path <%= root -%> 1>/dev/null
 
   # Create other windows.
-  <%- tabs.drop(1).each_with_index do |tab, ti| -%>
-    <%- i = ti + base_index + 1 -%>
-  <%= tmux %> new-window -t <%= window(i) %> -n <%= tab.name %>
+  <%- tabs.drop(1).each do |tab| -%>
+  <%= tab.tmux_new_window_command %>
   <%- end -%>
 
-  # Set up panes and issue commands for each window.
-  <%- tabs.each_with_index do |tab, ti| -%>
-    <%- i = ti + base_index -%>
+  <%- tabs.each do |tab| -%>
 
   # Window "<%= tab.name %>"
     <%- unless tab.panes? -%>
-  <%= send_keys(pre_tab, i) %>
-  <%= send_keys(tab.command, i) %>
-    <%- else tab.panes -%>
+  <%= tab.tmux_pre_tab_comamnd %>
+  <%= tab.tmux_main_command %>
+    <%- else -%>
       <%- tab.panes.each do |pane| -%>
-  <%= tmux %> splitw -t <%= window(i) %>
-  <%= send_keys(pre_tab, i) %>
-  <%= send_keys(pane.command, i) %>
-  <%= tmux %> select-layout -t <%= window(i) %> <%= tab.layout %>
-      <%- end -%>
+  <%= pane.tmux_pre_tab_command %>
+  <%= pane.tmux_main_command %>
 
-  <%= tmux %> select-pane -t <%= window(i) %>.0
+      <%- unless pane.last? -%>
+  <%= pane.tmux_split_command %>
+      <%- end -%>
+    <%- end -%>
+
+
+  <%= tab.tmux_layout_command %>
+  <%= tab.tmux_select_first_pane %>
     <%- end -%>
   <%- end -%>
 
