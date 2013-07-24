@@ -58,17 +58,14 @@ For editing you can also use `tmuxinator open [project]`. `new` is aliased to
 `o`,`open` and `n`. Your default editor (`$EDITOR`) is used to open the file.
 If this is a new project you will see this default config:
 
-
 ``` yaml
-# ~/.tmuxinator/project_name.yml
-# you can make as many tabs as you wish...
-
-project_name: Tmuxinator
-project_root: ~/code/rails_project
-socket_name: foo # Not needed. Remove to use default socket
-pre: sudo /etc/rc.d/mysqld start
-pre_tab: 1.9.2@rails_project
-tabs:
+name: Tmuxinator
+root: ~/Code/tmuxinator
+socket_name: foo # Remove to use default socket
+pre: sudo /etc/rc.d/mysqld start # Runs before everything
+pre_window: rbenv shell 2.0.0-p247 # Runs in each tab and pane
+tmux_args: -v -2 # Pass arguments to tmux
+windows:
   - editor:
       layout: main-vertical
       panes:

@@ -67,12 +67,7 @@ module Tmuxinator
     end
 
     def tmux
-      "tmux#{socket}"
-    end
-
-    def attach
-      cli_args.present? ? " #{cli_args}" : nil
-      "tmux#{cli_args}#{socket} -u attach-session -t #{name}"
+      "tmux#{tmux_args}#{socket}"
     end
 
     def socket
@@ -93,8 +88,19 @@ module Tmuxinator
       yaml["socket_path"]
     end
 
-    def cli_args
-      yaml["cli_args"]
+    def tmux_args
+      args = 
+        if yaml["cli_args"].present?
+          yaml["cli_args"]
+        else
+          yaml["tmux_args"]
+        end
+
+      if args.present?
+        " #{args.strip}"
+      else
+        ""
+      end
     end
 
     def base_index
@@ -135,12 +141,9 @@ module Tmuxinator
 
     def deprecations
       deprecations = []
-
-      if yaml["rbenv"] || yaml["rvm"]
-        deprecations << "DEPRECATION: rbenv/rvm specific options have been replaced by the pre_tab option and will not be supported in 0.8.0."
-      end
-
-      deprecations << "DEPRECATION: The tabs option has been replaced by the window option and will not be supported in 0.8.0."
+      deprecations << "DEPRECATION: rbenv/rvm specific options have been replaced by the pre_tab option and will not be supported in 0.8.0." if yaml["rbenv"] || yaml["rvm"]
+      deprecations << "DEPRECATION: The tabs option has been replaced by the window option and will not be supported in 0.8.0." if yaml["tabs"].present?
+      deprecations << "DEPRECATION: The cli_args option has been replaced by the tmux_args option and will not be supported in 0.8.0." if yaml["cli_args"].present?
     end
   end
 end

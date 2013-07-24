@@ -44,4 +44,4 @@ if [ "$?" -eq 1 ]; then
   <%= tmux %> select-window -t <%= base_index %>
 fi
 
-<%= attach %>
+<%= tmux %> -u attach-session -t <%= name %>
