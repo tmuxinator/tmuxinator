@@ -64,7 +64,7 @@ root: ~/Code/tmuxinator
 socket_name: foo # Remove to use default socket
 pre: sudo /etc/rc.d/mysqld start # Runs before everything
 pre_window: rbenv shell 2.0.0-p247 # Runs in each tab and pane
-tmux_args: -v -2 # Pass arguments to tmux
+tmux_options: -v -2 # Pass arguments to tmux
 windows:
   - editor:
       layout: main-vertical
