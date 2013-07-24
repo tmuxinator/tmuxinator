@@ -51,6 +51,14 @@ module Tmuxinator
 
     def start(name)
       project = validate_project(name)
+
+      if project.deprecations.any?
+        project.deprecations.each { |deprecation| say deprecation, :red }
+        puts
+        print "Press any key to continue."
+        STDIN.getc
+      end
+
       Kernel.exec(project.render)
     end
 
@@ -157,7 +165,7 @@ module Tmuxinator
 
         project = Tmuxinator::Project.new(yaml)
 
-        exit!("Your project file should include some tabs.") unless project.tabs?
+        exit!("Your project file should include some windows.") unless project.windows?
         exit!("Your project file didn't specify a 'project_root'") unless project.root?
         exit!("Your project file didn't specify a 'project_name'") unless project.name?
 

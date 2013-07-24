@@ -8,25 +8,26 @@ if [ "$?" -eq 1 ]; then
   <%= pre %>
 
   # Create the session and the first window.
-  <%= tmux %> new-session -d -s <%= name %> -n <%= tabs.first.name %>
+  <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %>
 
   # Set the default path.
   <%= tmux %> set-option -t <%= name %> default-path <%= root -%> 1>/dev/null
 
   # Create other windows.
-  <%- tabs.drop(1).each do |tab| -%>
-  <%= tab.tmux_new_window_command %>
+  <%- windows.drop(1).each do |window| -%>
+  <%= window.tmux_new_window_command %>
   <%- end -%>
 
-  <%- tabs.each do |tab| -%>
+  <%- windows.each do |window| -%>
 
-  # Window "<%= tab.name %>"
-    <%- unless tab.panes? -%>
-  <%= tab.tmux_pre_tab_comamnd %>
-  <%= tab.tmux_main_command %>
+  # Window "<%= window.name %>"
+    <%- unless window.panes? -%>
+  <%= window.tmux_pre_window_command %>
+  <%= window.tmux_main_command %>
     <%- else -%>
-      <%- tab.panes.each do |pane| -%>
-  <%= pane.tmux_pre_tab_command %>
+      <%- window.panes.each do |pane| -%>
+  <%= pane.tmux_pre_window_command %>
+  <%= pane.tmux_pre_command %>
   <%= pane.tmux_main_command %>
 
       <%- unless pane.last? -%>
@@ -35,8 +36,8 @@ if [ "$?" -eq 1 ]; then
     <%- end -%>
 
 
-  <%= tab.tmux_layout_command %>
-  <%= tab.tmux_select_first_pane %>
+  <%= window.tmux_layout_command %>
+  <%= window.tmux_select_first_pane %>
     <%- end -%>
   <%- end -%>
 

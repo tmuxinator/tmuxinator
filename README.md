@@ -126,6 +126,16 @@ You can also use this shorthand alias for tmuxinator
 $ mux [command]
 ```
 
+## Interpreter Managers & Environment Variables
+
+To use tmuxinator with rbenv, RVM, NVM etc, use the `pre_tab` option.
+
+```
+pre_tab: rbenv shell 2.0.0-p247
+```
+
+These commands will run before any pane or window.
+
 ## Other Commands
 
 Copy an existing project. Aliased to `c` and `cp`

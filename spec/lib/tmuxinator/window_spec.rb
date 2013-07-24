@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Tmuxinator::Tab do
+describe Tmuxinator::Window do
   let(:yaml) do
     {
       "editor" => {
@@ -11,17 +11,17 @@ describe Tmuxinator::Tab do
     }
   end
 
-  let(:tab) { Tmuxinator::Tab.new(yaml, 0, nil) }
+  let(:window) { Tmuxinator::Window.new(yaml, 0, nil) }
 
   describe "#initialize" do
     it "creates an instance" do
-      expect(tab).to be_a(Tmuxinator::Tab)
+      expect(window).to be_a(Tmuxinator::Window)
     end
   end
 
   describe "#build_panes" do
     it "creates the list of panes" do
-      expect(tab.panes).to_not be_empty
+      expect(window.panes).to_not be_empty
     end
   end
 end

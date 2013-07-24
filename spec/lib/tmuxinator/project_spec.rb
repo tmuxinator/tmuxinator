@@ -17,9 +17,9 @@ describe Tmuxinator::Project do
     end
   end
 
-  describe "#tabs" do
-    it "gets the list of tabs" do
-      expect(project.tabs).to_not be_empty
+  describe "#windows" do
+    it "gets the list of windows" do
+      expect(project.windows).to_not be_empty
     end
   end
 
@@ -35,10 +35,10 @@ describe Tmuxinator::Project do
     end
   end
 
-  describe "#tabs?" do
-    context "tabs are present" do
+  describe "#windows?" do
+    context "windows are present" do
       it "returns true" do
-        expect(project.tabs?).to be_true
+        expect(project.windows?).to be_true
       end
     end
   end

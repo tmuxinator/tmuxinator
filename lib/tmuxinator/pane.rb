@@ -13,8 +13,12 @@ module Tmuxinator
       "#{project.name}:#{tab.index + project.base_index}.#{index + project.base_index}"
     end
 
-    def tmux_pre_tab_command
-      project.pre_tab.present? ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{project.pre_tab.shellescape} C-m" : ""
+    def tmux_pre_command
+      tab.pre.present? ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{tab.pre.shellescape} C-m" : ""
+    end
+
+    def tmux_pre_window_command
+      project.pre_window.present? ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{project.pre_window.shellescape} C-m" : ""
     end
 
     def tmux_main_command

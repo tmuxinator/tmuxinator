@@ -1,9 +1,9 @@
 module Tmuxinator
-  class Tab
-    attr_reader :name, :panes, :layout, :pre, :command, :index, :project
+  class Window
+    attr_reader :name, :panes, :layout, :command, :index, :project
 
-    def initialize(tab_yaml, index, project)
-      @name = tab_yaml.keys.first.present? ? tab_yaml.keys.first.shellescape : nil
+    def initialize(window_yaml, index, project)
+      @name = window_yaml.keys.first.present? ? window_yaml.keys.first.shellescape : nil
       @panes = []
       @layout = nil
       @pre = nil
@@ -11,7 +11,7 @@ module Tmuxinator
       @project = project
       @index = index
 
-      value = tab_yaml.values.first
+      value = window_yaml.values.first
 
       if value.is_a?(Hash)
         @layout = value["layout"].present? ? value["layout"].shellescape : nil
@@ -33,6 +33,18 @@ module Tmuxinator
       end
     end
 
+    def pre
+      if @pre.present?
+        if @pre.is_a?(Array)
+          @pre.join(" && ")
+        elsif @pre.is_a?(String)
+          @pre
+        end
+      else
+        ""
+      end
+    end
+
     def panes?
       panes.any?
     end
@@ -41,8 +53,8 @@ module Tmuxinator
       "#{project.name}:#{index + project.base_index}"
     end
 
-    def tmux_pre_tab_comamnd
-      project.pre_tab.present? ? "#{project.tmux} send-keys -t #{tmux_window_target} #{project.pre_tab.shellescape} C-m" : ""
+    def tmux_pre_window_command
+      project.pre_window.present? ? "#{project.tmux} send-keys -t #{tmux_window_target} #{project.pre_window.shellescape} C-m" : ""
     end
 
     def tmux_main_command

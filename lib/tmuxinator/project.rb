@@ -13,20 +13,33 @@ module Tmuxinator
       Erubis::Eruby.new(template).result(binding)
     end
 
-    def tabs
-      @tabs ||= if yaml["tabs"].present?
-        yaml["tabs"].map.with_index do |tab_yaml, index|
-          Tmuxinator::Tab.new(tab_yaml, index, self)
+    def windows
+      windows_yml =
+        if yaml["tabs"].present?
+          yaml["tabs"]
+        else
+          yaml["windows"]
         end
+
+      @windows ||= windows_yml.map.with_index do |window_yml, index|
+        Tmuxinator::Window.new(window_yml, index, self)
       end
     end
 
     def root
-      yaml["project_root"]
+      if yaml["project_root"].present?
+        yaml["project_root"]
+      else
+        yaml["root"]
+      end
     end
 
     def name
-      yaml["project_name"].shellescape
+      if yaml["project_name"].present?
+        yaml["project_name"].shellescape
+      else
+        yaml["name"].shellescape
+      end
     end
 
     def rvm
@@ -41,8 +54,16 @@ module Tmuxinator
       yaml["pre"]
     end
 
-    def pre_tab
-      yaml["pre_tab"]
+    def pre_window
+      if yaml["rbenv"].present?
+        "rbenv shell #{yaml["rbenv"]}"
+      elsif yaml["rvm"].present?
+        "rvm use #{yaml["rvm"]}"
+      elsif yaml["pre_tab"].present?
+        yaml["pre_tab"]
+      else
+        yaml["pre_window"]
+      end
     end
 
     def tmux
@@ -80,8 +101,8 @@ module Tmuxinator
       `tmux start-server\\\; show-window-options -g | grep pane-base-index`.split(/\s/).last.to_i
     end
 
-    def tabs?
-      tabs.any?
+    def windows?
+      windows.any?
     end
 
     def root?
@@ -110,6 +131,16 @@ module Tmuxinator
       else
         "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
       end
+    end
+
+    def deprecations
+      deprecations = []
+
+      if yaml["rbenv"] || yaml["rvm"]
+        deprecations << "DEPRECATION: rbenv/rvm specific options have been replaced by the pre_tab option and will not be supported in 0.8.0."
+      end
+
+      deprecations << "DEPRECATION: The tabs option has been replaced by the window option and will not be supported in 0.8.0."
     end
   end
 end
