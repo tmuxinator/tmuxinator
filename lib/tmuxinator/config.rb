@@ -31,11 +31,16 @@ module Tmuxinator
       end
 
       def exists?(name)
-        File.exists?(project(name))
+        unless project(name).nil?
+          File.exists?(project(name))
+        else
+          false
+        end
       end
 
       def project(name)
-        "#{root}/#{name}.yml"
+        projects = Dir.glob("#{root}/**/*.yml")
+        projects.select { |project| project =~ /#{name}.yml/ }.first
       end
 
       def template
