@@ -88,6 +88,7 @@ describe Tmuxinator::Config do
   describe "#exists?" do
     before do
       File.stub(:exists? => true)
+      Tmuxinator::Config.stub(:project => "")
     end
 
     it "checks if the given project exists" do
@@ -96,7 +97,13 @@ describe Tmuxinator::Config do
   end
 
   describe "#project" do
+    before do
+      Dir.stub(:glob => ["#{Tmuxinator::Config.root}/test.yml"])
+    end
+
+
     let(:root) { Tmuxinator::Config.root }
+
     it "gets the project as path to the yml file" do
       expect(Tmuxinator::Config.project("test")).to eq "#{root}/test.yml"
     end
