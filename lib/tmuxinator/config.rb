@@ -32,11 +32,7 @@ module Tmuxinator
       end
 
       def exists?(name)
-        unless project(name).nil?
-          File.exists?(project(name))
-        else
-          false
-        end
+        File.exists?(project(name))
       end
 
       def project(name)
