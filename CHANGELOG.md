@@ -1,7 +1,18 @@
-## HEAD
-- Added rvm and rbenv support (#94)
-- Fix base-index issues (#94)
-- Fix tmux completion issues (#48)
+## 0.6.0
+
+- Rewrote core functionality with proper abstractions and unit tests
+- Fixed outstanding bugs #72 #89 #90 #93 #101 #102 #103 #104 #109
+- Switched to thor for command line argument parsing
+- Switched to Erubis for more Rails like ERB
+- Added simplecov for test coverage
+- Added debug command line option to view generated shell commands
+- Added commands and completion options for completion scripts
+- Added `pre_window` option for running commands before all panes and windows
+- Deprecated `rbenv` in favour of `pre_window`
+- Deprecated `rvm` in favour of `pre_window`
+- Deprecated `cli_args` in favour of `tmux_options`
+- Deprecated `tabs` in favour of `windows`
+- Dropped support for Ruby 1.9.2
 
 ## 0.5.0
 - Added optional socket name support (Thanks to Adam Walters)
