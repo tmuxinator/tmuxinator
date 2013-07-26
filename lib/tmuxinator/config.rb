@@ -41,7 +41,8 @@ module Tmuxinator
 
       def project(name)
         projects = Dir.glob("#{root}/**/*.yml")
-        projects.select { |project| project =~ /#{name}.yml/ }.first
+        project_file = projects.detect { |project| project =~ /#{name}.yml/ }
+        project_file || "#{root}/#{name}.yml"
       end
 
       def template
