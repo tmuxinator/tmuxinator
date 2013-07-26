@@ -15,3 +15,4 @@ rdoc
 spec/reports
 tmp
 db
+vendor/
