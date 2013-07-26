@@ -1,11 +1,17 @@
-require 'yaml'
-require 'ostruct'
-require 'erb'
-require 'tmuxinator/helper'
-require 'tmuxinator/cli'
-require 'tmuxinator/config_writer'
+require "yaml"
+require "erubis"
+require "shellwords"
+require "thor"
+require "active_support/all"
 
-TMUX_TEMPLATE  = "#{File.dirname(__FILE__)}/tmuxinator/assets/tmux_config.tmux.erb"
+require "tmuxinator/util"
+require "tmuxinator/deprecations"
+require "tmuxinator/cli"
+require "tmuxinator/config"
+require "tmuxinator/pane"
+require "tmuxinator/project"
+require "tmuxinator/window"
+require "tmuxinator/version"
 
 module Tmuxinator
 end

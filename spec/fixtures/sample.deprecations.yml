@@ -1,13 +1,13 @@
-# ~/.tmuxinator/<%= @name %>.yml
+# ~/.tmuxinator/sample.deprecations.yml
 # you can make as many tabs as you wish...
 
-name: sample
-root: ~/test
+project_name: sample
+project_root: ~/test
 socket_name: foo # Remove to use default socket
 pre: sudo /etc/rc.d/mysqld start # Runs before everything
-pre_window: rbenv shell 2.0.0-p247 # Runs in each tab and pane
-tmux_options: -v -2 # Pass arguments to tmux
-windows:
+rbenv: 2.0.0-p247
+cli_args: -v -2 # Pass arguments to tmux
+tabs:
   - editor:
       pre:
         - echo "I get run in each pane, before each pane command!"

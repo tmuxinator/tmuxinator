@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
-$:.unshift(File.dirname(__FILE__) + '/../lib') unless $:.include?(File.dirname(__FILE__) + '/../lib')
+$: << File.expand_path("../../lib/", __FILE__)
 
-require 'tmuxinator'
+require "thor"
+require "tmuxinator"
 
-Tmuxinator::Cli.run(*ARGV)
+if ARGV.length == 1 && (ARGV & Tmuxinator::Cli.new.command_list).empty?
+  Tmuxinator::Cli.new.start(ARGV[0])
+else
+  Tmuxinator::Cli.start
+end

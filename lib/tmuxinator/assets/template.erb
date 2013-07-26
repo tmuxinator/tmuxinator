@@ -1,0 +1,47 @@
+#!<%= ENV["SHELL"] || "/bin/bash" %>
+<%= tmux %> start-server\; has-session -t <%= name %> 2>/dev/null
+
+if [ "$?" -eq 1 ]; then
+  cd <%= root || "." %>
+
+  # Run pre command.
+  <%= pre %>
+
+  # Create the session and the first window.
+  <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %>
+
+  # Set the default path.
+  <%= tmux %> set-option -t <%= name %> default-path <%= root -%> 1>/dev/null
+
+  # Create other windows.
+  <%- windows.drop(1).each do |window| -%>
+  <%= window.tmux_new_window_command %>
+  <%- end -%>
+
+  <%- windows.each do |window| -%>
+
+  # Window "<%= window.name %>"
+    <%- unless window.panes? -%>
+  <%= window.tmux_pre_window_command %>
+  <%= window.tmux_main_command %>
+    <%- else -%>
+      <%- window.panes.each do |pane| -%>
+  <%= pane.tmux_pre_window_command %>
+  <%= pane.tmux_pre_command %>
+  <%= pane.tmux_main_command %>
+
+      <%- unless pane.last? -%>
+  <%= pane.tmux_split_command %>
+      <%- end -%>
+    <%- end -%>
+
+
+  <%= window.tmux_layout_command %>
+  <%= window.tmux_select_first_pane %>
+    <%- end -%>
+  <%- end -%>
+
+  <%= tmux %> select-window -t <%= base_index %>
+fi
+
+<%= tmux %> -u attach-session -t <%= name %>

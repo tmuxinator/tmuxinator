@@ -1,4 +1,4 @@
-# ~/.tmuxinator/<%= @name %>.yml
+# ~/.tmuxinator/sample.yml
 # you can make as many tabs as you wish...
 
 name: sample
