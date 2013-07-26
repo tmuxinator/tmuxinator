@@ -1,4 +1,3 @@
-require "pry"
 module Tmuxinator
   class Config
     class << self
