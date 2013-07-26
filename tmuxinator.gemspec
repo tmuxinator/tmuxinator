@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "tmuxinator/meta"
+require "tmuxinator/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = Tmuxinator::NAME
+  spec.name          = "tmuxinator"
   spec.version       = Tmuxinator::VERSION
   spec.authors       = ["Allen Bargi"]
   spec.email         = ["allen.bargi@gmail.com"]
