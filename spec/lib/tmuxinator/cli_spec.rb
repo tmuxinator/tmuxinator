@@ -17,6 +17,59 @@ describe Tmuxinator::Cli do
     end
   end
 
+  describe "#completions" do
+    before do
+      ARGV.replace(["completions", "start"])
+      Tmuxinator::Config.stub(:configs => ["test.yml"])
+    end
+
+    it "gets completions" do
+      out, _ = capture_io { cli.start }
+      expect(out).to include("test.yml")
+    end
+  end
+
+  describe "#commands" do
+    before do
+      ARGV.replace(["commands"])
+    end
+
+    it "lists the commands" do
+      out, _ = capture_io { cli.start }
+      expect(out).to eq "#{%w(commands copy debug delete doctor help implode list start version).join("\n")}\n"
+    end
+  end
+
+  describe "#start" do
+    before do
+      ARGV.replace(["start", "foo"])
+      Tmuxinator::Config.stub(:validate => project)
+      Kernel.stub(:exec)
+    end
+
+    context "no deprecations" do
+      let(:project) { FactoryGirl.build(:project) }
+
+      it "starts the project" do
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+    end
+
+    context "deprecations" do
+      before do
+        $stdin.stub(:getc => "y")
+      end
+
+      let(:project) { FactoryGirl.build(:project_with_deprecations) }
+
+      it "prints the deprecations" do
+        out, _ = capture_io { cli.start }
+        expect(out).to include "DEPRECATION"
+      end
+    end
+  end
+
   describe "#new" do
     let(:file) { StringIO.new }
 
@@ -42,7 +95,7 @@ describe Tmuxinator::Cli do
       end
 
       it "just opens the file" do
-        Kernel.should_receive(:system)
+        expect(Kernel).to receive(:system)
         capture_io { cli.start }
       end
     end
@@ -56,16 +109,16 @@ describe Tmuxinator::Cli do
 
     context "new project already exists" do
       before do
-        $stdin.should_receive(:gets).and_return("y")
+        $stdin.stub(:gets => "y")
       end
 
       it "prompts user to confirm overwrite" do
-        FileUtils.should_receive(:rm)
+        expect(FileUtils).to receive(:rm)
         capture_io { cli.start }
       end
 
       it "copies the config" do
-        FileUtils.should_receive(:copy_file)
+        expect(FileUtils).to receive(:copy_file)
         capture_io { cli.start }
       end
     end
@@ -81,6 +134,20 @@ describe Tmuxinator::Cli do
     end
   end
 
+  describe "#debug" do
+    let(:project) { FactoryGirl.build(:project) }
+
+    before do
+      ARGV.replace(["debug", "foo"])
+      Tmuxinator::Config.stub(:validate => project)
+    end
+
+    it "renders the project" do
+      expect(project).to receive(:render)
+      capture_io { cli.start }
+    end
+  end
+
   describe "#delete" do
     before do
       ARGV.replace(["delete", "foo"])
@@ -88,17 +155,16 @@ describe Tmuxinator::Cli do
 
     context "project exists" do
       before do
+        $stdin.stub(:gets => "y")
         Tmuxinator::Config.stub(:exists?) { true }
       end
 
       it "confirms deletion" do
-        $stdin.should_receive(:gets).and_return("y")
         capture_io { cli.start }
       end
 
       it "deletes the project" do
-        $stdin.should_receive(:gets).and_return("y")
-        FileUtils.should_receive(:rm)
+        expect(FileUtils).to receive(:rm)
         capture_io { cli.start }
       end
     end
@@ -113,16 +179,16 @@ describe Tmuxinator::Cli do
   describe "#implode" do
     before do
       ARGV.replace(["implode"])
+      $stdin.stub(:gets => "y")
     end
 
     it "confirms deletion of all projects" do
-      $stdin.should_receive(:gets).and_return("y")
+      expect($stdin).to receive(:gets).and_return("y")
       capture_io { cli.start }
     end
 
     it "deletes all projects" do
-      $stdin.should_receive(:gets).and_return("y")
-      FileUtils.should_receive(:remove_dir)
+      expect(FileUtils).to receive(:remove_dir)
       capture_io { cli.start }
     end
   end

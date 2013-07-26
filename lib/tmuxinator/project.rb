@@ -1,6 +1,7 @@
 module Tmuxinator
   class Project
     include Tmuxinator::Util
+    include Tmuxinator::Deprecations
 
     attr_reader :yaml
 
@@ -42,24 +43,16 @@ module Tmuxinator
       end
     end
 
-    def rvm
-      yaml["rvm"]
-    end
-
-    def rbenv
-      yaml["rbenv"]
-    end
-
     def pre
       yaml["pre"]
     end
 
     def pre_window
-      if yaml["rbenv"].present?
+      if rbenv?
         "rbenv shell #{yaml["rbenv"]}"
-      elsif yaml["rvm"].present?
+      elsif rvm?
         "rvm use #{yaml["rvm"]}"
-      elsif yaml["pre_tab"].present?
+      elsif pre_tab?
         yaml["pre_tab"]
       else
         yaml["pre_window"]
@@ -89,15 +82,10 @@ module Tmuxinator
     end
 
     def tmux_options
-      args = 
-        if yaml["cli_args"].present?
-          yaml["cli_args"]
-        else
-          yaml["tmux_options"]
-        end
-
-      if args.present?
-        " #{args.strip}"
+      if cli_args?
+        " #{yaml["cli_args"].strip}"
+      elsif tmux_options?
+        " #{yaml["tmux_options"].strip}"
       else
         ""
       end
@@ -105,6 +93,10 @@ module Tmuxinator
 
     def base_index
       `tmux start-server\\\; show-window-options -g | grep pane-base-index`.split(/\s/).last.to_i
+    end
+
+    def tmux_options?
+      yaml["tmux_options"].present?
     end
 
     def windows?

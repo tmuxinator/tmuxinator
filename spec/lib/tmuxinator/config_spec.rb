@@ -19,6 +19,16 @@ describe Tmuxinator::Config do
     end
   end
 
+  describe "#configs" do
+    before do
+      Dir.stub(:[] => ["test.yml"])
+    end
+
+    it "gets a list of all projects" do
+      expect(Tmuxinator::Config.configs).to include("test")
+    end
+  end
+
   describe "#installed?" do
     context "tmux is installed" do
       before do

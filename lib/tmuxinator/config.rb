@@ -1,3 +1,4 @@
+require "pry"
 module Tmuxinator
   class Config
     class << self
@@ -45,6 +46,46 @@ module Tmuxinator
 
       def template
         "#{File.dirname(__FILE__)}/assets/template.erb"
+      end
+
+      def configs
+        Dir["#{Tmuxinator::Config.root}/*.yml"].sort.map do |path|
+          path.gsub("#{Tmuxinator::Config.root}/", "").gsub(".yml", "")
+        end
+      end
+
+      def validate(name)
+        unless Tmuxinator::Config.exists?(name)
+          puts "Project #{name} doesn't exist."
+          exit!
+        end
+
+        config_path = Tmuxinator::Config.project(name)
+
+        yaml = begin
+          YAML.load(File.read(config_path))
+        rescue SyntaxError, StandardError
+          puts "Failed to parse config file. Please check your formatting."
+          exit!
+        end
+
+        project = Tmuxinator::Project.new(yaml)
+
+        unless project.windows?
+          puts "Your project file should include some windows."
+          exit!
+        end
+
+        unless project.root?
+          puts "Your project file didn't specify a 'project_root'"
+          exit!
+        end
+
+        unless project.name?
+          puts "Your project file didn't specify a 'project_name'"
+        end
+
+        project
       end
     end
   end
