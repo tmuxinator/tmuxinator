@@ -92,7 +92,7 @@ module Tmuxinator
     end
 
     def base_index
-      `tmux start-server\\\; show-window-options -g | grep pane-base-index`.split(/\s/).last.to_i
+      `#{tmux} start-server\\\; show-window-options -g | grep pane-base-index`.split(/\s/).last.to_i
     end
 
     def tmux_options?
