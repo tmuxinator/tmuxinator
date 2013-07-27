@@ -1,3 +1,7 @@
+## 0.6.1
+- Remove stray binding.pry
+- Fix nil error when creating a new project.
+
 ## 0.6.0
 
 - Rewrote core functionality with proper abstractions and unit tests
