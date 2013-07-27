@@ -6,7 +6,7 @@ project_root: ~/test
 socket_name: foo # Remove to use default socket
 pre: sudo /etc/rc.d/mysqld start # Runs before everything
 rbenv: 2.0.0-p247
-cli_args: -v -2 # Pass arguments to tmux
+cli_args: -f ~/.tmux.mac.conf # Pass arguments to tmux
 tabs:
   - editor:
       pre:

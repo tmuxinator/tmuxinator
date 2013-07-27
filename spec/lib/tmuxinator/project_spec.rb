@@ -130,7 +130,7 @@ describe Tmuxinator::Project do
       end
 
       it "still gets the tmux options" do
-        expect(project_with_deprecations.tmux_options).to eq " -v -2"
+        expect(project_with_deprecations.tmux_options).to eq " -f ~/.tmux.mac.conf"
       end
     end
   end
@@ -174,7 +174,7 @@ describe Tmuxinator::Project do
 
     context "command for window is not empty" do
       it "returns the tmux command" do
-        expect(project.send_keys("vim", 1)).to eq "tmux -v -2 -L foo send-keys -t sample:1 vim C-m"
+        expect(project.send_keys("vim", 1)).to eq "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 vim C-m"
       end
     end
   end
@@ -188,7 +188,7 @@ describe Tmuxinator::Project do
 
     context "command for pane is not empty" do
       it "returns the tmux command" do
-        expect(project.send_pane_command("vim", 1, 0)).to eq "tmux -v -2 -L foo send-keys -t sample:1 vim C-m"
+        expect(project.send_pane_command("vim", 1, 0)).to eq "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 vim C-m"
       end
     end
   end
