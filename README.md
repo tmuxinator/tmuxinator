@@ -176,6 +176,12 @@ Shows tmuxinator's version.
 $ tmuxinator version
 ```
 
+## FAQ
+
+### Window names are not displayed properly?
+
+Add `export DISABLE_AUTO_TITLE=true` to your `.zshrc` or `.bashrc`
+
 ## Contributing
 
 To contribute, please read the [contributing guide](https://github.com/aziz/tmuxinator/blob/master/CONTRIBUTING.md).
