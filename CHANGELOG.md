@@ -1,3 +1,7 @@
+## 0.6.2
+- Also pass command line options to the `base_index` lookup.
+- Fixed bug #116.
+
 ## 0.6.1
 - Remove stray binding.pry
 - Fix nil error when creating a new project.
