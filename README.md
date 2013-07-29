@@ -36,7 +36,7 @@ Download the appropriate completion file from the repo.
 
 Add the following to your `~/.bashrc`:
 
-    source `which tmuxinator.zsh`
+    source `which tmuxinator.bash`
 
 ### zsh
 
