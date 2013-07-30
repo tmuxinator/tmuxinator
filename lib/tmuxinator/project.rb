@@ -1,3 +1,4 @@
+require "pry"
 module Tmuxinator
   class Project
     include Tmuxinator::Util
@@ -83,9 +84,9 @@ module Tmuxinator
 
     def tmux_options
       if cli_args?
-        " #{yaml["cli_args"].strip}"
+        " #{yaml["cli_args"].to_s.strip}"
       elsif tmux_options?
-        " #{yaml["tmux_options"].strip}"
+        " #{yaml["tmux_options"].to_s.strip}"
       else
         ""
       end
