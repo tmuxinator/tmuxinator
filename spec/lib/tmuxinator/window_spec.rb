@@ -59,4 +59,22 @@ describe Tmuxinator::Window do
       end
     end
   end
+
+  describe "#tmux_new_window_command" do
+    let(:project) { double(:project) }
+    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+
+    before do
+      project.stub(
+        :name => "",
+        :tmux => "tmux",
+        :root => "/project/tmuxinator",
+        :base_index => 1
+      )
+    end
+
+    it "specifies root path by passing -c to tmux" do
+      expect(window.tmux_new_window_command).to include("-c /project/tmuxinator")
+    end
+  end
 end
