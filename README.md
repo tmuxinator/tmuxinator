@@ -112,7 +112,7 @@ or [specify your own](http://stackoverflow.com/a/9976282/183537).
 This will fire up tmux with all the tabs and panes you configured.
 
 ``` bash
-$ tmuinxator start [project]
+$ tmuxinator start [project]
 ```
 
 ## Shorthand
@@ -125,10 +125,10 @@ $ mux [command]
 
 ## Interpreter Managers & Environment Variables
 
-To use tmuxinator with rbenv, RVM, NVM etc, use the `pre_tab` option.
+To use tmuxinator with rbenv, RVM, NVM etc, use the `pre_window` option.
 
 ```
-pre_tab: rbenv shell 2.0.0-p247
+pre_window: rbenv shell 2.0.0-p247
 ```
 
 These commands will run before any pane or window.
