@@ -1,3 +1,9 @@
+## 0.6.3
+- Remove stray pry #128
+- Allow starting a tmuxinator project while inside a tmux session #130
+- Set the tmux layout after pane creation to avoid pane too small errors #131
+- Check for both pane-base-index and base-index #126
+
 ## 0.6.2
 - Also pass command line options to the `base_index` lookup.
 - Fixed bug #116.
