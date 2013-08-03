@@ -8,7 +8,7 @@ if [ "$?" -eq 1 ]; then
   <%= pre %>
 
   # Create the session and the first window.
-  <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %>
+  TMUX= <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %>
 
   # Set the default path.
   <%= tmux %> set-option -t <%= name %> default-path <%= root -%> 1>/dev/null
@@ -44,4 +44,8 @@ if [ "$?" -eq 1 ]; then
   <%= tmux %> select-window -t <%= base_index %>
 fi
 
-<%= tmux %> -u attach-session -t <%= name %>
+if [ -z "$TMUX" ]; then
+  <%= tmux %> -u attach-session -t <%= name %>
+else
+  <%= tmux %> -u switch-client -t <%= name %>
+fi
