@@ -15,29 +15,30 @@ if [ "$?" -eq 1 ]; then
 
   # Create other windows.
   <%- windows.drop(1).each do |window| -%>
-  <%= window.tmux_new_window_command %>
+    <%= window.tmux_new_window_command %>
   <%- end -%>
 
   <%- windows.each do |window| -%>
 
   # Window "<%= window.name %>"
     <%- unless window.panes? -%>
-  <%= window.tmux_pre_window_command %>
-  <%= window.tmux_main_command %>
+      <%= window.tmux_pre_window_command %>
+      <%= window.tmux_main_command %>
     <%- else -%>
       <%- window.panes.each do |pane| -%>
-  <%= pane.tmux_pre_window_command %>
-  <%= pane.tmux_pre_command %>
-  <%= pane.tmux_main_command %>
-
+        <%= pane.tmux_pre_window_command %>
+        <%= pane.tmux_pre_command %>
+        <%= pane.tmux_main_command %>
+  
       <%- unless pane.last? -%>
-  <%= pane.tmux_split_command %>
+        <%= pane.tmux_split_command %>
       <%- end -%>
+      
+      <%= window.tmux_layout_command %>
     <%- end -%>
 
 
-  <%= window.tmux_layout_command %>
-  <%= window.tmux_select_first_pane %>
+      <%= window.tmux_select_first_pane %>
     <%- end -%>
   <%- end -%>
 
