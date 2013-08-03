@@ -1,4 +1,6 @@
-# Tmuxinator [![Gem Version](https://badge.fury.io/rb/tmuxinator.png)](http://badge.fury.io/rb/tmuxinator) [![Build Status](https://secure.travis-ci.org/aziz/tmuxinator.png)](http://travis-ci.org/aziz/tmuxinator?branch=master) [![Coverage Status](https://coveralls.io/repos/aziz/tmuxinator/badge.png)](https://coveralls.io/r/aziz/tmuxinator) [![Code Climate](https://codeclimate.com/github/aziz/tmuxinator.png)](https://codeclimate.com/github/aziz/tmuxinator) [![Dependency Status](https://gemnasium.com/aziz/tmuxinator.png)](https://gemnasium.com/aziz/tmuxinator)
+# Tmuxinator
+
+[![Gem Version](https://badge.fury.io/rb/tmuxinator.png)](http://badge.fury.io/rb/tmuxinator) [![Build Status](https://secure.travis-ci.org/aziz/tmuxinator.png)](http://travis-ci.org/aziz/tmuxinator?branch=master) [![Coverage Status](https://coveralls.io/repos/aziz/tmuxinator/badge.png)](https://coveralls.io/r/aziz/tmuxinator) [![Code Climate](https://codeclimate.com/github/aziz/tmuxinator.png)](https://codeclimate.com/github/aziz/tmuxinator) [![Dependency Status](https://gemnasium.com/aziz/tmuxinator.png)](https://gemnasium.com/aziz/tmuxinator)
 
 Create and manage tmux sessions easily.
 
