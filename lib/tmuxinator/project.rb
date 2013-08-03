@@ -92,7 +92,7 @@ module Tmuxinator
     end
 
     def base_index
-      `#{tmux} start-server\\\; show-window-options -g | grep pane-base-index`.split(/\s/).last.to_i
+      get_pane_base_index.present? ? get_pane_base_index.to_i : get_base_index.to_i
     end
 
     def tmux_options?
@@ -137,6 +137,14 @@ module Tmuxinator
       deprecations << "DEPRECATION: The tabs option has been replaced by the window option and will not be supported in 0.8.0." if yaml["tabs"].present?
       deprecations << "DEPRECATION: The cli_args option has been replaced by the tmux_options option and will not be supported in 0.8.0." if yaml["cli_args"].present?
       deprecations
+    end
+
+    def get_pane_base_index
+      `#{tmux} start-server\\; show-option -g | grep pane-base-index`.split(/\s/).last
+    end
+
+    def get_base_index
+      `#{tmux} start-server\\; show-option -g | grep base-index`.split(/\s/).last
     end
   end
 end

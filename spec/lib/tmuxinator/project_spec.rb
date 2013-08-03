@@ -135,6 +135,30 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "#base_index" do
+    context "pane base index present" do
+      before do
+        project.stub(:get_pane_base_index => "1")
+        project.stub(:get_base_index => "1")
+      end
+
+      it "gets the pane base index" do
+        expect(project.base_index).to eq 1
+      end
+    end
+
+    context "pane base index no present" do
+      before do
+        project.stub(:get_pane_base_index => nil)
+        project.stub(:get_base_index => "0")
+      end
+
+      it "gets the base index" do
+        expect(project.base_index).to eq 0
+      end
+    end
+  end
+
   describe "#window" do
     it "gets the window and index for tmux" do
       expect(project.window(1)).to eq "sample:1"
