@@ -59,4 +59,24 @@ describe Tmuxinator::Window do
       end
     end
   end
+
+  describe '#tmux_new_window_command' do
+    let(:project) { double(:project) }
+    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+
+    before {
+      project.stub(
+        :name => '',
+        :tmux => 'tmux',
+        :root => '/project/tmuxinator',
+        :base_index => 1
+      )
+    }
+
+    subject(:command) { window.tmux_new_window_command }
+
+    it 'specify default directory using -c directory' do
+      command.should include('-c /project/tmuxinator')
+    end
+  end
 end
