@@ -44,7 +44,12 @@ module Tmuxinator
     end
 
     def pre
-      yaml["pre"]
+      pre_config = yaml["pre"]
+      if pre_config.is_a?(Array)
+        pre_config.join('; ')
+      else
+        pre_config
+      end
     end
 
     def pre_window
