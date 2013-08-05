@@ -230,4 +230,29 @@ describe Tmuxinator::Project do
       end
     end
   end
+
+  describe "#pre" do
+    subject(:pre) { project.pre }
+
+    context "pre in yaml is string" do
+      before { project.yaml["pre"] = "mysql.server start" }
+
+      it "returns the string" do
+        expect(pre).to eq("mysql.server start")
+      end
+    end
+
+    context "pre in yaml is Array" do
+      before {
+        project.yaml["pre"] = [
+          "mysql.server start",
+          "memcached -d"
+        ]
+      }
+
+      it "joins array using ;" do
+        expect(pre).to eq("mysql.server start; memcached -d")
+      end
+    end
+  end
 end
