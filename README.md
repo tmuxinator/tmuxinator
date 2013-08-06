@@ -32,19 +32,21 @@ export EDITOR='vim'
 
 ## Completion
 
-Download the appropriate completion file from the repo.
+Download the appropriate completion file from the repo and source the file.
+
+The following are example where the completion file has been downloaded into `~/.bin`.
 
 ### bash
 
 Add the following to your `~/.bashrc`:
 
-    source `which tmuxinator.bash`
+    source ~/.bin/tmuxinator.bash
 
 ### zsh
 
 Add the following to your `~/.zshrc`:
 
-    source `which tmuxinator.zsh`
+    source ~/.bin/tmuxinator.zsh
 
 ## Usage
 
