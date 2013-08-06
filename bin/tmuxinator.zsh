@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 if [[ ! -o interactive ]]; then
     return
 fi
