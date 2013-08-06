@@ -1,3 +1,8 @@
+## 0.6.4
+- Fixes broken backwards compatibility of multiple pre commands #129
+- Fixes tmuxinator ignoring project root when started from within a tmux session #132
+- Add gem version badge
+
 ## 0.6.3
 - Remove stray pry #128
 - Allow starting a tmuxinator project while inside a tmux session #130
