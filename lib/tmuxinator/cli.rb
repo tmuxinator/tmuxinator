@@ -52,7 +52,7 @@ module Tmuxinator
       if project.deprecations.any?
         project.deprecations.each { |deprecation| say deprecation, :red }
         puts
-        print "Press any key to continue."
+        print "Press ENTER to continue."
         STDIN.getc
       end
 
