@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 _tmuxinator() {
     COMPREPLY=()
     local word="${COMP_WORDS[COMP_CWORD]}"
@@ -13,4 +15,4 @@ _tmuxinator() {
     fi
 }
 
-complete -F _tmuxinator tmuxinator mux
+complete -F _tmuxinator -o tmuxinator mux
