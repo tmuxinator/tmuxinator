@@ -1,7 +1,3 @@
-## 0.6.4.1
-- Move slow completion scripts back to bin.
-- Change deprecation continue key to just enter.
-
 ## 0.6.4
 - Fixes broken backwards compatibility of multiple pre commands #129
 - Fixes tmuxinator ignoring project root when started from within a tmux session #132
