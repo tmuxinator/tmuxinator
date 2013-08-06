@@ -15,4 +15,4 @@ _tmuxinator() {
     fi
 }
 
-complete -F _tmuxinator -o tmuxinator mux
+complete -F _tmuxinator tmuxinator mux
