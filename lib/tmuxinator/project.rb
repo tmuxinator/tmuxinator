@@ -139,7 +139,7 @@ module Tmuxinator
     def deprecations
       deprecations = []
       deprecations << "DEPRECATION: rbenv/rvm specific options have been replaced by the pre_tab option and will not be supported in 0.8.0." if yaml["rbenv"] || yaml["rvm"]
-      deprecations << "DEPRECATION: The tabs option has been replaced by the window option and will not be supported in 0.8.0." if yaml["tabs"].present?
+      deprecations << "DEPRECATION: The tabs option has been replaced by the windows option and will not be supported in 0.8.0." if yaml["tabs"].present?
       deprecations << "DEPRECATION: The cli_args option has been replaced by the tmux_options option and will not be supported in 0.8.0." if yaml["cli_args"].present?
       deprecations
     end
