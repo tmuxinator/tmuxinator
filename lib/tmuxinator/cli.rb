@@ -104,7 +104,7 @@ module Tmuxinator
       end
     end
 
-    desc "implode", "Delets all tmuxinator projects"
+    desc "implode", "Deletes all tmuxinator projects"
     map "i" => :implode
 
     def implode
