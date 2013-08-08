@@ -50,6 +50,15 @@ Add the following to your `~/.zshrc`:
 
 ## Usage
 
+### Tmux base-index
+
+If you use a base-index other than the default (0) in tmux, please be sure to add the following two lines to your `.tmux.conf`:
+
+```
+set-option -g base-index 1
+set-window-option -g pane-base-index 1
+```
+
 ### Create a project
 
 Create or edit your projects with:
@@ -92,6 +101,8 @@ If you want to have your own default config, place it into
 The `pre` command allows you to run anything before starting the tmux session.
 Could be handy to make sure you database daemons are running. Multiple commands
 can be specified, just like for tabs.
+
+Under `windows:`, each `-` indicates a single window in tmux. However, each window can have multiple panes. Sometimes you want a window with multiple panes, sometimes you just want a window with one pane. Note that `-` in yaml represents an array entry.
 
 ## Panes Support
 
