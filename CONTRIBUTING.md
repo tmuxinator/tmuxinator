@@ -19,6 +19,8 @@
 If you've gone the extra mile and have a patch that fixes the issue, you
 should submit a Pull Request!
 
+* Please follow the [GitHub Styleguide](https://github.com/styleguide/ruby) for
+  Ruby in both implementation and tests!
 * Fork the repo on Github.
 * Create a topic branch from where you want to base your work.
 * Add a test for your change. Only refactoring and documentation changes
@@ -26,4 +28,15 @@ should submit a Pull Request!
   we need a test!
 * Run _all_ the tests to assure nothine else was broken. We only take pull requests with passing tests.
 * Check for unnecessary whitespace with `git diff --check` before committing.
+* Structure your commit messages like this:
+
+```
+Summarize clearly in one line what the commit is about
+
+Describe the problem the commit solves or the use
+case for a new feature. Justify why you chose
+the particular solution.
+```
+
+* Use "fix", "add", "change" instead of "fixed", "added", "changed" in your commit messages.
 * Push to your fork and submit a pull request.
