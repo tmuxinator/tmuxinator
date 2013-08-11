@@ -36,7 +36,7 @@ module Tmuxinator
 
       unless Tmuxinator::Config.exists?(name)
         template = Tmuxinator::Config.default? ? Tmuxinator::Config.default : Tmuxinator::Config.sample
-        erb  = ERB.new(File.read(template)).result(binding)
+        erb  = Erubis::Eruby.new(File.read(template)).result(binding)
         File.open(config, "w") { |f| f.write(erb) }
       end
 
