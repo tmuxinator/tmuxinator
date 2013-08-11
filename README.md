@@ -4,37 +4,48 @@
 
 Create and manage tmux sessions easily.
 
-### Example
-
-![Screenshot](http://f.cl.ly/items/3e3I1l1t3D2U472n1h0h/Screen%20shot%202010-12-10%20at%2010.59.17%20PM.png)
+![Screenshot](https://f.cloud.github.com/assets/141213/916084/065fef7c-fe82-11e2-9c23-a9622c7d83c3.png)
 
 ## Installation
 
-``` bash
-$ gem install tmuxinator
+```
+gem install tmuxinator
 ```
 
 ## Editor and Shell
 
-tmuxinator uses your shell's default editor for opening files.  If you're not
+tmuxinator uses your shell's default editor for opening files. If you're not
 sure what that is type:
 
 ``` bash
 $ echo $EDITOR
 ```
 
-For me that produces "vim" If you want to change your default editor simple
+For me that produces "vim" If you want to change your default editor simply
 put a line in ~/.bashrc that changes it. Mine looks like this:
 
-``` bash
+```
 export EDITOR='vim'
+```
+
+## tmux
+
+The recommended version of tmux to use is 1.8. You're mileage may vary for
+earlier versions. Refer to the FAQ for any odd behaviour.
+
+### base-index
+
+If you use a `base-index` other than the default, please be sure to also set the `pane-base-index`
+
+```
+set-window-option -g pane-base-index 1
 ```
 
 ## Completion
 
-Download the appropriate completion file from the repo and source the file.
-
-The following are example where the completion file has been downloaded into `~/.bin`.
+Download the appropriate completion file from the repo and `source` the file.
+The following are example where the completion file has been downloaded into
+`~/.bin`.
 
 ### bash
 
@@ -50,14 +61,8 @@ Add the following to your `~/.zshrc`:
 
 ## Usage
 
-### Tmux base-index
-
-If you use a base-index other than the default (0) in tmux, please be sure to add the following two lines to your `.tmux.conf`:
-
-```
-set-option -g base-index 1
-set-window-option -g pane-base-index 1
-```
+A working knowledge of tmux is assumed. You should understand what window and
+panes are in tmux. If not please consult the [man pages](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) for tmux.
 
 ### Create a project
 
@@ -71,56 +76,73 @@ For editing you can also use `tmuxinator open [project]`. `new` is aliased to
 `o`,`open` and `n`. Your default editor (`$EDITOR`) is used to open the file.
 If this is a new project you will see this default config:
 
-``` yaml
-name: Tmuxinator
-root: ~/Code/tmuxinator
-socket_name: foo # Remove to use default socket
-pre: sudo /etc/rc.d/mysqld start # Runs before everything
-pre_window: rbenv shell 2.0.0-p247 # Runs in each tab and pane
-tmux_options: -v -2 # Pass arguments to tmux
+```yaml
+# ~/.tmuxinator/sample.yml
+
+name: sample
+root: ~/
+
+# Optional. tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
 windows:
   - editor:
       layout: main-vertical
       panes:
         - vim
-        - #empty, will just run plain bash
-        - top
-  - shell: git pull
-  - database: rails db
-  - server: rails s
+        - guard
+  - server: bundle exec rails s
   - logs: tail -f logs/development.log
-  - console: rails c
-  - capistrano:
-  - server: ssh me@myhost
 ```
 
-If a tab contains multiple commands, they will be joined together with `&&`.
-If you want to have your own default config, place it into
-`$HOME/.tmuxinator/default.yml`
+If you want to have your own default config, place it into `$HOME/.tmuxinator/default.yml`
 
-The `pre` command allows you to run anything before starting the tmux session.
-Could be handy to make sure you database daemons are running. Multiple commands
-can be specified, just like for tabs.
+## Windows
 
-Under `windows:`, each `-` indicates a single window in tmux. However, each window can have multiple panes. Sometimes you want a window with multiple panes, sometimes you just want a window with one pane. Note that `-` in yaml represents an array entry.
+The windows option allows the specfication of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
+and command to be run.
 
-## Panes Support
+```
+windows:
+  - editor: vim
+```
 
-You can define your own panes inside a window likes this:
+## Panes
 
-``` yaml
-- window_with_panes
-    layout: main-vertical
-    panes:
-      - vim
-      - #empty, will just run plain bash
-      - top
+Panes are optional and are children of window entries, but unlike windows, they do not need a name. In the following example, the `editor` window has 2 panes, one running vim, the other guard.
+
+```yaml
+windows:
+  - editor:
+      layout: main-vertical
+      panes:
+        - vim
+        - guard
 ```
 
 The layout setting gets handed down to tmux directly, so you can choose from
-one of [the five standard
-layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6)
+one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6)
 or [specify your own](http://stackoverflow.com/a/9976282/183537).
+
+## Interpreter Managers & Environment Variables
+
+To use tmuxinator with rbenv, RVM, NVM etc, use the `pre_window` option.
+
+```
+pre_window: rbenv shell 2.0.0-p247
+```
+
+These command(s) will run before any subsequent commands in all panes and windows.
+
 
 ## Starting a session
 
@@ -132,21 +154,11 @@ $ tmuxinator start [project]
 
 ## Shorthand
 
-You can also use this shorthand alias for tmuxinator
+An shorthand alias for tmuxinator can also be used.
 
 ``` bash
 $ mux [command]
 ```
-
-## Interpreter Managers & Environment Variables
-
-To use tmuxinator with rbenv, RVM, NVM etc, use the `pre_window` option.
-
-```
-pre_window: rbenv shell 2.0.0-p247
-```
-
-These commands will run before any pane or window.
 
 ## Other Commands
 
@@ -156,7 +168,6 @@ $ tmuxinator copy [existing] [new]
 ```
 
 List all the projects you have configured. Aliased to `l` and `ls`
-
 ``` bash
 $ tmuxinator list
 ```
@@ -193,7 +204,7 @@ $ tmuxinator version
 
 ## FAQ
 
-### Window names are not displayed properly?
+### Window names are not displaying properly?
 
 Add `export DISABLE_AUTO_TITLE=true` to your `.zshrc` or `.bashrc`
 
