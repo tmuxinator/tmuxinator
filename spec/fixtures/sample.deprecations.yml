@@ -1,5 +1,4 @@
 # ~/.tmuxinator/sample.deprecations.yml
-# you can make as many tabs as you wish...
 
 project_name: sample
 project_root: ~/test
