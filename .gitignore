@@ -16,3 +16,4 @@ spec/reports
 tmp
 db
 vendor/
+tags
