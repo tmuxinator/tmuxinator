@@ -114,13 +114,13 @@ describe Tmuxinator::Config do
       Tmuxinator::Config.stub(:root => path)
     end
 
-    context 'with project yml' do
+    context "with project yml" do
       it "gets the project as path to the yml file" do
         expect(Tmuxinator::Config.project("sample")).to eq "#{root}/sample.yml"
       end
     end
 
-    context 'without project yml' do
+    context "without project yml" do
       it "gets the project as path to the yml file" do
         expect(Tmuxinator::Config.project("new-project")).to eq "#{root}/new-project.yml"
       end
