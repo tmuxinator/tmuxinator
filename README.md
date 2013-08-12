@@ -104,8 +104,6 @@ windows:
   - logs: tail -f logs/development.log
 ```
 
-If you want to have your own default config, place it into `$HOME/.tmuxinator/default.yml`
-
 ## Windows
 
 The windows option allows the specfication of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
