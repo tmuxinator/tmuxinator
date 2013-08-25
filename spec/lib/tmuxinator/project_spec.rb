@@ -231,6 +231,13 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "#command" do
+    it "flattens the command" do
+      window = project.windows.keep_if{ |w| w.name == "shell" }.first
+      expect(window.command).to eq("git pull && git merge")
+    end
+  end
+
   describe "#pre" do
     subject(:pre) { project.pre }
 

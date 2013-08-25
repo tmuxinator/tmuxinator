@@ -1,5 +1,7 @@
 module Tmuxinator
   class Window
+    include Tmuxinator::Util
+
     attr_reader :name, :panes, :layout, :command, :index, :project
 
     def initialize(window_yaml, index, project)
@@ -19,7 +21,7 @@ module Tmuxinator
 
         @panes = build_panes(value["panes"])
       else
-        @command = value
+        @command = flatten_command(value)
       end
     end
 
