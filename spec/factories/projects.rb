@@ -17,7 +17,7 @@ FactoryGirl.define do
 
   factory :project_with_erb, :class => Tmuxinator::Project do
     ignore do
-      file { YAML.load(ERB.new(File.read("#{File.expand_path("spec/fixtures/sample.erb.yml")}")).result) }
+      file { YAML.load(Erubis::Eruby.new(File.read("#{File.expand_path("spec/fixtures/sample.erb.yml")}")).result(binding)) }
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
