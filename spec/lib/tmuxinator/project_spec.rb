@@ -3,6 +3,7 @@ require "spec_helper"
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
+  let(:project_with_erb) { FactoryGirl.build(:project_with_erb) }
 
   describe "#initialize" do
     context "valid yaml" do
@@ -44,6 +45,12 @@ describe Tmuxinator::Project do
         expect(project_with_deprecations.root).to eq "~/test"
       end
     end
+
+    context "with ERB" do
+      it "gets the root" do
+        expect(project_with_erb.root).to eq "~/test"
+      end
+    end
   end
 
   describe "#name" do
@@ -56,6 +63,12 @@ describe Tmuxinator::Project do
     context "with deprecations" do
       it "still gets the name" do
         expect(project_with_deprecations.name).to eq "sample"
+      end
+    end
+
+    context "with ERB" do
+      it "gets the name" do
+        expect(project_with_erb.name).to eq "sample"
       end
     end
   end
