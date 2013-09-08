@@ -1,0 +1,4 @@
+# ~/.tmuxinator/sample.erb.yml
+
+project_name: <%= "sample" %>
+project_root: <%= "~/test" %>

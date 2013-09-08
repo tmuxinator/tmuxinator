@@ -18,7 +18,7 @@ tmuxinator uses your shell's default editor for opening files. If you're not
 sure what that is type:
 
 ``` bash
-$ echo $EDITOR
+echo $EDITOR
 ```
 
 For me that produces "vim" If you want to change your default editor simply
@@ -68,8 +68,8 @@ panes are in tmux. If not please consult the [man pages](http://manpages.ubuntu.
 
 Create or edit your projects with:
 
-``` bash
-$ tmuxinator new [project]
+```
+tmuxinator new [project]
 ```
 
 For editing you can also use `tmuxinator open [project]`. `new` is aliased to
@@ -103,8 +103,6 @@ windows:
   - server: bundle exec rails s
   - logs: tail -f logs/development.log
 ```
-
-If you want to have your own default config, place it into `$HOME/.tmuxinator/default.yml`
 
 ## Windows
 
@@ -148,58 +146,58 @@ These command(s) will run before any subsequent commands in all panes and window
 
 This will fire up tmux with all the tabs and panes you configured.
 
-``` bash
-$ tmuxinator start [project]
+```
+tmuxinator start [project]
 ```
 
 ## Shorthand
 
 An shorthand alias for tmuxinator can also be used.
 
-``` bash
-$ mux [command]
+```
+mux [command]
 ```
 
 ## Other Commands
 
 Copy an existing project. Aliased to `c` and `cp`
-``` bash
-$ tmuxinator copy [existing] [new]
+```
+tmuxinator copy [existing] [new]
 ```
 
 List all the projects you have configured. Aliased to `l` and `ls`
-``` bash
-$ tmuxinator list
+```
+tmuxinator list
 ```
 
 Remove a project. Aliased to `rm`
-``` bash
-$ tmuxinator delete [project]
+```
+tmuxinator delete [project]
 ```
 
 Remove all tmuxinator configs, aliases and scripts. Aliased to `i`
-``` bash
-$ tmuxinator implode
+```
+tmuxinator implode
 ```
 
 Examines your environment and identifies problems with your configuration
-``` bash
-$ tmuxinator doctor
+```
+tmuxinator doctor
 ```
 
 Shows tmuxinator's help. Aliased to `h`
-``` bash
-$ tmuxinator help
+```
+tmuxinator help
 ```
 
 Shows the shell commands that get executed for a project
-```bash
-$ tmuxinator debug [project]
+```
+tmuxinator debug [project]
 ```
 
 Shows tmuxinator's version.
-``` bash
-$ tmuxinator version
+```
+tmuxinator version
 ```
 
 ## FAQ
