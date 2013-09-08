@@ -48,6 +48,28 @@ describe Tmuxinator::Window do
     end
   end
 
+  describe "#command" do
+    context "command is an array" do
+      before do
+        yaml["editor"] = ["git fetch", "git status"]
+      end
+
+      it "returns the flattened command" do
+        expect(window.command).to eq "git fetch && git status"
+      end
+    end
+
+    context "command is a string" do
+      before do
+        yaml["editor"] = "vim"
+      end
+
+      it "returns the command" do
+        expect(window.command).to eq "vim"
+      end
+    end
+  end
+
   describe "#build_panes" do
     context "no panes" do
       before do
