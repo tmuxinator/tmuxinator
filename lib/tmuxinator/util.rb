@@ -10,5 +10,9 @@ module Tmuxinator
     def yes_no(condition)
       condition ? say("Yes", :green) : say("No", :red)
     end
+
+    def flatten_command(command)
+      [command].flatten.compact.reject { |c| c.strip.empty? }.join(" && ")
+    end
   end
 end

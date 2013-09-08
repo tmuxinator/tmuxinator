@@ -17,7 +17,9 @@ windows:
         - vim
         - #empty, will just run plain bash
         - top
-  - shell: git pull
+  - shell:
+    - git pull
+    - git merge
   - guard:
       layout: tiled
       pre:

@@ -1,3 +1,14 @@
+## 0.6.5
+- Change deprecation continue message from any key to just the enter key
+- Dramatically clean up the readme to be clearer for new users
+- Update the contributing guide with references to the GitHub styleguide and add examples of how to leave good commit messages
+- Use Erubis to render the project sample and fix a bad binding reference
+- Update the sample project to be much simpler
+- Fix not working delete command #142
+- Fix an error in the bash completion script
+- Fix an issue where the wrong project path was being returned
+- Fix an issue where command aliases were being ignored
+
 ## 0.6.4
 - Fixes broken backwards compatibility of multiple pre commands #129
 - Fixes tmuxinator ignoring project root when started from within a tmux session #132

@@ -36,7 +36,7 @@ module Tmuxinator
 
       def project(name)
         projects = Dir.glob("#{root}/**/*.yml")
-        project_file = projects.detect { |project| project =~ /#{name}.yml/ }
+        project_file = projects.detect { |project| project =~ /^#{name}.yml$/ }
         project_file || "#{root}/#{name}.yml"
       end
 
@@ -56,10 +56,9 @@ module Tmuxinator
           exit!
         end
 
-        config_path = per_project ? name : Tmuxinator::Config.project(name)
-
         yaml = begin
-          YAML.load(File.read(config_path))
+          config_path = per_project ? name : Tmuxinator::Config.project(name)
+          YAML.load(Erubis::Eruby.new(File.read(config_path)).result(binding))
         rescue SyntaxError, StandardError
           puts "Failed to parse config file. Please check your formatting."
           exit!
