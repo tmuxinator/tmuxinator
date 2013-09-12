@@ -28,13 +28,13 @@ if [ "$?" -eq 1 ]; then
       <%- window.panes.each do |pane| -%>
   <%= pane.tmux_pre_window_command %>
   <%= pane.tmux_pre_command %>
-  <%= pane.tmux_main_command %>
-
       <%- unless pane.last? -%>
   <%= pane.tmux_split_command %>
       <%- end -%>
-  <%= window.tmux_layout_command %>
+  <%= pane.tmux_main_command %>
+
     <%- end -%>
+  <%= window.tmux_layout_command %>
 
 
   <%= window.tmux_select_first_pane %>
