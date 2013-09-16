@@ -235,7 +235,7 @@ describe Tmuxinator::Project do
     let(:window) { project.windows.keep_if { |w| w.name == "shell" }.first }
 
     it "splits commands into an array" do
-      expect(window.commands).to eq(["git\\ pull C-m", "git\\ merge C-m"])
+      expect(window.commands).to eq(["tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ pull C-m", "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ merge C-m"])
     end
   end
 

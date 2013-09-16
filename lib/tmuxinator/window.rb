@@ -20,7 +20,7 @@ module Tmuxinator
 
         @panes = build_panes(value["panes"])
       else
-        @commands = build_commands(value)
+        @commands = build_commands(tmux_window_command_prefix, value)
       end
     end
 
@@ -31,6 +31,18 @@ module Tmuxinator
         end
       else
         Tmuxinator::Pane.new(pane_yml, index, project, self)
+      end
+    end
+
+    def build_commands(prefix, command_yml)
+      if command_yml.is_a?(Array)
+        command_yml.map do |command|
+          "#{tmux_window_command_prefix} #{command.shellescape} C-m" if command.present?
+        end.compact
+      elsif command_yml.present?
+        ["#{tmux_window_command_prefix} #{command_yml.shellescape} C-m"]
+      else
+        []
       end
     end
 
@@ -56,6 +68,10 @@ module Tmuxinator
 
     def tmux_pre_window_command
       project.pre_window.present? ? "#{project.tmux} send-keys -t #{tmux_window_target} #{project.pre_window.shellescape} C-m" : ""
+    end
+
+    def tmux_window_command_prefix
+      "#{project.tmux} send-keys -t #{project.name}:#{index + project.base_index}"
     end
 
     def tmux_new_window_command

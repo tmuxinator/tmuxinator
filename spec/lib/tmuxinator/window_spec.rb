@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe Tmuxinator::Window do
+  let(:project) { double }
   let(:yaml) do
     {
       "editor" => {
@@ -11,7 +12,11 @@ describe Tmuxinator::Window do
     }
   end
 
-  let(:window) { Tmuxinator::Window.new(yaml, 0, nil) }
+  let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+
+  before do
+    project.stub(:tmux => "tmux", :name => "test", :base_index => 1)
+  end
 
   describe "#initialize" do
     it "creates an instance" do
@@ -48,14 +53,14 @@ describe Tmuxinator::Window do
     end
   end
 
-  describe "#commands" do
+  describe "#build_commands" do
     context "command is an array" do
       before do
         yaml["editor"] = ["git fetch", "git status"]
       end
 
       it "returns the flattened command" do
-        expect(window.commands).to eq ["git\\ fetch C-m", "git\\ status C-m"]
+        expect(window.commands).to eq ["tmux send-keys -t test:1 git\\ fetch C-m", "tmux send-keys -t test:1 git\\ status C-m"]
       end
     end
 
@@ -65,7 +70,17 @@ describe Tmuxinator::Window do
       end
 
       it "returns the command" do
-        expect(window.commands).to eq ["vim C-m"]
+        expect(window.commands).to eq ["tmux send-keys -t test:1 vim C-m"]
+      end
+    end
+
+    context "command is empty" do
+      before do
+        yaml["editor"] = ""
+      end
+
+      it "returns an empty array" do
+        expect(window.commands).to be_empty
       end
     end
   end
