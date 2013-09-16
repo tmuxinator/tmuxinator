@@ -23,7 +23,9 @@ if [ "$?" -eq 1 ]; then
   # Window "<%= window.name %>"
     <%- unless window.panes? -%>
   <%= window.tmux_pre_window_command %>
-  <%= window.tmux_main_command %>
+    <%- window.commands.each do |command| -%>
+  <%= command %>
+    <%- end -%>
     <%- else -%>
       <%- window.panes.each do |pane| -%>
   <%= pane.tmux_pre_window_command %>
@@ -35,7 +37,6 @@ if [ "$?" -eq 1 ]; then
       <%- end -%>
   <%= window.tmux_layout_command %>
     <%- end -%>
-
 
   <%= window.tmux_select_first_pane %>
     <%- end -%>

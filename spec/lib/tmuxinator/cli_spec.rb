@@ -151,11 +151,11 @@ describe Tmuxinator::Cli do
   describe "#delete" do
     before do
       ARGV.replace(["delete", "foo"])
+      $stdin.stub(:gets => "y")
     end
 
     context "project exists" do
       before do
-        $stdin.stub(:gets => "y")
         Tmuxinator::Config.stub(:exists?) { true }
       end
 
@@ -170,6 +170,10 @@ describe Tmuxinator::Cli do
     end
 
     context "project doesn't exist" do
+      before do
+        $stdin.stub(:gets => "y")
+      end
+
       it "exits with error message" do
         expect { capture_io { cli.start } }.to raise_error SystemExit
       end

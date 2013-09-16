@@ -231,11 +231,11 @@ describe Tmuxinator::Project do
     end
   end
 
-  describe "#command" do
+  describe "#commands" do
     let(:window) { project.windows.keep_if { |w| w.name == "shell" }.first }
 
-    it "flattens the command" do
-      expect(window.command).to eq("git pull && git merge")
+    it "splits commands into an array" do
+      expect(window.commands).to eq(["git\\ pull C-m", "git\\ merge C-m"])
     end
   end
 

@@ -1,15 +1,16 @@
+require "pry"
+
 module Tmuxinator
   class Window
     include Tmuxinator::Util
 
-    attr_reader :name, :panes, :layout, :command, :index, :project
+    attr_reader :name, :panes, :layout, :commands, :index, :project
 
     def initialize(window_yaml, index, project)
       @name = window_yaml.keys.first.present? ? window_yaml.keys.first.shellescape : nil
       @panes = []
       @layout = nil
       @pre = nil
-      @command = nil
       @project = project
       @index = index
 
@@ -21,7 +22,7 @@ module Tmuxinator
 
         @panes = build_panes(value["panes"])
       else
-        @command = flatten_command(value)
+        @commands = build_commands(value)
       end
     end
 
@@ -57,10 +58,6 @@ module Tmuxinator
 
     def tmux_pre_window_command
       project.pre_window.present? ? "#{project.tmux} send-keys -t #{tmux_window_target} #{project.pre_window.shellescape} C-m" : ""
-    end
-
-    def tmux_main_command
-      command.present? ? "#{project.tmux} send-keys -t #{project.name}:#{index + project.base_index} #{command.shellescape} C-m" : ""
     end
 
     def tmux_new_window_command
