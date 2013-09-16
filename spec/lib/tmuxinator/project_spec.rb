@@ -113,6 +113,24 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "#tmux_command" do
+    context "tmux_command specified" do
+      before do
+        project.yaml["tmux_command"] = "byobu"
+      end
+
+      it "gets the custom tmux command" do
+        expect(project.tmux_command).to eq "byobu"
+      end
+    end
+
+    context "tmux_command is not specified" do
+      it "returns the default" do
+        expect(project.tmux_command).to eq "tmux"
+      end
+    end
+  end
+
   describe "#tmux_options" do
     context "no tmux options" do
       before do

@@ -65,13 +65,12 @@ module Tmuxinator
     end
 
     def tmux
-      "#{tmux_cmd}#{tmux_options}#{socket}"
+      "#{tmux_command}#{tmux_options}#{socket}"
     end
 
-    # used by tmux derivates/wrappers, e.g byobu - use byobu-tmux
-    def tmux_cmd
-      if yaml["tmux_cmd"].present?
-        yaml["tmux_cmd"]
+    def tmux_command
+      if yaml["tmux_command"].present?
+        yaml["tmux_command"]
       else
         "tmux"
       end

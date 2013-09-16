@@ -16,7 +16,7 @@ root: ~/
 # tmux_options: -f ~/.tmux.mac.conf
 
 # Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
-# tmux_cmd: tmux
+# tmux_command: byobu
 
 windows:
   - editor:
