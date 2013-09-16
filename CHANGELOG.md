@@ -1,3 +1,10 @@
+## 0.6.6
+- Fix a bug caused by not escaping the root path #145
+- Fix bash completion with a single argument #148
+- Fix regression where an array of commands for a window wasn't working #149
+- Add an option to call tmux wrappers or derivatives #154
+- Make multiple commands use tmux's `send-keys` rather than just using `&&` #100
+
 ## 0.6.5
 - Change deprecation continue message from any key to just the enter key
 - Dramatically clean up the readme to be clearer for new users
