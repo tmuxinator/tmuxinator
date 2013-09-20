@@ -28,6 +28,16 @@ describe Tmuxinator::Window do
     it "creates the list of panes" do
       expect(window.panes).to_not be_empty
     end
+
+    context "no panes" do
+      before do
+        yaml["editor"]["panes"] = "vim"
+      end
+
+      it "creates one pane" do
+        expect(window.panes).to be_a(Tmuxinator::Pane)
+      end
+    end
   end
 
   describe "#pre" do
@@ -81,18 +91,6 @@ describe Tmuxinator::Window do
 
       it "returns an empty array" do
         expect(window.commands).to be_empty
-      end
-    end
-  end
-
-  describe "#build_panes" do
-    context "no panes" do
-      before do
-        yaml["editor"]["panes"] = "vim"
-      end
-
-      it "creates one pane" do
-        expect(window.panes).to be_a(Tmuxinator::Pane)
       end
     end
   end
