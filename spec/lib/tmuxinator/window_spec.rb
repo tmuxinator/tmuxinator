@@ -2,12 +2,13 @@ require "spec_helper"
 
 describe Tmuxinator::Window do
   let(:project) { double }
+  let(:panes) { ["vim", nil, "top"] }
   let(:yaml) do
     {
       "editor" => {
         "pre" => ["echo 'I get run in each pane.  Before each pane command!'", nil],
         "layout" => "main-vertical",
-        "panes" => ["vim", nil, "top"]
+        "panes" => panes
       }
     }
   end
@@ -24,18 +25,36 @@ describe Tmuxinator::Window do
     end
   end
 
-  describe "#build_panes" do
-    it "creates the list of panes" do
-      expect(window.panes).to_not be_empty
+  describe "#panes" do
+    let(:pane) { double(:pane) }
+
+    before do
+      Tmuxinator::Pane.stub :new => pane
     end
 
-    context "no panes" do
-      before do
-        yaml["editor"]["panes"] = "vim"
+    context "with a three element Array" do
+      let(:panes) { ["vim", nil, "top"] }
+
+      it "creates three panes" do
+        expect(Tmuxinator::Pane).to receive(:new).exactly(3).times
+        window.panes
       end
 
+      it "returns three panes" do
+        expect(window.panes).to eql [pane, pane, pane]
+      end
+    end
+
+    context "with a String" do
+      let(:panes) { "vim" }
+
       it "creates one pane" do
-        expect(window.panes).to be_a(Tmuxinator::Pane)
+        expect(Tmuxinator::Pane).to receive(:new).once
+        window.panes
+      end
+
+      it "returns one pane" do
+        expect(window.panes).to eql pane
       end
     end
   end
