@@ -53,8 +53,21 @@ describe Tmuxinator::Window do
         window.panes
       end
 
-      it "returns one pane" do
-        expect(window.panes).to eql pane
+      it "returns one pane in an Array" do
+        expect(window.panes).to eql [pane]
+      end
+    end
+
+    context "with nil" do
+      let(:panes) { nil }
+
+      it "doesn't create any panes" do
+        expect(Tmuxinator::Pane).to_not receive(:new)
+        window.panes
+      end
+
+      it "returns an empty Array" do
+        expect(window.panes).to be_empty
       end
     end
   end
