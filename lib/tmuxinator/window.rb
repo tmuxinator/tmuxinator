@@ -25,12 +25,8 @@ module Tmuxinator
     end
 
     def build_panes(pane_yml)
-      if pane_yml.is_a?(Array)
-        pane_yml.map.with_index do |pane_cmd, index|
-          Tmuxinator::Pane.new(pane_cmd, index, project, self)
-        end
-      else
-        Tmuxinator::Pane.new(pane_yml, index, project, self)
+      Array(pane_yml).map.with_index do |pane_cmd, index|
+        Tmuxinator::Pane.new(pane_cmd, index, project, self)
       end
     end
 
