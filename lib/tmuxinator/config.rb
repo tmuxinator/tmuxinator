@@ -52,6 +52,10 @@ module Tmuxinator
         "#{File.dirname(__FILE__)}/assets/template.erb"
       end
 
+      def wemux_template
+        "#{File.dirname(__FILE__)}/assets/wemux_template.erb"
+      end
+
       def configs
         Dir["#{Tmuxinator::Config.root}/*.yml"].sort.map do |path|
           path.gsub("#{Tmuxinator::Config.root}/", "").gsub(".yml", "")

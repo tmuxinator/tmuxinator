@@ -1,0 +1,37 @@
+# ~/.tmuxinator/sample_wemux.yml
+# you can make as many tabs as you wish...
+
+name: sample
+root: ~/test
+pre: sudo /etc/rc.d/mysqld start # Runs before everything
+pre_window: rbenv shell 2.0.0-p247 # Runs in each tab and pane
+tmux_options: -f ~/.tmux.mac.conf # Pass arguments to tmux
+tmux_command: wemux
+windows:
+  - editor:
+      pre:
+        - echo "I get run in each pane, before each pane command!"
+        -
+      layout: main-vertical
+      panes:
+        - vim
+        - #empty, will just run plain bash
+        - top
+  - shell:
+    - git pull
+    - git merge
+  - guard:
+      layout: tiled
+      pre:
+        - echo "I get run in each pane."
+        - echo "Before each pane command!"
+      panes:
+        -
+        - #empty, will just run plain bash
+        -
+  - database: bundle exec rails db
+  - server: bundle exec rails s
+  - logs: tail -f log/development.log
+  - console: bundle exec rails c
+  - capistrano:
+  - server: ssh user@example.com

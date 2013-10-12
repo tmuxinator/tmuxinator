@@ -3,6 +3,7 @@ require "spec_helper"
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
+  let(:wemux_project) { FactoryGirl.build(:wemux_project) }
 
   describe "#initialize" do
     context "valid yaml" do
@@ -15,6 +16,12 @@ describe Tmuxinator::Project do
   describe "#render" do
     it "renders the tmux config" do
       expect(project.render).to_not be_empty
+    end
+
+    context "wemux" do
+      it "renders the wemux config" do
+        expect(wemux_project.render).to_not be_empty
+      end
     end
   end
 
@@ -56,6 +63,12 @@ describe Tmuxinator::Project do
     context "with deprecations" do
       it "still gets the name" do
         expect(project_with_deprecations.name).to eq "sample"
+      end
+    end
+
+    context "wemux" do
+      it "is wemux" do
+        expect(wemux_project.name).to eq "wemux"
       end
     end
   end
