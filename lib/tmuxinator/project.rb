@@ -15,12 +15,7 @@ module Tmuxinator
     end
 
     def windows
-      windows_yml =
-        if yaml["tabs"].present?
-          yaml["tabs"]
-        else
-          yaml["windows"]
-        end
+      windows_yml = yaml["tabs"].presence || yaml["windows"]
 
       @windows ||= windows_yml.map.with_index do |window_yml, index|
         Tmuxinator::Window.new(window_yml, index, self)
@@ -28,19 +23,11 @@ module Tmuxinator
     end
 
     def root
-      if yaml["project_root"].present?
-        yaml["project_root"]
-      else
-        yaml["root"]
-      end
+      yaml["project_root"].presence || yaml["root"]
     end
 
     def name
-      if yaml["project_name"].present?
-        yaml["project_name"].shellescape
-      else
-        yaml["name"].shellescape
-      end
+      yaml["project_name"].presence.try(:shellescape) || yaml["name"].shellescape
     end
 
     def pre
@@ -69,11 +56,7 @@ module Tmuxinator
     end
 
     def tmux_command
-      if yaml["tmux_command"].present?
-        yaml["tmux_command"]
-      else
-        "tmux"
-      end
+      yaml["tmux_command"].presence || "tmux"
     end
 
     def socket
