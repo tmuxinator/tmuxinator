@@ -17,6 +17,9 @@ windows:
         - vim
         - #empty, will just run plain bash
         - top
+        - pane_with_multiple_commands:
+            - ssh server
+            - echo "Hello"
   - shell:
     - git pull
     - git merge

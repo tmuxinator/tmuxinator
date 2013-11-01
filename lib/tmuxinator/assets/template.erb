@@ -23,14 +23,20 @@ if [ "$?" -eq 1 ]; then
   # Window "<%= window.name %>"
     <%- unless window.panes? -%>
   <%= window.tmux_pre_window_command %>
-    <%- window.commands.each do |command| -%>
+      <%- window.commands.each do |command| -%>
   <%= command %>
-    <%- end -%>
+      <%- end -%>
     <%- else -%>
       <%- window.panes.each do |pane| -%>
   <%= pane.tmux_pre_window_command %>
   <%= pane.tmux_pre_command %>
-  <%= pane.tmux_main_command %>
+        <%- if pane.multiple_commands? %>
+          <%- pane.commands.each do |command| -%>
+  <%= pane.tmux_main_command(command) %>
+          <%- end -%>
+        <%- else -%>
+  <%= pane.tmux_main_command(commands.first) %>
+        <%- end -%>
 
       <%- unless pane.last? -%>
   <%= pane.tmux_split_command %>

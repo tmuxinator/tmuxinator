@@ -1,3 +1,5 @@
+require "pry"
+
 module Tmuxinator
   class Window
     include Tmuxinator::Util
@@ -24,10 +26,16 @@ module Tmuxinator
       end
     end
 
-    def build_panes(pane_yml)
-      Array(pane_yml).map.with_index do |pane_cmd, index|
-        Tmuxinator::Pane.new(pane_cmd, index, project, self)
-      end
+    def build_panes(panes_yml)
+      Array(panes_yml).map.with_index do |pane_yml, index|
+        if pane_yml.is_a?(Hash)
+          pane_yml.map do |name, commands|
+            Tmuxinator::Pane.new(index, project, self, *commands)
+          end
+        else
+          Tmuxinator::Pane.new(index, project, self, pane_yml)
+        end
+      end.flatten
     end
 
     def build_commands(prefix, command_yml)
