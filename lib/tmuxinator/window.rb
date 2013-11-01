@@ -1,5 +1,3 @@
-require "pry"
-
 module Tmuxinator
   class Window
     include Tmuxinator::Util
