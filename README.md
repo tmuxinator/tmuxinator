@@ -30,7 +30,7 @@ export EDITOR='vim'
 
 ## tmux
 
-The recommended version of tmux to use is 1.8. You're mileage may vary for
+The recommended version of tmux to use is 1.8. Your mileage may vary for
 earlier versions. Refer to the FAQ for any odd behaviour.
 
 ### base-index
@@ -61,7 +61,7 @@ Add the following to your `~/.zshrc`:
 
 ## Usage
 
-A working knowledge of tmux is assumed. You should understand what window and
+A working knowledge of tmux is assumed. You should understand what windows and
 panes are in tmux. If not please consult the [man pages](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) for tmux.
 
 ### Create a project
