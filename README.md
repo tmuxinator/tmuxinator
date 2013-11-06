@@ -119,6 +119,9 @@ windows:
 
 ## Panes
 
+**_Note that if you wish to use panes, make sure that you do not have `.` in your project name. tmux uses `.` to delimit between window and pane indicies,
+and tmuxinator uses the project name in combination with these indicies to target the correct pane or window._**
+
 Panes are optional and are children of window entries, but unlike windows, they do not need a name. In the following example, the `editor` window has 2 panes, one running vim, the other guard.
 
 ```yaml
