@@ -3,7 +3,11 @@
 - Fix bash completion with a single argument #148
 - Fix regression where an array of commands for a window wasn't working #149
 - Add an option to call tmux wrappers or derivatives #154
-- Make multiple commands use tmux's `send-keys` rather than just using `&&` #100
+- Refactor build\_panes to always return an array #157
+- Clean up some branching code using `.presence` #163
+- Setup TravisCI test matrix for different tmux versions #164
+- Fix some grammar and spelling in readme #166
+- Make multiple commands use tmux's `send-keys` rather than just using `&&` for both panes and windows #100
 
 ## 0.6.5
 - Change deprecation continue message from any key to just the enter key

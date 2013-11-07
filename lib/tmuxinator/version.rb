@@ -1,3 +1,3 @@
 module Tmuxinator
-  VERSION = "0.6.6.pre.3"
+  VERSION = "0.6.6"
 end
