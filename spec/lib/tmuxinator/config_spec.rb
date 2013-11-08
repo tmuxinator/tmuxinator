@@ -23,7 +23,6 @@ describe Tmuxinator::Config do
     let(:root) { Tmuxinator::Config.root }
     context "when the file exists" do
         before do
-            puts Tmuxinator::Config.default
           File.stub(:exists?).with(Tmuxinator::Config.default) { true }
         end
         it "returns true" do
@@ -32,7 +31,6 @@ describe Tmuxinator::Config do
     end
     context "when the file doesn't exist" do
         before do
-            puts Tmuxinator::Config.default
           File.stub(:exists?).with(Tmuxinator::Config.default) { false }
         end
         it "returns true" do
