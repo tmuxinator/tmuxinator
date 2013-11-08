@@ -15,7 +15,7 @@ module Tmuxinator
       end
 
       def default?
-        exists?(default)
+        exists?("default")
       end
 
       def installed?

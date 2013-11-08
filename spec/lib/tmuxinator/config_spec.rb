@@ -19,6 +19,30 @@ describe Tmuxinator::Config do
     end
   end
 
+  describe "#default?" do
+    let(:root) { Tmuxinator::Config.root }
+
+    context "when the file exists" do
+      before do
+        File.stub(:exists?).with(Tmuxinator::Config.default) { true }
+      end
+
+      it "returns true" do
+        expect(Tmuxinator::Config.default?).to be_true
+      end
+    end
+
+    context "when the file doesn't exist" do
+      before do
+        File.stub(:exists?).with(Tmuxinator::Config.default) { false }
+      end
+
+      it "returns true" do
+        expect(Tmuxinator::Config.default?).to be_false
+      end
+    end
+  end
+
   describe "#configs" do
     before do
       Dir.stub(:[] => ["test.yml"])
