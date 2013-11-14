@@ -153,49 +153,20 @@ describe Tmuxinator::Project do
     end
   end
 
-  describe '#get_pane_base_index' do
-    it 'will extra the pane_base_index from tmux_options' do
-      project.stub(show_tmux_options: tmux_options(pane_base_index: 3))
+  describe "#get_pane_base_index" do
+    it "extracts the pane_base_index from tmux_options" do
+      project.stub(show_tmux_options: tmux_config(pane_base_index: 3))
 
-      expect(project.get_pane_base_index).to eq('3')
+      expect(project.get_pane_base_index).to eq("3")
     end
   end
 
-  describe '#get_base_index' do
-    it 'will extract the base index from options' do
-      project.stub(show_tmux_options: tmux_options(base_index: 1))
+  describe "#get_base_index" do
+    it "extracts the base index from options" do
+      project.stub(show_tmux_options: tmux_config(base_index: 1))
 
-      expect(project.get_base_index).to eq('1')
+      expect(project.get_base_index).to eq("1")
     end
-
-    it 'will extra when extra grep lines are configured' do
-      ENV['GREP_OPTIONS'] = '-A 3 -B 3'
-      project.stub(show_tmux_options: tmux_options(base_index: 1))
-
-      expect(project.get_base_index).to eq('1')
-    end
-  end
-
-  def tmux_options(options={})
-    standard_options = [
-      "assume-paste-time 1",
-      "bell-action any",
-      "bell-on-alert off",
-    ]
-
-    if base_index  = options.fetch(:base_index) {1}
-     standard_options << "base-index #{base_index}"
-    end
-
-    if pane_base_index  = options.fetch(:pane_base_index) {1}
-     standard_options << "pane-base-index #{pane_base_index}"
-    end
-
-    standard_options << "status-fg colour248"
-    standard_options << "status-interval 15"
-    standard_options << "status-justify left"
-
-    "echo '#{standard_options.join("\n")}'"
   end
 
   describe "#base_index" do

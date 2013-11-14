@@ -136,15 +136,11 @@ module Tmuxinator
     end
 
     def get_pane_base_index
-      get_value_for_key('pane-base-index')
+      tmux_config["pane-base-index"]
     end
 
     def get_base_index
-      get_value_for_key('base-index')
-    end
-
-    def grep_for_key(key)
-      "grep -A 0 -B 0 #{key}"
+      tmux_config["base-index"]
     end
 
     def show_tmux_options
@@ -153,8 +149,22 @@ module Tmuxinator
 
     private
 
-    def get_value_for_key(key)
-      `#{show_tmux_options} | #{grep_for_key(key)}`.split(/\s/).last
+    def tmux_config
+      @tmux_config ||= extract_tmux_config
+    end
+
+    def extract_tmux_config
+      options_hash = {}
+
+      options_string = `#{show_tmux_options}`
+
+      options_string.split("\n").map do |entry|
+        key, value = entry.split("\s")
+        options_hash[key] = value
+        options_hash
+      end
+
+      options_hash
     end
   end
 end
