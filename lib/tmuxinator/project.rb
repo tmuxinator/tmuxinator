@@ -136,11 +136,19 @@ module Tmuxinator
     end
 
     def get_pane_base_index
-      `#{tmux} start-server\\; show-option -g | grep pane-base-index`.split(/\s/).last
+      `#{show_tmux_options} | #{grep_for_key('pane-base-index')}`.split(/\s/).last
     end
 
     def get_base_index
-      `#{tmux} start-server\\; show-option -g | grep base-index`.split(/\s/).last
+      `#{show_tmux_options} | #{grep_for_key('base-index')}`.split(/\s/).last
+    end
+
+    def grep_for_key(key)
+      "grep -A 0 -B 0 #{key}"
+    end
+
+    def show_tmux_options
+      "#{tmux} start-server\\; show-option -g"
     end
   end
 end
