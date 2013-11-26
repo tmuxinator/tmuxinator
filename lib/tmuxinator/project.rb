@@ -136,11 +136,35 @@ module Tmuxinator
     end
 
     def get_pane_base_index
-      `#{tmux} start-server\\; show-option -g | grep pane-base-index`.split(/\s/).last
+      tmux_config["pane-base-index"]
     end
 
     def get_base_index
-      `#{tmux} start-server\\; show-option -g | grep base-index`.split(/\s/).last
+      tmux_config["base-index"]
+    end
+
+    def show_tmux_options
+      "#{tmux} start-server\\; show-option -g"
+    end
+
+    private
+
+    def tmux_config
+      @tmux_config ||= extract_tmux_config
+    end
+
+    def extract_tmux_config
+      options_hash = {}
+
+      options_string = `#{show_tmux_options}`
+
+      options_string.split("\n").map do |entry|
+        key, value = entry.split("\s")
+        options_hash[key] = value
+        options_hash
+      end
+
+      options_hash
     end
   end
 end

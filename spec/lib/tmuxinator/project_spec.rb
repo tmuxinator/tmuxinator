@@ -153,6 +153,22 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "#get_pane_base_index" do
+    it "extracts the pane_base_index from tmux_options" do
+      project.stub(show_tmux_options: tmux_config(pane_base_index: 3))
+
+      expect(project.get_pane_base_index).to eq("3")
+    end
+  end
+
+  describe "#get_base_index" do
+    it "extracts the base index from options" do
+      project.stub(show_tmux_options: tmux_config(base_index: 1))
+
+      expect(project.get_base_index).to eq("1")
+    end
+  end
+
   describe "#base_index" do
     context "pane base index present" do
       before do
