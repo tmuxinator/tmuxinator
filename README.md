@@ -104,7 +104,7 @@ windows:
         - vim
         - guard
   - server: bundle exec rails s
-  - logs: tail -f logs/development.log
+  - logs: tail -f log/development.log
 ```
 
 ## Windows
