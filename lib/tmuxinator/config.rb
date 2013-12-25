@@ -2,8 +2,13 @@ module Tmuxinator
   class Config
     class << self
       def root
-        Dir.mkdir("#{ENV["HOME"]}/.tmuxinator") unless File.directory?(File.expand_path("~/.tmuxinator"))
-        "#{ENV["HOME"]}/.tmuxinator"
+        local_root = File.join(File.expand_path(Dir.pwd), '.tmuxinator/')
+        if File.directory?(local_root)
+          local_root
+        else
+          Dir.mkdir("#{ENV["HOME"]}/.tmuxinator") unless File.directory?(File.expand_path("~/.tmuxinator"))
+          "#{ENV["HOME"]}/.tmuxinator"
+        end
       end
 
       def sample
@@ -11,7 +16,7 @@ module Tmuxinator
       end
 
       def default
-        "#{ENV["HOME"]}/.tmuxinator/default.yml"
+        "#{Tmuxinator::Config.root}/.tmuxinator/default.yml"
       end
 
       def default?
