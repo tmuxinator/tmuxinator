@@ -59,6 +59,12 @@ Add the following to your `~/.zshrc`:
 
     source ~/.bin/tmuxinator.zsh
 
+### fish
+
+Move `tmuxinator.fish` to your `completions` folder:
+
+    cp ~/.bin/tmuxinator.fish ~/.config/completions/
+
 ## Usage
 
 A working knowledge of tmux is assumed. You should understand what windows and
