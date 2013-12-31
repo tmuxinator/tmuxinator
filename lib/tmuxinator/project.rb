@@ -25,11 +25,13 @@ module Tmuxinator
     end
 
     def root
-      yaml["project_root"] || File.expand_path(yaml["root"])
+      root = yaml["project_root"] || yaml["root"]
+      root.blank? ? "" : File.expand_path(root)
     end
 
     def name
-      yaml["project_name"] && yaml["project_name"].shellescape || yaml["name"].shellescape
+      name = yaml["project_name"] || yaml["name"]
+      name.shellescape
     end
 
     def pre
