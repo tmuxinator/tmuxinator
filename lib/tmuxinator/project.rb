@@ -23,7 +23,7 @@ module Tmuxinator
     end
 
     def root
-      yaml["project_root"].presence || yaml["root"]
+      yaml["project_root"].presence || yaml["root"].presence || ''
     end
 
     def name
