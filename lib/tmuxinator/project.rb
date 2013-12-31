@@ -27,7 +27,7 @@ module Tmuxinator
     end
 
     def name
-      yaml["project_name"].presence.try(:shellescape) || yaml["name"].shellescape
+      (yaml["project_name"].presence || yaml["name"].presence).try(:shellescape)
     end
 
     def pre

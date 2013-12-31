@@ -74,6 +74,7 @@ module Tmuxinator
 
         unless project.name?
           puts "Your project file didn't specify a 'project_name'"
+          exit!
         end
 
         project
