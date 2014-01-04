@@ -156,7 +156,7 @@ These command(s) will run before any subsequent commands in all panes and window
 ## Passing directly to send-keys
 
 tmuxinator passes commands directly to send keys. This differs from simply chaining commands together using `&&` or `;`, in that
-tmux will directly send the commands to shell as if you typed them in. This allows commands to be executed on a remote server over
+tmux will directly send the commands to a shell as if you typed them in. This allows commands to be executed on a remote server over
 SSH for example.
 
 To support this both the window and pane options can take an array as an argument:
