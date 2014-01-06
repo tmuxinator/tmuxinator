@@ -23,11 +23,11 @@ module Tmuxinator
     end
 
     def root
-      yaml["project_root"].presence || yaml["root"]
+      yaml["project_root"].presence || yaml["root"].presence || ''
     end
 
     def name
-      yaml["project_name"].presence.try(:shellescape) || yaml["name"].shellescape
+      (yaml["project_name"].presence || yaml["name"].presence).try(:shellescape)
     end
 
     def pre
