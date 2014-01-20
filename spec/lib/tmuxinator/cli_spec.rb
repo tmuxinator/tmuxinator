@@ -36,7 +36,7 @@ describe Tmuxinator::Cli do
 
     it "lists the commands" do
       out, _ = capture_io { cli.start }
-      expect(out).to eq "#{%w(commands copy debug delete doctor help implode list start version).join("\n")}\n"
+      expect(out).to eq "#{%w(commands copy debug delete doctor help implode list start version close).join("\n")}\n"
     end
   end
 
