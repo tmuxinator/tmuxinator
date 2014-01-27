@@ -19,7 +19,11 @@ root: ~/
 # tmux_command: byobu
 
 windows:
+  - project:
+      -
   - editor:
+      index: 9
+      path: ~/src
       layout: main-vertical
       panes:
         - vim
