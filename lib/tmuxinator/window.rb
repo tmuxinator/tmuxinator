@@ -15,6 +15,7 @@ module Tmuxinator
       value = window_yaml.values.first
 
       if value.is_a?(Hash)
+        @index = value["index"] if value["index"].present?
         @layout = value["layout"].present? ? value["layout"].shellescape : nil
         @pre = value["pre"] if value["pre"].present?
 
