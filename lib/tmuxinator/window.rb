@@ -19,7 +19,7 @@ module Tmuxinator
         @index = value["index"] if value["index"].present?
         @layout = value["layout"].present? ? value["layout"].shellescape : nil
         @pre = value["pre"] if value["pre"].present?
-        @path = value["path"] if value["path"].present?
+        @path = value["path"].shellescape if value["path"].present?
 
         @panes = build_panes(value["panes"])
       else
