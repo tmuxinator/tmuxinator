@@ -40,7 +40,7 @@ module Tmuxinator
         File.open(config, "w") { |f| f.write(erb) }
       end
 
-      Kernel.system("$EDITOR #{config}")
+      Kernel.system("$EDITOR #{config}") || doctor
     end
 
     desc "start [PROJECT]", "Start a tmux session using a project's tmuxinator config"
