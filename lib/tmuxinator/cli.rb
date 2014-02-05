@@ -6,7 +6,7 @@ module Tmuxinator
 
     def initialize(*args)
       super
-      @command_list = %w(commands copy debug delete doctor help implode list start version)
+      @command_list = %w(commands copy debug delete doctor help implode list start version close)
     end
 
     package_name "tmuxinator"
@@ -95,7 +95,7 @@ module Tmuxinator
       if Tmuxinator::Config.exists?(project)
         config =  "#{Tmuxinator::Config.root}/#{project}.yml"
 
-        if yes?("Are you sure you want to delete #{project}?", :red)
+        if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
           FileUtils.rm(config)
           say "Deleted #{project}"
         end
@@ -146,6 +146,14 @@ module Tmuxinator
 
       say "Checking if $SHELL is set ==> "
       yes_no  Tmuxinator::Config.shell?
+    end
+
+    desc "close", "Close given tmuxinator project"
+
+    def close(name)
+      if Kernel.system("tmux kill-session -t #{name}")
+        say "#{name} project has been closed"
+      end
     end
   end
 end
