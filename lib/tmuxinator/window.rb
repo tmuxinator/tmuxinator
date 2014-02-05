@@ -2,7 +2,7 @@ module Tmuxinator
   class Window
     include Tmuxinator::Util
 
-    attr_reader :name, :panes, :layout, :commands, :index, :project
+    attr_reader :name, :panes, :layout, :commands, :index, :project, :path
 
     def initialize(window_yaml, index, project)
       @name = window_yaml.keys.first.present? ? window_yaml.keys.first.shellescape : nil
@@ -11,12 +11,15 @@ module Tmuxinator
       @pre = nil
       @project = project
       @index = index
+      @path = project.root.shellescape
 
       value = window_yaml.values.first
 
       if value.is_a?(Hash)
+        @index = value["index"] if value["index"].present?
         @layout = value["layout"].present? ? value["layout"].shellescape : nil
         @pre = value["pre"] if value["pre"].present?
+        @path = value["path"].shellescape if value["path"].present?
 
         @panes = build_panes(value["panes"])
       else
@@ -77,7 +80,7 @@ module Tmuxinator
     end
 
     def tmux_new_window_command
-      "#{project.tmux} new-window -c #{project.root.shellescape} -t #{tmux_window_target} -n #{name}"
+      "#{project.tmux} new-window -c #{path} -t #{tmux_window_target} -n #{name}"
     end
 
     def tmux_layout_command
