@@ -15,7 +15,7 @@ module Tmuxinator
     end
 
     def windows
-      windows_yml = yaml["tabs"].presence || yaml["windows"]
+      windows_yml = yaml["tabs"] || yaml["windows"]
 
       @windows ||= windows_yml.map.with_index do |window_yml, index|
         Tmuxinator::Window.new(window_yml, index, self)
@@ -23,11 +23,11 @@ module Tmuxinator
     end
 
     def root
-      yaml["project_root"].presence || yaml["root"]
+      yaml["project_root"] || yaml["root"]
     end
 
     def name
-      yaml["project_name"].presence.try(:shellescape) || yaml["name"].shellescape
+      yaml["project_name"] && yaml["project_name"].shellescape || yaml["name"].shellescape
     end
 
     def pre
@@ -56,13 +56,13 @@ module Tmuxinator
     end
 
     def tmux_command
-      yaml["tmux_command"].presence || "tmux"
+      yaml["tmux_command"] || "tmux"
     end
 
     def socket
-      if socket_path.present?
+      if socket_path
         " -S #{socket_path}"
-      elsif socket_name.present?
+      elsif socket_name
         " -L #{socket_name}"
       else
         nil
@@ -88,11 +88,11 @@ module Tmuxinator
     end
 
     def base_index
-      get_pane_base_index.present? ? get_pane_base_index.to_i : get_base_index.to_i
+      get_pane_base_index ? get_pane_base_index.to_i : get_base_index.to_i
     end
 
     def tmux_options?
-      yaml["tmux_options"].present?
+      yaml["tmux_options"]
     end
 
     def windows?
@@ -100,11 +100,11 @@ module Tmuxinator
     end
 
     def root?
-      root.present?
+      !root.nil?
     end
 
     def name?
-      name.present?
+      !name.nil?
     end
 
     def window(i)
@@ -112,7 +112,7 @@ module Tmuxinator
     end
 
     def send_pane_command(cmd, window_index, pane_index)
-      if cmd.blank?
+      if cmd.empty?
         ""
       else
         "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
@@ -120,7 +120,7 @@ module Tmuxinator
     end
 
     def send_keys(cmd, window_index)
-      if cmd.blank?
+      if cmd.empty?
        ""
       else
         "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
@@ -130,8 +130,8 @@ module Tmuxinator
     def deprecations
       deprecations = []
       deprecations << "DEPRECATION: rbenv/rvm specific options have been replaced by the pre_tab option and will not be supported in 0.8.0." if yaml["rbenv"] || yaml["rvm"]
-      deprecations << "DEPRECATION: The tabs option has been replaced by the windows option and will not be supported in 0.8.0." if yaml["tabs"].present?
-      deprecations << "DEPRECATION: The cli_args option has been replaced by the tmux_options option and will not be supported in 0.8.0." if yaml["cli_args"].present?
+      deprecations << "DEPRECATION: The tabs option has been replaced by the windows option and will not be supported in 0.8.0." if yaml["tabs"]
+      deprecations << "DEPRECATION: The cli_args option has been replaced by the tmux_options option and will not be supported in 0.8.0." if yaml["cli_args"]
       deprecations
     end
 
