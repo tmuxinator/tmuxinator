@@ -14,15 +14,15 @@ module Tmuxinator
     end
 
     def tmux_pre_command
-      tab.pre.present? ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{tab.pre.shellescape} C-m" : ""
+      tab.pre ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{tab.pre.shellescape} C-m" : ""
     end
 
     def tmux_pre_window_command
-      project.pre_window.present? ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{project.pre_window.shellescape} C-m" : ""
+      project.pre_window ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{project.pre_window.shellescape} C-m" : ""
     end
 
     def tmux_main_command(command)
-      command.present? ? "#{project.tmux} send-keys -t #{project.name}:#{tab.index + project.base_index}.#{index + tab.project.base_index} #{command.shellescape} C-m" : ""
+      command ? "#{project.tmux} send-keys -t #{project.name}:#{tab.index + project.base_index}.#{index + tab.project.base_index} #{command.shellescape} C-m" : ""
     end
 
     def tmux_split_command
@@ -34,7 +34,7 @@ module Tmuxinator
     end
 
     def multiple_commands?
-      commands.present? && commands.length > 0
+      commands && commands.length > 0
     end
   end
 end
