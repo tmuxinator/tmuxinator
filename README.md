@@ -246,7 +246,7 @@ Add `export DISABLE_AUTO_TITLE=true` to your `.zshrc` or `.bashrc`
 
 1. Include the config file in your project, e.g. for Rails, you could put it in config/tmuxinator.yml
 2. Set your root relative to the config dir like: `root: "#{config_dir}/.."`
-3. Specify the direct file path, e.g. `tmuxinator config/tmuxinator.yml"
+3. Specify the direct file path, e.g. `tmuxinator config/tmuxinator.yml`
 
 ## Contributing
 
