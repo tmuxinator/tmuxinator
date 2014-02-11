@@ -242,6 +242,12 @@ tmuxinator version
 
 Add `export DISABLE_AUTO_TITLE=true` to your `.zshrc` or `.bashrc`
 
+### How can I ship a tmuxinator config with my project?
+
+1. Include the config file in your project, e.g. for Rails, you could put it in config/tmuxinator.yml
+2. Set your root relative to the config dir like: `root: "#{config_dir}/.."`
+3. Specify the direct file path, e.g. `tmuxinator config/tmuxinator.yml"
+
 ## Contributing
 
 To contribute, please read the [contributing guide](https://github.com/aziz/tmuxinator/blob/master/CONTRIBUTING.md).

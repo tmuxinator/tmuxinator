@@ -5,8 +5,14 @@ module Tmuxinator
 
     attr_reader :yaml
 
-    def initialize(yaml)
-      @yaml = yaml
+    def initialize(config_path)
+      @config_path = config_path
+      begin
+        @yaml = YAML.load(File.read(config_path))
+      rescue SyntaxError, StandardError
+        puts "Failed to parse config file. Please check your formatting."
+        exit!
+      end
     end
 
     def render
@@ -23,7 +29,8 @@ module Tmuxinator
     end
 
     def root
-      yaml["project_root"].presence || yaml["root"]
+      root_path = yaml["project_root"].presence || yaml["root"]
+      root_path.gsub /\#\{config_dir\}/, File.expand_path(File.dirname(@config_path))
     end
 
     def name

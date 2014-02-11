@@ -58,15 +58,7 @@ module Tmuxinator
         end
 
         config_path = Tmuxinator::Config.project(name)
-
-        yaml = begin
-          YAML.load(File.read(config_path))
-        rescue SyntaxError, StandardError
-          puts "Failed to parse config file. Please check your formatting."
-          exit!
-        end
-
-        project = Tmuxinator::Project.new(yaml)
+        project = Tmuxinator::Project.new(config_path)
 
         unless project.windows?
           puts "Your project file should include some windows."
