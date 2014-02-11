@@ -3,11 +3,11 @@ module Tmuxinator
     include Tmuxinator::Util
     include Tmuxinator::Deprecations
 
-    attr_reader :yaml
+    attr_reader :yaml, :context
 
     def initialize(yaml, context={})
       @yaml = yaml
-      @config_path = context[:config_path]
+      @context = context
     end
 
     def render
@@ -25,7 +25,10 @@ module Tmuxinator
 
     def root
       root_path = yaml["project_root"].presence || yaml["root"]
-      root_path.gsub(/\#\{config_dir\}/) { File.expand_path(File.dirname(@config_path)) }
+      File.expand_path root_path.gsub(/\#\{config_dir\}/) { 
+        config_path = @context[:config_path]
+        File.dirname(config_path)
+      }
     end
 
     def name
