@@ -1,4 +1,9 @@
 #!<%= ENV["SHELL"] || "/bin/bash" %>
+
+# Clear rbenv variables before starting tmux
+unset RBENV_VERSION
+unset RBENV_DIR
+
 <%= tmux %> start-server\; has-session -t <%= name %> 2>/dev/null
 
 if [ "$?" -eq 1 ]; then
