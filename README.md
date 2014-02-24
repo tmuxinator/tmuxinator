@@ -245,8 +245,8 @@ Add `export DISABLE_AUTO_TITLE=true` to your `.zshrc` or `.bashrc`
 ### How can I ship a tmuxinator config with my project?
 
 1. Include the config file in your project, e.g. for Rails, you could put it in <rails-project-root>/config/tmuxinator.yml
-2. You'll probably want to set the `root` property to be relative to the config file, so members of your project can keep it any folder location on their respective machines. To do so, use `#{config_dir}` in the YML file's `root` value, e.g. if you put the config at <rails-project-root>/config/tmuxinator.yml, you want this line: `root: "#{config_dir}/.."`.
-3. To run it, simply point to the direct file path, e.g. `tmuxinator config/tmuxinator.yml`
+2. To run it, simply point to the direct file path, e.g. `tmuxinator config/tmuxinator.yml`
+3. On a typical project, you'll want to set the `root` property to your project's home, so a special variable `config_dir` is provided to support root paths relative to the folder housing the tmuxinator config file. In our Rails example with the YML in <project-home>/config, you'll want this line: `root: "#{config_dir}/.."`.
 
 ## Contributing
 
