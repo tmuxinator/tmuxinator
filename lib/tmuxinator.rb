@@ -2,7 +2,6 @@ require "yaml"
 require "erubis"
 require "shellwords"
 require "thor"
-require "active_support/all"
 
 require "tmuxinator/util"
 require "tmuxinator/deprecations"

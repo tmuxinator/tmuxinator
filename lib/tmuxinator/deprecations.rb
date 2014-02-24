@@ -1,19 +1,19 @@
 module Tmuxinator
   module Deprecations
     def rvm?
-      yaml["rvm"].present?
+      yaml["rvm"]
     end
 
     def rbenv?
-      yaml["rbenv"].present?
+      yaml["rbenv"]
     end
 
     def pre_tab?
-      yaml["pre_tab"].present?
+      yaml["pre_tab"]
     end
 
     def cli_args?
-      yaml["cli_args"].present?
+      yaml["cli_args"]
     end
   end
 end
