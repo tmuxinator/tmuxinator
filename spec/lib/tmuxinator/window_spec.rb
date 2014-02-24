@@ -142,7 +142,7 @@ describe Tmuxinator::Window do
 
     context "tmux 1.6 and below" do
       before do
-        Tmuxinator::Config.stub(:version => 1.6) unless ENV["TRAVIS"]
+        Tmuxinator::Config.stub(:version => 1.6)
       end
 
       it "specifies root path by passing default-path to tmux" do
