@@ -44,6 +44,7 @@ describe Tmuxinator::Cli do
     before do
       ARGV.replace(["start", "foo"])
       Tmuxinator::Config.stub(:validate => project)
+      Tmuxinator::Config.stub(:version => 1.9)
       Kernel.stub(:exec)
     end
 

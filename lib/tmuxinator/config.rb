@@ -22,6 +22,14 @@ module Tmuxinator
         Kernel.system("which tmux > /dev/null")
       end
 
+      def version
+        `tmux -V`.split(" ")[1].to_f if installed?
+      end
+
+      def default_path_option
+        version && version < 1.7 ? "default-path" : "-c"
+      end
+
       def editor?
         !ENV["EDITOR"].nil? && !ENV["EDITOR"].empty?
       end

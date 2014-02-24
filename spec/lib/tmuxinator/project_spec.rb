@@ -35,13 +35,13 @@ describe Tmuxinator::Project do
   describe "#root" do
     context "without deprecations" do
       it "gets the root" do
-        expect(project.root).to eq "~/test"
+        expect(project.root).to include("test")
       end
     end
 
     context "with deprecations" do
       it "still gets the root" do
-        expect(project_with_deprecations.root).to eq "~/test"
+        expect(project_with_deprecations.root).to include("test")
       end
     end
   end

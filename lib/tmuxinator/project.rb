@@ -23,7 +23,7 @@ module Tmuxinator
     end
 
     def root
-      yaml["project_root"] || yaml["root"]
+      yaml["project_root"] || File.expand_path(yaml["root"])
     end
 
     def name
