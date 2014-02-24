@@ -1,6 +1,6 @@
 # Tmuxinator
 
-[![Gem Version](https://badge.fury.io/rb/tmuxinator.png)](http://badge.fury.io/rb/tmuxinator) [![Build Status](https://secure.travis-ci.org/aziz/tmuxinator.png)](http://travis-ci.org/aziz/tmuxinator?branch=master) [![Coverage Status](https://coveralls.io/repos/aziz/tmuxinator/badge.png)](https://coveralls.io/r/aziz/tmuxinator) [![Code Climate](https://codeclimate.com/github/aziz/tmuxinator.png)](https://codeclimate.com/github/aziz/tmuxinator) [![Dependency Status](https://gemnasium.com/aziz/tmuxinator.png)](https://gemnasium.com/aziz/tmuxinator)
+[![Gem Version](https://badge.fury.io/rb/tmuxinator.png)](http://badge.fury.io/rb/tmuxinator) [![Build Status](https://secure.travis-ci.org/tmuxinator/tmuxinator.png)](http://travis-ci.org/tmuxinator/tmuxinator?branch=master) [![Coverage Status](https://coveralls.io/repos/tmuxinator/tmuxinator/badge.png)](https://coveralls.io/r/tmuxinator/tmuxinator) [![Code Climate](https://codeclimate.com/github/tmuxinator/tmuxinator.png)](https://codeclimate.com/github/tmuxinator/tmuxinator) [![Dependency Status](https://gemnasium.com/tmuxinator/tmuxinator.png)](https://gemnasium.com/tmuxinator/tmuxinator)
 
 Create and manage tmux sessions easily.
 
@@ -244,7 +244,7 @@ Add `export DISABLE_AUTO_TITLE=true` to your `.zshrc` or `.bashrc`
 
 ## Contributing
 
-To contribute, please read the [contributing guide](https://github.com/aziz/tmuxinator/blob/master/CONTRIBUTING.md).
+To contribute, please read the [contributing guide](https://github.com/tmuxinator/tmuxinator/blob/master/CONTRIBUTING.md).
 
 ## Copyright
 
