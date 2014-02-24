@@ -1,3 +1,16 @@
+## 0.6.7
+- Remove use of grep for base-index #171
+- Fix bugs in `Tmuxinator::Config.default?` #169
+- Fix path for Rails log in directory sample #177
+- Add completions for fish shell #179
+- Fix grammar in readme #184
+- Make commands take precedence over project names #182
+- Improve error messages when $EDITOR isn't set #186, #194
+- Add confirmation to deletion prompt #197
+- Fix broken badge references after organisation move
+- Remove dependancy on ActiveSupport #199
+- Fix compatability with tmux 1.9
+
 ## 0.6.6
 - Fix a bug caused by not escaping the root path #145
 - Fix bash completion with a single argument #148
