@@ -3,11 +3,16 @@ require "spec_helper"
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
+  let(:project_with_context) { FactoryGirl.build(:project_with_context) }
 
   describe "#initialize" do
     context "valid yaml" do
       it "creates an instance" do
         expect(project).to be_a(Tmuxinator::Project)
+      end
+      it "includes calling context" do
+        expect(project.context).to_not be_empty
+        expect(project.context[:config_path]).to_not be_empty
       end
     end
   end
@@ -35,13 +40,19 @@ describe Tmuxinator::Project do
   describe "#root" do
     context "without deprecations" do
       it "gets the root" do
-        expect(project.root).to eq "~/test"
+        expect(project.root).to eq File.expand_path("~/test")
       end
     end
 
     context "with deprecations" do
       it "still gets the root" do
-        expect(project_with_deprecations.root).to eq "~/test"
+        expect(project_with_deprecations.root).to eq File.expand_path("~/test")
+      end
+    end
+
+    context "with context" do
+      it "uses relative path for root" do
+        expect(project_with_context.root).to eq File.expand_path("#{File.dirname(__FILE__)}/../../..")
       end
     end
   end

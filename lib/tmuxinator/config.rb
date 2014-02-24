@@ -35,6 +35,7 @@ module Tmuxinator
       end
 
       def project(name)
+        return name if name =~ /\.yml$/ and File.file?(name)
         projects = Dir.glob("#{root}/**/*.yml")
         project_file = projects.detect { |project| project =~ /^#{name}.yml$/ }
         project_file || "#{root}/#{name}.yml"
@@ -56,16 +57,13 @@ module Tmuxinator
           exit!
         end
 
-        config_path = Tmuxinator::Config.project(name)
-
-        yaml = begin
-          YAML.load(File.read(config_path))
+        begin
+          config_path = Tmuxinator::Config.project(name)
+          yaml = YAML.load(File.read(config_path))
+          project = Tmuxinator::Project.new(yaml, { config_path: config_path })
         rescue SyntaxError, StandardError
-          puts "Failed to parse config file. Please check your formatting."
-          exit!
+          exit! "Failed to parse config file. Please check your formatting."
         end
-
-        project = Tmuxinator::Project.new(yaml)
 
         unless project.windows?
           puts "Your project file should include some windows."
