@@ -140,8 +140,20 @@ describe Tmuxinator::Window do
       )
     end
 
-    it "specifies root path by passing -c to tmux" do
-      expect(window.tmux_new_window_command).to include("-c /project/tmuxinator")
+    context "tmux 1.7 or greater " do
+      it "specifies root path by passing -c to tmux" do
+        expect(window.tmux_new_window_command).to include("-c /project/tmuxinator")
+      end
+    end
+
+    context "tmux 1.6 and below" do
+      before do
+        Tmuxinator::Config.stub(:version => 1.6)
+      end
+
+      it "specifies root path by passing default-path to tmux" do
+        expect(window.tmux_new_window_command).to include("default-path /project/tmuxinator")
+      end
     end
   end
 end
