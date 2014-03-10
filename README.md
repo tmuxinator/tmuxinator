@@ -188,7 +188,7 @@ tmuxinator start [project]
 
 ## Shorthand
 
-An shorthand alias for tmuxinator can also be used.
+A shorthand alias for tmuxinator can also be used.
 
 ```
 mux [command]
