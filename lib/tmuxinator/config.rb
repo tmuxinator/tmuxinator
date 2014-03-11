@@ -58,16 +58,15 @@ module Tmuxinator
         end
       end
 
-      def validate(name)
-        unless Tmuxinator::Config.exists?(name)
+      def validate(name, per_project = false)
+        unless Tmuxinator::Config.exists?(name) || File.exists?(name)
           puts "Project #{name} doesn't exist."
           exit!
         end
 
-        config_path = Tmuxinator::Config.project(name)
-
         yaml = begin
-          YAML.load(File.read(config_path))
+          config_path = per_project ? name : Tmuxinator::Config.project(name)
+          YAML.load(Erubis::Eruby.new(File.read(config_path)).result(binding))
         rescue SyntaxError, StandardError
           puts "Failed to parse config file. Please check your formatting."
           exit!
