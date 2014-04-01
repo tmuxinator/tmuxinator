@@ -115,7 +115,7 @@ windows:
 
 ## Windows
 
-The windows option allows the specfication of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
+The windows option allows the specification of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
 and command to be run.
 
 ```
@@ -125,8 +125,8 @@ windows:
 
 ## Panes
 
-**_Note that if you wish to use panes, make sure that you do not have `.` in your project name. tmux uses `.` to delimit between window and pane indicies,
-and tmuxinator uses the project name in combination with these indicies to target the correct pane or window._**
+**_Note that if you wish to use panes, make sure that you do not have `.` in your project name. tmux uses `.` to delimit between window and pane indices,
+and tmuxinator uses the project name in combination with these indices to target the correct pane or window._**
 
 Panes are optional and are children of window entries, but unlike windows, they do not need a name. In the following example, the `editor` window has 2 panes, one running vim, the other guard.
 
