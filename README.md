@@ -115,7 +115,7 @@ windows:
 
 ## Windows
 
-The windows option allows the specfication of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
+The windows option allows the specification of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
 and command to be run.
 
 ```
