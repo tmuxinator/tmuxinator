@@ -5,6 +5,7 @@ require "thor"
 
 require "tmuxinator/util"
 require "tmuxinator/deprecations"
+require "tmuxinator/wemux_support"
 require "tmuxinator/cli"
 require "tmuxinator/config"
 require "tmuxinator/pane"

@@ -2,11 +2,13 @@ module Tmuxinator
   class Project
     include Tmuxinator::Util
     include Tmuxinator::Deprecations
+    include Tmuxinator::WemuxSupport
 
     attr_reader :yaml
 
     def initialize(yaml)
       @yaml = yaml
+      load_wemux_overrides if wemux?
     end
 
     def render
