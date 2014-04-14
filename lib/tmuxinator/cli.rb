@@ -121,11 +121,7 @@ module Tmuxinator
     def list
       say "tmuxinator projects:"
 
-      configs = Dir["#{Tmuxinator::Config.root}/*.yml"].sort.map do |path|
-        path.gsub("#{Tmuxinator::Config.root}/", "").gsub(".yml", "")
-      end
-
-      print_in_columns configs
+      print_in_columns Tmuxinator::Config.configs
     end
 
     desc "version", "Display installed tmuxinator version"
