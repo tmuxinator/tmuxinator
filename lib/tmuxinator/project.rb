@@ -159,7 +159,7 @@ module Tmuxinator
       options_hash = {}
 
       options_string = `#{show_tmux_options}`
-
+      options_string.encode!("UTF-8", :invalid => :replace)
       options_string.split("\n").map do |entry|
         key, value = entry.split("\s")
         options_hash[key] = value
