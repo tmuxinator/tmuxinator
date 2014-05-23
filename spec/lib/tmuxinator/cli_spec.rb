@@ -110,7 +110,7 @@ describe Tmuxinator::Cli do
 
     context "new project already exists" do
       before do
-        $stdin.stub(:gets => "y")
+        Thor::LineEditor.stub(:readline => "y")
       end
 
       it "prompts user to confirm overwrite" do
@@ -152,16 +152,12 @@ describe Tmuxinator::Cli do
   describe "#delete" do
     before do
       ARGV.replace(["delete", "foo"])
-      $stdin.stub(:gets => "y")
+      Thor::LineEditor.stub(:readline => "y")
     end
 
     context "project exists" do
       before do
         Tmuxinator::Config.stub(:exists?) { true }
-      end
-
-      it "confirms deletion" do
-        capture_io { cli.start }
       end
 
       it "deletes the project" do
@@ -172,7 +168,7 @@ describe Tmuxinator::Cli do
 
     context "project doesn't exist" do
       before do
-        $stdin.stub(:gets => "y")
+        Thor::LineEditor.stub(:readline => "y")
       end
 
       it "exits with error message" do
@@ -184,11 +180,11 @@ describe Tmuxinator::Cli do
   describe "#implode" do
     before do
       ARGV.replace(["implode"])
-      $stdin.stub(:gets => "y")
+      Thor::LineEditor.stub(:readline => "y")
     end
 
     it "confirms deletion of all projects" do
-      expect($stdin).to receive(:gets).and_return("y")
+      expect(Thor::LineEditor).to receive(:readline).and_return("y")
       capture_io { cli.start }
     end
 
