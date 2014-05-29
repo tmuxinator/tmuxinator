@@ -58,7 +58,7 @@ module Tmuxinator
 
       def configs
         Dir["#{Tmuxinator::Config.root}/*.yml"].sort.map do |path|
-          path.gsub("#{Tmuxinator::Config.root}/", "").gsub(".yml", "")
+          File.basename(path, ".yml")
         end
       end
 
