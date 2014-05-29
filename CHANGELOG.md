@@ -1,3 +1,10 @@
+## 0.6.8
+- Remove some duplication #212
+- Add wemux support #88 - Thanks to Andrew Thal (@athal7)
+- Fix typos in readme #217, #216
+- Fix encoding bug #229
+- Fix specs not running due to changes in thor
+
 ## 0.6.7
 - Remove use of grep for base-index #171
 - Fix bugs in `Tmuxinator::Config.default?` #169
