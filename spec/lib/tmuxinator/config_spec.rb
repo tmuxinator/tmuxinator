@@ -24,28 +24,28 @@ describe Tmuxinator::Config do
 
     context "when the file exists" do
       before do
-        File.stub(:exists?).with(Tmuxinator::Config.default) { true }
+        allow(File).to receive(:exists?).with(Tmuxinator::Config.default) { true }
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.default?).to be_true
+        expect(Tmuxinator::Config.default?).to be_truthy
       end
     end
 
     context "when the file doesn't exist" do
       before do
-        File.stub(:exists?).with(Tmuxinator::Config.default) { false }
+        allow(File).to receive(:exists?).with(Tmuxinator::Config.default) { false }
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.default?).to be_false
+        expect(Tmuxinator::Config.default?).to be_falsey
       end
     end
   end
 
   describe "#configs" do
     before do
-      Dir.stub(:[] => ["test.yml"])
+      allow(Dir).to receive_messages(:[] => ["test.yml"])
     end
 
     it "gets a list of all projects" do
@@ -56,21 +56,21 @@ describe Tmuxinator::Config do
   describe "#installed?" do
     context "tmux is installed" do
       before do
-        Kernel.stub(:system) { true }
+        allow(Kernel).to receive(:system) { true }
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.installed?).to be_true
+        expect(Tmuxinator::Config.installed?).to be_truthy
       end
     end
 
     context "tmux is not installed" do
       before do
-        Kernel.stub(:system) { false }
+        allow(Kernel).to receive(:system) { false }
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.installed?).to be_false
+        expect(Tmuxinator::Config.installed?).to be_falsey
       end
     end
   end
@@ -78,21 +78,21 @@ describe Tmuxinator::Config do
   describe "#editor?" do
     context "$EDITOR is set" do
       before do
-        ENV.stub(:[]).with("EDITOR") { "vim" }
+        allow(ENV).to receive(:[]).with("EDITOR") { "vim" }
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.editor?).to be_true
+        expect(Tmuxinator::Config.editor?).to be_truthy
       end
     end
 
     context "$EDITOR is not set" do
       before do
-        ENV.stub(:[]).with("EDITOR") { nil }
+        allow(ENV).to receive(:[]).with("EDITOR") { nil }
       end
 
       it "returns false" do
-        expect(Tmuxinator::Config.editor?).to be_false
+        expect(Tmuxinator::Config.editor?).to be_falsey
       end
     end
   end
@@ -100,33 +100,33 @@ describe Tmuxinator::Config do
   describe "#shell?" do
     context "$SHELL is set" do
       before do
-        ENV.stub(:[]).with("SHELL") { "vim" }
+        allow(ENV).to receive(:[]).with("SHELL") { "vim" }
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.shell?).to be_true
+        expect(Tmuxinator::Config.shell?).to be_truthy
       end
     end
 
     context "$SHELL is not set" do
       before do
-        ENV.stub(:[]).with("SHELL") { nil }
+        allow(ENV).to receive(:[]).with("SHELL") { nil }
       end
 
       it "returns false" do
-        expect(Tmuxinator::Config.shell?).to be_false
+        expect(Tmuxinator::Config.shell?).to be_falsey
       end
     end
   end
 
   describe "#exists?" do
     before do
-      File.stub(:exists? => true)
-      Tmuxinator::Config.stub(:project => "")
+      allow(File).to receive_messages(:exists? => true)
+      allow(Tmuxinator::Config).to receive_messages(:project => "")
     end
 
     it "checks if the given project exists" do
-      expect(Tmuxinator::Config.exists?("test")).to be_true
+      expect(Tmuxinator::Config.exists?("test")).to be_truthy
     end
   end
 
@@ -135,7 +135,7 @@ describe Tmuxinator::Config do
 
     before do
       path = File.expand_path("../../../fixtures/", __FILE__)
-      Tmuxinator::Config.stub(:root => path)
+      allow(Tmuxinator::Config).to receive_messages(:root => path)
     end
 
     context "with project yml" do

@@ -4,10 +4,10 @@ describe Tmuxinator::Cli do
 
   before do
     ARGV.clear
-    Kernel.stub(:system)
-    FileUtils.stub(:copy_file)
-    FileUtils.stub(:rm)
-    FileUtils.stub(:remove_dir)
+    allow(Kernel).to receive(:system)
+    allow(FileUtils).to receive(:copy_file)
+    allow(FileUtils).to receive(:rm)
+    allow(FileUtils).to receive(:remove_dir)
   end
 
   context "no arguments" do
@@ -20,7 +20,7 @@ describe Tmuxinator::Cli do
   describe "#completions" do
     before do
       ARGV.replace(["completions", "start"])
-      Tmuxinator::Config.stub(:configs => ["test.yml"])
+      allow(Tmuxinator::Config).to receive_messages(:configs => ["test.yml"])
     end
 
     it "gets completions" do
@@ -43,9 +43,9 @@ describe Tmuxinator::Cli do
   describe "#start" do
     before do
       ARGV.replace(["start", "foo"])
-      Tmuxinator::Config.stub(:validate => project)
-      Tmuxinator::Config.stub(:version => 1.9)
-      Kernel.stub(:exec)
+      allow(Tmuxinator::Config).to receive_messages(:validate => project)
+      allow(Tmuxinator::Config).to receive_messages(:version => 1.9)
+      allow(Kernel).to receive(:exec)
     end
 
     context "no deprecations" do
@@ -59,7 +59,7 @@ describe Tmuxinator::Cli do
 
     context "deprecations" do
       before do
-        $stdin.stub(:getc => "y")
+        allow($stdin).to receive_messages(:getc => "y")
       end
 
       let(:project) { FactoryGirl.build(:project_with_deprecations) }
@@ -76,12 +76,12 @@ describe Tmuxinator::Cli do
 
     before do
       ARGV.replace(["new", "test"])
-      File.stub(:open) { |&block| block.yield file }
+      allow(File).to receive(:open) { |&block| block.yield file }
     end
 
     context "existing project doesn't exist" do
       before do
-        Tmuxinator::Config.stub(:exists? => false)
+        allow(Tmuxinator::Config).to receive_messages(:exists? => false)
       end
 
       it "creates a new tmuxinator project file" do
@@ -92,7 +92,7 @@ describe Tmuxinator::Cli do
 
     context "files exists" do
       before do
-        File.stub(:exists? => true)
+        allow(File).to receive_messages(:exists? => true)
       end
 
       it "just opens the file" do
@@ -105,12 +105,12 @@ describe Tmuxinator::Cli do
   describe "#copy" do
     before do
       ARGV.replace(["copy", "foo", "bar"])
-      Tmuxinator::Config.stub(:exists?) { true }
+      allow(Tmuxinator::Config).to receive(:exists?) { true }
     end
 
     context "new project already exists" do
       before do
-        Thor::LineEditor.stub(:readline => "y")
+        allow(Thor::LineEditor).to receive_messages(:readline => "y")
       end
 
       it "prompts user to confirm overwrite" do
@@ -126,7 +126,7 @@ describe Tmuxinator::Cli do
 
     context "existing project doens't exist" do
       before do
-        Tmuxinator::Config.stub(:exists?) { false }
+        allow(Tmuxinator::Config).to receive(:exists?) { false }
       end
 
       it "exit with error code" do
@@ -140,7 +140,7 @@ describe Tmuxinator::Cli do
 
     before do
       ARGV.replace(["debug", "foo"])
-      Tmuxinator::Config.stub(:validate => project)
+      allow(Tmuxinator::Config).to receive_messages(:validate => project)
     end
 
     it "renders the project" do
@@ -152,12 +152,12 @@ describe Tmuxinator::Cli do
   describe "#delete" do
     before do
       ARGV.replace(["delete", "foo"])
-      Thor::LineEditor.stub(:readline => "y")
+      allow(Thor::LineEditor).to receive_messages(:readline => "y")
     end
 
     context "project exists" do
       before do
-        Tmuxinator::Config.stub(:exists?) { true }
+        allow(Tmuxinator::Config).to receive(:exists?) { true }
       end
 
       it "deletes the project" do
@@ -168,7 +168,7 @@ describe Tmuxinator::Cli do
 
     context "project doesn't exist" do
       before do
-        Thor::LineEditor.stub(:readline => "y")
+        allow(Thor::LineEditor).to receive_messages(:readline => "y")
       end
 
       it "exits with error message" do
@@ -180,7 +180,7 @@ describe Tmuxinator::Cli do
   describe "#implode" do
     before do
       ARGV.replace(["implode"])
-      Thor::LineEditor.stub(:readline => "y")
+      allow(Thor::LineEditor).to receive_messages(:readline => "y")
     end
 
     it "confirms deletion of all projects" do
@@ -197,7 +197,7 @@ describe Tmuxinator::Cli do
   describe "#list" do
     before do
       ARGV.replace(["list"])
-      Dir.stub(:[] => ["/path/to/project.yml"])
+      allow(Dir).to receive_messages(:[] => ["/path/to/project.yml"])
     end
 
     it "lists all projects" do
@@ -222,9 +222,9 @@ describe Tmuxinator::Cli do
     end
 
     it "checks requirements" do
-      Tmuxinator::Config.should_receive(:installed?)
-      Tmuxinator::Config.should_receive(:editor?)
-      Tmuxinator::Config.should_receive(:shell?)
+      expect(Tmuxinator::Config).to receive(:installed?)
+      expect(Tmuxinator::Config).to receive(:editor?)
+      expect(Tmuxinator::Config).to receive(:shell?)
       capture_io { cli.start }
     end
   end

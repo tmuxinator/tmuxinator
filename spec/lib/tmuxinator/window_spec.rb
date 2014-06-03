@@ -16,7 +16,7 @@ describe Tmuxinator::Window do
   let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
 
   before do
-    project.stub(:tmux => "tmux", :name => "test", :base_index => 1)
+    allow(project).to receive_messages(:tmux => "tmux", :name => "test", :base_index => 1)
   end
 
   describe "#initialize" do
@@ -29,7 +29,7 @@ describe Tmuxinator::Window do
     let(:pane) { double(:pane) }
 
     before do
-      Tmuxinator::Pane.stub :new => pane
+      allow(Tmuxinator::Pane).to receive_messages :new => pane
     end
 
     context "with a three element Array" do
@@ -132,7 +132,7 @@ describe Tmuxinator::Window do
     let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
 
     before do
-      project.stub(
+      allow(project).to receive_messages(
         :name => "",
         :tmux => "tmux",
         :root => "/project/tmuxinator",
@@ -142,7 +142,7 @@ describe Tmuxinator::Window do
 
     context "tmux 1.6 and below" do
       before do
-        Tmuxinator::Config.stub(:version => 1.6)
+        allow(Tmuxinator::Config).to receive_messages(:version => 1.6)
       end
 
       it "specifies root path by passing default-path to tmux" do

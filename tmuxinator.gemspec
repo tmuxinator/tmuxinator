@@ -37,16 +37,17 @@ Gem::Specification.new do |spec|
 
   spec.required_rubygems_version = ">= 1.8.23"
 
-  spec.add_dependency "thor", ">= 0.18.0"
+  spec.add_dependency "thor", "~> 0.18", ">= 0.18.0"
   spec.add_dependency "erubis"
 
   spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rspec", ">= 2.14.0"
+  spec.add_development_dependency "rspec", "~> 3.0.0"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "awesome_print"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "pry-nav"
   spec.add_development_dependency "factory_girl"
+  spec.add_development_dependency "transpec"
 end
 

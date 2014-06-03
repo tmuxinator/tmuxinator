@@ -81,8 +81,8 @@ describe Tmuxinator::Project do
     context "with deprecations" do
       context "rbenv option is present" do
         before do
-          project.stub(:rbenv? => true)
-          project.stub_chain(:yaml, :[]).and_return("2.0.0-p247")
+          allow(project).to receive_messages(:rbenv? => true)
+          allow(project).to receive_message_chain(:yaml, :[]).and_return("2.0.0-p247")
         end
 
         it "still gets the correct pre_window command" do
@@ -92,8 +92,8 @@ describe Tmuxinator::Project do
 
       context "rvm option is present" do
         before do
-          project.stub(:rbenv? => false)
-          project.stub_chain(:yaml, :[]).and_return("ruby-2.0.0-p247")
+          allow(project).to receive_messages(:rbenv? => false)
+          allow(project).to receive_message_chain(:yaml, :[]).and_return("ruby-2.0.0-p247")
         end
 
         it "still gets the correct pre_window command" do
@@ -103,8 +103,8 @@ describe Tmuxinator::Project do
 
       context "pre_tab is present" do
         before do
-          project.stub(:rbenv? => false)
-          project.stub(:pre_tab? => true)
+          allow(project).to receive_messages(:rbenv? => false)
+          allow(project).to receive_messages(:pre_tab? => true)
         end
 
         it "still gets the correct pre_window command" do
@@ -117,7 +117,7 @@ describe Tmuxinator::Project do
   describe "#socket" do
     context "socket path is present" do
       before do
-        project.stub(:socket_path => "/tmp")
+        allow(project).to receive_messages(:socket_path => "/tmp")
       end
 
       it "gets the socket path" do
@@ -147,7 +147,7 @@ describe Tmuxinator::Project do
   describe "#tmux_options" do
     context "no tmux options" do
       before do
-        project.stub(:tmux_options? => false)
+        allow(project).to receive_messages(:tmux_options? => false)
       end
 
       it "returns nothing" do
@@ -157,7 +157,7 @@ describe Tmuxinator::Project do
 
     context "with deprecations" do
       before do
-        project_with_deprecations.stub(:cli_args? => true)
+        allow(project_with_deprecations).to receive_messages(:cli_args? => true)
       end
 
       it "still gets the tmux options" do
@@ -168,7 +168,7 @@ describe Tmuxinator::Project do
 
   describe "#get_pane_base_index" do
     it "extracts the pane_base_index from tmux_options" do
-      project.stub(show_tmux_options: tmux_config(pane_base_index: 3))
+      allow(project).to receive_messages(show_tmux_options: tmux_config(pane_base_index: 3))
 
       expect(project.get_pane_base_index).to eq("3")
     end
@@ -176,7 +176,7 @@ describe Tmuxinator::Project do
 
   describe "#get_base_index" do
     it "extracts the base index from options" do
-      project.stub(show_tmux_options: tmux_config(base_index: 1))
+      allow(project).to receive_messages(show_tmux_options: tmux_config(base_index: 1))
 
       expect(project.get_base_index).to eq("1")
     end
@@ -185,8 +185,8 @@ describe Tmuxinator::Project do
   describe "#base_index" do
     context "pane base index present" do
       before do
-        project.stub(:get_pane_base_index => "1")
-        project.stub(:get_base_index => "1")
+        allow(project).to receive_messages(:get_pane_base_index => "1")
+        allow(project).to receive_messages(:get_base_index => "1")
       end
 
       it "gets the pane base index" do
@@ -196,8 +196,8 @@ describe Tmuxinator::Project do
 
     context "pane base index no present" do
       before do
-        project.stub(:get_pane_base_index => nil)
-        project.stub(:get_base_index => "0")
+        allow(project).to receive_messages(:get_pane_base_index => nil)
+        allow(project).to receive_messages(:get_base_index => "0")
       end
 
       it "gets the base index" do
@@ -215,7 +215,7 @@ describe Tmuxinator::Project do
   describe "#name?" do
     context "name is present" do
       it "returns true" do
-        expect(project.name?).to be_true
+        expect(project.name?).to be_truthy
       end
     end
   end
@@ -223,7 +223,7 @@ describe Tmuxinator::Project do
   describe "#windows?" do
     context "windows are present" do
       it "returns true" do
-        expect(project.windows?).to be_true
+        expect(project.windows?).to be_truthy
       end
     end
   end
@@ -231,7 +231,7 @@ describe Tmuxinator::Project do
   describe "#root?" do
     context "root are present" do
       it "returns true" do
-        expect(project.root?).to be_true
+        expect(project.root?).to be_truthy
       end
     end
   end
