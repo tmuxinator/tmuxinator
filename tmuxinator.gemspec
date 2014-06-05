@@ -3,22 +3,22 @@ lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "tmuxinator/version"
 
-Gem::Specification.new do |spec|
-  spec.name          = "tmuxinator"
-  spec.version       = Tmuxinator::VERSION
-  spec.authors       = ["Allen Bargi"]
-  spec.email         = ["allen.bargi@gmail.com"]
-  spec.description   = %q{Create and manage complex tmux sessions easily.}
-  spec.summary       = %q{Create and manage complex tmux sessions easily.}
-  spec.homepage      = "https://github.com/aziz/tmuxinator"
-  spec.license       = "MIT"
+Gem::Specification.new do |s|
+  s.name          = "tmuxinator"
+  s.version       = Tmuxinator::VERSION
+  s.authors       = ["Allen Bargi"]
+  s.email         = ["allen.bargi@gmail.com"]
+  s.description   = %q{Create and manage complex tmux sessions easily.}
+  s.summary       = %q{Create and manage complex tmux sessions easily.}
+  s.homepage      = "https://github.com/aziz/tmuxinator"
+  s.license       = "MIT"
 
-  spec.files         = `git ls-files`.split($/)
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ["lib"]
+  s.files         = Dir('lib/**/*') + Dir('spec/**/*') + Dir('bin/*')
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
+  s.require_paths = ["lib"]
 
-  spec.post_install_message = %q{
+  s.post_install_message = %q{
     __________________________________________________________
     ..........................................................
 
@@ -35,19 +35,19 @@ Gem::Specification.new do |spec|
     __________________________________________________________
   }
 
-  spec.required_rubygems_version = ">= 1.8.23"
+  s.required_rubygems_version = ">= 1.8.23"
 
-  spec.add_dependency "thor", "~> 0.18", ">= 0.18.0"
-  spec.add_dependency "erubis"
+  s.add_dependency "thor", "~> 0.18", ">= 0.18.0"
+  s.add_dependency "erubis"
 
-  spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rspec", "~> 3.0.0"
-  spec.add_development_dependency "simplecov"
-  spec.add_development_dependency "coveralls"
-  spec.add_development_dependency "awesome_print"
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "pry-nav"
-  spec.add_development_dependency "factory_girl"
-  spec.add_development_dependency "transpec"
+  s.add_development_dependency "bundler", "~> 1.3"
+  s.add_development_dependency "rspec", "~> 3.0.0"
+  s.add_development_dependency "simplecov"
+  s.add_development_dependency "coveralls"
+  s.add_development_dependency "awesome_print"
+  s.add_development_dependency "pry"
+  s.add_development_dependency "pry-nav"
+  s.add_development_dependency "factory_girl"
+  s.add_development_dependency "transpec"
 end
 
