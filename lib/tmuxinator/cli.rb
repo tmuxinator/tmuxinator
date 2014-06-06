@@ -9,8 +9,6 @@ module Tmuxinator
       @command_list = %w(commands copy debug delete doctor help implode list start version)
     end
 
-    package_name "tmuxinator"
-
     desc "commands", "Lists commands available in tmuxinator"
 
     def commands
