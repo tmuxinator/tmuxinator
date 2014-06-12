@@ -19,7 +19,7 @@ module Tmuxinator
       end
 
       def installed?
-        Kernel.system("which -s tmux")
+        Kernel.system("type tmux > /dev/null")
       end
 
       def version
