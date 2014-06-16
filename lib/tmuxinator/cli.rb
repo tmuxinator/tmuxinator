@@ -8,9 +8,9 @@ module Tmuxinator
       super
       @command_list = %w(commands copy debug delete doctor help implode list start version)
     end
-    
+
     package_name "tmuxinator" unless Gem::Version.create(Thor::VERSION) < Gem::Version.create("0.18")
- 
+
     desc "commands", "Lists commands available in tmuxinator"
 
     def commands
