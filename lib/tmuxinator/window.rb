@@ -75,7 +75,8 @@ module Tmuxinator
     end
 
     def tmux_new_window_command
-      "#{project.tmux} new-window #{Tmuxinator::Config.default_path_option} #{File.expand_path(project.root).shellescape} -t #{tmux_window_target} -n #{name}"
+      path = project.root? ? "#{Tmuxinator::Config.default_path_option} #{File.expand_path(project.root).shellescape}" : nil
+      "#{project.tmux} new-window #{path} -t #{tmux_window_target} -n #{name}"
     end
 
     def tmux_layout_command

@@ -11,7 +11,9 @@ if [ "$?" -eq 127 ]; then
   TMUX= <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %>
 
   # Set the default path.
-  <%= tmux %> set-option -t <%= name %> default-path <%= root.shellescape -%> 1>/dev/null
+  <%- if root? -%>
+  <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root.shellescape -%> 1>/dev/null
+  <%- end -%>
 
   # Create other windows.
   <%- windows.drop(1).each do |window| -%>

@@ -136,6 +136,7 @@ describe Tmuxinator::Window do
         :name => "",
         :tmux => "tmux",
         :root => "/project/tmuxinator",
+        :root? => true,
         :base_index => 1
       )
     end
