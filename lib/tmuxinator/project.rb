@@ -26,7 +26,7 @@ module Tmuxinator
 
     def root
       root = yaml["project_root"] || yaml["root"]
-      root.blank? ? nil : File.expand_path(root)
+      root.blank? ? nil : File.expand_path(root).shellescape
     end
 
     def name
