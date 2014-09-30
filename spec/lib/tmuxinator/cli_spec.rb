@@ -114,11 +114,6 @@ describe Tmuxinator::Cli do
       end
 
       it "prompts user to confirm overwrite" do
-        expect(FileUtils).to receive(:rm)
-        capture_io { cli.start }
-      end
-
-      it "copies the config" do
         expect(FileUtils).to receive(:copy_file)
         capture_io { cli.start }
       end
