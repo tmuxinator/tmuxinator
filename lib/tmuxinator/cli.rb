@@ -6,7 +6,7 @@ module Tmuxinator
 
     def initialize(*args)
       super
-      @command_list = %w(commands copy debug delete doctor help implode list start version)
+      @command_list = %w(commands copy debug delete doctor help implode list open start version)
     end
 
     package_name "tmuxinator" unless Gem::Version.create(Thor::VERSION) < Gem::Version.create("0.18")
