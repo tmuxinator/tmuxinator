@@ -12,7 +12,7 @@ if [ "$?" -eq 127 ]; then
 
   # Set the default path.
   <%- if root? -%>
-  <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root.shellescape -%> 1>/dev/null
+  <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root -%> 1>/dev/null
   <%- end -%>
 
   # Create other windows.
