@@ -18,7 +18,7 @@ if [ "$?" -eq 1 ]; then
   <%- if Tmuxinator::Config.version < 1.7 -%>
   # Set the default path for versions prior to 1.7
   <%- if root? -%>
-  <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root.shellescape -%> 1>/dev/null
+  <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root -%> 1>/dev/null
   <%- end -%>
   <%- end -%>
 
