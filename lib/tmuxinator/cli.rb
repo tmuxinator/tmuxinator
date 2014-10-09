@@ -76,11 +76,9 @@ module Tmuxinator
 
       exit!("Project #{existing} doesn't exist!") unless Tmuxinator::Config.exists?(existing)
 
-      if Tmuxinator::Config.exists?(new)
-        if yes?("#{new} already exists, would you like to overwrite it?", :red)
-          say "Overwriting #{new}"
-          FileUtils.copy_file(existing_config_path, new_config_path)
-        end
+      if !Tmuxinator::Config.exists?(new) or yes?("#{new} already exists, would you like to overwrite it?", :red)
+        say "Overwriting #{new}" if Tmuxinator::Config.exists?(new)
+        FileUtils.copy_file(existing_config_path, new_config_path)
       end
 
       Kernel.system("$EDITOR #{new_config_path}")
