@@ -72,14 +72,19 @@ panes are in tmux. If not please consult the [man pages](http://manpages.ubuntu.
 
 ### Create a project
 
-Create or edit your projects with:
+Creating a new project:
 
 ```
 tmuxinator new [project]
 ```
 
-For editing you can also use `tmuxinator open [project]`. `new` is aliased to
-`o`,`open` and `n`. Your default editor (`$EDITOR`) is used to open the file.
+Editing an existing project:
+
+```
+tmuxinator open [project]
+```
+
+Your default editor (`$EDITOR`) is used to open the project configuration file.
 If this is a new project you will see this default config:
 
 ```yaml
@@ -194,7 +199,17 @@ A shorthand alias for tmuxinator can also be used.
 mux [command]
 ```
 
-## Other Commands
+## Commands
+
+Create a new project. Aliased to `n`
+```
+tmuxinator new [project]
+```
+
+Edit an existing project. Aliased to `o`
+```
+tmuxinator open [project]
+```
 
 Copy an existing project. Aliased to `c` and `cp`
 ```
@@ -211,7 +226,7 @@ Remove a project. Aliased to `rm`
 tmuxinator delete [project]
 ```
 
-Remove all tmuxinator configs, aliases and scripts. Aliased to `i`
+Remove all tmuxinator configs. Aliased to `i`
 ```
 tmuxinator implode
 ```
