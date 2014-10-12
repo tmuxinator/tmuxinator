@@ -1,3 +1,14 @@
+## 0.6.9
+- Update to RSpec 3.x
+- Allow for earlier versions of thor #234, #235
+- Remove dependency on git and fix warnings in gemspec #232, #233, #239
+- Switch from `which` to `type` to stop errors in OSX 10.10 #236, #237
+- Optional project root #185, #144
+- Clear rbenv environment variables before starting tmux #208
+- Update readme with correct fish completions path #247
+- Escape path to deal with special characters #251, #256, #257
+- Fix `copy` overwriting files #254, #258
+
 ## 0.6.8
 - Remove some duplication #212
 - Add wemux support #88 - Thanks to Andrew Thal (@athal7)
