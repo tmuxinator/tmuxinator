@@ -36,7 +36,7 @@ describe Tmuxinator::Cli do
 
     it "lists the commands" do
       out, _ = capture_io { cli.start }
-      expect(out).to eq "#{%w(commands copy debug delete doctor help implode list start version).join("\n")}\n"
+      expect(out).to eq "#{%w(commands copy debug delete doctor help implode list open start version).join("\n")}\n"
     end
   end
 
@@ -163,6 +163,7 @@ describe Tmuxinator::Cli do
 
     context "project doesn't exist" do
       before do
+        allow(Tmuxinator::Config).to receive(:exists?) { false }
         allow(Thor::LineEditor).to receive_messages(:readline => "y")
       end
 

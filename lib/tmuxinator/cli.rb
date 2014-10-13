@@ -97,7 +97,7 @@ module Tmuxinator
           say "Deleted #{project}"
         end
       else
-        exit! "That file doesn't exist."
+        exit!("That file doesn't exist.")
       end
     end
 
