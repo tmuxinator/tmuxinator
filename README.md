@@ -55,9 +55,17 @@ Add the following to your `~/.bashrc`:
 
 ### zsh
 
-Add the following to your `~/.zshrc`:
+The ZSH completion is maintained by the
+[zsh-users/zsh-completions](https://github.com/zsh-users/zsh-completions) project.
+Download the completion file from
+[here](https://raw.githubusercontent.com/zsh-users/zsh-completions/master/src/_tmuxinator) and
+source it in your `.zshrc`
 
-    source ~/.bin/tmuxinator.zsh
+Do the following:
+
+    mkdir -p ~/.bin
+    wget https://raw.githubusercontent.com/zsh-users/zsh-completions/master/src/_tmuxinator -O ~/.bin/tmuxinator.zsh
+    echo "source ~/.bin/tmuxinator.zsh" >> ~/.zshrc
 
 ### fish
 
