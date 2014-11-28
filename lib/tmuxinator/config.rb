@@ -71,7 +71,7 @@ module Tmuxinator
         config_path = Tmuxinator::Config.project(name)
 
         yaml = begin
-          YAML.load(File.read(config_path))
+          YAML.load(Erubis::Eruby.new(File.read(config_path)).result(binding))
         rescue SyntaxError, StandardError
           puts "Failed to parse config file. Please check your formatting."
           exit!
