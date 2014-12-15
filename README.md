@@ -183,8 +183,10 @@ windows:
 This will fire up tmux with all the tabs and panes you configured.
 
 ```
-tmuxinator start [project]
+tmuxinator start [project] [session]
 ```
+
+If you use the optional `[session]` argument, it will start the project with the custom session name provided. This is to enable reuse of a project without tmux session name collision.
 
 ## Shorthand
 

@@ -6,8 +6,9 @@ module Tmuxinator
 
     attr_reader :yaml
 
-    def initialize(yaml)
+    def initialize(yaml, custom_session=nil)
       @yaml = yaml
+      @custom_session = custom_session
       load_wemux_overrides if wemux?
     end
 
@@ -30,7 +31,7 @@ module Tmuxinator
     end
 
     def name
-      name = yaml["project_name"] || yaml["name"]
+      name = @custom_session || yaml["project_name"] || yaml["name"]
       name.shellescape
     end
 
@@ -74,7 +75,7 @@ module Tmuxinator
     end
 
     def socket_name
-      yaml["socket_name"]
+      @custom_session || yaml["socket_name"]
     end
 
     def socket_path
