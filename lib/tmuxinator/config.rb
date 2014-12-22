@@ -44,7 +44,7 @@ module Tmuxinator
 
       def project(name)
         projects = Dir.glob("#{root}/**/*.yml")
-        project_file = projects.detect { |project| project =~ /^#{name}.yml$/ }
+        project_file = projects.detect { |project| File.basename(project, ".yml") == name }
         project_file || "#{root}/#{name}.yml"
       end
 
