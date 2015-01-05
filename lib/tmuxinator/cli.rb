@@ -28,7 +28,9 @@ module Tmuxinator
 
     desc "new [PROJECT]", "Create a new project file and open it in your editor"
     map "open" => :new
+    map "edit" => :new
     map "o" => :new
+    map "e" => :new
     map "n" => :new
 
     def new(name)
