@@ -8,9 +8,15 @@ function __fish_tmuxinator_using_command
   return 1
 end
 
-complete -f -c tmuxinator -a '(tmuxinator completions start)'
-complete -f -c tmuxinator -a '(tmuxinator commands)'
-complete -f -c tmuxinator -n '__fish_tmuxinator_using_command start' -a '(tmuxinator completions start)'
-complete -f -c tmuxinator -n '__fish_tmuxinator_using_command open' -a '(tmuxinator completions open)'
-complete -f -c tmuxinator -n '__fish_tmuxinator_using_command copy' -a '(tmuxinator completions copy)'
-complete -f -c tmuxinator -n '__fish_tmuxinator_using_command delete' -a '(tmuxinator completions delete)'
+set __fish_tmuxinator_program_cmd (commandline -o)[1]
+
+function __fish_tmuxinator_program
+  eval "$__fish_tmuxinator_program_cmd $argv"
+end
+
+complete -f -c $__fish_tmuxinator_program_cmd                                                -a '(__fish_tmuxinator_program completions start)'
+complete -f -c $__fish_tmuxinator_program_cmd -n '__fish_use_subcommand'                  -x -a "(__fish_tmuxinator_program commands)"
+complete -f -c $__fish_tmuxinator_program_cmd -n '__fish_tmuxinator_using_command start'     -a "(__fish_tmuxinator_program completions start)"
+complete -f -c $__fish_tmuxinator_program_cmd -n '__fish_tmuxinator_using_command open'      -a "(__fish_tmuxinator_program completions open)"
+complete -f -c $__fish_tmuxinator_program_cmd -n '__fish_tmuxinator_using_command copy'      -a "(__fish_tmuxinator_program completions copy)"
+complete -f -c $__fish_tmuxinator_program_cmd -n '__fish_tmuxinator_using_command delete'    -a "(__fish_tmuxinator_program completions delete)"
