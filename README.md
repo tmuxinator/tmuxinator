@@ -63,7 +63,7 @@ Add the following to your `~/.zshrc`:
 
 Move `tmuxinator.fish` to your `completions` folder:
 
-    cp ~/.bin/tmuxinator.fish ~/.config/fish/completions/
+    cp ~/.bin/{mux,tmuxinator}.fish ~/.config/fish/completions/
 
 ## Usage
 
