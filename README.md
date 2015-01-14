@@ -170,12 +170,12 @@ windows:
     - ssh stats@example.com
     - tail -f /var/log/stats.log
   - logs:
-    layout: main-vertical
-    panes:
-      - logs:
-        - ssh logs@example.com
-        - cd /var/logs
-        - tail -f development.log
+      layout: main-vertical
+      panes:
+        - logs:
+          - ssh logs@example.com
+          - cd /var/logs
+          - tail -f development.log
 ```
 
 ## Starting a session
