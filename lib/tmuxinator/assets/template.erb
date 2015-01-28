@@ -57,7 +57,7 @@ if [ "$?" -eq 1 ]; then
     <%- end -%>
   <%- end -%>
 
-  <%= tmux %> select-window -t <%= base_index %>
+  <%= tmux %> select-window -t <%= startup_window %>
 fi
 
 if [ -z "$TMUX" ]; then

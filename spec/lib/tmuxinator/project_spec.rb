@@ -206,6 +206,24 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "#startup_window" do
+    context "startup window specified" do
+      it "gets the startup window from project config" do
+        project.yaml["startup_window"] = "logs"
+
+	expect(project.startup_window).to eq("logs")
+      end
+    end
+
+    context "startup window not specified" do
+      it "returns base index instead" do
+        allow(project).to receive_messages(:base_index => 8)
+
+	expect(project.startup_window).to eq 8
+      end
+    end
+  end
+
   describe "#window" do
     it "gets the window and index for tmux" do
       expect(project.window(1)).to eq "sample:1"

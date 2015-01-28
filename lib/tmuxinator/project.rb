@@ -95,6 +95,10 @@ module Tmuxinator
       get_pane_base_index ? get_pane_base_index.to_i : get_base_index.to_i
     end
 
+    def startup_window
+      yaml["startup_window"] || base_index
+    end
+
     def tmux_options?
       yaml["tmux_options"]
     end
