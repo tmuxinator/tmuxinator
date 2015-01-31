@@ -26,7 +26,8 @@ module Tmuxinator
     end
 
     def tmux_split_command
-      "#{project.tmux} splitw -t #{tab.tmux_window_target}"
+      path = tab.root? ? "#{Tmuxinator::Config.default_path_option} #{tab.root}" : nil
+      "#{project.tmux} splitw #{path} -t #{tab.tmux_window_target}"
     end
 
     def last?
