@@ -43,6 +43,10 @@ module Tmuxinator
       end
     end
 
+    def detached?
+      yaml["tmux_detached"]
+    end
+
     def pre_window
       if rbenv?
         "rbenv shell #{yaml["rbenv"]}"
