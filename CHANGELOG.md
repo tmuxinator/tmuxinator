@@ -1,3 +1,13 @@
+## 0.6.10
+- Interpret config file as ERB template #255 
+- Fix zsh completions #262 
+- Alias `e` to edit and `o` to open #275 
+- Fix fish completions #280 
+- Add `startup_window` #282
+- Add per window root option #283 
+- Fix project path detection #274 
+- Include completions in gemspec #270
+
 ## 0.6.9
 - Update to RSpec 3.x
 - Allow for earlier versions of thor #234, #235
