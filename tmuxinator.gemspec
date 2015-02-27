@@ -6,8 +6,8 @@ require "tmuxinator/version"
 Gem::Specification.new do |s|
   s.name          = "tmuxinator"
   s.version       = Tmuxinator::VERSION
-  s.authors       = ["Allen Bargi"]
-  s.email         = ["allen.bargi@gmail.com"]
+  s.authors       = ["Allen Bargi", "Christopher Chow"]
+  s.email         = ["allen.bargi@gmail.com", "chris@chowie.net"]
   s.description   = %q{Create and manage complex tmux sessions easily.}
   s.summary       = %q{Create and manage complex tmux sessions easily.}
   s.homepage      = "https://github.com/aziz/tmuxinator"
