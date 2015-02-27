@@ -79,7 +79,7 @@ tmuxinator new [project]
 ```
 
 For editing you can also use `tmuxinator open [project]`. `new` is aliased to
-`o`,`open` and `n`. Your default editor (`$EDITOR`) is used to open the file.
+`o`,`open`, `e`, `edit` and `n`. Your default editor (`$EDITOR`) is used to open the file.
 If this is a new project you will see this default config:
 
 ```yaml
