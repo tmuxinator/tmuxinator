@@ -12,16 +12,48 @@ describe Tmuxinator::Window do
       }
     }
   end
+  let(:yaml_root) do
+    {
+      "editor" => {
+        "root" => "/project/override",
+        "root?" => true,
+        "pre" => ["echo 'I get run in each pane.  Before each pane command!'", nil],
+        "layout" => "main-vertical",
+        "panes" => panes
+      }
+    }
+  end
 
   let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+  let(:window_root) { Tmuxinator::Window.new(yaml_root, 0, project) }
 
   before do
-    allow(project).to receive_messages(:tmux => "tmux", :name => "test", :base_index => 1)
+    allow(project).to receive_messages(
+       :tmux => "tmux",
+       :name => "test",
+       :base_index => 1,
+       :root => "/project/tmuxinator",
+       :root? => true
+     )
   end
 
   describe "#initialize" do
     it "creates an instance" do
       expect(window).to be_a(Tmuxinator::Window)
+    end
+  end
+
+  describe "#root" do
+    context "without window root" do
+      it "gets the project root" do
+        expect(window.root).to include("/project/tmuxinator")
+      end
+    end
+
+    context "with window root" do
+      it "gets the window root" do
+        expect(window_root.root).to include("/project/override")
+      end
     end
   end
 
