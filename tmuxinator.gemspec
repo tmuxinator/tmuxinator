@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email         = ["allen.bargi@gmail.com", "chris@chowie.net"]
   s.description   = %q{Create and manage complex tmux sessions easily.}
   s.summary       = %q{Create and manage complex tmux sessions easily.}
-  s.homepage      = "https://github.com/aziz/tmuxinator"
+  s.homepage      = "https://github.com/tmuxinator/tmuxinator"
   s.license       = "MIT"
 
   s.files         = Dir["lib/**/*", "spec/**/*", "bin/*", "completions/*"]
