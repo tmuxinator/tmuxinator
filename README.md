@@ -199,6 +199,14 @@ windows:
           - tail -f development.log
 ```
 
+## ERB
+
+Project files support ERB for reusability across environments. Eg:
+
+```
+root: <%= ENV["MY_CUSTOM_DIR"] %>
+```
+
 ## Starting a session
 
 This will fire up tmux with all the tabs and panes you configured.
