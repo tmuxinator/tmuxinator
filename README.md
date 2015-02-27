@@ -126,6 +126,24 @@ windows:
   - editor: vim
 ```
 
+### Window specific root
+
+An optional root option can be specified per window:
+
+```
+name: test
+root: ~/projects/company
+
+windows:
+  - small_project:
+      root: ~/projects/company/small_project
+      panes:
+        - start this
+        - start that
+```
+
+This takes precedence over the main root option.
+
 ## Panes
 
 **_Note that if you wish to use panes, make sure that you do not have `.` in your project name. tmux uses `.` to delimit between window and pane indices,
