@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :project, :class => Tmuxinator::Project do
-    ignore do
+    transient do
       file { YAML.load(File.read("#{File.expand_path("spec/fixtures/sample.yml")}")) }
     end
 
@@ -8,7 +8,7 @@ FactoryGirl.define do
   end
 
   factory :project_with_deprecations, :class => Tmuxinator::Project do
-    ignore do
+    transient do
       file { YAML.load(File.read("#{File.expand_path("spec/fixtures/sample.deprecations.yml")}")) }
     end
 
@@ -16,7 +16,7 @@ FactoryGirl.define do
   end
 
   factory :wemux_project, :class => Tmuxinator::Project do
-    ignore do
+    transient do
       file { YAML.load(File.read("#{File.expand_path("spec/fixtures/sample_wemux.yml")}")) }
     end
 
