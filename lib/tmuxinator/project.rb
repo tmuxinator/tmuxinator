@@ -55,6 +55,23 @@ module Tmuxinator
       end
     end
 
+    def attach
+      attach = true
+      if !yaml["attach"].nil?
+        attach = yaml["attach"]
+      end
+      attach
+    end
+
+    def post
+      post_config = yaml["post"]
+      if post_config.is_a?(Array)
+        post_config.join("; ")
+      else
+        post_config
+      end
+    end
+
     def tmux
       "#{tmux_command}#{tmux_options}#{socket}"
     end
@@ -113,6 +130,10 @@ module Tmuxinator
 
     def name?
       !name.nil?
+    end
+
+    def attach?
+      !!attach
     end
 
     def window(i)
