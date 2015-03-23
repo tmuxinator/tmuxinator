@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.homepage      = "https://github.com/tmuxinator/tmuxinator"
   s.license       = "MIT"
 
-  s.files         = Dir["lib/**/*", "spec/**/*", "bin/*", "completions/*"]
+  s.files         = Dir["lib/**/*", "spec/**/*", "bin/*", "completion/*"]
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
