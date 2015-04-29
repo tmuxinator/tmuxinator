@@ -1,6 +1,6 @@
 module Tmuxinator
   class Pane
-    attr_reader :commands, :project, :index, :project, :tab
+    attr_reader :commands, :project, :index, :tab
 
     def initialize(index, project, tab, *commands)
       @commands = commands
