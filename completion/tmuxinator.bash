@@ -6,9 +6,8 @@ _tmuxinator() {
 
     if [ "$COMP_CWORD" -eq 1 ]; then
         local commands="$(compgen -W "$(tmuxinator commands)" -- "$word")"
-        local projects="$(compgen -W "$(tmuxinator completions start)" -- "$word")"
 
-        COMPREPLY=( $commands $projects )
+        COMPREPLY=( $commands )
     else
         local words=("${COMP_WORDS[@]}")
         unset words[0]
