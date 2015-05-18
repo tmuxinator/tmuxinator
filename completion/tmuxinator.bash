@@ -8,7 +8,7 @@ _tmuxinator() {
         local commands="$(compgen -W "$(tmuxinator commands)" -- "$word")"
 
         COMPREPLY=( $commands )
-    else
+    elif [ "$COMP_CWORD" -eq 2 ]; then
         local words=("${COMP_WORDS[@]}")
         unset words[0]
         unset words[$COMP_CWORD]
