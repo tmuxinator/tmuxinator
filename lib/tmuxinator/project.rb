@@ -5,9 +5,25 @@ module Tmuxinator
     include Tmuxinator::WemuxSupport
 
     attr_reader :yaml
+    attr_reader :force_attach
+    attr_reader :force_detach
 
-    def initialize(yaml)
+
+    def initialize(yaml, cli_options)
+      print "#{cli_options.to_s}\n"
       @yaml = yaml
+      @force_attach=false
+      @force_detach=false
+      
+      cli_attach=cli_options[:attach]
+      if !cli_attach.nil?
+        print "has_key\n"
+        if cli_attach
+          @force_attach=true
+        else
+          @force_detach=true
+        end
+      end
       load_wemux_overrides if wemux?
     end
 
@@ -44,7 +60,9 @@ module Tmuxinator
     end
 
     def detached?
-      yaml["tmux_detached"]
+      yaml_detach=yaml["tmux_detached"]
+      detach=force_detach || !force_attach && yaml_detach
+      detach
     end
 
     def pre_window

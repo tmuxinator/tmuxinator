@@ -63,9 +63,10 @@ module Tmuxinator
 
     desc "start [PROJECT]", COMMANDS[:start]
     map "s" => :start
+    method_option :attach, :type => :boolean, :aliases => "-a", :desc => "Attach to tmux session after creation."
 
     def start(name)
-      project = Tmuxinator::Config.validate(name)
+      project = Tmuxinator::Config.validate(name, options)
 
       if project.deprecations.any?
         project.deprecations.each { |deprecation| say deprecation, :red }
@@ -77,10 +78,11 @@ module Tmuxinator
       Kernel.exec(project.render)
     end
 
+    method_option :attach, :type => :boolean, :aliases => "-a", :desc => "Attach to tmux session after creation."
     desc "debug [PROJECT]", COMMANDS[:debug]
 
     def debug(name)
-      project = Tmuxinator::Config.validate(name)
+      project = Tmuxinator::Config.validate(name, options)
       puts project.render
     end
 

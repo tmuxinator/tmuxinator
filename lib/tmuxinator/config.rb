@@ -62,7 +62,7 @@ module Tmuxinator
         end
       end
 
-      def validate(name)
+      def validate(name, cli_options)
         unless Tmuxinator::Config.exists?(name)
           puts "Project #{name} doesn't exist."
           exit!
@@ -77,7 +77,7 @@ module Tmuxinator
           exit!
         end
 
-        project = Tmuxinator::Project.new(yaml)
+        project = Tmuxinator::Project.new(yaml, cli_options)
 
         unless project.windows?
           puts "Your project file should include some windows."
