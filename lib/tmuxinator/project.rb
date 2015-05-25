@@ -9,21 +9,17 @@ module Tmuxinator
     attr_reader :force_detach
 
 
-    def initialize(yaml, cli_options)
-      print "#{cli_options.to_s}\n"
+    def initialize(yaml, options = {})
+      options[:force_attach] = false if options[:force_attach].nil?
+      options[:force_detach] = false if options[:force_detach].nil?
+
       @yaml = yaml
-      @force_attach=false
-      @force_detach=false
+
+      @force_attach=options[:force_attach]
+      @force_detach=options[:force_detach]
+
+      raise "Cannot force_attach and force_detach at the same time" if @force_attach && @force_detach
       
-      cli_attach=cli_options[:attach]
-      if !cli_attach.nil?
-        print "has_key\n"
-        if cli_attach
-          @force_attach=true
-        else
-          @force_detach=true
-        end
-      end
       load_wemux_overrides if wemux?
     end
 

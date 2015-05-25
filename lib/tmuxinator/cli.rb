@@ -61,12 +61,31 @@ module Tmuxinator
       Kernel.system("$EDITOR #{config}") || doctor
     end
 
+    def create_project(name, cli_options)
+      options={
+        :force_attach => false,
+        :force_detach => false
+      }
+
+      cli_attach=cli_options[:attach]
+      if !cli_attach.nil?
+        if cli_attach
+          options[:force_attach]=true
+        else
+          options[:force_detach]=true
+        end
+      end
+
+      project = Tmuxinator::Config.validate(name, options)
+      project
+    end
+
     desc "start [PROJECT]", COMMANDS[:start]
     map "s" => :start
     method_option :attach, :type => :boolean, :aliases => "-a", :desc => "Attach to tmux session after creation."
 
     def start(name)
-      project = Tmuxinator::Config.validate(name, options)
+      project = create_project(name, options)
 
       if project.deprecations.any?
         project.deprecations.each { |deprecation| say deprecation, :red }
@@ -82,7 +101,7 @@ module Tmuxinator
     desc "debug [PROJECT]", COMMANDS[:debug]
 
     def debug(name)
-      project = Tmuxinator::Config.validate(name, options)
+      project = create_project(name, options)
       puts project.render
     end
 
