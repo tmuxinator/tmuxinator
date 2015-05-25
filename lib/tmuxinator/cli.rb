@@ -61,24 +61,26 @@ module Tmuxinator
       Kernel.system("$EDITOR #{config}") || doctor
     end
 
-    def create_project(name, cli_options)
-      options={
-        :force_attach => false,
-        :force_detach => false
-      }
+    no_commands{
+      def create_project(name, cli_options)
+        options={
+          :force_attach => false,
+          :force_detach => false
+        }
 
-      cli_attach=cli_options[:attach]
-      if !cli_attach.nil?
-        if cli_attach
-          options[:force_attach]=true
-        else
-          options[:force_detach]=true
+        cli_attach=cli_options[:attach]
+        if !cli_attach.nil?
+          if cli_attach
+            options[:force_attach]=true
+          else
+            options[:force_detach]=true
+          end
         end
-      end
 
-      project = Tmuxinator::Config.validate(name, options)
-      project
-    end
+        project = Tmuxinator::Config.validate(name, options)
+        project
+      end
+    }
 
     desc "start [PROJECT]", COMMANDS[:start]
     map "s" => :start
