@@ -3,6 +3,9 @@ require "spec_helper"
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
+  let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
+  let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
+
   let(:wemux_project) { FactoryGirl.build(:wemux_project) }
 
   describe "#initialize" do
@@ -330,27 +333,42 @@ describe Tmuxinator::Project do
   end
 
   describe "#detached?" do
-    subject(:detached) { project.detached? }
 
     context "tmux_detached is true in yaml" do
       before { project.yaml["tmux_detached"] = true }
 
       it "returns true" do
-        expect(detached).to be_truthy
+        expect(project.detached?).to be_truthy
       end
     end
 
     context "tmux_detached is not defined in yaml" do
       it "returns false" do
-        expect(detached).to be_falsey
+        expect(project.detached?).to be_falsey
       end
     end
 
     context "tmux_detached is false in yaml" do
       it "returns false" do
-        expect(detached).to be_falsey
+        expect(project.detached?).to be_falsey
       end
     end
 
+    context "tmux_detached is true in yaml, but command line forces attach" do
+      before { project_with_force_attach.yaml["tmux_detached"] = true }
+
+      it "returns false" do
+        expect(project_with_force_attach.detached?).to be_falsey
+      end
+    end
+
+    context "tmux_detached is false in yaml, but command line forces detach" do
+      before { project_with_force_detach.yaml["tmux_detached"] = false }
+
+      it "returns true" do
+        expect(project_with_force_detach.detached?).to be_truthy
+      end
+    end
   end
+
 end

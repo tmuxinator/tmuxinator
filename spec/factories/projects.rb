@@ -12,7 +12,7 @@ FactoryGirl.define do
       file { YAML.load(File.read("#{File.expand_path("spec/fixtures/detach.yml")}")) }
     end
 
-    initialize_with { Tmuxinator::Project.new(file, {:attach => true}) }
+    initialize_with { Tmuxinator::Project.new(file, {:force_attach => true}) }
   end
 
   factory :project_with_force_detach, :class => Tmuxinator::Project do
@@ -20,7 +20,7 @@ FactoryGirl.define do
       file { YAML.load(File.read("#{File.expand_path("spec/fixtures/sample.yml")}")) }
     end
 
-    initialize_with { Tmuxinator::Project.new(file, {:attach => false}) }
+    initialize_with { Tmuxinator::Project.new(file, {:force_detach => true}) }
   end
 
   factory :project_with_deprecations, :class => Tmuxinator::Project do
