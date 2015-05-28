@@ -328,4 +328,29 @@ describe Tmuxinator::Project do
       end
     end
   end
+
+  describe "#detached?" do
+    subject(:detached) { project.detached? }
+
+    context "tmux_detached is true in yaml" do
+      before { project.yaml["tmux_detached"] = true }
+
+      it "returns true" do
+        expect(detached).to be_truthy
+      end
+    end
+
+    context "tmux_detached is not defined in yaml" do
+      it "returns false" do
+        expect(detached).to be_falsey
+      end
+    end
+
+    context "tmux_detached is false in yaml" do
+      it "returns false" do
+        expect(detached).to be_falsey
+      end
+    end
+
+  end
 end
