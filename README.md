@@ -174,6 +174,20 @@ pre_window: rbenv shell 2.0.0-p247
 
 These command(s) will run before any subsequent commands in all panes and windows.
 
+## Custom attachment and post commands
+
+You can set tmuxiniator to skip auto-attaching to the session by using the `attach` option.
+
+```
+attach: false
+```
+
+You can also run arbitrary commands by using the `post` option. This is useful if you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2).
+
+```
+post: tmux -CC attach
+```
+
 ## Passing directly to send-keys
 
 tmuxinator passes commands directly to send keys. This differs from simply chaining commands together using `&&` or `;`, in that
