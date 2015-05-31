@@ -64,8 +64,12 @@ if [ "$?" -eq 1 ]; then
   <%= tmux %> select-window -t <%= startup_window %>
 fi
 
-if [ -z "$TMUX" ]; then
-  <%= tmux %> -u attach-session -t <%= name %>
-else
-  <%= tmux %> -u switch-client -t <%= name %>
-fi
+<%- if attach? -%>
+  if [ -z "$TMUX" ]; then
+    <%= tmux %> -u attach-session -t <%= name %>
+  else
+    <%= tmux %> -u switch-client -t <%= name %>
+  fi
+<%- end -%>
+
+<%= post %>
