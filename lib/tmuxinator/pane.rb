@@ -14,11 +14,15 @@ module Tmuxinator
     end
 
     def tmux_pre_command
-      tab.pre ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{tab.pre.shellescape} C-m" : ""
+      return unless tab.pre
+
+      "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{tab.pre.shellescape} C-m"
     end
 
     def tmux_pre_window_command
-      project.pre_window ? "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{project.pre_window.shellescape} C-m" : ""
+      return unless project.pre_window
+
+      "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{project.pre_window.shellescape} C-m"
     end
 
     def tmux_main_command(command)

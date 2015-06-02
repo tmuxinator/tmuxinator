@@ -115,14 +115,13 @@ describe Tmuxinator::Window do
       end
     end
 
-
     context "pre is not present" do
       before do
         yaml["editor"].delete("pre")
       end
 
-      it "returns an empty string" do
-        expect(window.pre).to eq ""
+      it "returns nil" do
+        expect(window.pre).to be_nil
       end
     end
   end
