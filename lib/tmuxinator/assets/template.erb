@@ -21,9 +21,9 @@ if [ "$?" -eq 1 ]; then
 
   <% if Tmuxinator::Config.version < 1.7 %>
   # Set the default path for versions prior to 1.7
-  <% if root? %>
+    <% if root? %>
   <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root -%> 1>/dev/null
-  <% end %>
+    <% end %>
   <% end %>
 
   # Create other windows.
@@ -51,11 +51,11 @@ if [ "$?" -eq 1 ]; then
   <%= pane.tmux_main_command(commands.first) %>
         <% end %>
 
-      <% unless pane.last? %>
+        <% unless pane.last? %>
   <%= pane.tmux_split_command %>
-      <% end %>
+        <% end %>
   <%= window.tmux_layout_command %>
-    <% end %>
+      <% end %>
 
   <%= window.tmux_select_first_pane %>
     <% end %>
