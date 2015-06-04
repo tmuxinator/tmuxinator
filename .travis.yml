@@ -18,7 +18,7 @@ matrix:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libevent-dev libncurses-dev
-  - git clone git://git.code.sf.net/p/tmux/tmux-code tmux
+  - git clone https://github.com/tmux/tmux.git tmux
   - cd tmux
   - git checkout $TMUX_VERSION
   - sh autogen.sh
