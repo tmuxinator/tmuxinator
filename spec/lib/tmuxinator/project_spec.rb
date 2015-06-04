@@ -4,6 +4,7 @@ describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
   let(:wemux_project) { FactoryGirl.build(:wemux_project) }
+  let(:noname_project) { FactoryGirl.build(:noname_project) }
 
   describe "#initialize" do
     context "valid yaml" do
@@ -51,6 +52,12 @@ describe Tmuxinator::Project do
         expect(project_with_deprecations.root).to include("test")
       end
     end
+
+    context "without root" do
+      it "doesn't throw an error" do
+        expect{noname_project.root}.to_not raise_error
+      end
+    end
   end
 
   describe "#name" do
@@ -69,6 +76,12 @@ describe Tmuxinator::Project do
     context "wemux" do
       it "is wemux" do
         expect(wemux_project.name).to eq "wemux"
+      end
+    end
+
+    context "without name" do
+      it "displays error message" do
+        expect{noname_project.name}.to_not raise_error
       end
     end
   end

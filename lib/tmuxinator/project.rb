@@ -31,7 +31,7 @@ module Tmuxinator
 
     def name
       name = yaml["project_name"] || yaml["name"]
-      name.shellescape
+      name.blank? ? nil : name.shellescape
     end
 
     def pre

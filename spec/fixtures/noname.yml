@@ -1,0 +1,6 @@
+# ~/.tmuxinator/noname.yml
+# you can make as many tabs as you wish...
+
+root: ~/test
+windows:
+  - test: echo foo

@@ -22,4 +22,12 @@ FactoryGirl.define do
 
     initialize_with { Tmuxinator::Project.new(file) }
   end
+
+  factory :noname_project, :class => Tmuxinator::Project do
+    transient do
+      file { YAML.load(File.read("#{File.expand_path("spec/fixtures/noname.yml")}")) }
+    end
+
+    initialize_with { Tmuxinator::Project.new(file) }
+  end
 end
