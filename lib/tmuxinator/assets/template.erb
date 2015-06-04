@@ -13,53 +13,59 @@ if [ "$?" -eq 1 ]; then
   <%= pre %>
 
   # Create the session and the first window.
-  <%- if windows.first.root? -%>
+  <% if windows.first.root? %>
   TMUX= <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %> <%= Tmuxinator::Config.default_path_option %> <%= windows.first.root %>
-  <%- else -%>
+  <% else %>
   TMUX= <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %>
-  <%- end -%>
+  <% end %>
 
-  <%- if Tmuxinator::Config.version < 1.7 -%>
+  <% if Tmuxinator::Config.version < 1.7 %>
   # Set the default path for versions prior to 1.7
-  <%- if root? -%>
+    <% if root? %>
   <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root -%> 1>/dev/null
-  <%- end -%>
-  <%- end -%>
+    <% end %>
+  <% end %>
 
   # Create other windows.
-  <%- windows.drop(1).each do |window| -%>
+  <% windows.drop(1).each do |window| %>
   <%= window.tmux_new_window_command %>
-  <%- end -%>
+  <% end %>
 
-  <%- windows.each do |window| -%>
+  <% windows.each do |window| %>
 
   # Window "<%= window.name %>"
-    <%- unless window.panes? -%>
+    <% unless window.panes? %>
+      <% if window.project.pre_window %>
   <%= window.tmux_pre_window_command %>
-      <%- window.commands.each do |command| -%>
+      <% end %>
+      <% window.commands.each do |command| %>
   <%= command %>
-      <%- end -%>
-    <%- else -%>
-      <%- window.panes.each do |pane| -%>
+      <% end %>
+    <% else %>
+      <% window.panes.each do |pane| %>
+        <% if pane.project.pre_window %>
   <%= pane.tmux_pre_window_command %>
+        <% end %>
+        <% if pane.tab.pre %>
   <%= pane.tmux_pre_command %>
-        <%- if pane.multiple_commands? %>
-          <%- pane.commands.each do |command| -%>
+        <% end %>
+        <% if pane.multiple_commands? %>
+          <% pane.commands.each do |command| %>
   <%= pane.tmux_main_command(command) %>
-          <%- end -%>
-        <%- else -%>
+          <% end %>
+        <% else %>
   <%= pane.tmux_main_command(commands.first) %>
-        <%- end -%>
+        <% end %>
 
-      <%- unless pane.last? -%>
+        <% unless pane.last? %>
   <%= pane.tmux_split_command %>
-      <%- end -%>
+        <% end %>
   <%= window.tmux_layout_command %>
-    <%- end -%>
+      <% end %>
 
   <%= window.tmux_select_first_pane %>
-    <%- end -%>
-  <%- end -%>
+    <% end %>
+  <% end %>
 
   <%= tmux %> select-window -t <%= startup_window %>
 fi
