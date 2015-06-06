@@ -12,11 +12,11 @@ if [ "$?" -eq 1 ]; then
   # Run pre command.
   <%= pre %>
 
-  # Create the session and the first window.
-  <% if windows.first.root? %>
-  TMUX= <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %> <%= Tmuxinator::Config.default_path_option %> <%= windows.first.root %>
-  <% else %>
+  # Create the session and the first window. Manually switch to root
+  # directory if required to support tmux < 1.9
   TMUX= <%= tmux %> new-session -d -s <%= name %> -n <%= windows.first.name %>
+  <% if windows.first.root? %>
+  <%= windows.first.tmux_window_command_prefix %> <%= "cd #{windows.first.root}".shellescape %> C-m
   <% end %>
 
   <% if Tmuxinator::Config.version < 1.7 %>

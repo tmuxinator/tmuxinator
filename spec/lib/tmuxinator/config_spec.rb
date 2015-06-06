@@ -19,6 +19,28 @@ describe Tmuxinator::Config do
     end
   end
 
+  describe "#default_path_option" do
+    context ">= 1.8" do
+      before do
+        allow(Tmuxinator::Config).to receive(:version).and_return(1.8)
+      end
+
+      it "returns -c" do
+        expect(Tmuxinator::Config.default_path_option).to eq "-c"
+      end
+    end
+
+    context "< 1.8" do
+      before do
+        allow(Tmuxinator::Config).to receive(:version).and_return(1.7)
+      end
+
+      it "returns default-path" do
+        expect(Tmuxinator::Config.default_path_option).to eq "default-path"
+      end
+    end
+  end
+
   describe "#default?" do
     let(:root) { Tmuxinator::Config.root }
 
