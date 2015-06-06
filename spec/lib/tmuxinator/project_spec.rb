@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
+  let(:project_with_custom_name) { FactoryGirl.build(:project_with_custom_name) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
   let(:wemux_project) { FactoryGirl.build(:wemux_project) }
   let(:noname_project) { FactoryGirl.build(:noname_project) }
@@ -22,6 +23,15 @@ describe Tmuxinator::Project do
     context "wemux" do
       it "renders the wemux config" do
         expect(wemux_project.render).to_not be_empty
+      end
+    end
+
+    context "custom name" do
+      it "renders the tmux config with custom name" do
+        rendered = project_with_custom_name.render
+        expect(rendered).to_not be_empty
+        expect(rendered).to include("custom")
+        expect(rendered).to_not include("sample")
       end
     end
   end

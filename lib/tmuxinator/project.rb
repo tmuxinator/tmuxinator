@@ -4,10 +4,11 @@ module Tmuxinator
     include Tmuxinator::Deprecations
     include Tmuxinator::WemuxSupport
 
-    attr_reader :yaml
+    attr_reader :yaml, :custom_name
 
-    def initialize(yaml)
+    def initialize(yaml, custom_name = nil)
       @yaml = yaml
+      @custom_name = custom_name
       load_wemux_overrides if wemux?
     end
 
@@ -30,7 +31,7 @@ module Tmuxinator
     end
 
     def name
-      name = yaml["project_name"] || yaml["name"]
+      name = custom_name || yaml["project_name"] || yaml["name"]
       name.blank? ? nil : name.shellescape
     end
 

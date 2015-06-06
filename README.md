@@ -228,8 +228,12 @@ root: <%= ENV["MY_CUSTOM_DIR"] %>
 This will fire up tmux with all the tabs and panes you configured.
 
 ```
-tmuxinator start [project]
+tmuxinator start [project] [alias]
 ```
+
+If you use the optional `[alias]` argument, it will start a new tmux session
+with the custom alias name provided.  This is to enable reuse of a project
+without tmux session name collision.
 
 ## Shorthand
 
