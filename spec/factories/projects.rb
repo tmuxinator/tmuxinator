@@ -8,7 +8,7 @@ FactoryGirl.define do
   end
 
   factory :project_with_custom_name, :class => Tmuxinator::Project do
-    ignore do
+    transient do
       file { YAML.load(File.read("#{File.expand_path("spec/fixtures/sample.yml")}")) }
     end
 
