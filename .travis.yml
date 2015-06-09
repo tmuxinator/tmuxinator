@@ -2,9 +2,11 @@ language: ruby
 rvm:
   - "1.9.3"
   - "2.0.0"
-  - "2.1.2"
+  - "2.1.6"
+  - "2.2.2"
 env:
   - TMUX_VERSION=master
+  - TMUX_VERSION=2.0
   - TMUX_VERSION=1.9
   - TMUX_VERSION=1.8
   - TMUX_VERSION=1.7
@@ -16,7 +18,7 @@ matrix:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libevent-dev libncurses-dev
-  - git clone git://git.code.sf.net/p/tmux/tmux-code tmux
+  - git clone https://github.com/tmux/tmux.git tmux
   - cd tmux
   - git checkout $TMUX_VERSION
   - sh autogen.sh

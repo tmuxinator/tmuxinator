@@ -27,7 +27,7 @@ module Tmuxinator
       end
 
       def default_path_option
-        version && version < 1.7 ? "default-path" : "-c"
+        version && version < 1.8 ? "default-path" : "-c"
       end
 
       def editor?
@@ -62,7 +62,7 @@ module Tmuxinator
         end
       end
 
-      def validate(name)
+      def validate(name, custom_name = nil)
         unless Tmuxinator::Config.exists?(name)
           puts "Project #{name} doesn't exist."
           exit!
@@ -77,7 +77,7 @@ module Tmuxinator
           exit!
         end
 
-        project = Tmuxinator::Project.new(yaml)
+        project = Tmuxinator::Project.new(yaml, custom_name)
 
         unless project.windows?
           puts "Your project file should include some windows."

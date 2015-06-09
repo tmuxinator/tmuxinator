@@ -4,10 +4,11 @@ module Tmuxinator
     include Tmuxinator::Deprecations
     include Tmuxinator::WemuxSupport
 
-    attr_reader :yaml
+    attr_reader :yaml, :custom_name
 
-    def initialize(yaml)
+    def initialize(yaml, custom_name = nil)
       @yaml = yaml
+      @custom_name = custom_name
       load_wemux_overrides if wemux?
     end
 
@@ -30,8 +31,8 @@ module Tmuxinator
     end
 
     def name
-      name = yaml["project_name"] || yaml["name"]
-      name.shellescape
+      name = custom_name || yaml["project_name"] || yaml["name"]
+      name.blank? ? nil : name.shellescape
     end
 
     def pre
@@ -52,6 +53,23 @@ module Tmuxinator
         yaml["pre_tab"]
       else
         yaml["pre_window"]
+      end
+    end
+
+    def attach
+      attach = true
+      if !yaml["attach"].nil?
+        attach = yaml["attach"]
+      end
+      attach
+    end
+
+    def post
+      post_config = yaml["post"]
+      if post_config.is_a?(Array)
+        post_config.join("; ")
+      else
+        post_config
       end
     end
 
@@ -113,6 +131,10 @@ module Tmuxinator
 
     def name?
       !name.nil?
+    end
+
+    def attach?
+      !!attach
     end
 
     def window(i)
