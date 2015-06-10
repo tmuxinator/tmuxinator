@@ -27,7 +27,7 @@ FactoryGirl.define do
       file { YAML.load(File.read("#{File.expand_path("spec/fixtures/sample.yml")}")) }
     end
 
-    initialize_with { Tmuxinator::Project.new(file, "custom") }
+    initialize_with { Tmuxinator::Project.new(file, {:custom_name => "custom"}) }
   end
 
   factory :project_with_deprecations, :class => Tmuxinator::Project do

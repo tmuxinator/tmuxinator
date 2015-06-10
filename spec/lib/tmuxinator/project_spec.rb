@@ -355,41 +355,42 @@ describe Tmuxinator::Project do
     end
   end
 
-  describe "#detached?" do
+  describe "#attach?" do
 
-    context "tmux_detached is true in yaml" do
-      before { project.yaml["tmux_detached"] = true }
-
-      it "returns true" do
-        expect(project.detached?).to be_truthy
-      end
-    end
-
-    context "tmux_detached is not defined in yaml" do
-      it "returns false" do
-        expect(project.detached?).to be_falsey
-      end
-    end
-
-    context "tmux_detached is false in yaml" do
-      it "returns false" do
-        expect(project.detached?).to be_falsey
-      end
-    end
-
-    context "tmux_detached is true in yaml, but command line forces attach" do
-      before { project_with_force_attach.yaml["tmux_detached"] = true }
-
-      it "returns false" do
-        expect(project_with_force_attach.detached?).to be_falsey
-      end
-    end
-
-    context "tmux_detached is false in yaml, but command line forces detach" do
-      before { project_with_force_detach.yaml["tmux_detached"] = false }
+    context "attach is true in yaml" do
+      before { project.yaml["attach"] = true }
 
       it "returns true" do
-        expect(project_with_force_detach.detached?).to be_truthy
+        expect(project.attach?).to be_truthy
+      end
+    end
+
+    context "attach is not defined in yaml" do
+      it "returns true" do
+        expect(project.attach?).to be_truthy
+      end
+    end
+
+    context "attach is false in yaml" do
+      before { project.yaml["attach"] = false }
+      it "returns false" do
+        expect(project.attach?).to be_falsey
+      end
+    end
+
+    context "attach is true in yaml, but command line forces detach" do
+      before { project_with_force_attach.yaml["attach"] = true }
+
+      it "returns false" do
+        expect(project_with_force_detach.attach?).to be_falsey
+      end
+    end
+
+    context "attach is false in yaml, but command line forces attach" do
+      before { project_with_force_detach.yaml["attach"] = false }
+
+      it "returns true" do
+        expect(project_with_force_attach.attach?).to be_truthy
       end
     end
   end

@@ -61,7 +61,7 @@ module Tmuxinator
       if yaml["attach"].nil?
         yaml_attach = true
       else
-        yaml_attach=yaml["attach"]
+        yaml_attach = yaml["attach"]
       end
       attach = force_attach || !force_detach && yaml_attach
       attach
@@ -146,10 +146,6 @@ module Tmuxinator
 
     def name?
       !name.nil?
-    end
-
-    def attach?
-      !!attach
     end
 
     def window(i)
