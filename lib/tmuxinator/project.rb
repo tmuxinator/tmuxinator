@@ -7,16 +7,18 @@ module Tmuxinator
     attr_reader :yaml
     attr_reader :force_attach
     attr_reader :force_detach
-
+    attr_reader :custom_name
 
     def initialize(yaml, options = {})
       options[:force_attach] = false if options[:force_attach].nil?
-      options[:force_detach] = false if options[:force_detach].nil?
+      options[:force_attach] = false if options[:force_attach].nil?
 
       @yaml = yaml
 
-      @force_attach=options[:force_attach]
-      @force_detach=options[:force_detach]
+      @custom_name = options[:custom_name]
+
+      @force_attach = options[:force_attach]
+      @force_detach = options[:force_detach]
 
       raise "Cannot force_attach and force_detach at the same time" if @force_attach && @force_detach
       
@@ -42,8 +44,8 @@ module Tmuxinator
     end
 
     def name
-      name = yaml["project_name"] || yaml["name"]
-      name.shellescape
+      name = custom_name || yaml["project_name"] || yaml["name"]
+      name.blank? ? nil : name.shellescape
     end
 
     def pre
@@ -55,10 +57,14 @@ module Tmuxinator
       end
     end
 
-    def detached?
-      yaml_detach=yaml["tmux_detached"]
-      detach=force_detach || !force_attach && yaml_detach
-      detach
+    def attach?
+      if yaml["attach"].nil?
+        yaml_attach = true
+      else
+        yaml_attach=yaml["attach"]
+      end
+      attach = force_attach || !force_detach && yaml_attach
+      attach
     end
 
     def pre_window
@@ -70,6 +76,15 @@ module Tmuxinator
         yaml["pre_tab"]
       else
         yaml["pre_window"]
+      end
+    end
+
+    def post
+      post_config = yaml["post"]
+      if post_config.is_a?(Array)
+        post_config.join("; ")
+      else
+        post_config
       end
     end
 
@@ -131,6 +146,10 @@ module Tmuxinator
 
     def name?
       !name.nil?
+    end
+
+    def attach?
+      !!attach
     end
 
     def window(i)

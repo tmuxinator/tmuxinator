@@ -1,3 +1,14 @@
+## 0.6.11
+- Add aliasing of projects to create multiple sessions for a single project #143, #273
+- ERB support for projects #267
+- Post and attach options #293
+- Fix typo in gemspec #294
+- Fix completions not searching subdirectory #295
+- Remove duplicate attribute #298
+- Fix support for tmux 1.8 and below
+- Project cleanup #311
+- Fix error when no project name is provided #303
+
 ## 0.6.10
 - Interpret config file as ERB template #255 
 - Fix zsh completions #262 

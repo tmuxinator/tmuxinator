@@ -1,3 +1,7 @@
+This is a fork of [tmuxinator/tmuxinator](https://github.com/tmuxinator/tmuxinator). In this fork I am trying to add some new features. If a feature is ready, I will send it back as a pull request.
+
+This fork can be unstable. I will not track security updates. So for all serious work, please use the [original](https://github.com/tmuxinator/tmuxinator).
+
 # Tmuxinator
 
 [![Gem Version](https://badge.fury.io/rb/tmuxinator.svg)](http://badge.fury.io/rb/tmuxinator) [![Build Status](https://secure.travis-ci.org/tmuxinator/tmuxinator.png)](http://travis-ci.org/tmuxinator/tmuxinator?branch=master) [![Coverage Status](https://img.shields.io/coveralls/tmuxinator/tmuxinator.svg)](https://coveralls.io/r/tmuxinator/tmuxinator?branch=master) [![Code Climate](https://codeclimate.com/github/tmuxinator/tmuxinator/badges/gpa.svg)](https://codeclimate.com/github/tmuxinator/tmuxinator) [![Dependency Status](https://gemnasium.com/tmuxinator/tmuxinator.svg)](https://gemnasium.com/tmuxinator/tmuxinator)
@@ -79,7 +83,9 @@ tmuxinator new [project]
 ```
 
 For editing you can also use `tmuxinator open [project]`. `new` is aliased to
-`o`,`open`, `e`, `edit` and `n`. Your default editor (`$EDITOR`) is used to open the file.
+`o`,`open`, `e`, `edit` and `n`. Please note that dots can't be used in project
+names as tmux uses them internally to delimit between windows and panes.
+Your default editor (`$EDITOR`) is used to open the file.
 If this is a new project you will see this default config:
 
 ```yaml
@@ -174,6 +180,20 @@ pre_window: rbenv shell 2.0.0-p247
 
 These command(s) will run before any subsequent commands in all panes and windows.
 
+## Custom attachment and post commands
+
+You can set tmuxiniator to skip auto-attaching to the session by using the `attach` option.
+
+```
+attach: false
+```
+
+You can also run arbitrary commands by using the `post` option. This is useful if you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2).
+
+```
+post: tmux -CC attach
+```
+
 ## Passing directly to send-keys
 
 tmuxinator passes commands directly to send keys. This differs from simply chaining commands together using `&&` or `;`, in that
@@ -212,8 +232,12 @@ root: <%= ENV["MY_CUSTOM_DIR"] %>
 This will fire up tmux with all the tabs and panes you configured.
 
 ```
-tmuxinator start [project]
+tmuxinator start [project] [alias]
 ```
+
+If you use the optional `[alias]` argument, it will start a new tmux session
+with the custom alias name provided.  This is to enable reuse of a project
+without tmux session name collision.
 
 ## Shorthand
 

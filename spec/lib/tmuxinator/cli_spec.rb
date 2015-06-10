@@ -71,6 +71,24 @@ describe Tmuxinator::Cli do
     end
   end
 
+  describe "#start(custom_name)" do
+    before do
+      ARGV.replace(["start", "foo", "bar"])
+      allow(Tmuxinator::Config).to receive_messages(:validate => project)
+      allow(Tmuxinator::Config).to receive_messages(:version => 1.9)
+      allow(Kernel).to receive(:exec)
+    end
+
+    context "no deprecations" do
+      let(:project) { FactoryGirl.build(:project) }
+
+      it "starts the project" do
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+    end
+  end
+
   describe "#new" do
     let(:file) { StringIO.new }
 
@@ -159,6 +177,12 @@ describe Tmuxinator::Cli do
       out, _ = capture_io { cli.start }
       # Currently no project is rendered at all
       #expect(out).to_not include "attach-session"
+    end
+
+    it "renders the project with custom session" do
+      ARGV.replace(["debug", "sample", "bar"])
+      expect(project).to receive(:render)
+      capture_io { cli.start }
     end
   end
 

@@ -21,8 +21,11 @@ root: ~/
 # Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
 # startup_window: logs
 
-# for option to start detached
-# tmux_detached: true
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+# Runs after everything. Use it to attach to tmux with custom options etc.
+# post: tmux -CC attach -t <%= name %>
 
 windows:
   - editor:

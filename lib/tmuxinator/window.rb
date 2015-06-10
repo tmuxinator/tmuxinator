@@ -55,8 +55,6 @@ module Tmuxinator
         @pre.join(" && ")
       elsif @pre.is_a?(String)
         @pre
-      else
-        ""
       end
     end
 
@@ -73,7 +71,9 @@ module Tmuxinator
     end
 
     def tmux_pre_window_command
-      project.pre_window ? "#{project.tmux} send-keys -t #{tmux_window_target} #{project.pre_window.shellescape} C-m" : ""
+      return unless project.pre_window
+
+      "#{project.tmux} send-keys -t #{tmux_window_target} #{project.pre_window.shellescape} C-m"
     end
 
     def tmux_window_command_prefix

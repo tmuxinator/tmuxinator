@@ -2,11 +2,13 @@ require "spec_helper"
 
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
+  let(:project_with_custom_name) { FactoryGirl.build(:project_with_custom_name) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
   let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
   let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
 
   let(:wemux_project) { FactoryGirl.build(:wemux_project) }
+  let(:noname_project) { FactoryGirl.build(:noname_project) }
 
   describe "#initialize" do
     context "valid yaml" do
@@ -24,6 +26,15 @@ describe Tmuxinator::Project do
     context "wemux" do
       it "renders the wemux config" do
         expect(wemux_project.render).to_not be_empty
+      end
+    end
+
+    context "custom name" do
+      it "renders the tmux config with custom name" do
+        rendered = project_with_custom_name.render
+        expect(rendered).to_not be_empty
+        expect(rendered).to include("custom")
+        expect(rendered).to_not include("sample")
       end
     end
   end
@@ -54,6 +65,12 @@ describe Tmuxinator::Project do
         expect(project_with_deprecations.root).to include("test")
       end
     end
+
+    context "without root" do
+      it "doesn't throw an error" do
+        expect{noname_project.root}.to_not raise_error
+      end
+    end
   end
 
   describe "#name" do
@@ -72,6 +89,12 @@ describe Tmuxinator::Project do
     context "wemux" do
       it "is wemux" do
         expect(wemux_project.name).to eq "wemux"
+      end
+    end
+
+    context "without name" do
+      it "displays error message" do
+        expect{noname_project.name}.to_not raise_error
       end
     end
   end
