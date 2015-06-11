@@ -11,7 +11,7 @@ module Tmuxinator
 
     def initialize(yaml, options = {})
       options[:force_attach] = false if options[:force_attach].nil?
-      options[:force_attach] = false if options[:force_attach].nil?
+      options[:force_detach] = false if options[:force_detach].nil?
 
       @yaml = yaml
 
