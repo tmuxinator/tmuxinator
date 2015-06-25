@@ -217,7 +217,7 @@ windows:
 
 ## ERB
 
-Project files support ERB for reusability across environments. Eg:
+Project files support [ERB](https://en.wikipedia.org/wiki/ERuby#erb) for reusability across environments. Eg:
 
 ```
 root: <%= ENV["MY_CUSTOM_DIR"] %>
