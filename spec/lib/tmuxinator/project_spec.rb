@@ -4,6 +4,9 @@ describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_custom_name) { FactoryGirl.build(:project_with_custom_name) }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
+  let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
+  let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
+
   let(:wemux_project) { FactoryGirl.build(:wemux_project) }
   let(:noname_project) { FactoryGirl.build(:noname_project) }
 
@@ -351,4 +354,45 @@ describe Tmuxinator::Project do
       end
     end
   end
+
+  describe "#attach?" do
+
+    context "attach is true in yaml" do
+      before { project.yaml["attach"] = true }
+
+      it "returns true" do
+        expect(project.attach?).to be_truthy
+      end
+    end
+
+    context "attach is not defined in yaml" do
+      it "returns true" do
+        expect(project.attach?).to be_truthy
+      end
+    end
+
+    context "attach is false in yaml" do
+      before { project.yaml["attach"] = false }
+      it "returns false" do
+        expect(project.attach?).to be_falsey
+      end
+    end
+
+    context "attach is true in yaml, but command line forces detach" do
+      before { project_with_force_attach.yaml["attach"] = true }
+
+      it "returns false" do
+        expect(project_with_force_detach.attach?).to be_falsey
+      end
+    end
+
+    context "attach is false in yaml, but command line forces attach" do
+      before { project_with_force_detach.yaml["attach"] = false }
+
+      it "returns true" do
+        expect(project_with_force_attach.attach?).to be_truthy
+      end
+    end
+  end
+
 end

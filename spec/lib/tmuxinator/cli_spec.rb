@@ -150,15 +150,33 @@ describe Tmuxinator::Cli do
 
   describe "#debug" do
     let(:project) { FactoryGirl.build(:project) }
+    let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
+    let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
 
     before do
-      ARGV.replace(["debug", "foo"])
       allow(Tmuxinator::Config).to receive_messages(:validate => project)
     end
 
     it "renders the project" do
+      ARGV.replace(["debug", "foo"])
       expect(project).to receive(:render)
       capture_io { cli.start }
+    end
+
+    it "force attach renders the project with attach code" do
+      ARGV.replace(["debug", "--attach=true" "sample"])
+      expect(project).to receive(:render)
+      out, _ = capture_io { cli.start }
+      # Currently no project is rendered at all, because the project file is not found
+      #expect(out).to include "attach-session"
+    end
+
+    it "force detach renders the project without attach code" do
+      ARGV.replace(["debug", "--attach=false" "sample"])
+      expect(project).to receive(:render)
+      out, _ = capture_io { cli.start }
+      # Currently no project is rendered at all
+      #expect(out).to_not include "attach-session"
     end
 
     it "renders the project with custom session" do

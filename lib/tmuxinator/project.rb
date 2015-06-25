@@ -4,11 +4,24 @@ module Tmuxinator
     include Tmuxinator::Deprecations
     include Tmuxinator::WemuxSupport
 
-    attr_reader :yaml, :custom_name
+    attr_reader :yaml
+    attr_reader :force_attach
+    attr_reader :force_detach
+    attr_reader :custom_name
 
-    def initialize(yaml, custom_name = nil)
+    def initialize(yaml, options = {})
+      options[:force_attach] = false if options[:force_attach].nil?
+      options[:force_detach] = false if options[:force_detach].nil?
+
       @yaml = yaml
-      @custom_name = custom_name
+
+      @custom_name = options[:custom_name]
+
+      @force_attach = options[:force_attach]
+      @force_detach = options[:force_detach]
+
+      raise "Cannot force_attach and force_detach at the same time" if @force_attach && @force_detach
+      
       load_wemux_overrides if wemux?
     end
 
@@ -44,6 +57,16 @@ module Tmuxinator
       end
     end
 
+    def attach?
+      if yaml["attach"].nil?
+        yaml_attach = true
+      else
+        yaml_attach = yaml["attach"]
+      end
+      attach = force_attach || !force_detach && yaml_attach
+      attach
+    end
+
     def pre_window
       if rbenv?
         "rbenv shell #{yaml["rbenv"]}"
@@ -54,14 +77,6 @@ module Tmuxinator
       else
         yaml["pre_window"]
       end
-    end
-
-    def attach
-      attach = true
-      if !yaml["attach"].nil?
-        attach = yaml["attach"]
-      end
-      attach
     end
 
     def post
@@ -131,10 +146,6 @@ module Tmuxinator
 
     def name?
       !name.nil?
-    end
-
-    def attach?
-      !!attach
     end
 
     def window(i)
