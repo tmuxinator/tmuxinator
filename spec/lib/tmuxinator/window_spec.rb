@@ -3,9 +3,10 @@ require "spec_helper"
 describe Tmuxinator::Window do
   let(:project) { double }
   let(:panes) { ["vim", nil, "top"] }
+  let(:window_name) { "editor" }
   let(:yaml) do
     {
-      "editor" => {
+      window_name => {
         "pre" => ["echo 'I get run in each pane.  Before each pane command!'", nil],
         "layout" => "main-vertical",
         "panes" => panes
@@ -154,6 +155,24 @@ describe Tmuxinator::Window do
 
       it "returns an empty array" do
         expect(window.commands).to be_empty
+      end
+    end
+  end
+
+  describe "#name_options" do
+    context 'with a name' do
+      let(:window_name) { 'editor' }
+
+      it 'specifies name with tmux name option' do
+        expect(window.tmux_window_name_option).to eq "-n #{window_name}"
+      end
+    end
+
+    context 'without a name' do
+      let(:window_name) { nil }
+
+      it 'specifies no tmux name option' do
+        expect(window.tmux_window_name_option).to be_empty
       end
     end
   end
