@@ -219,5 +219,13 @@ describe Tmuxinator::Window do
         expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} #{name_part}"
       end
     end
+
+    context 'name not set' do
+      let(:window_name) { nil }
+
+      it 'does not set name option' do
+        expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} "
+      end
+    end
   end
 end
