@@ -180,24 +180,43 @@ describe Tmuxinator::Window do
   describe "#tmux_new_window_command" do
     let(:project) { double(:project) }
     let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+    let(:root?) { true }
+    let(:root) { "/project/tmuxinator" }
 
     before do
       allow(project).to receive_messages(
-        :name => "",
+        :name => "test",
         :tmux => "tmux",
-        :root => "/project/tmuxinator",
-        :root? => true,
+        :root => root,
+        :root? => root?,
         :base_index => 1
       )
     end
 
-    context "tmux 1.6 and below" do
-      before do
-        allow(Tmuxinator::Config).to receive_messages(:version => 1.6)
-      end
+    let(:tmux_part) { project.tmux }
+    let(:window_command_part) { "new-window" }
+    let(:name_part) { window.tmux_window_name_option }
+    let(:target_part) { "-t #{window.tmux_window_target}" }
+    let(:path_part) { "#{default_path_option} #{project.root}" }
 
-      it "specifies root path by passing default-path to tmux" do
-        expect(window.tmux_new_window_command).to include("default-path /project/tmuxinator")
+    let(:default_path_option) { '-c' }
+
+    before do
+      allow(Tmuxinator::Config).to receive(:default_path_option).and_return(default_path_option)
+    end
+
+    it 'contstructs window command with path, target, and name options' do
+      expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} #{name_part}"
+    end
+
+    context 'root not set' do
+      let(:root?) { false }
+      let(:root) { nil }
+
+      let(:path_part) { nil }
+
+      it 'has an extra space instead of path_part' do
+        expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} #{name_part}"
       end
     end
   end
