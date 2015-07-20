@@ -188,6 +188,10 @@ module Tmuxinator
       "#{tmux} start-server\\; show-option -g"
     end
 
+    def tmux_new_session_command
+      "#{ tmux } new-session -d -s #{ name } -n #{ windows.first.name }"
+    end
+
     private
 
     def tmux_config

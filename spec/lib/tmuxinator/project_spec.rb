@@ -395,4 +395,9 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe 'tmux_new_session_command' do
+    it 'returns command to start a new detatched session' do
+      expect(project.tmux_new_session_command).to eq("#{project.tmux} new-session -d -s #{ project.name } -n #{ project.windows.first.name }")
+    end
+  end
 end
