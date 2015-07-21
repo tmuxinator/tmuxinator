@@ -160,18 +160,18 @@ describe Tmuxinator::Window do
   end
 
   describe "#name_options" do
-    context 'with a name' do
-      let(:window_name) { 'editor' }
+    context "with a name" do
+      let(:window_name) { "editor" }
 
-      it 'specifies name with tmux name option' do
+      it "specifies name with tmux name option" do
         expect(window.tmux_window_name_option).to eq "-n #{window_name}"
       end
     end
 
-    context 'without a name' do
+    context "without a name" do
       let(:window_name) { nil }
 
-      it 'specifies no tmux name option' do
+      it "specifies no tmux name option" do
         expect(window.tmux_window_name_option).to be_empty
       end
     end
@@ -205,25 +205,25 @@ describe Tmuxinator::Window do
       allow(Tmuxinator::Config).to receive(:default_path_option).and_return(default_path_option)
     end
 
-    it 'contstructs window command with path, target, and name options' do
+    it "contstructs window command with path, target, and name options" do
       expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} #{name_part}"
     end
 
-    context 'root not set' do
+    context "root not set" do
       let(:root?) { false }
       let(:root) { nil }
 
       let(:path_part) { nil }
 
-      it 'has an extra space instead of path_part' do
+      it "has an extra space instead of path_part" do
         expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} #{name_part}"
       end
     end
 
-    context 'name not set' do
+    context "name not set" do
       let(:window_name) { nil }
 
-      it 'does not set name option' do
+      it "does not set name option" do
         expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} "
       end
     end
