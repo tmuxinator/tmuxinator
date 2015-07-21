@@ -4,7 +4,7 @@ end
 FactoryGirl.define do
   factory :project, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/sample.yml') }
+      file { yaml_load("spec/fixtures/sample.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
@@ -12,7 +12,7 @@ FactoryGirl.define do
 
   factory :project_with_force_attach, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/detach.yml') }
+      file { yaml_load("spec/fixtures/detach.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file, force_attach: true) }
@@ -20,14 +20,14 @@ FactoryGirl.define do
 
   factory :project_with_force_detach, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/detach.yml') }
+      file { yaml_load("spec/fixtures/detach.yml") }
     end
     initialize_with { Tmuxinator::Project.new(file, force_detach: true) }
   end
 
   factory :project_with_custom_name, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/sample.yml') }
+      file { yaml_load("spec/fixtures/sample.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file, custom_name: "custom") }
@@ -35,7 +35,7 @@ FactoryGirl.define do
 
   factory :project_with_deprecations, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/sample.deprecations.yml') }
+      file { yaml_load("spec/fixtures/sample.deprecations.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
@@ -43,7 +43,7 @@ FactoryGirl.define do
 
   factory :wemux_project, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/sample_wemux.yml') }
+      file { yaml_load("spec/fixtures/sample_wemux.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
@@ -51,7 +51,7 @@ FactoryGirl.define do
 
   factory :noname_project, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/noname.yml') }
+      file { yaml_load("spec/fixtures/noname.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
@@ -59,7 +59,7 @@ FactoryGirl.define do
 
   factory :nameless_window_project, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/nameless_window.yml') }
+      file { yaml_load("spec/fixtures/nameless_window.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
