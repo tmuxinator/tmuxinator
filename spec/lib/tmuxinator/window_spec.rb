@@ -194,19 +194,20 @@ describe Tmuxinator::Window do
     end
 
     let(:tmux_part) { project.tmux }
-    let(:window_command_part) { "new-window" }
+    let(:window_part) { "new-window" }
     let(:name_part) { window.tmux_window_name_option }
     let(:target_part) { "-t #{window.tmux_window_target}" }
-    let(:path_part) { "#{default_path_option} #{project.root}" }
+    let(:path_part) { "#{path_option} #{project.root}" }
 
-    let(:default_path_option) { '-c' }
+    let(:path_option) { "-c" }
+    let(:full_command) { "#{tmux_part} #{window_part} #{path_part} #{target_part} #{name_part}" }
 
     before do
-      allow(Tmuxinator::Config).to receive(:default_path_option).and_return(default_path_option)
+      allow(Tmuxinator::Config).to receive(:default_path_option) { path_option }
     end
 
     it "contstructs window command with path, target, and name options" do
-      expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} #{name_part}"
+      expect(window.tmux_new_window_command).to eq full_command
     end
 
     context "root not set" do
@@ -216,15 +217,16 @@ describe Tmuxinator::Window do
       let(:path_part) { nil }
 
       it "has an extra space instead of path_part" do
-        expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} #{name_part}"
+        expect(window.tmux_new_window_command).to eq full_command
       end
     end
 
     context "name not set" do
       let(:window_name) { nil }
+      let(:full_command) { "#{tmux_part} #{window_part} #{path_part} #{target_part} " }
 
       it "does not set name option" do
-        expect(window.tmux_new_window_command).to eq "#{tmux_part} #{window_command_part} #{path_part} #{target_part} "
+        expect(window.tmux_new_window_command).to eq full_command
       end
     end
   end
