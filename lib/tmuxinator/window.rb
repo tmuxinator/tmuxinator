@@ -80,9 +80,13 @@ module Tmuxinator
       "#{project.tmux} send-keys -t #{project.name}:#{index + project.base_index}"
     end
 
+    def tmux_window_name_option
+      name ? "-n #{name}" : ""
+    end
+
     def tmux_new_window_command
       path = root? ? "#{Tmuxinator::Config.default_path_option} #{root}" : nil
-      "#{project.tmux} new-window #{path} -t #{tmux_window_target} -n #{name}"
+      "#{project.tmux} new-window #{path} -t #{tmux_window_target} #{tmux_window_name_option}"
     end
 
     def tmux_layout_command

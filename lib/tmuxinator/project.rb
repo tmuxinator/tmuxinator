@@ -21,7 +21,7 @@ module Tmuxinator
       @force_detach = options[:force_detach]
 
       raise "Cannot force_attach and force_detach at the same time" if @force_attach && @force_detach
-      
+
       load_wemux_overrides if wemux?
     end
 
@@ -186,6 +186,10 @@ module Tmuxinator
 
     def show_tmux_options
       "#{tmux} start-server\\; show-option -g"
+    end
+
+    def tmux_new_session_command
+      "#{ tmux } new-session -d -s #{ name } #{ windows.first.tmux_window_name_option }"
     end
 
     private
