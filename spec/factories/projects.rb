@@ -35,7 +35,7 @@ FactoryGirl.define do
 
   factory :project_with_number_as_name, class: Tmuxinator::Project do
     transient do
-      file { yaml_load('spec/fixtures/sample_number_as_name.yml') }
+      file { yaml_load("spec/fixtures/sample_number_as_name.yml") }
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
