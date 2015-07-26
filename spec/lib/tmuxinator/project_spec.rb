@@ -3,7 +3,9 @@ require "spec_helper"
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_custom_name) { FactoryGirl.build(:project_with_custom_name) }
-  let(:project_with_number_as_name) { FactoryGirl.build(:project_with_number_as_name) }
+  let(:project_with_number_as_name) {
+    FactoryGirl.build(:project_with_number_as_name)
+  }
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
   let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
   let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
