@@ -3,6 +3,9 @@ require "spec_helper"
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
   let(:project_with_custom_name) { FactoryGirl.build(:project_with_custom_name) }
+  let(:project_with_number_as_name) do
+    FactoryGirl.build(:project_with_number_as_name)
+  end
   let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
   let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
   let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
@@ -96,6 +99,13 @@ describe Tmuxinator::Project do
     context "without name" do
       it "displays error message" do
         expect{noname_project.name}.to_not raise_error
+      end
+    end
+
+    context "as number" do
+      it "will gracefully handle a name given as a number" do
+        rendered = project_with_number_as_name
+        expect(rendered.name.to_i).to_not equal 0
       end
     end
   end
