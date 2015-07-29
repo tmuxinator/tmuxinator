@@ -123,7 +123,7 @@ windows:
 The windows option allows the specification of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
 and command to be run.
 
-```
+```yaml
 windows:
   - editor: vim
 ```
@@ -132,7 +132,7 @@ windows:
 
 An optional root option can be specified per window:
 
-```
+```yaml
 name: test
 root: ~/projects/company
 
@@ -170,7 +170,7 @@ or [specify your own](http://stackoverflow.com/a/9976282/183537).
 
 To use tmuxinator with rbenv, RVM, NVM etc, use the `pre_window` option.
 
-```
+```yaml
 pre_window: rbenv shell 2.0.0-p247
 ```
 
@@ -180,13 +180,13 @@ These command(s) will run before any subsequent commands in all panes and window
 
 You can set tmuxiniator to skip auto-attaching to the session by using the `attach` option.
 
-```
+```yaml
 attach: false
 ```
 
 You can also run arbitrary commands by using the `post` option. This is useful if you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2).
 
-```
+```yaml
 post: tmux -CC attach
 ```
 
@@ -198,7 +198,7 @@ SSH for example.
 
 To support this both the window and pane options can take an array as an argument:
 
-```
+```yaml
 name: sample
 root: ~/
 
@@ -219,7 +219,7 @@ windows:
 
 Project files support [ERB](https://en.wikipedia.org/wiki/ERuby#erb) for reusability across environments. Eg:
 
-```
+```yaml
 root: <%= ENV["MY_CUSTOM_DIR"] %>
 ```
 
