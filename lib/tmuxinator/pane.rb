@@ -53,9 +53,5 @@ module Tmuxinator
     def last?
       index == tab.panes.length - 1
     end
-
-    def multiple_commands?
-      commands && commands.length > 0
-    end
   end
 end
