@@ -7,7 +7,7 @@ module Tmuxinator
       end
 
       def sample
-        "#{File.dirname(__FILE__)}/assets/sample.yml"
+        asset_path "sample.yml"
       end
 
       def default
@@ -49,11 +49,11 @@ module Tmuxinator
       end
 
       def template
-        "#{File.dirname(__FILE__)}/assets/template.erb"
+        asset_path "template.erb"
       end
 
       def wemux_template
-        "#{File.dirname(__FILE__)}/assets/wemux_template.erb"
+        asset_path "wemux_template.erb"
       end
 
       def configs
@@ -91,6 +91,12 @@ module Tmuxinator
 
         project
       end
+
+      private
+
+        def asset_path(asset)
+          "#{File.dirname(__FILE__)}/assets/#{asset}"
+        end
     end
   end
 end
