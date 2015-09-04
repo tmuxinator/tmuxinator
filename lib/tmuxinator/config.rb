@@ -49,7 +49,7 @@ module Tmuxinator
         projects.detect { |project| File.basename(project, ".yml") == name }
       end
 
-      def project_in_local(name)
+      def project_in_local(_name)
         [LOCAL_DEFAULT].detect { |f| File.exists?(f) }
       end
 
