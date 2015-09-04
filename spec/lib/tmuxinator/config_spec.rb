@@ -46,6 +46,7 @@ describe Tmuxinator::Config do
 
     context "when the file exists" do
       before do
+        allow(File).to receive(:exists?).with(Tmuxinator::Config::LOCAL_DEFAULT) { false }
         allow(File).to receive(:exists?).with(Tmuxinator::Config.default) { true }
       end
 
@@ -56,6 +57,7 @@ describe Tmuxinator::Config do
 
     context "when the file doesn't exist" do
       before do
+        allow(File).to receive(:exists?).with(Tmuxinator::Config::LOCAL_DEFAULT) { false }
         allow(File).to receive(:exists?).with(Tmuxinator::Config.default) { false }
       end
 
@@ -152,7 +154,7 @@ describe Tmuxinator::Config do
     end
   end
 
-  describe "#project" do
+  describe "#project_in_root" do
     let(:root) { Tmuxinator::Config.root }
 
     before do
@@ -162,7 +164,51 @@ describe Tmuxinator::Config do
 
     context "with project yml" do
       it "gets the project as path to the yml file" do
+        expect(Tmuxinator::Config.project_in_root("sample")).to eq "#{root}/sample.yml"
+      end
+    end
+
+    context "without project yml" do
+      it "gets the project as path to the yml file" do
+        expect(Tmuxinator::Config.project_in_root("new-project")).to be_nil
+      end
+    end
+  end
+
+  describe "#project_in_local" do
+    context "with a project yml" do
+      it "gets the project as path to the yml file" do
+        expect(File).to receive(:exists?).with(Tmuxinator::Config::LOCAL_DEFAULT){ true }
+
+        expect(Tmuxinator::Config.project_in_local("sample")).to eq Tmuxinator::Config::LOCAL_DEFAULT
+      end
+    end
+
+    context "without project yml" do
+      it "gets the project as path to the yml file" do
+        expect(Tmuxinator::Config.project_in_local("new-project")).to be_nil
+      end
+    end
+  end
+
+  describe "#project" do
+    let(:root) { Tmuxinator::Config.root }
+    let(:path) { File.expand_path("../../../fixtures/", __FILE__) }
+
+    context "with project yml in the root directory" do
+      before do
+        allow(Tmuxinator::Config).to receive_messages(:root => path)
+      end
+
+      it "gets the project as path to the yml file" do
         expect(Tmuxinator::Config.project("sample")).to eq "#{root}/sample.yml"
+      end
+    end
+
+    context "without a project yml in the root directory, but with one in the local directory" do
+      it "gets the project as path to the yml file" do
+        expect(File).to receive(:exists?).with(Tmuxinator::Config::LOCAL_DEFAULT){ true }
+        expect(Tmuxinator::Config.project("sample")).to eq "./.tmuxinator.yml"
       end
     end
 

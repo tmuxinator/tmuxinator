@@ -1,5 +1,7 @@
 module Tmuxinator
   class Config
+    LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
+
     class << self
       def root
         Dir.mkdir("#{ENV["HOME"]}/.tmuxinator") unless File.directory?(File.expand_path("~/.tmuxinator"))
@@ -42,10 +44,21 @@ module Tmuxinator
         File.exists?(project(name))
       end
 
-      def project(name)
+      def project_in_root(name)
         projects = Dir.glob("#{root}/**/*.yml")
-        project_file = projects.detect { |project| File.basename(project, ".yml") == name }
-        project_file || "#{root}/#{name}.yml"
+        projects.detect { |project| File.basename(project, ".yml") == name }
+      end
+
+      def project_in_local(name)
+        [LOCAL_DEFAULT].detect { |f| File.exists?(f) }
+      end
+
+      def default_project(name)
+        "#{root}/#{name}.yml"
+      end
+
+      def project(name)
+        project_in_root(name) || project_in_local(name) || default_project(name)
       end
 
       def template

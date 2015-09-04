@@ -235,6 +235,8 @@ If you use the optional `[alias]` argument, it will start a new tmux session
 with the custom alias name provided.  This is to enable reuse of a project
 without tmux session name collision.
 
+If there is a `./.tmuxinator.yml` file in the current working directory but not a named project file in `~/.tmuxinator`, tmuxinator will use the local file.  This is primarily intended to be used for sharing tmux configurations in complex development environments.
+
 ## Shorthand
 
 A shorthand alias for tmuxinator can also be used.
