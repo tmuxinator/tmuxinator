@@ -6,6 +6,7 @@ module Tmuxinator
           return yaml[value]
         end
       end
+      raise "Method [#{name}] does not exist!"
     end
   end
 end
