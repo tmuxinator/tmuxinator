@@ -282,7 +282,7 @@ module Tmuxinator
     def extract_tmux_config
       options_hash = {}
 
-      options_string = `#{show_tmux_options}`
+      options_string = IO.popen([ENV["SHELL"] || "/bin/sh", "-c", show_tmux_options]).read
       options_string.encode!("UTF-8", invalid: :replace)
       options_string.split("\n").map do |entry|
         key, value = entry.split("\s")
