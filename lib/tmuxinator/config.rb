@@ -49,7 +49,11 @@ module Tmuxinator
         projects.detect { |project| File.basename(project, ".yml") == name }
       end
 
-      def project_in_local(_)
+      def local?
+        self.project_in_local
+      end
+
+      def project_in_local
         [LOCAL_DEFAULT].detect { |f| File.exists?(f) }
       end
 
@@ -58,7 +62,7 @@ module Tmuxinator
       end
 
       def project(name)
-        project_in_root(name) || project_in_local(name) || default_project(name)
+        project_in_root(name) || project_in_local || default_project(name)
       end
 
       def template
@@ -75,34 +79,20 @@ module Tmuxinator
         end
       end
 
-      def validate(name, options={})
-        unless Tmuxinator::Config.exists?(name)
-          puts "Project #{name} doesn't exist."
-          exit!
+      def validate(name: nil, custom_name: nil, force_attach: false, force_detach: false)
+        project_file = if name.nil?
+          raise "Project file at ./.tmuxinator.yml doesn't exist." unless Tmuxinator::Config.local?
+          project_in_local
+        else
+          raise "Project #{name} doesn't exist." unless Tmuxinator::Config.exists?(name)
+          Tmuxinator::Config.project(name)
         end
-
-        config_path = Tmuxinator::Config.project(name)
-
-        yaml = begin
-          YAML.load(Erubis::Eruby.new(File.read(config_path)).result(binding))
-        rescue SyntaxError, StandardError
-          puts "Failed to parse config file. Please check your formatting."
-          exit!
-        end
-
-        project = Tmuxinator::Project.new(yaml, options)
-
-        unless project.windows?
-          puts "Your project file should include some windows."
-          exit!
-        end
-
-        unless project.name?
-          puts "Your project file didn't specify a 'project_name'"
-          exit!
-        end
-
-        project
+        options = {
+          custom_name: custom_name,
+          force_attach: force_attach,
+          force_detach: force_detach
+        }
+        Tmuxinator::Project.load(project_file, options).validate!
       end
 
       private

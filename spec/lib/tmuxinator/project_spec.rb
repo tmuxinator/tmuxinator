@@ -424,4 +424,33 @@ describe Tmuxinator::Project do
       end
     end
   end
+
+  describe "::load" do
+    let(:path) { File.expand_path("../../../fixtures/sample.yml", __FILE__) }
+    let(:options) { {} }
+
+    it "should raise if the project file doesn't parse" do
+      bad_yaml = <<-Y
+      name: "foo"
+        subkey:
+      Y
+      expect(File).to receive(:read).with(path){ bad_yaml }
+      expect{ self.described_class.load(path, options) }.to raise_error RuntimeError, %r{Failed.to.parse.config.file}
+    end
+
+    it "should return an instance of the class if the file loads" do
+      expect(self.described_class.load(path, options)).to be_a Tmuxinator::Project
+    end
+  end
+
+  describe "#validate!" do
+    it "should raise if there are no windows defined" do
+      nowindows_project =  FactoryGirl.build(:nowindows_project)
+      expect{ nowindows_project.validate! }.to raise_error RuntimeError, %r{should.include.some.windows}
+    end
+
+    it "should raise if there is not a project name" do
+      expect{ noname_project.validate! }.to raise_error RuntimeError, %r{didn't.specify.a.'project_name'}
+    end
+  end
 end

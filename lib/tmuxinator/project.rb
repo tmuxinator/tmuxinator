@@ -9,6 +9,24 @@ module Tmuxinator
     attr_reader :force_detach
     attr_reader :custom_name
 
+    def self.load(path, options = {})
+      yaml = begin
+        raw_content = File.read(path)
+        content = Erubis::Eruby.new(raw_content).result(binding)
+        YAML.load(content)
+      rescue SyntaxError, StandardError
+        raise "Failed to parse config file. Please check your formatting."
+      end
+
+      self.new(yaml, options)
+    end
+
+    def validate!
+      raise "Your project file should include some windows." unless self.windows?
+      raise "Your project file didn't specify a 'project_name'" unless self.name?
+      self
+    end
+
     def initialize(yaml, options = {})
       options[:force_attach] = false if options[:force_attach].nil?
       options[:force_detach] = false if options[:force_detach].nil?
@@ -33,7 +51,7 @@ module Tmuxinator
     def windows
       windows_yml = yaml["tabs"] || yaml["windows"]
 
-      @windows ||= windows_yml.map.with_index do |window_yml, index|
+      @windows ||= (windows_yml || {}).map.with_index do |window_yml, index|
         Tmuxinator::Window.new(window_yml, index, self)
       end
     end

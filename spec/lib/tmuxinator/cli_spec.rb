@@ -36,7 +36,7 @@ describe Tmuxinator::Cli do
 
     it "lists the commands" do
       out, _ = capture_io { cli.start }
-      expect(out).to eq "#{%w(commands completions new open start debug copy delete implode version doctor list).join("\n")}\n"
+      expect(out).to eq "#{%w(commands completions new open start local debug copy delete implode version doctor list).join("\n")}\n"
     end
   end
 
@@ -68,6 +68,39 @@ describe Tmuxinator::Cli do
         out, _ = capture_io { cli.start }
         expect(out).to include "DEPRECATION"
       end
+    end
+  end
+
+  describe "#local" do
+    shared_examples_for :local_project do
+      before do
+        allow(Tmuxinator::Config).to receive_messages(:validate => project)
+        allow(Tmuxinator::Config).to receive_messages(:version => 1.9)
+        allow(Kernel).to receive(:exec)
+      end
+
+      let(:project) { FactoryGirl.build(:project) }
+
+      it "starts the project" do
+        expect(Kernel).to receive(:exec)
+        out, err = capture_io { cli.start }
+        expect(err).to eq ""
+        expect(out).to eq ""
+      end
+    end
+
+    context "when the command used is 'local'" do
+      before do
+        ARGV.replace ["local"]
+      end
+      it_should_behave_like :local_project
+    end
+
+    context "when the command used is '.'" do
+      before do
+        ARGV.replace ["."]
+      end
+      it_should_behave_like :local_project
     end
   end
 
@@ -155,25 +188,23 @@ describe Tmuxinator::Cli do
 
     before do
       allow(Tmuxinator::Config).to receive_messages(:validate => project)
+      expect(project).to receive(:render)
     end
 
     it "renders the project" do
       ARGV.replace(["debug", "foo"])
-      expect(project).to receive(:render)
       capture_io { cli.start }
     end
 
     it "force attach renders the project with attach code" do
-      ARGV.replace(["debug", "--attach=true" "sample"])
-      expect(project).to receive(:render)
+      ARGV.replace(["debug", "--attach=true", "sample"])
       out, _ = capture_io { cli.start }
       # Currently no project is rendered at all, because the project file is not found
       #expect(out).to include "attach-session"
     end
 
     it "force detach renders the project without attach code" do
-      ARGV.replace(["debug", "--attach=false" "sample"])
-      expect(project).to receive(:render)
+      ARGV.replace(["debug", "--attach=false", "sample"])
       out, _ = capture_io { cli.start }
       # Currently no project is rendered at all
       #expect(out).to_not include "attach-session"
@@ -181,7 +212,6 @@ describe Tmuxinator::Cli do
 
     it "renders the project with custom session" do
       ARGV.replace(["debug", "sample", "bar"])
-      expect(project).to receive(:render)
       capture_io { cli.start }
     end
   end
@@ -265,5 +295,39 @@ describe Tmuxinator::Cli do
       expect(Tmuxinator::Config).to receive(:shell?)
       capture_io { cli.start }
     end
+  end
+
+  describe "#create_project" do
+    shared_examples_for :a_proper_project do
+      it "should create a valid project" do
+        expect(subject).to be_a Tmuxinator::Project
+        expect(subject.name).to eq name
+      end
+    end
+
+    let(:name) { "sample" }
+    let(:custom_name) { nil }
+    let(:cli_options) { {} }
+    let(:path) { File.expand_path("../../../fixtures", __FILE__) }
+
+    context "when creating a traditional named project" do
+      subject { self.described_class.new.create_project(name: name, custom_name: custom_name) }
+
+      before do
+        allow(Tmuxinator::Config).to receive_messages(:root => path)
+      end
+
+      it_should_behave_like :a_proper_project
+    end
+
+    # context "when creating a local project" do
+    #   subject { self.described_class.new.create_project(custom_name: custom_name) }
+
+    #   before do
+    #     allow(Tmuxinator::Config).to receive_messages(:root => path)
+    #   end
+
+    #   it_should_behave_like :a_proper_project
+    # end
   end
 end

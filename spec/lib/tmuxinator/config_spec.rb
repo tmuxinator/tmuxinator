@@ -177,19 +177,26 @@ describe Tmuxinator::Config do
     end
   end
 
+  describe "#local?" do
+    it "checks if the given project exists" do
+      expect(File).to receive(:exists?).with(Tmuxinator::Config::LOCAL_DEFAULT) { true }
+      expect(Tmuxinator::Config.local?).to be_truthy
+    end
+  end
+
   describe "#project_in_local" do
     let(:default) { Tmuxinator::Config::LOCAL_DEFAULT }
 
     context "with a project yml" do
       it "gets the project as path to the yml file" do
         expect(File).to receive(:exists?).with(default) { true }
-        expect(Tmuxinator::Config.project_in_local("sample")).to eq default
+        expect(Tmuxinator::Config.project_in_local).to eq default
       end
     end
 
     context "without project yml" do
       it "gets the project as path to the yml file" do
-        expect(Tmuxinator::Config.project_in_local("new-project")).to be_nil
+        expect(Tmuxinator::Config.project_in_local).to be_nil
       end
     end
   end
@@ -220,6 +227,35 @@ describe Tmuxinator::Config do
       let(:expected) { "#{root}/new-project.yml" }
       it "gets the project as path to the yml file" do
         expect(Tmuxinator::Config.project("new-project")).to eq expected
+      end
+    end
+  end
+
+  describe "#validate" do
+    let(:path) { File.expand_path("../../../fixtures", __FILE__) }
+    let(:default) { Tmuxinator::Config::LOCAL_DEFAULT }
+
+    context "when a project name is provided" do
+      it "should raise if the project file can't be found" do
+        expect{ Tmuxinator::Config.validate(name: "sample") }.to raise_error RuntimeError, %r{Project.+doesn't.exist}
+      end
+
+      it "should load and validate the project" do
+        expect(Tmuxinator::Config).to receive_messages(:root => path)
+        expect(Tmuxinator::Config.validate(name: "sample")).to be_a Tmuxinator::Project
+      end
+    end
+
+    context "when no project name is provided" do
+      it "should raise if the local project file doesn't exist" do
+        expect(File).to receive(:exists?).with(default){ false }
+        expect{ Tmuxinator::Config.validate }.to raise_error RuntimeError, %r{Project.+doesn't.exist}
+      end
+
+      it "should load and validate the project" do
+        expect(File).to receive(:exists?).with(default).at_least(:once){ true }
+        expect(File).to receive(:read).with(default).and_return(File.read(File.join(path, "sample.yml")))
+        expect(Tmuxinator::Config.validate).to be_a Tmuxinator::Project
       end
     end
   end
