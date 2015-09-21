@@ -124,31 +124,65 @@ describe Tmuxinator::Cli do
 
   describe "#new" do
     let(:file) { StringIO.new }
+    let(:name) { "test" }
 
     before do
-      ARGV.replace(["new", "test"])
       allow(File).to receive(:open) { |&block| block.yield file }
     end
 
-    context "existing project doesn't exist" do
+    context "without the --local option" do
       before do
-        allow(Tmuxinator::Config).to receive_messages(:exists? => false)
+        ARGV.replace(["new", name])
       end
 
-      it "creates a new tmuxinator project file" do
-        capture_io { cli.start }
-        expect(file.string).to_not be_empty
+      context "existing project doesn't exist" do
+        before do
+          expect(Tmuxinator::Config).to receive_messages(:exists? => false)
+        end
+
+        it "creates a new tmuxinator project file" do
+          capture_io { cli.start }
+          expect(file.string).to_not be_empty
+        end
+      end
+
+      context "files exists" do
+        before do
+          expect(File).to receive_messages(:exists? => true)
+        end
+
+        it "just opens the file" do
+          expect(Kernel).to receive(:system).with(%r{#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml})
+          capture_io { cli.start }
+        end
       end
     end
 
-    context "files exists" do
+    context "with the --local option" do
       before do
-        allow(File).to receive_messages(:exists? => true)
+        ARGV.replace ["new", name, "--local"]
       end
 
-      it "just opens the file" do
-        expect(Kernel).to receive(:system)
-        capture_io { cli.start }
+      context "existing project doesn't exist" do
+        before do
+          expect(Tmuxinator::Config).to receive_messages(:local? => false)
+        end
+
+        it "creates a new tmuxinator project file" do
+          capture_io { cli.start }
+          expect(file.string).to_not be_empty
+        end
+      end
+
+      context "files exists" do
+        before do
+          expect(File).to receive(:exists?).with(Tmuxinator::Config::LOCAL_DEFAULT){ true }
+        end
+
+        it "just opens the file" do
+          expect(Kernel).to receive(:system).with(%r{#{Tmuxinator::Config::LOCAL_DEFAULT}})
+          capture_io { cli.start }
+        end
       end
     end
   end

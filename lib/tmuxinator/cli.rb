@@ -49,17 +49,27 @@ module Tmuxinator
     map "o" => :new
     map "e" => :new
     map "n" => :new
+    method_option :local, type: :boolean, aliases: ["-l"], desc: "Create local project file at ./.tmuxinator.yml"
 
     def new(name)
-      config = Tmuxinator::Config.project(name)
-
-      unless Tmuxinator::Config.exists?(name)
+      generate_template = ->(path) do
         template = Tmuxinator::Config.default? ? Tmuxinator::Config.default : Tmuxinator::Config.sample
-        erb  = Erubis::Eruby.new(File.read(template)).result(binding)
-        File.open(config, "w") { |f| f.write(erb) }
+        erb = Erubis::Eruby.new(File.read(template)).result(binding)
+        File.open(path, "w") { |f| f.write(erb) }
+        path
       end
 
-      Kernel.system("$EDITOR #{config}") || doctor
+      project_file = if options[:local]
+        path = Tmuxinator::Config::LOCAL_DEFAULT
+        generate_template.call(path) unless Tmuxinator::Config.local?
+        path
+      else
+        path = Tmuxinator::Config.default_project(name)
+        generate_template.call(path) unless Tmuxinator::Config.exists?(name)
+        path
+      end
+
+      Kernel.system("$EDITOR #{project_file}") || doctor
     end
 
     no_commands{
