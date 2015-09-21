@@ -2,17 +2,27 @@ require "spec_helper"
 
 describe Tmuxinator::Project do
   let(:project) { FactoryGirl.build(:project) }
-  let(:project_with_custom_name) { FactoryGirl.build(:project_with_custom_name) }
+  let(:project_with_custom_name) do
+    FactoryGirl.build(:project_with_custom_name)
+  end
   let(:project_with_number_as_name) do
     FactoryGirl.build(:project_with_number_as_name)
   end
-  let(:project_with_deprecations) { FactoryGirl.build(:project_with_deprecations) }
-  let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
-  let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
+  let(:project_with_deprecations) do
+    FactoryGirl.build(:project_with_deprecations)
+  end
+  let(:project_with_force_attach) do
+    FactoryGirl.build(:project_with_force_attach)
+  end
+  let(:project_with_force_detach) do
+    FactoryGirl.build(:project_with_force_detach)
+  end
 
   let(:wemux_project) { FactoryGirl.build(:wemux_project) }
   let(:noname_project) { FactoryGirl.build(:noname_project) }
-  let(:nameless_window_project) { FactoryGirl.build(:nameless_window_project) }
+  let(:nameless_window_project) do
+    FactoryGirl.build(:nameless_window_project)
+  end
 
   describe "#initialize" do
     context "valid yaml" do
@@ -72,7 +82,7 @@ describe Tmuxinator::Project do
 
     context "without root" do
       it "doesn't throw an error" do
-        expect{noname_project.root}.to_not raise_error
+        expect { noname_project.root }.to_not raise_error
       end
     end
   end
@@ -98,7 +108,7 @@ describe Tmuxinator::Project do
 
     context "without name" do
       it "displays error message" do
-        expect{noname_project.name}.to_not raise_error
+        expect { noname_project.name }.to_not raise_error
       end
     end
 
@@ -118,8 +128,9 @@ describe Tmuxinator::Project do
     context "with deprecations" do
       context "rbenv option is present" do
         before do
-          allow(project).to receive_messages(:rbenv? => true)
-          allow(project).to receive_message_chain(:yaml, :[]).and_return("2.0.0-p247")
+          allow(project).to receive_messages(rbenv?: true)
+          allow(project).to \
+            receive_message_chain(:yaml, :[]).and_return("2.0.0-p247")
         end
 
         it "still gets the correct pre_window command" do
@@ -129,8 +140,9 @@ describe Tmuxinator::Project do
 
       context "rvm option is present" do
         before do
-          allow(project).to receive_messages(:rbenv? => false)
-          allow(project).to receive_message_chain(:yaml, :[]).and_return("ruby-2.0.0-p247")
+          allow(project).to receive_messages(rbenv?: false)
+          allow(project).to \
+            receive_message_chain(:yaml, :[]).and_return("ruby-2.0.0-p247")
         end
 
         it "still gets the correct pre_window command" do
@@ -140,8 +152,8 @@ describe Tmuxinator::Project do
 
       context "pre_tab is present" do
         before do
-          allow(project).to receive_messages(:rbenv? => false)
-          allow(project).to receive_messages(:pre_tab? => true)
+          allow(project).to receive_messages(rbenv?: false)
+          allow(project).to receive_messages(pre_tab?: true)
         end
 
         it "still gets the correct pre_window command" do
@@ -154,7 +166,7 @@ describe Tmuxinator::Project do
   describe "#socket" do
     context "socket path is present" do
       before do
-        allow(project).to receive_messages(:socket_path => "/tmp")
+        allow(project).to receive_messages(socket_path: "/tmp")
       end
 
       it "gets the socket path" do
@@ -184,7 +196,7 @@ describe Tmuxinator::Project do
   describe "#tmux_options" do
     context "no tmux options" do
       before do
-        allow(project).to receive_messages(:tmux_options? => false)
+        allow(project).to receive_messages(tmux_options?: false)
       end
 
       it "returns nothing" do
@@ -194,18 +206,20 @@ describe Tmuxinator::Project do
 
     context "with deprecations" do
       before do
-        allow(project_with_deprecations).to receive_messages(:cli_args? => true)
+        allow(project_with_deprecations).to receive_messages(cli_args?: true)
       end
 
       it "still gets the tmux options" do
-        expect(project_with_deprecations.tmux_options).to eq " -f ~/.tmux.mac.conf"
+        expect(project_with_deprecations.tmux_options).to \
+          eq " -f ~/.tmux.mac.conf"
       end
     end
   end
 
   describe "#get_pane_base_index" do
     it "extracts the pane_base_index from tmux_options" do
-      allow(project).to receive_messages(show_tmux_options: tmux_config(pane_base_index: 3))
+      allow(project).to \
+        receive_messages(show_tmux_options: tmux_config(pane_base_index: 3))
 
       expect(project.get_pane_base_index).to eq("3")
     end
@@ -213,7 +227,8 @@ describe Tmuxinator::Project do
 
   describe "#get_base_index" do
     it "extracts the base index from options" do
-      allow(project).to receive_messages(show_tmux_options: tmux_config(base_index: 1))
+      allow(project).to \
+        receive_messages(show_tmux_options: tmux_config(base_index: 1))
 
       expect(project.get_base_index).to eq("1")
     end
@@ -222,8 +237,8 @@ describe Tmuxinator::Project do
   describe "#base_index" do
     context "pane base index present" do
       before do
-        allow(project).to receive_messages(:get_pane_base_index => "1")
-        allow(project).to receive_messages(:get_base_index => "1")
+        allow(project).to receive_messages(get_pane_base_index: "1")
+        allow(project).to receive_messages(get_base_index: "1")
       end
 
       it "gets the pane base index" do
@@ -233,8 +248,8 @@ describe Tmuxinator::Project do
 
     context "pane base index no present" do
       before do
-        allow(project).to receive_messages(:get_pane_base_index => nil)
-        allow(project).to receive_messages(:get_base_index => "0")
+        allow(project).to receive_messages(get_pane_base_index: nil)
+        allow(project).to receive_messages(get_base_index: "0")
       end
 
       it "gets the base index" do
@@ -248,15 +263,15 @@ describe Tmuxinator::Project do
       it "gets the startup window from project config" do
         project.yaml["startup_window"] = "logs"
 
-	expect(project.startup_window).to eq("logs")
+        expect(project.startup_window).to eq("logs")
       end
     end
 
     context "startup window not specified" do
       it "returns base index instead" do
-        allow(project).to receive_messages(:base_index => 8)
+        allow(project).to receive_messages(base_index: 8)
 
-	expect(project.startup_window).to eq 8
+        expect(project.startup_window).to eq 8
       end
     end
   end
@@ -300,7 +315,8 @@ describe Tmuxinator::Project do
 
     context "command for window is not empty" do
       it "returns the tmux command" do
-        expect(project.send_keys("vim", 1)).to eq "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 vim C-m"
+        expect(project.send_keys("vim", 1)).to \
+          eq "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 vim C-m"
       end
     end
   end
@@ -314,7 +330,8 @@ describe Tmuxinator::Project do
 
     context "command for pane is not empty" do
       it "returns the tmux command" do
-        expect(project.send_pane_command("vim", 1, 0)).to eq "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 vim C-m"
+        expect(project.send_pane_command("vim", 1, 0)).to \
+          eq "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 vim C-m"
       end
     end
   end
@@ -337,7 +354,11 @@ describe Tmuxinator::Project do
     let(:window) { project.windows.keep_if { |w| w.name == "shell" }.first }
 
     it "splits commands into an array" do
-      expect(window.commands).to eq(["tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ pull C-m", "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ merge C-m"])
+      commands = [
+        "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ pull C-m",
+        "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ merge C-m"
+      ]
+      expect(window.commands).to eq(commands)
     end
   end
 
@@ -353,12 +374,12 @@ describe Tmuxinator::Project do
     end
 
     context "pre in yaml is Array" do
-      before {
+      before do
         project.yaml["pre"] = [
           "mysql.server start",
           "memcached -d"
         ]
-      }
+      end
 
       it "joins array using ;" do
         expect(pre).to eq("mysql.server start; memcached -d")
@@ -367,7 +388,6 @@ describe Tmuxinator::Project do
   end
 
   describe "#attach?" do
-
     context "attach is true in yaml" do
       before { project.yaml["attach"] = true }
 
@@ -407,7 +427,10 @@ describe Tmuxinator::Project do
   end
 
   describe "tmux_new_session_command" do
-    let(:command) { "#{project.tmux} new-session -d -s #{ project.name } -n #{ project.windows.first.name }" }
+    let(:command) { "#{executable} new-session -d -s #{session} -n #{window}" }
+    let(:executable) { project.tmux }
+    let(:session) { project.name }
+    let(:window) { project.windows.first.name }
 
     context "when first window has a name" do
       it "returns command to start a new detatched session" do
@@ -417,7 +440,7 @@ describe Tmuxinator::Project do
 
     context "when first window is nameless" do
       let(:project) { nameless_window_project }
-      let(:command) { "#{project.tmux} new-session -d -s #{ project.name } " }
+      let(:command) { "#{project.tmux} new-session -d -s #{project.name} " }
 
       it "returns command to for new detatched session without a window name" do
         expect(project.tmux_new_session_command).to eq command
@@ -434,23 +457,29 @@ describe Tmuxinator::Project do
       name: "foo"
         subkey:
       Y
-      expect(File).to receive(:read).with(path){ bad_yaml }
-      expect{ self.described_class.load(path, options) }.to raise_error RuntimeError, %r{Failed.to.parse.config.file}
+      expect(File).to receive(:read).with(path) { bad_yaml }
+      expect do
+        described_class.load(path, options)
+      end.to raise_error RuntimeError, %r{Failed.to.parse.config.file}
     end
 
     it "should return an instance of the class if the file loads" do
-      expect(self.described_class.load(path, options)).to be_a Tmuxinator::Project
+      expect(described_class.load(path, options)).to be_a Tmuxinator::Project
     end
   end
 
   describe "#validate!" do
     it "should raise if there are no windows defined" do
-      nowindows_project =  FactoryGirl.build(:nowindows_project)
-      expect{ nowindows_project.validate! }.to raise_error RuntimeError, %r{should.include.some.windows}
+      nowindows_project = FactoryGirl.build(:nowindows_project)
+      expect do
+        nowindows_project.validate!
+      end.to raise_error RuntimeError, %r{should.include.some.windows}
     end
 
     it "should raise if there is not a project name" do
-      expect{ noname_project.validate! }.to raise_error RuntimeError, %r{didn't.specify.a.'project_name'}
+      expect do
+        noname_project.validate!
+      end.to raise_error RuntimeError, %r{didn't.specify.a.'project_name'}
     end
   end
 end

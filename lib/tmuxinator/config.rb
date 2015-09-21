@@ -4,8 +4,9 @@ module Tmuxinator
 
     class << self
       def root
-        Dir.mkdir("#{ENV["HOME"]}/.tmuxinator") unless File.directory?(File.expand_path("~/.tmuxinator"))
-        "#{ENV["HOME"]}/.tmuxinator"
+        root_dir = File.expand_path("~/.tmuxinator")
+        Dir.mkdir("#{ENV['HOME']}/.tmuxinator") unless File.directory?(root_dir)
+        "#{ENV['HOME']}/.tmuxinator"
       end
 
       def sample
@@ -13,7 +14,7 @@ module Tmuxinator
       end
 
       def default
-        "#{ENV["HOME"]}/.tmuxinator/default.yml"
+        "#{ENV['HOME']}/.tmuxinator/default.yml"
       end
 
       def default?
@@ -50,7 +51,7 @@ module Tmuxinator
       end
 
       def local?
-        self.project_in_local
+        project_in_local
       end
 
       def project_in_local
@@ -79,14 +80,19 @@ module Tmuxinator
         end
       end
 
-      def validate(name: nil, custom_name: nil, force_attach: false, force_detach: false)
+      def validate(name: nil, \
+                   custom_name: nil, \
+                   force_attach: false, \
+                   force_detach: false)
         project_file = if name.nil?
-          raise "Project file at ./.tmuxinator.yml doesn't exist." unless Tmuxinator::Config.local?
-          project_in_local
-        else
-          raise "Project #{name} doesn't exist." unless Tmuxinator::Config.exists?(name)
-          Tmuxinator::Config.project(name)
-        end
+                         raise "Project file at ./.tmuxinator.yml doesn't exist." \
+                           unless Tmuxinator::Config.local?
+                         project_in_local
+                       else
+                         raise "Project #{name} doesn't exist." \
+                           unless Tmuxinator::Config.exists?(name)
+                         Tmuxinator::Config.project(name)
+                       end
         options = {
           custom_name: custom_name,
           force_attach: force_attach,
@@ -97,9 +103,9 @@ module Tmuxinator
 
       private
 
-        def asset_path(asset)
-          "#{File.dirname(__FILE__)}/assets/#{asset}"
-        end
+      def asset_path(asset)
+        "#{File.dirname(__FILE__)}/assets/#{asset}"
+      end
     end
   end
 end

@@ -20,11 +20,11 @@ describe Tmuxinator::Cli do
   describe "#completions" do
     before do
       ARGV.replace(["completions", "start"])
-      allow(Tmuxinator::Config).to receive_messages(:configs => ["test.yml"])
+      allow(Tmuxinator::Config).to receive_messages(configs: ["test.yml"])
     end
 
     it "gets completions" do
-      out, _ = capture_io { cli.start }
+      out, _err = capture_io { cli.start }
       expect(out).to include("test.yml")
     end
   end
@@ -35,16 +35,29 @@ describe Tmuxinator::Cli do
     end
 
     it "lists the commands" do
-      out, _ = capture_io { cli.start }
-      expect(out).to eq "#{%w(commands completions new open start local debug copy delete implode version doctor list).join("\n")}\n"
+      out, _err = capture_io { cli.start }
+      expected = %w(commands
+                    completions
+                    new
+                    open
+                    start
+                    local
+                    debug
+                    copy
+                    delete
+                    implode
+                    version
+                    doctor
+                    list)
+      expect(out).to eq "#{expected.join("\n")}\n"
     end
   end
 
   describe "#start" do
     before do
       ARGV.replace(["start", "foo"])
-      allow(Tmuxinator::Config).to receive_messages(:validate => project)
-      allow(Tmuxinator::Config).to receive_messages(:version => 1.9)
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
@@ -59,13 +72,13 @@ describe Tmuxinator::Cli do
 
     context "deprecations" do
       before do
-        allow($stdin).to receive_messages(:getc => "y")
+        allow($stdin).to receive_messages(getc: "y")
       end
 
       let(:project) { FactoryGirl.build(:project_with_deprecations) }
 
       it "prints the deprecations" do
-        out, _ = capture_io { cli.start }
+        out, _err = capture_io { cli.start }
         expect(out).to include "DEPRECATION"
       end
     end
@@ -74,8 +87,8 @@ describe Tmuxinator::Cli do
   describe "#local" do
     shared_examples_for :local_project do
       before do
-        allow(Tmuxinator::Config).to receive_messages(:validate => project)
-        allow(Tmuxinator::Config).to receive_messages(:version => 1.9)
+        allow(Tmuxinator::Config).to receive_messages(validate: project)
+        allow(Tmuxinator::Config).to receive_messages(version: 1.9)
         allow(Kernel).to receive(:exec)
       end
 
@@ -107,8 +120,8 @@ describe Tmuxinator::Cli do
   describe "#start(custom_name)" do
     before do
       ARGV.replace(["start", "foo", "bar"])
-      allow(Tmuxinator::Config).to receive_messages(:validate => project)
-      allow(Tmuxinator::Config).to receive_messages(:version => 1.9)
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
@@ -137,7 +150,7 @@ describe Tmuxinator::Cli do
 
       context "existing project doesn't exist" do
         before do
-          expect(Tmuxinator::Config).to receive_messages(:exists? => false)
+          expect(Tmuxinator::Config).to receive_messages(exists?: false)
         end
 
         it "creates a new tmuxinator project file" do
@@ -147,12 +160,13 @@ describe Tmuxinator::Cli do
       end
 
       context "files exists" do
+        let(:command) { "#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml" }
         before do
-          expect(File).to receive_messages(:exists? => true)
+          expect(File).to receive_messages(exists?: true)
         end
 
         it "just opens the file" do
-          expect(Kernel).to receive(:system).with(%r{#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml})
+          expect(Kernel).to receive(:system).with(%r{#{command}})
           capture_io { cli.start }
         end
       end
@@ -165,7 +179,7 @@ describe Tmuxinator::Cli do
 
       context "existing project doesn't exist" do
         before do
-          expect(Tmuxinator::Config).to receive_messages(:local? => false)
+          expect(File).to receive(:exists?).at_least(:once) { false }
         end
 
         it "creates a new tmuxinator project file" do
@@ -175,12 +189,13 @@ describe Tmuxinator::Cli do
       end
 
       context "files exists" do
+        let(:path) { Tmuxinator::Config::LOCAL_DEFAULT }
         before do
-          expect(File).to receive(:exists?).with(Tmuxinator::Config::LOCAL_DEFAULT){ true }
+          expect(File).to receive(:exists?).with(path) { true }
         end
 
         it "just opens the file" do
-          expect(Kernel).to receive(:system).with(%r{#{Tmuxinator::Config::LOCAL_DEFAULT}})
+          expect(Kernel).to receive(:system).with(%r{#{path}})
           capture_io { cli.start }
         end
       end
@@ -195,7 +210,7 @@ describe Tmuxinator::Cli do
 
     context "new project already exists" do
       before do
-        allow(Thor::LineEditor).to receive_messages(:readline => "y")
+        allow(Thor::LineEditor).to receive_messages(readline: "y")
       end
 
       it "prompts user to confirm overwrite" do
@@ -217,11 +232,15 @@ describe Tmuxinator::Cli do
 
   describe "#debug" do
     let(:project) { FactoryGirl.build(:project) }
-    let(:project_with_force_attach) { FactoryGirl.build(:project_with_force_attach) }
-    let(:project_with_force_detach) { FactoryGirl.build(:project_with_force_detach) }
+    let(:project_with_force_attach) do
+      FactoryGirl.build(:project_with_force_attach)
+    end
+    let(:project_with_force_detach) do
+      FactoryGirl.build(:project_with_force_detach)
+    end
 
     before do
-      allow(Tmuxinator::Config).to receive_messages(:validate => project)
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
       expect(project).to receive(:render)
     end
 
@@ -232,16 +251,17 @@ describe Tmuxinator::Cli do
 
     it "force attach renders the project with attach code" do
       ARGV.replace(["debug", "--attach=true", "sample"])
-      out, _ = capture_io { cli.start }
-      # Currently no project is rendered at all, because the project file is not found
-      #expect(out).to include "attach-session"
+      capture_io { cli.start }
+      # Currently no project is rendered at all,
+      #   because the project file is not found
+      # expect(out).to include "attach-session"
     end
 
     it "force detach renders the project without attach code" do
       ARGV.replace(["debug", "--attach=false", "sample"])
-      out, _ = capture_io { cli.start }
+      capture_io { cli.start }
       # Currently no project is rendered at all
-      #expect(out).to_not include "attach-session"
+      # expect(out).to_not include "attach-session"
     end
 
     it "renders the project with custom session" do
@@ -253,7 +273,7 @@ describe Tmuxinator::Cli do
   describe "#delete" do
     before do
       ARGV.replace(["delete", "foo"])
-      allow(Thor::LineEditor).to receive_messages(:readline => "y")
+      allow(Thor::LineEditor).to receive_messages(readline: "y")
     end
 
     context "project exists" do
@@ -270,7 +290,7 @@ describe Tmuxinator::Cli do
     context "project doesn't exist" do
       before do
         allow(Tmuxinator::Config).to receive(:exists?) { false }
-        allow(Thor::LineEditor).to receive_messages(:readline => "y")
+        allow(Thor::LineEditor).to receive_messages(readline: "y")
       end
 
       it "exits with error message" do
@@ -282,7 +302,7 @@ describe Tmuxinator::Cli do
   describe "#implode" do
     before do
       ARGV.replace(["implode"])
-      allow(Thor::LineEditor).to receive_messages(:readline => "y")
+      allow(Thor::LineEditor).to receive_messages(readline: "y")
     end
 
     it "confirms deletion of all projects" do
@@ -313,7 +333,7 @@ describe Tmuxinator::Cli do
     end
 
     it "prints the current version" do
-      out, _ = capture_io { cli.start }
+      out, _err = capture_io { cli.start }
       expect(out).to eq "tmuxinator #{Tmuxinator::VERSION}\n"
     end
   end
@@ -345,23 +365,19 @@ describe Tmuxinator::Cli do
     let(:path) { File.expand_path("../../../fixtures", __FILE__) }
 
     context "when creating a traditional named project" do
-      subject { self.described_class.new.create_project(name: name, custom_name: custom_name) }
+      let(:params) do
+        {
+          name: name,
+          custom_name: custom_name
+        }
+      end
+      subject { described_class.new.create_project(**params) }
 
       before do
-        allow(Tmuxinator::Config).to receive_messages(:root => path)
+        allow(Tmuxinator::Config).to receive_messages(root: path)
       end
 
       it_should_behave_like :a_proper_project
     end
-
-    # context "when creating a local project" do
-    #   subject { self.described_class.new.create_project(custom_name: custom_name) }
-
-    #   before do
-    #     allow(Tmuxinator::Config).to receive_messages(:root => path)
-    #   end
-
-    #   it_should_behave_like :a_proper_project
-    # end
   end
 end
