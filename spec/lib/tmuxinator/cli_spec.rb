@@ -371,7 +371,7 @@ describe Tmuxinator::Cli do
           custom_name: custom_name
         }
       end
-      subject { described_class.new.create_project(**params) }
+      subject { described_class.new.create_project(params) }
 
       before do
         allow(Tmuxinator::Config).to receive_messages(root: path)

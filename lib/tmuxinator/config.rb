@@ -1,6 +1,7 @@
 module Tmuxinator
   class Config
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
+    NO_LOCAL_FILE_MSG = "Project file at ./.tmuxinator.yml doesn't exist."
 
     class << self
       def root
@@ -80,12 +81,13 @@ module Tmuxinator
         end
       end
 
-      def validate(name: nil, \
-                   custom_name: nil, \
-                   force_attach: false, \
-                   force_detach: false)
+      def validate(options = {})
+        name = options[:name]
+        options[:force_attach] ||= false
+        options[:force_detach] ||= false
+
         project_file = if name.nil?
-                         raise "Project file at ./.tmuxinator.yml doesn't exist." \
+                         raise NO_LOCAL_FILE_MSG \
                            unless Tmuxinator::Config.local?
                          project_in_local
                        else
@@ -93,11 +95,6 @@ module Tmuxinator
                            unless Tmuxinator::Config.exists?(name)
                          Tmuxinator::Config.project(name)
                        end
-        options = {
-          custom_name: custom_name,
-          force_attach: force_attach,
-          force_detach: force_detach
-        }
         Tmuxinator::Project.load(project_file, options).validate!
       end
 

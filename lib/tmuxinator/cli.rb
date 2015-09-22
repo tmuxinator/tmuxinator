@@ -77,29 +77,23 @@ module Tmuxinator
     end
 
     no_commands do
-      def create_project(name: nil, custom_name: nil, **cli_options)
+      def create_project(project_options = {})
+        attach_opt = project_options[:attach]
+        attach = !attach_opt.nil? && attach_opt ? true : false
+        detach = !attach_opt.nil? && !attach_opt ? true : false
+
         options = {
-          force_attach: false,
-          force_detach: false
+          force_attach: attach,
+          force_detach: detach,
+          name: project_options[:name],
+          custom_name: project_options[:custom_name]
         }
 
-        cli_attach = cli_options[:attach]
-        if !cli_attach.nil?
-          if cli_attach
-            options[:force_attach] = true
-          else
-            options[:force_detach] = true
-          end
-        end
-
-        options[:custom_name] = custom_name
-
-        project = begin
-          Tmuxinator::Config.validate(name: name, **options)
+        begin
+          Tmuxinator::Config.validate(options)
         rescue => e
           exit! e.message
         end
-        project
       end
 
       def render_project(project)
@@ -126,7 +120,7 @@ module Tmuxinator
         custom_name: custom_name,
         attach: options[:attach]
       }
-      project = create_project(**params)
+      project = create_project(params)
       render_project(project)
     end
 
@@ -148,7 +142,7 @@ module Tmuxinator
         custom_name: custom_name,
         attach: options[:attach]
       }
-      project = create_project(**params)
+      project = create_project(params)
       puts project.render
     end
 
