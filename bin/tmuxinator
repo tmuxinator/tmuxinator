@@ -4,7 +4,13 @@ $: << File.expand_path("../../lib/", __FILE__)
 require "thor"
 require "tmuxinator"
 
-if ARGV.length == 1
+if ARGV.length == 0
+  if Tmuxinator::Config.local?
+    Tmuxinator::Cli.new.local
+  else
+    Tmuxinator::Cli.start
+  end
+elsif ARGV.length == 1
   name = ARGV[0]
 
   if Tmuxinator::Cli::COMMANDS.keys.include?(name.to_sym)
