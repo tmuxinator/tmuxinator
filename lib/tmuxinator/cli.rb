@@ -66,7 +66,7 @@ module Tmuxinator
                      else
                        Tmuxinator::Config.default_project(name)
                      end
-      unless File.exists?(project_file)
+      unless Tmuxinator::Config.exists?(project_file)
         template = Tmuxinator::Config.default? ? :default : :sample
         content = File.read(Tmuxinator::Config.send(template.to_sym))
         erb = Erubis::Eruby.new(content).result(binding)

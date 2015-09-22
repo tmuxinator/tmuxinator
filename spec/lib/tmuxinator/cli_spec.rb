@@ -161,8 +161,9 @@ describe Tmuxinator::Cli do
 
       context "files exists" do
         let(:command) { "#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml" }
+
         before do
-          expect(File).to receive_messages(exists?: true)
+          expect(Tmuxinator::Config).to receive_messages(exists?: true)
         end
 
         it "just opens the file" do
@@ -179,7 +180,7 @@ describe Tmuxinator::Cli do
 
       context "existing project doesn't exist" do
         before do
-          expect(File).to receive(:exists?).at_least(:once) { false }
+          expect(Tmuxinator::Config).to receive(:exists?).at_least(:once) { false }
         end
 
         it "creates a new tmuxinator project file" do
@@ -191,7 +192,7 @@ describe Tmuxinator::Cli do
       context "files exists" do
         let(:path) { Tmuxinator::Config::LOCAL_DEFAULT }
         before do
-          expect(File).to receive(:exists?).with(path) { true }
+          expect(Tmuxinator::Config).to receive(:exists?).with(path) { true }
         end
 
         it "just opens the file" do
