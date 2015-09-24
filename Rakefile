@@ -1,4 +1,7 @@
 require "bundler/gem_tasks"
+require "rubocop/rake_task"
+
+RuboCop::RakeTask.new
 
 namespace :hound do
   BASE_CMD = "git diff --no-commit-id --name-only -r master | grep rb"
