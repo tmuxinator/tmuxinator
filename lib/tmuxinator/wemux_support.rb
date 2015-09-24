@@ -5,17 +5,17 @@ module Tmuxinator
     end
 
     def load_wemux_overrides
-      self.instance_eval do
-        def render
+      class_eval do
+        define_method :render do
           template = File.read(Tmuxinator::Config.wemux_template)
           Erubis::Eruby.new(template).result(binding)
         end
 
-        def name
+        define_method :name do
           "wemux"
         end
 
-        def tmux
+        define_method :tmux do
           "wemux"
         end
       end

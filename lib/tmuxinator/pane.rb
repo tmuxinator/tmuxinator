@@ -10,27 +10,43 @@ module Tmuxinator
     end
 
     def tmux_window_and_pane_target
-      "#{project.name}:#{tab.index + project.base_index}.#{index + project.base_index}"
+      x = tab.index + project.base_index
+      y = index + project.base_index
+      "#{project.name}:#{x}.#{y}"
     end
 
     def tmux_pre_command
       return unless tab.pre
 
-      "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{tab.pre.shellescape} C-m"
+      t = tmux_window_and_pane_target
+      e = tab.pre.shellescape
+      "#{project.tmux} send-keys -t #{t} #{e} C-m"
     end
 
     def tmux_pre_window_command
       return unless project.pre_window
 
-      "#{project.tmux} send-keys -t #{tmux_window_and_pane_target} #{project.pre_window.shellescape} C-m"
+      t = tmux_window_and_pane_target
+      e = project.pre_window.shellescape
+      "#{project.tmux} send-keys -t #{t} #{e} C-m"
     end
 
     def tmux_main_command(command)
-      command ? "#{project.tmux} send-keys -t #{project.name}:#{tab.index + project.base_index}.#{index + tab.project.base_index} #{command.shellescape} C-m" : ""
+      if command
+        x = tab.index + project.base_index
+        y = index + tab.project.base_index
+        e = command.shellescape
+        n = project.name
+        "#{project.tmux} send-keys -t #{n}:#{x}.#{y} #{e} C-m"
+      else
+        ""
+      end
     end
 
     def tmux_split_command
-      path = tab.root? ? "#{Tmuxinator::Config.default_path_option} #{tab.root}" : nil
+      path = if tab.root?
+               "#{Tmuxinator::Config.default_path_option} #{tab.root}"
+             end
       "#{project.tmux} splitw #{path} -t #{tab.tmux_window_target}"
     end
 
