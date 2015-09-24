@@ -506,6 +506,8 @@ Metrics/LineLength:
   URISchemes:
   - http
   - https
+  Exclude:
+    - lib/tmuxinator/window.rb
 Metrics/MethodLength:
   Description: Avoid methods longer than 10 lines of code.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#short-methods

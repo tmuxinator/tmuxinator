@@ -7,7 +7,10 @@ describe Tmuxinator::Window do
   let(:yaml) do
     {
       window_name => {
-        "pre" => ["echo 'I get run in each pane.  Before each pane command!'", nil],
+        "pre" => [
+          "echo 'I get run in each pane.  Before each pane command!'",
+          nil
+        ],
         "layout" => "main-vertical",
         "panes" => panes
       }
@@ -18,7 +21,10 @@ describe Tmuxinator::Window do
       "editor" => {
         "root" => "/project/override",
         "root?" => true,
-        "pre" => ["echo 'I get run in each pane.  Before each pane command!'", nil],
+        "pre" => [
+          "echo 'I get run in each pane.  Before each pane command!'",
+          nil
+        ],
         "layout" => "main-vertical",
         "panes" => panes
       }
@@ -30,12 +36,12 @@ describe Tmuxinator::Window do
 
   before do
     allow(project).to receive_messages(
-       :tmux => "tmux",
-       :name => "test",
-       :base_index => 1,
-       :root => "/project/tmuxinator",
-       :root? => true
-     )
+      tmux: "tmux",
+      name: "test",
+      base_index: 1,
+      root: "/project/tmuxinator",
+      root?: true
+    )
   end
 
   describe "#initialize" do
@@ -62,7 +68,7 @@ describe Tmuxinator::Window do
     let(:pane) { double(:pane) }
 
     before do
-      allow(Tmuxinator::Pane).to receive_messages :new => pane
+      allow(Tmuxinator::Pane).to receive_messages new: pane
     end
 
     context "with a three element Array" do
@@ -134,7 +140,10 @@ describe Tmuxinator::Window do
       end
 
       it "returns the flattened command" do
-        expect(window.commands).to eq ["tmux send-keys -t test:1 git\\ fetch C-m", "tmux send-keys -t test:1 git\\ status C-m"]
+        expect(window.commands).to eq [
+          "tmux send-keys -t test:1 git\\ fetch C-m",
+          "tmux send-keys -t test:1 git\\ status C-m"
+        ]
       end
     end
 
@@ -185,11 +194,11 @@ describe Tmuxinator::Window do
 
     before do
       allow(project).to receive_messages(
-        :name => "test",
-        :tmux => "tmux",
-        :root => root,
-        :root? => root?,
-        :base_index => 1
+        name: "test",
+        tmux: "tmux",
+        root: root,
+        root?: root?,
+        base_index: 1
       )
     end
 
@@ -200,7 +209,9 @@ describe Tmuxinator::Window do
     let(:path_part) { "#{path_option} #{project.root}" }
 
     let(:path_option) { "-c" }
-    let(:full_command) { "#{tmux_part} #{window_part} #{path_part} #{target_part} #{name_part}" }
+    let(:full_command) do
+      "#{tmux_part} #{window_part} #{path_part} #{target_part} #{name_part}"
+    end
 
     before do
       allow(Tmuxinator::Config).to receive(:default_path_option) { path_option }
@@ -223,7 +234,9 @@ describe Tmuxinator::Window do
 
     context "name not set" do
       let(:window_name) { nil }
-      let(:full_command) { "#{tmux_part} #{window_part} #{path_part} #{target_part} " }
+      let(:full_command) do
+        "#{tmux_part} #{window_part} #{path_part} #{target_part} "
+      end
 
       it "does not set name option" do
         expect(window.tmux_new_window_command).to eq full_command

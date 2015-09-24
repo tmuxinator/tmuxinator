@@ -5,7 +5,9 @@ module Tmuxinator
     attr_reader :name, :root, :panes, :layout, :commands, :index, :project
 
     def initialize(window_yaml, index, project)
-      @name = !window_yaml.keys.first.nil? ? window_yaml.keys.first.shellescape : nil
+      @name = if !window_yaml.keys.first.nil?
+                window_yaml.keys.first.shellescape
+              end
       @root = nil
       @panes = []
       @layout = nil
@@ -18,7 +20,11 @@ module Tmuxinator
       if value.is_a?(Hash)
         @layout = value["layout"] ? value["layout"].shellescape : nil
         @pre = value["pre"] if value["pre"]
-        @root = value["root"] ? File.expand_path(value["root"]).shellescape : project.root? ? project.root : nil
+        @root = if value["root"]
+                  File.expand_path(value["root"]).shellescape
+                elsif project.root?
+                  project.root
+                end
 
         @panes = build_panes(value["panes"])
       else
@@ -29,7 +35,7 @@ module Tmuxinator
     def build_panes(panes_yml)
       Array(panes_yml).map.with_index do |pane_yml, index|
         if pane_yml.is_a?(Hash)
-          pane_yml.map do |name, commands|
+          pane_yml.map do |_name, commands|
             Tmuxinator::Pane.new(index, project, self, *commands)
           end
         else
@@ -38,7 +44,7 @@ module Tmuxinator
       end.flatten
     end
 
-    def build_commands(prefix, command_yml)
+    def build_commands(_prefix, command_yml)
       if command_yml.is_a?(Array)
         command_yml.map do |command|
           "#{tmux_window_command_prefix} #{command.shellescape} C-m" if command

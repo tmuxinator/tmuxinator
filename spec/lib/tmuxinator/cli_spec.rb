@@ -180,7 +180,9 @@ describe Tmuxinator::Cli do
 
       context "existing project doesn't exist" do
         before do
-          expect(Tmuxinator::Config).to receive(:exists?).at_least(:once) { false }
+          expect(Tmuxinator::Config).to receive(:exists?).at_least(:once) do
+            false
+          end
         end
 
         it "creates a new tmuxinator project file" do
