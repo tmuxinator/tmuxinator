@@ -468,6 +468,19 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "::parse_settings" do
+    let(:args) { ["one", "two=three"] }
+
+    it "returns settings in a hash" do
+      expect(described_class.parse_settings(args)["two"]).to eq("three")
+    end
+
+    it "removes settings from args" do
+      described_class.parse_settings(args)
+      expect(args).to eq(["one"])
+    end
+  end
+
   describe "#validate!" do
     it "should raise if there are no windows defined" do
       nowindows_project = FactoryGirl.build(:nowindows_project)

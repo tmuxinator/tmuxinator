@@ -86,7 +86,8 @@ module Tmuxinator
           force_attach: attach,
           force_detach: detach,
           name: project_options[:name],
-          custom_name: project_options[:custom_name]
+          custom_name: project_options[:custom_name],
+          args: project_options[:args]
         }
 
         begin
@@ -108,17 +109,20 @@ module Tmuxinator
       end
     end
 
-    desc "start [PROJECT] [SESSION_NAME]", COMMANDS[:start]
+    desc "start [PROJECT] [ARGS]", COMMANDS[:start]
     map "s" => :start
     method_option :attach, type: :boolean,
                            aliases: "-a",
                            desc: "Attach to tmux session after creation."
+    method_option :name, aliases: "-n",
+                         desc: "Give the session a different name"
 
-    def start(name, custom_name = nil)
+    def start(name, *args)
       params = {
         name: name,
-        custom_name: custom_name,
-        attach: options[:attach]
+        custom_name: options[:name],
+        attach: options[:attach],
+        args: args
       }
       project = create_project(params)
       render_project(project)
@@ -134,13 +138,16 @@ module Tmuxinator
     method_option :attach, type: :boolean,
                            aliases: "-a",
                            desc: "Attach to tmux session after creation."
-    desc "debug [PROJECT] [SESSION_NAME]", COMMANDS[:debug]
+    method_option :name, aliases: "-n",
+                         desc: "Give the session a different name"
+    desc "debug [PROJECT] [ARGS]", COMMANDS[:debug]
 
-    def debug(name, custom_name = nil)
+    def debug(name, *args)
       params = {
         name: name,
-        custom_name: custom_name,
-        attach: options[:attach]
+        custom_name: options[:name],
+        attach: options[:attach],
+        args: args
       }
       project = create_project(params)
       puts project.render

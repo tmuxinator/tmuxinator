@@ -223,6 +223,38 @@ Project files support [ERB](https://en.wikipedia.org/wiki/ERuby#erb) for reusabi
 root: <%= ENV["MY_CUSTOM_DIR"] %>
 ```
 
+You can also pass arguments to your projects, and access them with ERB. Simple arguments are available in an array named `@args`.
+
+Eg:
+```bash
+$ tmuxinator start project foo
+```
+
+```yaml
+# ~/.tmuxinator/project.yml
+
+name: project
+root: ~/<%= @args[0] %>
+
+...
+```
+
+You can also pass key-value pairs using the format `key=value`. These will be available in a hash named `@settings`.
+
+Eg:
+```bash
+$ tmuxinator start project workspace=~/workspace/todo
+```
+
+```yaml
+# ~/.tmuxinator/project.yml
+
+name: project
+root: ~/<%= @settings["workspace"] %>
+
+...
+```
+
 ## Starting a session
 
 This will fire up tmux with all the tabs and panes you configured.

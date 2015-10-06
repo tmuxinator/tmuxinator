@@ -25,6 +25,11 @@ module Tmuxinator
     def self.load(path, options = {})
       yaml = begin
         raw_content = File.read(path)
+
+        args = options[:args] || []
+        @settings = parse_settings(args)
+        @args = args
+
         content = Erubis::Eruby.new(raw_content).result(binding)
         YAML.load(content)
       rescue SyntaxError, StandardError
@@ -32,6 +37,18 @@ module Tmuxinator
       end
 
       new(yaml, options)
+    end
+
+    def self.parse_settings(args)
+      settings = args.select { |x| x.match(/.*=.*/) }
+      args.reject! { |x| x.match(/.*=.*/) }
+
+      settings.map! do |setting|
+        parts = setting.split("=")
+        [parts[0], parts[1]]
+      end
+
+      Hash[settings]
     end
 
     def validate!
