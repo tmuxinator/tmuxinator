@@ -178,7 +178,7 @@ These command(s) will run before any subsequent commands in all panes and window
 
 ## Custom attachment and post commands
 
-You can set tmuxiniator to skip auto-attaching to the session by using the `attach` option.
+You can set tmuxinator to skip auto-attaching to the session by using the `attach` option.
 
 ```yaml
 attach: false
