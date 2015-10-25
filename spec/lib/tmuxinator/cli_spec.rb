@@ -68,6 +68,20 @@ describe Tmuxinator::Cli do
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
       end
+
+      it "accepts a flag for alternate name" do
+        ARGV.replace(["start", "foo" "--name=bar"])
+
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+
+      it "accepts additional arguments" do
+        ARGV.replace(["start", "foo", "bar", "three=four"])
+
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
     end
 
     context "deprecations" do
