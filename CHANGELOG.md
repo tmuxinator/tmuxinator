@@ -1,3 +1,22 @@
+## 0.7.0
+### New features
+
+- Add support for starting in detached mode #307
+- Support windows without names #292, #323
+- Add per project `.tmuxinator.yml` support #335 :sparkles:
+- Support passing args on the command line #343 :tada:
+
+### Bug fixes and Misc
+- Fix some RSpec deprecations
+- Explain what EBR is in the readme #319
+- Prevent project names containing only numbers from raising a NoMethodError #324
+- Fix YAML syntax highlighting in readme #325
+- Add `asset_path` helper #326
+- Switch to just plain Rubocop instead of hound #339
+- Fix typo in readme #346
+- Fix thor not returning correct exit status #192
+- Add gitter badge
+
 ## 0.6.11
 - Add aliasing of projects to create multiple sessions for a single project #143, #273
 - ERB support for projects #267
