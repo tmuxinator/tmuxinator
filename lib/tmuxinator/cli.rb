@@ -1,5 +1,11 @@
 module Tmuxinator
   class Cli < Thor
+    # By default, Thor returns exit(0) when an error occurs.
+    # Please see: https://github.com/tmuxinator/tmuxinator/issues/192
+    def self.exit_on_failure?
+      true
+    end
+
     include Tmuxinator::Util
 
     COMMANDS = {

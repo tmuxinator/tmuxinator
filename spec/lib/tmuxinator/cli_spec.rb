@@ -397,4 +397,16 @@ describe Tmuxinator::Cli do
       it_should_behave_like :a_proper_project
     end
   end
+
+  context "exit status" do
+    before do
+      ARGV.replace(["non-existent-command"])
+    end
+
+    it "returns a non-zero status when an error occurs" do
+      expect { capture_io { cli.start } }.to raise_error(SystemExit) do |e|
+        expect(e.status).to eq 1
+      end
+    end
+  end
 end
