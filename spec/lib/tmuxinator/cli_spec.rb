@@ -288,30 +288,76 @@ describe Tmuxinator::Cli do
   end
 
   describe "#delete" do
-    before do
-      ARGV.replace(["delete", "foo"])
-      allow(Thor::LineEditor).to receive_messages(readline: "y")
-    end
-
-    context "project exists" do
+    context "with a single argument" do
       before do
-        allow(Tmuxinator::Config).to receive(:exists?) { true }
-      end
-
-      it "deletes the project" do
-        expect(FileUtils).to receive(:rm)
-        capture_io { cli.start }
-      end
-    end
-
-    context "project doesn't exist" do
-      before do
-        allow(Tmuxinator::Config).to receive(:exists?) { false }
+        ARGV.replace(["delete", "foo"])
         allow(Thor::LineEditor).to receive_messages(readline: "y")
       end
 
-      it "exits with error message" do
-        expect { capture_io { cli.start } }.to raise_error SystemExit
+      context "project exists" do
+        before do
+          allow(Tmuxinator::Config).to receive(:exists?) { true }
+        end
+
+        it "deletes the project" do
+          expect(FileUtils).to receive(:rm)
+          capture_io { cli.start }
+        end
+      end
+
+      context "project doesn't exist" do
+        before do
+          allow(Tmuxinator::Config).to receive(:exists?) { false }
+        end
+
+        it "outputs an error message" do
+          expect(capture_io { cli.start }[0]).to match(/foo does not exist!/)
+        end
+      end
+    end
+
+    context "with multiple arguments" do
+      before do
+        ARGV.replace(["delete", "foo", "bar"])
+        allow(Thor::LineEditor).to receive_messages(readline: "y")
+      end
+
+      context "all projects exist" do
+        before do
+          allow(Tmuxinator::Config).to receive(:exists?).and_return(true)
+        end
+
+        it "deletes the projects" do
+          expect(FileUtils).to receive(:rm).exactly(2).times
+          capture_io { cli.start }
+        end
+      end
+
+      context "only one project exists" do
+        before do
+          allow(Tmuxinator::Config).to receive(:exists?).with("foo") { true }
+          allow(Tmuxinator::Config).to receive(:exists?).with("bar") { false }
+        end
+
+        it "deletes one project" do
+          expect(FileUtils).to receive(:rm)
+          capture_io { cli.start }
+        end
+
+        it "outputs an error message" do
+          expect(capture_io { cli.start }[0]).to match(/bar does not exist!/)
+        end
+      end
+
+      context "all projects do not exist" do
+        before do
+          allow(Tmuxinator::Config).to receive(:exists?).and_return(false)
+        end
+
+        it "outputs multiple error messages" do
+          expect(capture_io { cli.start }[0]).
+            to match(/foo does not exist!\nbar does not exist!/)
+        end
       end
     end
   end

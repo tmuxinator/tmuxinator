@@ -180,20 +180,22 @@ module Tmuxinator
       Kernel.system("$EDITOR #{new_config_path}")
     end
 
-    desc "delete [PROJECT]", COMMANDS[:delete]
+    desc "delete [PROJECT1] [PROJECT2] ...", COMMANDS[:delete]
     map "d" => :delete
     map "rm" => :delete
 
-    def delete(project)
-      if Tmuxinator::Config.exists?(project)
-        config = "#{Tmuxinator::Config.root}/#{project}.yml"
+    def delete(*projects)
+      projects.each do |project|
+        if Tmuxinator::Config.exists?(project)
+          config = "#{Tmuxinator::Config.root}/#{project}.yml"
 
-        if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
-          FileUtils.rm(config)
-          say "Deleted #{project}"
+          if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
+            FileUtils.rm(config)
+            say "Deleted #{project}"
+          end
+        else
+          puts "#{project} does not exist!"
         end
-      else
-        exit!("That file doesn't exist.")
       end
     end
 
