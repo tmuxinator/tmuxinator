@@ -67,16 +67,6 @@ module Tmuxinator
                           desc: "Create local project file at ./.tmuxinator.yml"
 
     def new(name)
-      # path = if options[:local]
-      #          Tmuxinator::Config::LOCAL_DEFAULT
-      #        else
-      #          Tmuxinator::Config.default_project(name)
-      #        end
-      # project_file = unless Tmuxinator::Config.exists?(path)
-      #                  generate_project_file(name, path)
-      #                else
-      #                  path
-      #                end
       project_file = find_project_file(name, options[:local])
       Kernel.system("$EDITOR #{project_file}") || doctor
     end
@@ -88,7 +78,7 @@ module Tmuxinator
                else
                  Tmuxinator::Config.default_project(name)
                end
-        unless Tmuxinator::Config.exists?(path)
+        unless File.exists?(path)
           generate_project_file(name, path)
         else
           path
