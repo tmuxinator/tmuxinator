@@ -67,22 +67,42 @@ module Tmuxinator
                           desc: "Create local project file at ./.tmuxinator.yml"
 
     def new(name)
-      project_file = if options[:local]
-                       Tmuxinator::Config::LOCAL_DEFAULT
-                     else
-                       Tmuxinator::Config.default_project(name)
-                     end
-      unless Tmuxinator::Config.exists?(project_file)
-        template = Tmuxinator::Config.default? ? :default : :sample
-        content = File.read(Tmuxinator::Config.send(template.to_sym))
-        erb = Erubis::Eruby.new(content).result(binding)
-        File.open(project_file, "w") { |f| f.write(erb) }
-      end
-
+      # path = if options[:local]
+      #          Tmuxinator::Config::LOCAL_DEFAULT
+      #        else
+      #          Tmuxinator::Config.default_project(name)
+      #        end
+      # project_file = unless Tmuxinator::Config.exists?(path)
+      #                  generate_project_file(name, path)
+      #                else
+      #                  path
+      #                end
+      project_file = find_project_file(name, options[:local])
       Kernel.system("$EDITOR #{project_file}") || doctor
     end
 
     no_commands do
+      def find_project_file(name, local=false)
+        path = if local
+                 Tmuxinator::Config::LOCAL_DEFAULT
+               else
+                 Tmuxinator::Config.default_project(name)
+               end
+        unless Tmuxinator::Config.exists?(path)
+          generate_project_file(name, path)
+        else
+          path
+        end
+      end
+
+      def generate_project_file(name, path)
+        template = Tmuxinator::Config.default? ? :default : :sample
+        content = File.read(Tmuxinator::Config.send(template.to_sym))
+        erb = Erubis::Eruby.new(content).result(binding)
+        File.open(path, "w") { |f| f.write(erb) }
+        path
+      end
+
       def create_project(project_options = {})
         attach_opt = project_options[:attach]
         attach = !attach_opt.nil? && attach_opt ? true : false
