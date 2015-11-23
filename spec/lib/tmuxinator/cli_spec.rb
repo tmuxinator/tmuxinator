@@ -154,18 +154,32 @@ describe Tmuxinator::Cli do
     let(:name) { "test" }
     let(:path) { Tmuxinator::Config.default_project(name) }
 
-    before do
-      # File.rm(path) if File.exists?(path)
-      # template_content = File.read(Tmuxinator::Config.send(:asset_path, "sample.yml"))
-      # File.open(path, "w") do |f|
+    context "when the project file _does_ already exist" do
+      let(:extra) { "  - extra: echo 'foobar'" }
 
-      # end
-      # ARGV.replace ["edit", name]
-    end
+      before do
+        # make sure that no project file exists initially
+        FileUtils.remove_file(path) if File.exists?(path)
+        expect(File).not_to exist(path)
 
-    context "when the project file exists" do
-      it "should use the existing project file" do
-        # capture_io { cli.start }
+        # now generate a project file
+        expect(Tmuxinator::Cli.new.generate_project_file(name, path)).to eq path
+        expect(File).to exist path
+
+        # add some content to the project file
+        File.open(path, "w") do |f|
+          f.write(extra)
+          f.flush
+        end
+        expect(File.read(path)).to match %r{#{extra}}
+
+        # get ready to run `tmuxinator edit #{name}`
+        ARGV.replace ["edit", name]
+      end
+
+      it "should _not_ generate a new project file" do
+        capture_io { cli.start }
+        expect(File.read(path)).to match %r{#{extra}}
       end
     end
   end
