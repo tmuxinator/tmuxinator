@@ -72,16 +72,16 @@ module Tmuxinator
     end
 
     no_commands do
-      def find_project_file(name, local=false)
+      def find_project_file(name, local = false)
         path = if local
                  Tmuxinator::Config::LOCAL_DEFAULT
                else
                  Tmuxinator::Config.default_project(name)
                end
-        unless File.exists?(path)
-          generate_project_file(name, path)
-        else
+        if File.exists?(path)
           path
+        else
+          generate_project_file(name, path)
         end
       end
 
