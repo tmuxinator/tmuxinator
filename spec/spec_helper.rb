@@ -2,10 +2,11 @@ require "coveralls"
 require "simplecov"
 require "pry"
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+formatters = [
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start do
   add_filter "vendor/cache"
 end

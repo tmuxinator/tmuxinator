@@ -5,7 +5,7 @@ gemspec
 
 gem "rake", "~> 10.4"
 gem "rspec", "~> 3.3"
-gem "simplecov", "~> 0.9"
+gem "simplecov", "~> 0.11.0"
 gem "coveralls", "~> 0.7"
 gem "awesome_print", "~> 1.2"
 gem "pry", "~> 0.10"
