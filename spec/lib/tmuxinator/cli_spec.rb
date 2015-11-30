@@ -149,6 +149,41 @@ describe Tmuxinator::Cli do
     end
   end
 
+  describe "#edit" do
+    let(:file) { StringIO.new }
+    let(:name) { "test" }
+    let(:path) { Tmuxinator::Config.default_project(name) }
+
+    context "when the project file _does_ already exist" do
+      let(:extra) { "  - extra: echo 'foobar'" }
+
+      before do
+        # make sure that no project file exists initially
+        FileUtils.remove_file(path) if File.exists?(path)
+        expect(File).not_to exist(path)
+
+        # now generate a project file
+        expect(Tmuxinator::Cli.new.generate_project_file(name, path)).to eq path
+        expect(File).to exist path
+
+        # add some content to the project file
+        File.open(path, "w") do |f|
+          f.write(extra)
+          f.flush
+        end
+        expect(File.read(path)).to match %r{#{extra}}
+
+        # get ready to run `tmuxinator edit #{name}`
+        ARGV.replace ["edit", name]
+      end
+
+      it "should _not_ generate a new project file" do
+        capture_io { cli.start }
+        expect(File.read(path)).to match %r{#{extra}}
+      end
+    end
+  end
+
   describe "#new" do
     let(:file) { StringIO.new }
     let(:name) { "test" }
@@ -164,7 +199,7 @@ describe Tmuxinator::Cli do
 
       context "existing project doesn't exist" do
         before do
-          expect(Tmuxinator::Config).to receive_messages(exists?: false)
+          expect(File).to receive_messages(exists?: false)
         end
 
         it "creates a new tmuxinator project file" do
@@ -174,14 +209,15 @@ describe Tmuxinator::Cli do
       end
 
       context "files exists" do
-        let(:command) { "#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml" }
+        let(:root_path) { "#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml" }
 
         before do
-          expect(Tmuxinator::Config).to receive_messages(exists?: true)
+          allow(File).to receive(:exists?).with(anything).and_return(false)
+          expect(File).to receive(:exists?).with(root_path).and_return(true)
         end
 
         it "just opens the file" do
-          expect(Kernel).to receive(:system).with(%r{#{command}})
+          expect(Kernel).to receive(:system).with(%r{#{root_path}})
           capture_io { cli.start }
         end
       end
@@ -194,7 +230,7 @@ describe Tmuxinator::Cli do
 
       context "existing project doesn't exist" do
         before do
-          expect(Tmuxinator::Config).to receive(:exists?).at_least(:once) do
+          allow(File).to receive(:exists?).at_least(:once) do
             false
           end
         end
@@ -208,7 +244,7 @@ describe Tmuxinator::Cli do
       context "files exists" do
         let(:path) { Tmuxinator::Config::LOCAL_DEFAULT }
         before do
-          expect(Tmuxinator::Config).to receive(:exists?).with(path) { true }
+          expect(File).to receive(:exists?).with(path) { true }
         end
 
         it "just opens the file" do
@@ -365,6 +401,69 @@ describe Tmuxinator::Cli do
       expect(Tmuxinator::Config).to receive(:editor?)
       expect(Tmuxinator::Config).to receive(:shell?)
       capture_io { cli.start }
+    end
+  end
+
+  describe "#find_project_file" do
+    let(:name) { "foobar" }
+    let(:path) { Tmuxinator::Config.default_project(name) }
+
+    after(:each) do
+      FileUtils.remove_file(path) if File.exists?(path)
+    end
+
+    context "when the project file does not already exist" do
+      before do
+        expect(File).not_to exist(path), "expected file at #{path} not to exist"
+      end
+
+      it "should generate a project file" do
+        new_path = Tmuxinator::Cli.new.find_project_file(name, false)
+        expect(new_path).to eq path
+        expect(File).to exist new_path
+      end
+    end
+
+    context "when the project file _does_ already exist" do
+      let(:extra) { "  - extra: echo 'foobar'" }
+
+      before do
+        expect(File).not_to exist(path), "expected file at #{path} not to exist"
+        expect(Tmuxinator::Cli.new.generate_project_file(name, path)).to eq path
+        expect(File).to exist path
+
+        File.open(path, "w") do |f|
+          f.write(extra)
+          f.flush
+        end
+        expect(File.read(path)).to match %r{#{extra}}
+      end
+
+      it "should _not_ generate a new project file" do
+        new_path = Tmuxinator::Cli.new.find_project_file(name, false)
+        expect(new_path).to eq path
+        expect(File).to exist new_path
+        expect(File.read(new_path)).to match %r{#{extra}}
+      end
+    end
+  end
+
+  describe "#generate_project_file" do
+    let(:name) { "foobar" }
+    let(:path) { Tmuxinator::Config.default_project(name) }
+
+    before do
+      expect(File).not_to exist(path), "expected file at #{path} not to exist"
+    end
+
+    after(:each) do
+      FileUtils.remove_file(path) if File.exists?(path)
+    end
+
+    it "should always generate a project file" do
+      new_path = Tmuxinator::Cli.new.generate_project_file(name, path)
+      expect(new_path).to eq path
+      expect(File).to exist new_path
     end
   end
 
