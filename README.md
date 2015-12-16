@@ -21,7 +21,7 @@ sure what that is type:
 echo $EDITOR
 ```
 
-For me that produces "vim" If you want to change your default editor simply
+For me that produces "vim". If you want to change your default editor simply
 put a line in ~/.bashrc that changes it. Mine looks like this:
 
 ```
