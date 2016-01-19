@@ -54,7 +54,7 @@ describe Tmuxinator::Project do
 
     # Please see: https://github.com/tmuxinator/tmuxinator/issues/347
     context "open sessions" do
-      it "uses 'has-session =' to avoid overeager matches on open session names" do
+      it "uses 'has-session =' to avoid matching open session name prefixes" do
         output = project.render
         expect(output).to match %r{has-session =}
       end
