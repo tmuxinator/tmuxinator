@@ -10,4 +10,4 @@ gem "coveralls", "~> 0.7"
 gem "awesome_print", "~> 1.2"
 gem "pry", "~> 0.10"
 gem "factory_girl", "~> 4.5"
-gem "rubocop", "~> 0.34", require: false
+gem "rubocop", "0.35.1", require: false
