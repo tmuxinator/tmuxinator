@@ -21,7 +21,6 @@ describe Tmuxinator::Config do
     it "maps the path of sample if default fails" do
       expect(Tmuxinator::Config.default("notafile")).to include("sample.yml")
     end
-
   end
 
   describe "#default_path_option" do

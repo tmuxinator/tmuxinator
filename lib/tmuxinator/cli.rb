@@ -87,7 +87,7 @@ module Tmuxinator
       end
 
       def generate_project_file(name, path)
-        default = options[:default].to_s != '' ? options[:default] : "default"
+        default = options[:default].to_s != "" ? options[:default] : "default"
         template = Tmuxinator::Config.default(default)
         content = File.read(template)
         erb = Erubis::Eruby.new(content).result(binding)
