@@ -15,6 +15,7 @@ describe Tmuxinator::Config do
 
   describe "#default" do
     it "gets the path of the default config" do
+      allow(Tmuxinator::Config).to receive(:exists?).and_return(true)
       expect(Tmuxinator::Config.default("default")).to include("default.yml")
     end
     it "maps the path of sample if default fails" do
