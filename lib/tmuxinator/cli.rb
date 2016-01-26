@@ -57,6 +57,7 @@ module Tmuxinator
     end
 
     desc "new [PROJECT]", COMMANDS[:new]
+    option :default
     map "open" => :new
     map "edit" => :new
     map "o" => :new
@@ -86,8 +87,9 @@ module Tmuxinator
       end
 
       def generate_project_file(name, path)
-        template = Tmuxinator::Config.default? ? :default : :sample
-        content = File.read(Tmuxinator::Config.send(template.to_sym))
+        default = options[:default].to_s != '' ? options[:default] : "default"
+        template = Tmuxinator::Config.default(default)
+        content = File.read(template)
         erb = Erubis::Eruby.new(content).result(binding)
         File.open(path, "w") { |f| f.write(erb) }
         path

@@ -14,12 +14,11 @@ module Tmuxinator
         asset_path "sample.yml"
       end
 
-      def default
-        "#{ENV['HOME']}/.tmuxinator/default.yml"
-      end
-
-      def default?
-        exists?("default")
+      def default(filename)
+        if exists? (filename)
+          return "#{ENV['HOME']}/.tmuxinator/#{filename}.yml"
+        end
+        sample
       end
 
       def installed?
