@@ -99,6 +99,35 @@ describe Tmuxinator::Window do
         expect(window.panes).to be_empty
       end
     end
+
+    context "nested collections" do
+      let(:command1) { "cd /tmp/" }
+      let(:command2) { "ls" }
+
+      let(:panes) { [ "vim", nested_collection ] }
+
+      context "with nested hash" do
+        let(:nested_collection) { { pane2: [ command1, command2  ] } }
+
+        it "returns two panes in an Array" do
+          expect(window.panes).to match [
+            a_pane.with(index: 0).and_commands("vim"),
+            a_pane.with(index: 1).and_commands(command1, command2)
+          ]
+        end
+      end
+
+      context "with nested array" do
+        let(:nested_collection) { [command1, command2] }
+
+        it "returns two panes in an Array" do
+          expect(window.panes).to match [
+            a_pane.with(index: 0).and_commands("vim"),
+            a_pane.with(index: 1).and_commands(command1, command2)
+          ]
+        end
+      end
+    end
   end
 
   describe "#pre" do
