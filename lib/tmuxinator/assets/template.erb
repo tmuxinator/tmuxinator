@@ -60,9 +60,10 @@ if [ "$?" -eq 1 ]; then
         <% unless pane.last? %>
   <%= pane.tmux_split_command %>
         <% end %>
-  <%= window.tmux_layout_command %>
+  <%= window.tmux_tiled_layout_command %>
       <% end %>
 
+  <%= window.tmux_layout_command %>
   <%= window.tmux_select_first_pane %>
     <% end %>
   <% end %>
