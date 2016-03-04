@@ -95,6 +95,10 @@ module Tmuxinator
       "#{project.tmux} new-window #{path} -t #{tmux_window_target} #{tmux_window_name_option}"
     end
 
+    def tmux_tiled_layout_command
+      "#{project.tmux} select-layout -t #{tmux_window_target} tiled"
+    end
+
     def tmux_layout_command
       "#{project.tmux} select-layout -t #{tmux_window_target} #{layout}"
     end
