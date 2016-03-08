@@ -53,7 +53,7 @@ module Tmuxinator
     desc "completions [arg1 arg2]", COMMANDS[:completions]
 
     def completions(arg)
-      if %w(start open copy delete).include?(arg)
+      if %w(start stop open copy delete).include?(arg)
         configs = Tmuxinator::Config.configs
         puts configs
       end
@@ -154,10 +154,9 @@ module Tmuxinator
     desc "stop [PROJECT]", COMMANDS[:stop]
     map "st" => :stop
 
-    def stop(name, *args)
+    def stop(name)
       params = {
-        name: name,
-        args: args
+        name: name
       }
       project = create_project(params)
       kill_project(project)
