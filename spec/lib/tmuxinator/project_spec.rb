@@ -456,6 +456,18 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "tmux_kill_session_command" do
+    let(:command) { "#{executable} kill-session -t #{session}" }
+    let(:executable) { project.tmux }
+    let(:session) { project.name }
+
+    context "when first window has a name" do
+      it "returns command to start a new detatched session" do
+        expect(project.tmux_kill_session_command).to eq command
+      end
+    end
+  end
+
   describe "::load" do
     let(:path) { File.expand_path("../../../fixtures/sample.yml", __FILE__) }
     let(:options) { {} }
