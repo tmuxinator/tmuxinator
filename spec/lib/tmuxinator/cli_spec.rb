@@ -102,16 +102,20 @@ describe Tmuxinator::Cli do
   describe "#stop" do
     before do
       ARGV.replace(["stop", "foo"])
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
-    let(:project) { FactoryGirl.build(:project) }
+    context "with project name" do
+      let(:project) { FactoryGirl.build(:project) }
 
-    it "stop the project" do
-      expect(Kernel).to receive(:exec)
-      cli.start
-      capture_io { cli.stop }
+      it "stop the project" do
+        expect(Kernel).to receive(:exec)
+        out, err = capture_io { cli.start }
+        expect(err).to eq ""
+        expect(out).to eq ""
+      end
     end
   end
 
