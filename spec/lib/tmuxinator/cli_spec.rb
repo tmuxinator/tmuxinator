@@ -41,6 +41,7 @@ describe Tmuxinator::Cli do
                     new
                     open
                     start
+                    stop
                     local
                     debug
                     copy
@@ -95,6 +96,22 @@ describe Tmuxinator::Cli do
         out, _err = capture_io { cli.start }
         expect(out).to include "DEPRECATION"
       end
+    end
+  end
+
+  describe "#stop" do
+    before do
+      ARGV.replace(["stop", "foo"])
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
+    end
+
+    let(:project) { FactoryGirl.build(:project) }
+
+    it "stop the project" do
+      expect(Kernel).to receive(:exec)
+      cli.start
+      capture_io { cli.stop }
     end
   end
 
