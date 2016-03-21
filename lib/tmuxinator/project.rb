@@ -242,6 +242,10 @@ module Tmuxinator
       "#{tmux} new-session -d -s #{name} #{window}"
     end
 
+    def tmux_kill_session_command
+      "#{tmux} kill-session -t #{name}"
+    end
+
     private
 
     def tmux_config
