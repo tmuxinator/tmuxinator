@@ -19,7 +19,9 @@ _tmuxinator() {
   return
 }
 
-_tmuxinator
+type tmuxinator 2>&1 > /dev/null && {
+  _tmuxinator
+}
 
 # Local Variables:
 # mode: Shell-Script

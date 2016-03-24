@@ -8,7 +8,7 @@ _tmuxinator() {
     if [ "$COMP_CWORD" -eq 1 ]; then
         local commands="$(compgen -W "$(tmuxinator commands)" -- "$word")"
         local projects="$(compgen -W "$(tmuxinator completions start)" -- "$word")"
- 
+
         COMPREPLY=( $commands $projects )
     elif [ "$COMP_CWORD" -eq 2 ]; then
         local words
@@ -21,4 +21,6 @@ _tmuxinator() {
     fi
 }
 
-complete -F _tmuxinator tmuxinator mux
+type tmuxinator 2>&1 > /dev/null && {
+    complete -F _tmuxinator tmuxinator mux
+}
