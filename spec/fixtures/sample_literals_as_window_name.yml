@@ -1,0 +1,15 @@
+# ~/.tmuxinator/sample_literals_as_window_name.yml
+
+name: sample
+windows:
+  - 222: echo Fixnum as window name fixture
+  - 222_333: echo Fixnum as window name fixture
+  - 111222333444555666777: echo BigNum as window name fixture
+  - 222.3: echo Float as window name fixture
+  - 4e5: echo Float as window name fixture
+  - 4E5: echo Float as window name fixture
+  - true: echo TrueClass as window name fixture
+  - false: echo FalseClass as window name fixture
+  - nil: echo NilClass as window name fixture
+  - //: echo RegExp as window name fixture
+  - /sample/: echo RegExp as window name fixture
