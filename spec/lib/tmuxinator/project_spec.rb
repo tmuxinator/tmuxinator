@@ -133,7 +133,9 @@ describe Tmuxinator::Project do
     context "window as non-string literal" do
       it "will gracefully handle a window name given as a non-string literal" do
         rendered = project_with_literals_as_window_name
-        expect(rendered.name.to_i).to_not equal 0
+        expect(rendered.windows.map(&:name)).to match_array(
+          %w(222 222333 111222333444555666777 222.3 4e5 4E5
+             true false nil // /sample/))
       end
     end
   end
