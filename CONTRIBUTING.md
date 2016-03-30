@@ -26,7 +26,7 @@ should submit a Pull Request!
 * Add a test for your change. Only refactoring and documentation changes
   require no new tests. If you are adding functionality or fixing a bug,
   we need a test!
-* Run _all_ the tests to ensure nothine else was broken. We only take pull requests with passing tests.
+* Run _all_ the tests to ensure nothing else was broken. We only take pull requests with passing tests.
 * Check for unnecessary whitespace with `git diff --check` before committing.
 * Structure your commit messages like this:
 
