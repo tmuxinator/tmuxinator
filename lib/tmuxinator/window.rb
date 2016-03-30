@@ -6,7 +6,7 @@ module Tmuxinator
 
     def initialize(window_yaml, index, project)
       @name = if !window_yaml.keys.first.nil?
-                window_yaml.keys.first.shellescape
+                window_yaml.keys.first.to_s.shellescape
               end
       @root = nil
       @panes = []
