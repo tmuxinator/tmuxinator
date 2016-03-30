@@ -3,7 +3,7 @@
 ## First
 
 * Check if the issue you're going to submit isn't already submitted in
-  the [Issues](https://github.com/aziz/tmuxinator/issues) page.
+  the [Issues](https://github.com/tmuxinator/tmuxinator/issues) page.
 
 ## Issues
 
