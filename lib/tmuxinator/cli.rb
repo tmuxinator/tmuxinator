@@ -47,7 +47,7 @@ module Tmuxinator
               COMMANDS.keys.join("\n")
             end
 
-      puts out
+      say out
     end
 
     desc "completions [arg1 arg2]", COMMANDS[:completions]
@@ -55,7 +55,7 @@ module Tmuxinator
     def completions(arg)
       if %w(start stop open copy delete).include?(arg)
         configs = Tmuxinator::Config.configs
-        puts configs
+        say configs
       end
     end
 
@@ -119,7 +119,7 @@ module Tmuxinator
       def render_project(project)
         if project.deprecations.any?
           project.deprecations.each { |deprecation| say deprecation, :red }
-          puts
+          say
           print "Press ENTER to continue."
           STDIN.getc
         end
@@ -184,7 +184,7 @@ module Tmuxinator
         args: args
       }
       project = create_project(params)
-      puts project.render
+      say project.render
     end
 
     desc "copy [EXISTING] [NEW]", COMMANDS[:copy]
