@@ -194,7 +194,7 @@ module Tmuxinator
             say "Deleted #{project}"
           end
         else
-          puts "#{project} does not exist!"
+          say "#{project} does not exist!"
         end
       end
     end
