@@ -1,3 +1,6 @@
+## 0.7.1
+- Bugfix where `mux open` or similar would delete the contents of the file
+
 ## 0.7.0
 ### New features
 
