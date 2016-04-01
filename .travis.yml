@@ -27,4 +27,4 @@ before_install:
   - ./configure && make && sudo make install
   - cd ..
   - tmux -V
-script: bundle exec test
+script: bundle exec rake test
