@@ -1,3 +1,7 @@
+## 0.7.2
+- Bugfix for attaching to sessions by prefix when running `start`
+- Bugfix for "pane could not be created" error
+
 ## 0.7.1
 - Bugfix where `mux open` or similar would delete the contents of the file
 
