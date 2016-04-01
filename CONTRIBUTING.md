@@ -27,6 +27,7 @@ should submit a Pull Request!
   require no new tests. If you are adding functionality or fixing a bug,
   we need a test!
 * Run _all_ the tests to ensure nothing else was broken. We only take pull requests with passing tests.
+* Make a note in the `CHANGELOG.md` file with a brief summary of your change under the heading "Unreleased" at the top of the file. If that heading does not exist, you should add it.
 * Check for unnecessary whitespace with `git diff --check` before committing.
 * Structure your commit messages like this:
 

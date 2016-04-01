@@ -1,3 +1,21 @@
+## Unreleased
+### New features
+
+- Add support for deleting multiple projects at once, using `mux delete <p1> <p2> ...`
+- Add stop command to kill tmux sessions
+
+### Bugfixes
+
+- Bugfix for issue with using numbers as window names
+- Bugfix for trying to load shell completions before checking to see if tmuxinator is installed.
+
+## 0.7.2
+- Bugfix for attaching to sessions by prefix when running `start`
+- Bugfix for "pane could not be created" error
+
+## 0.7.1
+- Bugfix where `mux open` or similar would delete the contents of the file
+
 ## 0.7.0
 ### New features
 
