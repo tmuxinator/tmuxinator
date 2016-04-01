@@ -1,7 +1,9 @@
 require "bundler/gem_tasks"
 require "rubocop/rake_task"
+require "rspec/core/rake_task"
 
 RuboCop::RakeTask.new
+RSpec::Core::RakeTask.new
 
 namespace :hound do
   BASE_CMD = "git diff --no-commit-id --name-only -r master | grep rb"
@@ -18,3 +20,4 @@ namespace :hound do
 end
 
 task :check => ["hound:count", "hound:check"]
+task :test => ["spec", "rubocop"]
