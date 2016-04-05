@@ -54,14 +54,6 @@ describe Tmuxinator::Project do
         expect(rendered).to_not include("sample")
       end
     end
-
-    # Please see: https://github.com/tmuxinator/tmuxinator/issues/347
-    context "open sessions" do
-      it "uses 'has-session =' to avoid matching open session name prefixes" do
-        output = project.render
-        expect(output).to match %r{has-session =}
-      end
-    end
   end
 
   describe "#windows" do
