@@ -6,7 +6,7 @@ unset RBENV_DIR
 
 <%= tmux %> start-server;
 
-if <%= tmux_has_session? name %>; then
+<%- if tmux_has_session? name -%>
   cd <%= root || "." %>
 
   # Run pre command.
@@ -69,7 +69,7 @@ if <%= tmux_has_session? name %>; then
   <% end %>
 
   <%= tmux %> select-window -t <%= startup_window %>
-fi
+<%- end -%>
 
 <%- if attach? -%>
   if [ -z "$TMUX" ]; then
