@@ -150,7 +150,7 @@ module Tmuxinator
     def tmux_has_session?(name)
       sessions = `#{tmux_command} ls`
 
-      !sessions.match("^#{name}:")
+      !!sessions.match("^#{name}:")
     end
 
     def socket
