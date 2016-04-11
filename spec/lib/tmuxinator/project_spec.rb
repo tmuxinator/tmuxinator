@@ -54,13 +54,27 @@ describe Tmuxinator::Project do
         expect(rendered).to_not include("sample")
       end
     end
+  end
 
-    # Please see: https://github.com/tmuxinator/tmuxinator/issues/347
-    context "open sessions" do
-      it "uses 'has-session =' to avoid matching open session name prefixes" do
-        output = project.render
-        expect(output).to match %r{has-session =}
-      end
+  describe "#tmux_has_session?" do
+    before do
+      cmd = "#{project.tmux_command} ls"
+      resp = ""\
+        "foo: 1 window (created Sun May 25 10:12:00 1986) [50x50] (detached)\n"\
+        "bar: 1 window (created Sat Sept 01 00:00:00 1990) [50x50] (detached)"
+      call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
+
+      expect(project).to call_tmux_ls
+    end
+
+    it "should return true only when `tmux ls` has the named session" do
+      expect(project.tmux_has_session?("foo")).to be true
+      expect(project.tmux_has_session?("bar")).to be true
+      expect(project.tmux_has_session?("quux")).to be false
+    end
+
+    it "should return false if a partial (prefix) match is found" do
+      expect(project.tmux_has_session?("foobar")).to be false
     end
   end
 

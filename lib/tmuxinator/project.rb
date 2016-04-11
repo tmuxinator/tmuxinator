@@ -147,6 +147,12 @@ module Tmuxinator
       yaml["tmux_command"] || "tmux"
     end
 
+    def tmux_has_session?(name)
+      sessions = `#{tmux_command} ls`
+
+      !!sessions.match("^#{name}:")
+    end
+
     def socket
       if socket_path
         " -S #{socket_path}"
