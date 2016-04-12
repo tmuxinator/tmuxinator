@@ -362,6 +362,18 @@ describe Tmuxinator::Cli do
         end
       end
 
+      context "local project exists" do
+        before do
+          allow(Tmuxinator::Config).to receive(:exists?) { true }
+          expect(Tmuxinator::Config).to receive(:project) { "local" }
+        end
+
+        it "deletes the local project" do
+          expect(FileUtils).to receive(:rm).with("local")
+          capture_io { cli.start }
+        end
+      end
+
       context "project doesn't exist" do
         before do
           allow(Tmuxinator::Config).to receive(:exists?) { false }
