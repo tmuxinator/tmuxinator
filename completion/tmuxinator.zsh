@@ -19,7 +19,7 @@ _tmuxinator() {
   return
 }
 
-type tmuxinator 2>&1 > /dev/null && {
+type tmuxinator &> /dev/null && {
   _tmuxinator
 }
 

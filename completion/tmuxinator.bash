@@ -21,6 +21,6 @@ _tmuxinator() {
     fi
 }
 
-type tmuxinator 2>&1 > /dev/null && {
+type tmuxinator &> /dev/null && {
     complete -F _tmuxinator tmuxinator mux
 }
