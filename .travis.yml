@@ -27,6 +27,4 @@ before_install:
   - ./configure && make && sudo make install
   - cd ..
   - tmux -V
-script:
-  - bundle exec rspec spec
-  - bundle exec rake rubocop
+script: bundle exec rake test
