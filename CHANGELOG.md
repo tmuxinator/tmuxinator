@@ -8,6 +8,7 @@
 
 - Bugfix for issue with using numbers as window names
 - Bugfix for trying to load shell completions before checking to see if tmuxinator is installed.
+- Bugfix for using `mux delete` to delete local projects
 
 ## 0.7.2
 - Bugfix for attaching to sessions by prefix when running `start`
