@@ -7,7 +7,7 @@
 ### Bugfixes
 
 - Bugfix for issue with using numbers as window names
-- Bugfix for trying to load shell completions before checking to see if tmuxinator is installed.
+- Bugfix for zsh-completion loading throwing an error if tmuxinator is not yet available.
 - Bugfix for using `mux delete` to delete local projects
 
 ## 0.7.2
@@ -48,13 +48,13 @@
 - Fix error when no project name is provided #303
 
 ## 0.6.10
-- Interpret config file as ERB template #255 
-- Fix zsh completions #262 
-- Alias `e` to edit and `o` to open #275 
-- Fix fish completions #280 
+- Interpret config file as ERB template #255
+- Fix zsh completions #262
+- Alias `e` to edit and `o` to open #275
+- Fix fish completions #280
 - Add `startup_window` #282
-- Add per window root option #283 
-- Fix project path detection #274 
+- Add per window root option #283
+- Fix project path detection #274
 - Include completions in gemspec #270
 
 ## 0.6.9
