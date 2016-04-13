@@ -1,4 +1,4 @@
-## Unreleased
+## 0.8.0
 ### New features
 
 - Add support for deleting multiple projects at once, using `mux delete <p1> <p2> ...`
