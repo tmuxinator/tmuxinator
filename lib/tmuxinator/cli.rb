@@ -55,7 +55,7 @@ module Tmuxinator
     def completions(arg)
       if %w(start stop open copy delete).include?(arg)
         configs = Tmuxinator::Config.configs
-        say configs
+        say configs.join("\n")
       end
     end
 
