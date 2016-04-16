@@ -1,3 +1,8 @@
+## Unreleased
+### Bugfixes
+
+- Fixed broken shell completions
+
 ## 0.8.0
 ### New features
 
