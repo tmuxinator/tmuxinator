@@ -20,7 +20,8 @@ describe Tmuxinator::Cli do
   describe "#completions" do
     before do
       ARGV.replace(["completions", "start"])
-      allow(Tmuxinator::Config).to receive_messages(configs: ["test.yml", "foo.yml"])
+      allow(Tmuxinator::Config).to receive_messages(configs: ["test.yml",
+                                                              "foo.yml"])
     end
 
     it "gets completions" do
