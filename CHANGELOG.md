@@ -1,4 +1,4 @@
-## Unreleased
+## 0.8.1
 ### Bugfixes
 
 - Fixed broken shell completions
