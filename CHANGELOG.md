@@ -1,3 +1,6 @@
+## Unreleased
+- Refactor Config.root
+
 ## 0.8.1
 ### Bugfixes
 
