@@ -11,6 +11,7 @@
 ### Bugfixes
 - Will no longer crash when no panes are specified in a window
 - Locking activesupport at < 5.0.0 to prevent broken builds on Ruby < 2.2.3
+- Fixed whitespace issues in help
 
 ## 0.8.1
 ### Bugfixes
