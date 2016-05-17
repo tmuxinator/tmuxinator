@@ -74,7 +74,9 @@ describe Tmuxinator::Window do
       end
 
       it "returns three panes" do
-        expect(window.panes).to all be_a_pane.with(project: project, tab: window)
+        expect(window.panes).to all be_a_pane.with(
+          project: project, tab: window
+        )
 
         expect(window.panes).to match([
           a_pane.with(index: 0).and_commands("vim"),
@@ -88,7 +90,8 @@ describe Tmuxinator::Window do
       let(:panes) { "vim" }
 
       it "returns one pane in an Array" do
-        expect(window.panes.first).to be_a_pane.with(index: 0).and_commands("vim")
+        expect(window.panes.first).to be_a_pane.
+          with(index: 0).and_commands("vim")
       end
     end
 
@@ -104,10 +107,10 @@ describe Tmuxinator::Window do
       let(:command1) { "cd /tmp/" }
       let(:command2) { "ls" }
 
-      let(:panes) { [ "vim", nested_collection ] }
+      let(:panes) { ["vim", nested_collection] }
 
       context "with nested hash" do
-        let(:nested_collection) { { pane2: [ command1, command2  ] } }
+        let(:nested_collection) { { pane2: [command1, command2] } }
 
         it "returns two panes in an Array" do
           expect(window.panes).to match [
