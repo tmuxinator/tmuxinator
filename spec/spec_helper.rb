@@ -16,6 +16,9 @@ require "factory_girl"
 
 FactoryGirl.find_definitions
 
+# Custom Matchers
+require_relative 'matchers/pane_matcher'
+
 RSpec.configure do |config|
   config.order = "random"
 end
