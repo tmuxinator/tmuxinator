@@ -32,12 +32,8 @@ if [ "$?" -eq 127 ]; then
       <%- window.panes.each do |pane| -%>
   <%= pane.tmux_pre_window_command %>
   <%= pane.tmux_pre_command %>
-    <%- if pane.multiple_commands? %>
-          <%- pane.commands.each do |command| -%>
+        <%- pane.commands.each do |command| -%>
   <%= pane.tmux_main_command(command) %>
-          <%- end -%>
-        <%- else -%>
-  <%= pane.tmux_main_command(commands.first) %>
         <%- end -%>
 
       <%- unless pane.last? -%>

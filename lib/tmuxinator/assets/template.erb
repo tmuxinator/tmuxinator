@@ -49,12 +49,8 @@ unset RBENV_DIR
         <% if pane.tab.pre %>
   <%= pane.tmux_pre_command %>
         <% end %>
-        <% if pane.multiple_commands? %>
-          <% pane.commands.each do |command| %>
+        <% pane.commands.each do |command| %>
   <%= pane.tmux_main_command(command) %>
-          <% end %>
-        <% else %>
-  <%= pane.tmux_main_command(commands.first) %>
         <% end %>
 
         <% unless pane.last? %>
