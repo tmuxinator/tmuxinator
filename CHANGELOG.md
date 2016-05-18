@@ -1,4 +1,4 @@
-## Unlreased
+## Unreleased
 
 ### New Features
 - Allow mulitple panes to be defined using yaml hash or array #266, #406
