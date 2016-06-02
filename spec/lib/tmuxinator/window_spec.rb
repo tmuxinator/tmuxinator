@@ -271,10 +271,7 @@ describe Tmuxinator::Window do
       let(:enabled) { "on" }
 
       let(:full_command) do
-        command = <<END_COMMAND
-#{tmux_part} #{window_option_set} #{target_part} #{synchronize_panes} #{enabled}
-END_COMMAND
-        command.chomp("\n")
+        "#{tmux_part} #{window_option_set} #{target_part} #{synchronize_panes} #{enabled}"
       end
 
       it "should set the synchronize-panes window option on" do
