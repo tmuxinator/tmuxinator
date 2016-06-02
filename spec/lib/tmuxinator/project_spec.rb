@@ -320,7 +320,7 @@ describe Tmuxinator::Project do
     end
 
     context "startup pane not specified" do
-      it "returns the first pane instead" do
+      it "returns the base pane instead" do
         allow(project).to receive_messages(pane_base_index: 4)
 
         expect(project.startup_pane).to eq(4)
