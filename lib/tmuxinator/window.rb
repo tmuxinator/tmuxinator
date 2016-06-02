@@ -2,7 +2,7 @@ module Tmuxinator
   class Window
     include Tmuxinator::Util
 
-    attr_reader :name, :root, :panes, :layout, :commands, :index, :project
+    attr_reader :name, :root, :panes, :layout, :commands, :index, :project, :synchronize
 
     def initialize(window_yaml, index, project)
       @name = if !window_yaml.keys.first.nil?
@@ -10,6 +10,7 @@ module Tmuxinator
               end
       @root = nil
       @panes = []
+      @synchronize = false
       @layout = nil
       @pre = nil
       @project = project
@@ -18,6 +19,7 @@ module Tmuxinator
       value = window_yaml.values.first
 
       if value.is_a?(Hash)
+        @synchronize = value["synchronize"] || false
         @layout = value["layout"] ? value["layout"].shellescape : nil
         @pre = value["pre"] if value["pre"]
         @root = if value["root"]
@@ -100,6 +102,10 @@ module Tmuxinator
 
     def tmux_tiled_layout_command
       "#{project.tmux} select-layout -t #{tmux_window_target} tiled"
+    end
+
+    def tmux_synchronize_panes
+      "#{project.tmux} set-window-option -t #{tmux_window_target} synchronize-panes on"
     end
 
     def tmux_layout_command
