@@ -36,6 +36,25 @@ describe Tmuxinator::Window do
   let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
   let(:window_root) { Tmuxinator::Window.new(yaml_root, 0, project) }
 
+  shared_context "window command context" do
+    let(:project) { double(:project) }
+    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+    let(:root?) { true }
+    let(:root) { "/project/tmuxinator" }
+
+    before do
+      allow(project).to receive_messages(
+        name: "test",
+        tmux: "tmux",
+        root: root,
+        root?: root?,
+        base_index: 1
+      )
+    end
+
+    let(:tmux_part) { project.tmux }
+  end
+
   before do
     allow(project).to receive_messages(
       tmux: "tmux",
@@ -245,22 +264,8 @@ describe Tmuxinator::Window do
   end
 
   describe "#tmux_synchronize_panes" do
-    let(:project) { double(:project) }
-    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
-    let(:root?) { true }
-    let(:root) { "/project/tmuxinator" }
+    include_context "window command context"
 
-    before do
-      allow(project).to receive_messages(
-        name: "test",
-        tmux: "tmux",
-        root: root,
-        root?: root?,
-        base_index: 1
-      )
-    end
-
-    let(:tmux_part) { project.tmux }
     let(:window_option_set_part) { "set-window-option" }
     let(:target_part) { "-t #{window.tmux_window_target}" }
     let(:synchronize_panes_part) { "synchronize-panes" }
@@ -280,22 +285,8 @@ describe Tmuxinator::Window do
   end
 
   describe "#tmux_new_window_command" do
-    let(:project) { double(:project) }
-    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
-    let(:root?) { true }
-    let(:root) { "/project/tmuxinator" }
+    include_context "window command context"
 
-    before do
-      allow(project).to receive_messages(
-        name: "test",
-        tmux: "tmux",
-        root: root,
-        root?: root?,
-        base_index: 1
-      )
-    end
-
-    let(:tmux_part) { project.tmux }
     let(:window_part) { "new-window" }
     let(:name_part) { window.tmux_window_name_option }
     let(:target_part) { "-t #{window.tmux_window_target}" }
