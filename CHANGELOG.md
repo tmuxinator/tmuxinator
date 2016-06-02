@@ -2,6 +2,7 @@
 
 ### New Features
 - Allow mulitple panes to be defined using yaml hash or array #266, #406
+- Add `startup_pane` #380
 
 ## 0.8.1
 ### Bugfixes
@@ -174,4 +175,3 @@
 ## 0.2.0
 - Added pane support (Thanks to Aaron Spiegel)
 - RVM support (Thanks to Jay Adkisoon)
-
