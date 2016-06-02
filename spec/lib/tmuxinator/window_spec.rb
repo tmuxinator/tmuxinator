@@ -261,17 +261,16 @@ describe Tmuxinator::Window do
     end
 
     let(:tmux_part) { project.tmux }
-    let(:window_option_set) { "set-window-option" }
+    let(:window_option_set_part) { "set-window-option" }
     let(:target_part) { "-t #{window.tmux_window_target}" }
-    let(:synchronize_panes) { "synchronize-panes" }
-    let(:tmux_part) { project.tmux }
+    let(:synchronize_panes_part) { "synchronize-panes" }
 
     context "synchronization enabled" do
       let(:synchronize) { true }
       let(:enabled) { "on" }
 
       let(:full_command) do
-        "#{tmux_part} #{window_option_set} #{target_part} #{synchronize_panes} #{enabled}"
+        "#{tmux_part} #{window_option_set_part} #{target_part} #{synchronize_panes_part} #{enabled}"
       end
 
       it "should set the synchronize-panes window option on" do
