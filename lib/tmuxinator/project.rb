@@ -21,6 +21,7 @@ module Tmuxinator
     attr_reader :force_attach
     attr_reader :force_detach
     attr_reader :custom_name
+    attr_reader :append
 
     def self.load(path, options = {})
       yaml = begin
@@ -69,6 +70,8 @@ module Tmuxinator
 
       @force_attach = options[:force_attach]
       @force_detach = options[:force_detach]
+
+      @append = options[:append]
 
       raise "Cannot force_attach and force_detach at the same time" \
         if @force_attach && @force_detach

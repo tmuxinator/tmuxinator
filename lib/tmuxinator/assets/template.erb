@@ -6,7 +6,7 @@ unset RBENV_DIR
 
 <%= tmux %> start-server;
 
-<%- if !tmux_has_session? name -%>
+<%- if !tmux_has_session? name || append -%>
   cd <%= root || "." %>
 
   # Run pre command.
@@ -14,7 +14,10 @@ unset RBENV_DIR
 
   # Create the session and the first window. Manually switch to root
   # directory if required to support tmux < 1.9
-  TMUX= <%= tmux_new_session_command %>
+  <% unless append %>
+    TMUX= <%= tmux_new_session_command %>
+  <% end %>
+
   <% if windows.first.root? %>
   <%= windows.first.tmux_window_command_prefix %> <%= "cd #{windows.first.root}".shellescape %> C-m
   <% end %>

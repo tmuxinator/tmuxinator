@@ -30,7 +30,10 @@ module Tmuxinator
       implode: "Deletes all tmuxinator projects",
       version: "Display installed tmuxinator version",
       doctor: "Look for problems in your configuration",
-      list: "Lists all tmuxinator projects"
+      list: "Lists all tmuxinator projects",
+      append: <<-DESC,
+        Append the windows in the given project to a session of the same name
+      DESC
     }
 
     package_name "tmuxinator" \
@@ -106,7 +109,8 @@ module Tmuxinator
           force_detach: detach,
           name: project_options[:name],
           custom_name: project_options[:custom_name],
-          args: project_options[:args]
+          args: project_options[:args],
+          append: project_options[:append]
         }
 
         begin
@@ -146,6 +150,26 @@ module Tmuxinator
         custom_name: options[:name],
         attach: options[:attach],
         args: args
+      }
+      project = create_project(params)
+      render_project(project)
+    end
+
+    desc "append [PROJECT] [ARGS]", COMMANDS[:append]
+    map "a" => :append
+    method_option :attach, type: :boolean,
+                           aliases: "-a",
+                           desc: "Attach to tmux session after creation."
+    method_option :name, aliases: "-n",
+                         desc: "Give the session a different name"
+
+    def append(name, *args)
+      params = {
+        name: name,
+        custom_name: options[:name],
+        attach: options[:attach],
+        args: args,
+        append: true
       }
       project = create_project(params)
       render_project(project)
