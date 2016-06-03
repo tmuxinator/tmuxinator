@@ -65,14 +65,8 @@ describe Tmuxinator::Window do
   end
 
   describe "#panes" do
-    let(:pane) { double(:pane) }
-
-    before do
-      allow(Tmuxinator::Pane).to receive_messages new: pane
-    end
-
     context "with a three element Array" do
-      let(:panes) { ["vim", nil, "top"] }
+      let(:panes) { ["vim", "ls", "top"] }
 
       it "creates three panes" do
         expect(Tmuxinator::Pane).to receive(:new).exactly(3).times
@@ -80,33 +74,61 @@ describe Tmuxinator::Window do
       end
 
       it "returns three panes" do
-        expect(window.panes).to eql [pane, pane, pane]
+        expect(window.panes).to all be_a_pane.with(
+          project: project, tab: window
+        )
+
+        expect(window.panes).to match([
+          a_pane.with(index: 0).and_commands("vim"),
+          a_pane.with(index: 1).and_commands("ls"),
+          a_pane.with(index: 2).and_commands("top")
+        ])
       end
     end
 
     context "with a String" do
       let(:panes) { "vim" }
 
-      it "creates one pane" do
-        expect(Tmuxinator::Pane).to receive(:new).once
-        window.panes
-      end
-
       it "returns one pane in an Array" do
-        expect(window.panes).to eql [pane]
+        expect(window.panes.first).to be_a_pane.
+          with(index: 0).and_commands("vim")
       end
     end
 
     context "with nil" do
       let(:panes) { nil }
 
-      it "doesn't create any panes" do
-        expect(Tmuxinator::Pane).to_not receive(:new)
-        window.panes
-      end
-
       it "returns an empty Array" do
         expect(window.panes).to be_empty
+      end
+    end
+
+    context "nested collections" do
+      let(:command1) { "cd /tmp/" }
+      let(:command2) { "ls" }
+
+      let(:panes) { ["vim", nested_collection] }
+
+      context "with nested hash" do
+        let(:nested_collection) { { pane2: [command1, command2] } }
+
+        it "returns two panes in an Array" do
+          expect(window.panes).to match [
+            a_pane.with(index: 0).and_commands("vim"),
+            a_pane.with(index: 1).and_commands(command1, command2)
+          ]
+        end
+      end
+
+      context "with nested array" do
+        let(:nested_collection) { [command1, command2] }
+
+        it "returns two panes in an Array" do
+          expect(window.panes).to match [
+            a_pane.with(index: 0).and_commands("vim"),
+            a_pane.with(index: 1).and_commands(command1, command2)
+          ]
+        end
       end
     end
   end

@@ -1,5 +1,10 @@
 ## Unreleased
+
+### Misc
 - Refactor Config.root
+
+### New Features
+- Allow mulitple panes to be defined using yaml hash or array #266, #406
 
 ## 0.8.1
 ### Bugfixes

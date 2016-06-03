@@ -34,13 +34,16 @@ module Tmuxinator
 
     def build_panes(panes_yml)
       Array(panes_yml).map.with_index do |pane_yml, index|
-        if pane_yml.is_a?(Hash)
-          pane_yml.map do |_name, commands|
-            Tmuxinator::Pane.new(index, project, self, *commands)
-          end
-        else
-          Tmuxinator::Pane.new(index, project, self, pane_yml)
-        end
+        commands =  case pane_yml
+                    when Hash
+                      pane_yml.values.first
+                    when Array
+                      pane_yml
+                    else
+                      pane_yml
+                    end
+
+        Tmuxinator::Pane.new(index, project, self, *commands)
       end.flatten
     end
 
