@@ -276,6 +276,40 @@ describe Tmuxinator::Cli do
         end
       end
     end
+
+    context "from an existing session" do
+      before(:all) do
+        # Can't use variables added through `let` in `before :all`.
+        @session = "for-testing-tmuxinator"
+        # Pass the -d option, so that the session is not attached.
+        Kernel.system "tmux new-session -d -s #{@session}"
+      end
+
+      before do
+        ARGV.replace ["new", name, @session]
+      end
+
+      after(:all) do
+        puts @session
+        Kernel.system "tmux kill-session -t #{@session}"
+      end
+
+      it "creates a project file" do
+        capture_io { cli.start }
+        expect(file.string).to_not be_empty
+        expect { YAML.parse file.string }.to_not raise_error
+      end
+    end
+
+    context "from an invalid session" do
+      before do
+        ARGV.replace ["new", name, "sessiondoesnotexist"]
+      end
+
+      it "should fail" do
+        expect { cli.start }.to raise_error RuntimeError
+      end
+    end
   end
 
   describe "#copy" do
