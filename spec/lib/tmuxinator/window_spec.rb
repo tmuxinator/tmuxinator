@@ -251,7 +251,7 @@ describe Tmuxinator::Window do
     context "synchronization disabled" do
       let(:synchronize) { false }
 
-      it "should have synchronization enabled" do
+      it "should have synchronization disabled" do
         expect(window.synchronize).to be false
       end
     end
