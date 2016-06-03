@@ -310,6 +310,24 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "#startup_pane" do
+    context "startup pane specified" do
+      it "get the startup pane index from project config" do
+        project.yaml["startup_pane"] = 1
+
+        expect(project.startup_pane).to eq(1)
+      end
+    end
+
+    context "startup pane not specified" do
+      it "returns the base pane instead" do
+        allow(project).to receive_messages(pane_base_index: 4)
+
+        expect(project.startup_pane).to eq(4)
+      end
+    end
+  end
+
   describe "#window" do
     it "gets the window and index for tmux" do
       expect(project.window(1)).to eq "sample:1"

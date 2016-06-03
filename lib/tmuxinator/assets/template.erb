@@ -65,6 +65,7 @@ unset RBENV_DIR
   <% end %>
 
   <%= tmux %> select-window -t <%= startup_window %>
+  <%= tmux %> select-pane -t <%= startup_pane %>
 <%- end -%>
 
 <%- if attach? -%>
