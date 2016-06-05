@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Misc
+- Refactor Config.root
+
 ### New Features
 - Allow mulitple panes to be defined using yaml hash or array #266, #406
 - Add `startup_pane` #380
