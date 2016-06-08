@@ -188,6 +188,16 @@ describe Tmuxinator::Window do
         expect(window.commands).to be_empty
       end
     end
+
+    context "command is a hash" do
+      before do
+        yaml["editor"] = { "layout" => "main-horizontal", "panes" => [nil] }
+      end
+
+      it "returns an empty array" do
+        expect(window.commands).to be_empty
+      end
+    end
   end
 
   describe "#name_options" do

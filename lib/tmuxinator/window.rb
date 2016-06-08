@@ -27,9 +27,9 @@ module Tmuxinator
                 end
 
         @panes = build_panes(value["panes"])
-      else
-        @commands = build_commands(tmux_window_command_prefix, value)
       end
+
+      @commands = build_commands(tmux_window_command_prefix, value)
     end
 
     def build_panes(panes_yml)
