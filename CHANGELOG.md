@@ -7,6 +7,9 @@
 - Allow mulitple panes to be defined using yaml hash or array #266, #406
 - Add `startup_pane` #380
 
+### Bugfixes
+- Will no longer crash when no panes are specified in a window
+
 ## 0.8.1
 ### Bugfixes
 
