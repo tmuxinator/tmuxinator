@@ -4,6 +4,7 @@ describe Tmuxinator::Window do
   let(:project) { double }
   let(:panes) { ["vim", nil, "top"] }
   let(:window_name) { "editor" }
+  let(:synchronize) { false }
   let(:yaml) do
     {
       window_name => {
@@ -11,6 +12,7 @@ describe Tmuxinator::Window do
           "echo 'I get run in each pane.  Before each pane command!'",
           nil
         ],
+        "synchronize" => synchronize,
         "layout" => "main-vertical",
         "panes" => panes
       }
@@ -33,6 +35,25 @@ describe Tmuxinator::Window do
 
   let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
   let(:window_root) { Tmuxinator::Window.new(yaml_root, 0, project) }
+
+  shared_context "window command context" do
+    let(:project) { double(:project) }
+    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+    let(:root?) { true }
+    let(:root) { "/project/tmuxinator" }
+
+    before do
+      allow(project).to receive_messages(
+        name: "test",
+        tmux: "tmux",
+        root: root,
+        root?: root?,
+        base_index: 1
+      )
+    end
+
+    let(:tmux_part) { project.tmux }
+  end
 
   before do
     allow(project).to receive_messages(
@@ -218,23 +239,54 @@ describe Tmuxinator::Window do
     end
   end
 
-  describe "#tmux_new_window_command" do
-    let(:project) { double(:project) }
-    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
-    let(:root?) { true }
-    let(:root) { "/project/tmuxinator" }
+  describe "#synchronize" do
+    context "synchronization enabled" do
+      let(:synchronize) { true }
 
-    before do
-      allow(project).to receive_messages(
-        name: "test",
-        tmux: "tmux",
-        root: root,
-        root?: root?,
-        base_index: 1
-      )
+      it "should have synchronization enabled" do
+        expect(window.synchronize).to be true
+      end
     end
 
-    let(:tmux_part) { project.tmux }
+    context "synchronization disabled" do
+      let(:synchronize) { false }
+
+      it "should have synchronization disabled" do
+        expect(window.synchronize).to be false
+      end
+    end
+
+    context "synchronization not specified" do
+      it "should have synchronization disabled" do
+        expect(window.synchronize).to be false
+      end
+    end
+  end
+
+  describe "#tmux_synchronize_panes" do
+    include_context "window command context"
+
+    let(:window_option_set_part) { "set-window-option" }
+    let(:target_part) { "-t #{window.tmux_window_target}" }
+    let(:synchronize_panes_part) { "synchronize-panes" }
+
+    context "synchronization enabled" do
+      let(:synchronize) { true }
+      let(:enabled) { "on" }
+
+      let(:full_command) do
+        "#{tmux_part} #{window_option_set_part} #{target_part} #{synchronize_panes_part} #{enabled}"
+      end
+
+      it "should set the synchronize-panes window option on" do
+        expect(window.tmux_synchronize_panes).to eq full_command
+      end
+    end
+  end
+
+  describe "#tmux_new_window_command" do
+    include_context "window command context"
+
     let(:window_part) { "new-window" }
     let(:name_part) { window.tmux_window_name_option }
     let(:target_part) { "-t #{window.tmux_window_target}" }

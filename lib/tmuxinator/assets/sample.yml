@@ -33,6 +33,8 @@ root: ~/
 windows:
   - editor:
       layout: main-vertical
+      # Synchronize all panes of this window
+      # synchronize: true
       panes:
         - vim
         - guard
