@@ -40,6 +40,7 @@ describe Tmuxinator::Cli do
       expected = %w(commands
                     completions
                     new
+                    edit
                     open
                     start
                     stop
