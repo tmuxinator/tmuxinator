@@ -269,6 +269,11 @@ without tmux session name collision.
 
 If there is a `./.tmuxinator.yml` file in the current working directory but not a named project file in `~/.tmuxinator`, tmuxinator will use the local file.  This is primarily intended to be used for sharing tmux configurations in complex development environments.
 
+<!--
+
+Hiding the Shorthand entry until the mux symlink issue has been addressed.
+Please see: https://github.com/tmuxinator/tmuxinator/issues/401
+
 ## Shorthand
 
 A shorthand alias for tmuxinator can also be used.
@@ -276,6 +281,8 @@ A shorthand alias for tmuxinator can also be used.
 ```
 mux [command]
 ```
+
+-->
 
 ## Other Commands
 
