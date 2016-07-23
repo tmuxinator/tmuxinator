@@ -57,24 +57,40 @@ describe Tmuxinator::Project do
   end
 
   describe "#tmux_has_session?" do
-    before do
-      cmd = "#{project.tmux_command} ls"
-      resp = ""\
-        "foo: 1 window (created Sun May 25 10:12:00 1986) [50x50] (detached)\n"\
-        "bar: 1 window (created Sat Sept 01 00:00:00 1990) [50x50] (detached)"
-      call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
+    context "no active sessions" do
+      before do
+        cmd = "#{project.tmux_command} ls 2> /dev/null"
+        resp = ""
+        call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
 
-      expect(project).to call_tmux_ls
+        expect(project).to call_tmux_ls
+      end
+
+      it "should return false if no sessions are found" do
+        expect(project.tmux_has_session?("no server running")).to be false
+      end
     end
 
-    it "should return true only when `tmux ls` has the named session" do
-      expect(project.tmux_has_session?("foo")).to be true
-      expect(project.tmux_has_session?("bar")).to be true
-      expect(project.tmux_has_session?("quux")).to be false
-    end
+    context "active sessions" do
+      before do
+        cmd = "#{project.tmux_command} ls 2> /dev/null"
+        resp = ""\
+          "foo: 1 window (created Sun May 25 10:12:00 1986) [0x0] (detached)\n"\
+          "bar: 1 window (created Sat Sept 01 00:00:00 1990) [0x0] (detached)"
+        call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
 
-    it "should return false if a partial (prefix) match is found" do
-      expect(project.tmux_has_session?("foobar")).to be false
+        expect(project).to call_tmux_ls
+      end
+
+      it "should return true only when `tmux ls` has the named session" do
+        expect(project.tmux_has_session?("foo")).to be true
+        expect(project.tmux_has_session?("bar")).to be true
+        expect(project.tmux_has_session?("quux")).to be false
+      end
+
+      it "should return false if a partial (prefix) match is found" do
+        expect(project.tmux_has_session?("foobar")).to be false
+      end
     end
   end
 

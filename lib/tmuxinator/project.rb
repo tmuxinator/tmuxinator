@@ -148,8 +148,11 @@ module Tmuxinator
     end
 
     def tmux_has_session?(name)
-      sessions = `#{tmux_command} ls`
-
+      # Redirect stderr to /dev/null in order to prevent "failed to connect
+      # to server: Connection refused" error message and non-zero exit status
+      # if no tmux sessions exist.
+      # Please see issues #402 and #414.
+      sessions = `#{tmux_command} ls 2> /dev/null`
       !!sessions.match("^#{name}:")
     end
 
