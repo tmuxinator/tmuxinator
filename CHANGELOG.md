@@ -9,6 +9,7 @@
 - Add synchronizations panes support #97
 
 ### Bugfixes
+- Supress `tmux ls` non-zero exit status/message when no sessions exist (#414)
 - Will no longer crash when no panes are specified in a window
 - Locking activesupport at < 5.0.0 to prevent broken builds on Ruby < 2.2.3
 - Fixed whitespace issues in help
