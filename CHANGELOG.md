@@ -1,4 +1,6 @@
 ## Unreleased
+- Temporarily hiding Shorthand entry in README.md to prevent new bug reports
+  about the mux symlink being broken
 
 ### Misc
 - Refactor Config.root
