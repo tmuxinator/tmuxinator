@@ -34,9 +34,6 @@ unset RBENV_DIR
   <% windows.each do |window| %>
 
   # Window "<%= window.name %>"
-    <% if window.synchronize %>
-  <%= window.tmux_synchronize_panes %>
-    <% end %>
     <% unless window.panes? %>
       <% if window.project.pre_window %>
   <%= window.tmux_pre_window_command %>
@@ -64,6 +61,10 @@ unset RBENV_DIR
 
   <%= window.tmux_layout_command %>
   <%= window.tmux_select_first_pane %>
+    <% end %>
+
+    <% if window.synchronize %>
+  <%= window.tmux_synchronize_panes %>
     <% end %>
   <% end %>
 

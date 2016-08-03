@@ -17,6 +17,7 @@
 - Will no longer crash when no panes are specified in a window
 - Locking activesupport at < 5.0.0 to prevent broken builds on Ruby < 2.2.3
 - Fixed whitespace issues in help
+- Initial commands no longer sent to multiple panes when synchronize panes enabled
 
 ## 0.8.1
 ### Bugfixes

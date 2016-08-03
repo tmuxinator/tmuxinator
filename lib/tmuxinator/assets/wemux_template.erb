@@ -23,9 +23,6 @@ if [ "$?" -eq 127 ]; then
   <%- windows.each do |window| -%>
 
   # Window "<%= window.name %>"
-    <%- if window.synchronize -%>
-  <%= window.tmux_synchronize_panes %>
-    <%- end %>
     <%- unless window.panes? -%>
   <%= window.tmux_pre_window_command %>
     <%- window.commands.each do |command| -%>
@@ -47,6 +44,10 @@ if [ "$?" -eq 127 ]; then
 
   <%= window.tmux_select_first_pane %>
     <%- end -%>
+
+    <%- if window.synchronize -%>
+  <%= window.tmux_synchronize_panes %>
+    <%- end %>
   <%- end -%>
 
   <%= tmux %> select-window -t <%= startup_window %>
