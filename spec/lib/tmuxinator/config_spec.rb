@@ -15,7 +15,11 @@ describe Tmuxinator::Config do
 
   describe "#default" do
     it "gets the path of the default config" do
-      expect(Tmuxinator::Config.default).to include("default.yml")
+      allow(Tmuxinator::Config).to receive(:exists?).and_return(true)
+      expect(Tmuxinator::Config.default("default")).to include("default.yml")
+    end
+    it "maps the path of sample if default fails" do
+      expect(Tmuxinator::Config.default("notafile")).to include("sample.yml")
     end
   end
 
@@ -37,34 +41,6 @@ describe Tmuxinator::Config do
 
       it "returns default-path" do
         expect(Tmuxinator::Config.default_path_option).to eq "default-path"
-      end
-    end
-  end
-
-  describe "#default?" do
-    let(:root) { Tmuxinator::Config.root }
-    let(:local_default) { Tmuxinator::Config::LOCAL_DEFAULT }
-    let(:proj_default) { Tmuxinator::Config.default }
-
-    context "when the file exists" do
-      before do
-        allow(File).to receive(:exists?).with(local_default) { false }
-        allow(File).to receive(:exists?).with(proj_default) { true }
-      end
-
-      it "returns true" do
-        expect(Tmuxinator::Config.default?).to be_truthy
-      end
-    end
-
-    context "when the file doesn't exist" do
-      before do
-        allow(File).to receive(:exists?).with(local_default) { false }
-        allow(File).to receive(:exists?).with(proj_default) { false }
-      end
-
-      it "returns true" do
-        expect(Tmuxinator::Config.default?).to be_falsey
       end
     end
   end
