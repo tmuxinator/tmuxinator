@@ -11,13 +11,13 @@
 - Allow mulitple panes to be defined using yaml hash or array #266, #406
 - Add `startup_pane` #380
 - Add synchronizations panes support #97
+- Add `before` and `after` options to synchronisation functionality
 
 ### Bugfixes
 - Supress `tmux ls` non-zero exit status/message when no sessions exist (#414)
 - Will no longer crash when no panes are specified in a window
 - Locking activesupport at < 5.0.0 to prevent broken builds on Ruby < 2.2.3
 - Fixed whitespace issues in help
-- Initial commands no longer sent to multiple panes when synchronize panes enabled
 
 ## 0.8.1
 ### Bugfixes
