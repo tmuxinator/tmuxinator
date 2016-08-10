@@ -43,7 +43,7 @@ module Tmuxinator
       end
 
       def exists?(name)
-        File.exists?(project(name))
+        File.exist?(project(name))
       end
 
       def project_in_root(name)
@@ -56,7 +56,7 @@ module Tmuxinator
       end
 
       def project_in_local
-        [LOCAL_DEFAULT].detect { |f| File.exists?(f) }
+        [LOCAL_DEFAULT].detect { |f| File.exist?(f) }
       end
 
       def default_project(name)

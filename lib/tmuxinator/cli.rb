@@ -80,7 +80,7 @@ module Tmuxinator
                else
                  Tmuxinator::Config.default_project(name)
                end
-        if File.exists?(path)
+        if File.exist?(path)
           path
         else
           generate_project_file(name, path)

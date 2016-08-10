@@ -3,6 +3,7 @@
   about the mux symlink being broken
 
 ### Misc
+- replace instances of `File.exists?` (deprecated) with `File.exist?`
 - Refactor Config.root
 
 ### New Features

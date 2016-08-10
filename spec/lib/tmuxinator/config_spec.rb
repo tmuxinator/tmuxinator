@@ -48,8 +48,8 @@ describe Tmuxinator::Config do
 
     context "when the file exists" do
       before do
-        allow(File).to receive(:exists?).with(local_default) { false }
-        allow(File).to receive(:exists?).with(proj_default) { true }
+        allow(File).to receive(:exist?).with(local_default) { false }
+        allow(File).to receive(:exist?).with(proj_default) { true }
       end
 
       it "returns true" do
@@ -59,8 +59,8 @@ describe Tmuxinator::Config do
 
     context "when the file doesn't exist" do
       before do
-        allow(File).to receive(:exists?).with(local_default) { false }
-        allow(File).to receive(:exists?).with(proj_default) { false }
+        allow(File).to receive(:exist?).with(local_default) { false }
+        allow(File).to receive(:exist?).with(proj_default) { false }
       end
 
       it "returns true" do
@@ -147,7 +147,7 @@ describe Tmuxinator::Config do
 
   describe "#exists?" do
     before do
-      allow(File).to receive_messages(exists?: true)
+      allow(File).to receive_messages(exist?: true)
       allow(Tmuxinator::Config).to receive_messages(project: "")
     end
 
@@ -181,7 +181,7 @@ describe Tmuxinator::Config do
   describe "#local?" do
     it "checks if the given project exists" do
       path = Tmuxinator::Config::LOCAL_DEFAULT
-      expect(File).to receive(:exists?).with(path) { true }
+      expect(File).to receive(:exist?).with(path) { true }
       expect(Tmuxinator::Config.local?).to be_truthy
     end
   end
@@ -191,7 +191,7 @@ describe Tmuxinator::Config do
 
     context "with a project yml" do
       it "gets the project as path to the yml file" do
-        expect(File).to receive(:exists?).with(default) { true }
+        expect(File).to receive(:exist?).with(default) { true }
         expect(Tmuxinator::Config.project_in_local).to eq default
       end
     end
@@ -220,7 +220,7 @@ describe Tmuxinator::Config do
 
     context "with a local project, but no project in root" do
       it "gets the project as path to the yml file" do
-        expect(File).to receive(:exists?).with(default) { true }
+        expect(File).to receive(:exist?).with(default) { true }
         expect(Tmuxinator::Config.project("sample")).to eq "./.tmuxinator.yml"
       end
     end
@@ -253,7 +253,7 @@ describe Tmuxinator::Config do
 
     context "when no project name is provided" do
       it "should raise if the local project file doesn't exist" do
-        expect(File).to receive(:exists?).with(default) { false }
+        expect(File).to receive(:exist?).with(default) { false }
         expect do
           Tmuxinator::Config.validate
         end.to raise_error RuntimeError, %r{Project.+doesn't.exist}
@@ -262,7 +262,7 @@ describe Tmuxinator::Config do
       it "should load and validate the project" do
         content = File.read(File.join(path, "sample.yml"))
 
-        expect(File).to receive(:exists?).with(default).at_least(:once) { true }
+        expect(File).to receive(:exist?).with(default).at_least(:once) { true }
         expect(File).to receive(:read).with(default).and_return(content)
 
         expect(Tmuxinator::Config.validate).to be_a Tmuxinator::Project
