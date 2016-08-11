@@ -1,6 +1,7 @@
 ## Unreleased
 - Temporarily hiding Shorthand entry in README.md to prevent new bug reports
   about the mux symlink being broken
+- Use `alias` (bash, zsh) and `abbr` (fish) instead of a symlink to hash `mux`. #401
 
 ### Misc
 - replace instances of `File.exists?` (deprecated) with `File.exist?`
