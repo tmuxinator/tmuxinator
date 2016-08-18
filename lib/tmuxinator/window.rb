@@ -115,5 +115,13 @@ module Tmuxinator
     def tmux_select_first_pane
       "#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.base_index}"
     end
+
+    def synchronize_before?
+      synchronize == true || synchronize == "before"
+    end
+
+    def synchronize_after?
+      synchronize == "after"
+    end
   end
 end

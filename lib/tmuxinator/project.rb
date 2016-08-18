@@ -16,6 +16,12 @@ module Tmuxinator
     DEPRECATION: The cli_args option has been replaced by the tmux_options
     option and will not be supported in 0.8.0.
     M
+    SYNC_DEP_MSG = <<-M
+    DEPRECATION: The synchronize option's current default behaviour is to
+    enable pane synchronization before running commands. As of 0.8.2, by
+    default, synchronization will only be enabled after the commands have
+    ran. To use this behaviour now use the 'synchronize: after' option.
+    M
 
     attr_reader :yaml
     attr_reader :force_attach
@@ -239,6 +245,7 @@ module Tmuxinator
       deprecations << RBENVRVM_DEP_MSG if yaml["rbenv"] || yaml["rvm"]
       deprecations << TABS_DEP_MSG if yaml["tabs"]
       deprecations << CLIARGS_DEP_MSG if yaml["cli_args"]
+      deprecations << SYNC_DEP_MSG if legacy_synchronize?
       deprecations
     end
 
@@ -281,6 +288,20 @@ module Tmuxinator
       end
 
       options_hash
+    end
+
+    def legacy_synchronize?
+      (synchronize_options & [true, "before"]).any?
+    end
+
+    def synchronize_options
+      window_options.map do |option|
+        option["synchronize"] if option.is_a?(Hash)
+      end
+    end
+
+    def window_options
+      yaml["windows"].map(&:values).flatten
     end
   end
 end

@@ -239,27 +239,67 @@ describe Tmuxinator::Window do
     end
   end
 
-  describe "#synchronize" do
-    context "synchronization enabled" do
+  describe "#synchronize_before?" do
+    subject { window.synchronize_before? }
+
+    context "synchronize is 'before'" do
+      let(:synchronize) { "before" }
+
+      it { is_expected.to be true }
+    end
+
+    context "synchronize is true" do
       let(:synchronize) { true }
 
-      it "should have synchronization enabled" do
-        expect(window.synchronize).to be true
-      end
+      it { is_expected.to be true }
+    end
+
+    context "synchronize is 'after'" do
+      let(:synchronize) { "after" }
+
+      it { is_expected.to be false }
     end
 
     context "synchronization disabled" do
       let(:synchronize) { false }
 
-      it "should have synchronization disabled" do
-        expect(window.synchronize).to be false
-      end
+      it { is_expected.to be false }
     end
 
     context "synchronization not specified" do
-      it "should have synchronization disabled" do
-        expect(window.synchronize).to be false
-      end
+      it { is_expected.to be false }
+    end
+  end
+
+  describe "#synchronize_after?" do
+    subject { window.synchronize_after? }
+
+    context "synchronization is 'after'" do
+      let(:synchronize) { "after" }
+
+      it { is_expected.to be true }
+    end
+
+    context "synchronization is true" do
+      let(:synchronize) { true }
+
+      it { is_expected.to be false }
+    end
+
+    context "synchronization is 'before'" do
+      let(:synchronize) { "before" }
+
+      it { is_expected.to be false }
+    end
+
+    context "synchronization disabled" do
+      let(:synchronize) { false }
+
+      it { is_expected.to be false }
+    end
+
+    context "synchronization not specified" do
+      it { is_expected.to be false }
     end
   end
 
