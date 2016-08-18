@@ -11,7 +11,8 @@
 - Allow mulitple panes to be defined using yaml hash or array #266, #406
 - Add `startup_pane` #380
 - Add synchronizations panes support #97
-- Add `before` and `after` options to synchronisation functionality
+- Add `before` and `after` options to synchronization functionality
+- Add deprecation warning if `synchronize: true` or `before` is used
 
 ### Bugfixes
 - Supress `tmux ls` non-zero exit status/message when no sessions exist (#414)

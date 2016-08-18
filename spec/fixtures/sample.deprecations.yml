@@ -32,3 +32,6 @@ tabs:
   - console: bundle exec rails c
   - capistrano:
   - server: ssh user@example.com
+windows:
+  - sample:
+    - synchronize: true
