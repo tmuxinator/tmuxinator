@@ -18,9 +18,12 @@ module Tmuxinator
     M
     SYNC_DEP_MSG = <<-M
     DEPRECATION: The synchronize option's current default behaviour is to
-    enable pane synchronization before running commands. As of 0.8.2, by
-    default, synchronization will only be enabled after the commands have
-    ran. To use this behaviour now use the 'synchronize: after' option.
+    enable pane synchronization before running commands. In a future release,
+    the default syncronization option will be `after`, i.e. synchronization of
+    panes will occur after the commands described in each of the panes
+    have run. At that time, the current behavior will need to be explicitly
+    enabled, using the `synchronize: before` option.  To use this behaviour
+    now, use the 'synchronize: after' option.
     M
 
     attr_reader :yaml
