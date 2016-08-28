@@ -278,48 +278,51 @@ describe Tmuxinator::Cli do
     end
 
     # this command variant only works for tmux version 1.6 and up.
-    context "from a session", if: Tmuxinator::Config.version >= 1.6 do
-      context "session exists" do
-        before(:all) do
-          # Can't add variables through `let` in `before :all`.
-          @session = "for-testing-tmuxinator"
-          # Pass the -d option, so that the session is not attached.
-          Kernel.system "tmux new-session -d -s #{@session}"
+    context "from a session" do
+      context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
+        context "session exists" do
+          before(:all) do
+            # Can't add variables through `let` in `before :all`.
+            @session = "for-testing-tmuxinator"
+            # Pass the -d option, so that the session is not attached.
+            Kernel.system "tmux new-session -d -s #{@session}"
+          end
+
+          before do
+            ARGV.replace ["new", name, @session]
+          end
+
+          after(:all) do
+            puts @session
+            Kernel.system "tmux kill-session -t #{@session}"
+          end
+
+          it "creates a project file" do
+            capture_io { cli.start }
+            expect(file.string).to_not be_empty
+            # make sure the output is valid YAML
+            expect { YAML.parse file.string }.to_not raise_error
+          end
         end
 
-        before do
-          ARGV.replace ["new", name, @session]
-        end
+        context "session doesn't exist" do
+          before do
+            ARGV.replace ["new", name, "sessiondoesnotexist"]
+          end
 
-        after(:all) do
-          puts @session
-          Kernel.system "tmux kill-session -t #{@session}"
-        end
-
-        it "creates a project file" do
-          capture_io { cli.start }
-          expect(file.string).to_not be_empty
-          # make sure the output is valid YAML
-          expect { YAML.parse file.string }.to_not raise_error
+          it "fails" do
+            expect { cli.start }.to raise_error RuntimeError
+          end
         end
       end
 
-      context "session doesn't exist" do
+      context "with tmux < 1.6" do
         before do
-          ARGV.replace ["new", name, "sessiondoesnotexist"]
+          ARGV.replace ["new", name, "sessionname"]
+          allow(Tmuxinator::Config).to receive(:version).and_return(1.5)
         end
 
-        it "should fail" do
-          expect { cli.start }.to raise_error RuntimeError
-        end
-      end
-
-      context "unsupported", if: Tmuxinator::Config.version < 1.6 do
-        before do
-          ARGV.replace ["new", name, "sessiondoesnotexist"]
-        end
-
-        it "should fail" do
+        it "is unsupported" do
           expect { cli.start }.to raise_error RuntimeError
         end
       end
