@@ -85,6 +85,11 @@ module Tmuxinator
       end
 
       def new_project_with_session(name, session)
+        if Tmuxinator::Config.version < 1.6
+          raise "Creating projects from sessions is unsupported\
+            for tmux version 1.5 or lower."
+        end
+
         windows, _, s0 = Open3.capture3(<<-CMD)
           tmux list-windows -t #{session}\
           -F "#W \#{window_layout} \#{window_active} \#{pane_current_path}"

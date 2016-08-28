@@ -313,6 +313,16 @@ describe Tmuxinator::Cli do
           expect { cli.start }.to raise_error RuntimeError
         end
       end
+
+      context "unsupported", if: Tmuxinator::Config.version < 1.6 do
+        before do
+          ARGV.replace ["new", name, "sessiondoesnotexist"]
+        end
+
+        it "should fail" do
+          expect { cli.start }.to raise_error RuntimeError
+        end
+      end
     end
   end
 
