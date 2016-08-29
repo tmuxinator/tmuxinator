@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Tmuxinator::Config do
   describe "#root" do
-    it "is ~/.tmuxintaor" do
+    it "is ~/.tmuxinator" do
       expect(Tmuxinator::Config.root).to eq "#{ENV['HOME']}/.tmuxinator"
     end
   end
@@ -247,7 +247,7 @@ describe Tmuxinator::Config do
       it "should load and validate the project" do
         expect(Tmuxinator::Config).to receive_messages(root: path)
         expect(Tmuxinator::Config.validate(name: "sample")).to \
-          be_a Tmuxinator::Project
+          be_a Tmuxinator::Project::Tmux
       end
     end
 
@@ -265,7 +265,7 @@ describe Tmuxinator::Config do
         expect(File).to receive(:exist?).with(default).at_least(:once) { true }
         expect(File).to receive(:read).with(default).and_return(content)
 
-        expect(Tmuxinator::Config.validate).to be_a Tmuxinator::Project
+        expect(Tmuxinator::Config.validate).to be_a Tmuxinator::Project::Tmux
       end
     end
   end
