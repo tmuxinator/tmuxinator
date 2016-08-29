@@ -13,6 +13,9 @@
 - Add synchronizations panes support #97
 - Add `before` and `after` options to synchronization functionality
 - Add deprecation warning if `synchronize: true` or `before` is used
+- Add TmuxValidator, which currently only validates that tmux has been installed
+  and is available on $PATH. In the future, this module could also be used to
+  validate minimum tmux version, etc. #385
 
 ### Bugfixes
 - Supress `tmux ls` non-zero exit status/message when no sessions exist (#414)
