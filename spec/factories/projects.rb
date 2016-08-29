@@ -30,7 +30,9 @@ FactoryGirl.define do
       file { yaml_load("spec/fixtures/sample.yml") }
     end
 
-    initialize_with { Tmuxinator::Project::Tmux.new(file, custom_name: "custom") }
+    initialize_with do
+      Tmuxinator::Project::Tmux.new(file, custom_name: "custom")
+    end
   end
 
   factory :project_with_number_as_name, class: Tmuxinator::Project::Tmux do
@@ -41,7 +43,10 @@ FactoryGirl.define do
     initialize_with { Tmuxinator::Project::Tmux.new(file) }
   end
 
-  factory :project_with_literals_as_window_name, class: Tmuxinator::Project::Tmux do
+  factory(
+    :project_with_literals_as_window_name,
+    class: Tmuxinator::Project::Tmux
+  ) do
     transient do
       file { yaml_load("spec/fixtures/sample_literals_as_window_name.yml") }
     end

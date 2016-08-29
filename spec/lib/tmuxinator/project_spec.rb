@@ -545,7 +545,8 @@ describe Tmuxinator::Project do
     end
 
     it "should return an instance of the class if the file loads" do
-      expect(described_class.load(path, options)).to be_a Tmuxinator::Project::Tmux
+      expect(described_class.load(path, options)).
+        to be_a Tmuxinator::Project::Tmux
     end
   end
 

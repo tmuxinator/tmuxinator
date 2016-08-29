@@ -89,7 +89,6 @@ module Tmuxinator
 
         raise "Cannot force_attach and force_detach at the same time" \
           if @force_attach && @force_detach
-
       end
 
       def render
