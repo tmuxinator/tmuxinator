@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe Tmuxinator::WemuxSupport do
-  let(:klass) { Class.new { include Tmuxinator::WemuxSupport } }
-  let(:instance) { klass.new }
+  let(:klass) { Tmuxinator::Project }
+  let(:instance) { klass.new({}) }
 
   it { expect(instance).to respond_to :wemux? }
   it { expect(instance).to respond_to :load_wemux_overrides }
