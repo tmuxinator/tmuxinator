@@ -15,7 +15,8 @@ require "tmuxinator/window"
 require "tmuxinator/version"
 require "tmuxinator/tmux_validator"
 
-module Tmuxinator; end
+module Tmuxinator
+end
 
 class Object
   def blank?
