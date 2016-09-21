@@ -263,11 +263,9 @@ This will fire up tmux with all the tabs and panes you configured.
 tmuxinator start [project] -n [name]
 ```
 
-If you use the optional `[name]` argument, it will start a new tmux session
-with the custom name name provided.  This is to enable reuse of a project
-without tmux session name collision.
+If you use the optional `[name]` argument, it will start a new tmux session with the custom name provided. This is to enable reuse of a project without tmux session name collision.
 
-If there is a `./.tmuxinator.yml` file in the current working directory but not a named project file in `~/.tmuxinator`, tmuxinator will use the local file.  This is primarily intended to be used for sharing tmux configurations in complex development environments.
+If there is a `./.tmuxinator.yml` file in the current working directory but not a named project file in `~/.tmuxinator`, tmuxinator will use the local file. This is primarily intended to be used for sharing tmux configurations in complex development environments.
 
 ## Shorthand
 
