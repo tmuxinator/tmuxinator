@@ -1,0 +1,5 @@
+# ~/.tmuxinator/noroot.yml
+# you can make as many tabs as you wish...
+
+windows:
+  - test: echo foo
