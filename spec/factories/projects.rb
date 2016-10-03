@@ -73,6 +73,14 @@ FactoryGirl.define do
     initialize_with { Tmuxinator::Project.new(file) }
   end
 
+  factory :noroot_project, class: Tmuxinator::Project do
+    transient do
+      file { yaml_load("spec/fixtures/noroot.yml") }
+    end
+
+    initialize_with { Tmuxinator::Project.new(file) }
+  end
+
   factory :nowindows_project, class: Tmuxinator::Project do
     transient do
       file { yaml_load("spec/fixtures/nowindows.yml") }

@@ -23,6 +23,7 @@ describe Tmuxinator::Project do
 
   let(:wemux_project) { FactoryGirl.build(:wemux_project) }
   let(:noname_project) { FactoryGirl.build(:noname_project) }
+  let(:noroot_project) { FactoryGirl.build(:noroot_project) }
   let(:nameless_window_project) do
     FactoryGirl.build(:nameless_window_project)
   end
@@ -123,7 +124,7 @@ describe Tmuxinator::Project do
 
     context "without root" do
       it "doesn't throw an error" do
-        expect { noname_project.root }.to_not raise_error
+        expect { noroot_project.root }.to_not raise_error
       end
     end
   end
