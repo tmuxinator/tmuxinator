@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- Removed support for Ruby 1.9.3
+
 ## 0.9.0
 ### Misc
 - Temporarily hiding Shorthand entry in README.md to prevent new bug reports
