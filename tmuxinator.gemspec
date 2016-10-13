@@ -38,8 +38,9 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.8.23"
   s.required_ruby_version = ">= 2.0.0"
 
-  s.add_dependency "thor", "~> 0.19", ">= 0.15.0"
   s.add_dependency "erubis", "~> 2.6"
+  s.add_dependency "thor", "~> 0.19", ">= 0.15.0"
+  s.add_dependency "xdg", "~>2.2", ">= 2.2.3"
 
   s.add_development_dependency "bundler", "~> 1.3"
   s.add_development_dependency "rake", "~> 10.4"

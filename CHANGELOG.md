@@ -3,6 +3,7 @@
 - Removed support for Ruby 1.9.3
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
+- Support user-specified and XDG Base Dirs configuration directories
 
 ## 0.9.0
 ### Misc

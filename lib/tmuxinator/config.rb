@@ -4,10 +4,26 @@ module Tmuxinator
     NO_LOCAL_FILE_MSG = "Project file at ./.tmuxinator.yml doesn't exist."
 
     class << self
-      def root
-        root_dir = File.expand_path("#{ENV['HOME']}/.tmuxinator")
-        Dir.mkdir(root_dir) unless File.directory?(root_dir)
-        root_dir
+      # The directory (created if needed) in which to store new projects
+      def directory
+        environment = ENV['TMUXINATOR_CONFIG']
+        if !environment.nil? && !environment.empty?
+          Dir.mkdir(environment) unless File.directory?(environment)
+          return environment
+        end
+        return xdg if File.directory?(xdg)
+        return home if File.directory?(home)
+        # No project directory specified or existant, default to XDG:
+        Dir.mkdir(xdg)
+        xdg
+      end
+
+      def home
+        ENV['HOME'] + "/.tmuxinator"
+      end
+
+      def xdg
+        XDG['CONFIG'].to_s + "/tmuxinator"
       end
 
       def sample
@@ -15,7 +31,7 @@ module Tmuxinator
       end
 
       def default
-        "#{ENV['HOME']}/.tmuxinator/default.yml"
+        "#{directory}/default.yml"
       end
 
       def default?
@@ -46,25 +62,32 @@ module Tmuxinator
         File.exist?(project(name))
       end
 
-      def project_in_root(name)
-        projects = Dir.glob("#{root}/**/*.yml")
-        projects.detect { |project| File.basename(project, ".yml") == name }
+      # The first project found matching 'name'
+      def global_project(name)
+        project_in(ENV['TMUXINATOR_CONFIG'], name) ||
+        project_in(xdg, name) ||
+        project_in(home, name)
       end
 
       def local?
-        project_in_local
+        local_project
       end
 
-      def project_in_local
+      def local_project
         [LOCAL_DEFAULT].detect { |f| File.exist?(f) }
       end
 
       def default_project(name)
-        "#{root}/#{name}.yml"
+        "#{directory}/#{name}.yml"
       end
 
+      # Pathname of project file
       def project(name)
-        project_in_root(name) || project_in_local || default_project(name)
+        project_in(ENV['TMUXINATOR_CONFIG'], name) ||
+        project_in(xdg, name) ||
+        project_in(home, name) ||
+        local_project || # refactor?
+        default_project(name)
       end
 
       def template
@@ -75,9 +98,26 @@ module Tmuxinator
         asset_path "wemux_template.erb"
       end
 
+      # Sorted list of all .yml files, including duplicates
       def configs
-        Dir["#{Tmuxinator::Config.root}/**/*.yml"].sort.map do |path|
-          path.gsub("#{Tmuxinator::Config.root}/", "").gsub(".yml", "")
+        configs = []
+        directories.each do |directory|
+          configs += Dir["#{directory}/**/*.yml"].collect do |path|
+            path.gsub("#{directory}/", "").gsub(".yml", "")
+          end
+        end
+        configs.sort
+      end
+
+      # Existant directories which may contain project files
+      # Listed in search order
+      # Used by `implode` and `list` commands
+      def directories
+        environment = ENV['TMUXINATOR_CONFIG']
+        if !environment.nil? && !environment.empty?
+          [environment]
+        else
+          [xdg, home].select { |d| File.directory? d }
         end
       end
 
@@ -89,7 +129,7 @@ module Tmuxinator
         project_file = if name.nil?
                          raise NO_LOCAL_FILE_MSG \
                            unless Tmuxinator::Config.local?
-                         project_in_local
+                         local_project
                        else
                          raise "Project #{name} doesn't exist." \
                            unless Tmuxinator::Config.exists?(name)
@@ -102,6 +142,14 @@ module Tmuxinator
 
       def asset_path(asset)
         "#{File.dirname(__FILE__)}/assets/#{asset}"
+      end
+
+      # The first pathname of the project named 'name' found while
+      # recursively searching 'directory'
+      def project_in(directory, name)
+        return nil if String(directory).empty?
+        projects = Dir.glob("#{directory}/**/*.yml")
+        projects.detect { |project| File.basename(project, ".yml") == name }
       end
     end
   end

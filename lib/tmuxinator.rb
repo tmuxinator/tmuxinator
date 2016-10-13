@@ -1,8 +1,9 @@
-require "yaml"
 require "erubis"
 require "shellwords"
 require "thor"
 require "thor/version"
+require "xdg"
+require "yaml"
 
 require "tmuxinator/util"
 require "tmuxinator/deprecations"

@@ -1,6 +1,7 @@
 require "coveralls"
 require "simplecov"
 require "pry"
+require "xdg"
 
 formatters = [
   SimpleCov::Formatter::HTMLFormatter,
