@@ -138,6 +138,11 @@ module Tmuxinator
         Tmuxinator::Project.load(project_file, options).validate!
       end
 
+      # Deprecated methods: ignore the 1st, use the 2nd
+      alias :root             :directory
+      alias :project_in_root  :global_project
+      alias :project_in_local :local_project
+
       private
 
       def asset_path(asset)
