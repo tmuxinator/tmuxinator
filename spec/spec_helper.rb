@@ -1,6 +1,6 @@
 require "coveralls"
-require "simplecov"
 require "pry"
+require "simplecov"
 require "xdg"
 
 formatters = [
