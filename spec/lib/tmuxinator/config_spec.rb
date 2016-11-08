@@ -44,6 +44,20 @@ describe Tmuxinator::Config do
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
       end
     end
+
+    context 'parent directory(s) do not exist' do
+      it 'creates parent directories if required' do
+        allow(File).to receive(:directory?).and_call_original
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.home) \
+         .and_return false
+        Dir.mktmpdir do |dir|
+          config_parent = "#{dir}/non_existant_parent/s"
+          allow(XDG).to receive(:[]).with('CONFIG').and_return config_parent
+          expect(Tmuxinator::Config.directory).to eq "#{config_parent}/tmuxinator"
+          expect(File.directory? "#{config_parent}/tmuxinator").to be true
+        end
+      end
+    end
   end
 
   describe "#directories" do
