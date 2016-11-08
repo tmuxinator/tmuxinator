@@ -83,9 +83,7 @@ module Tmuxinator
 
       # Pathname of the given project
       def project(name)
-        global_project(name) ||
-          local_project ||
-          default_project(name)
+        global_project(name) || local_project || default_project(name)
       end
 
       def template
