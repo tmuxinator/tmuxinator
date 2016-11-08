@@ -13,7 +13,22 @@ describe Tmuxinator::Config do
         allow(File).to receive(:directory?).and_return true
         expect(Tmuxinator::Config.directory).to eq 'expected'
       end
+    context 'parent directory does not exist' do
+      it 'creates parent directories if required' do
+        non_existant = '/does-not-exist' # a directory which does not exist
+        allow(Tmuxinator::Config).to receive(:xdg) \
+         .and_return non_existant + '/tmuxinator'
+        # allow(ENV).to receive(:[]).and_call_original
+        # allow(ENV).to receive(:[]).with('XDG_CONFIG_HOME')
+          # .and_return non_existant
+        # allow(Dir).to receive(:mkdir).with(non_existant)
+        allow(File).to receive(:directory?).and_return false
+        expect(Dir).to receive(:mkdir).with(non_existant)
+        allow(Dir).to receive(:mkdir).with(non_existant + '/tmuxinator')
+        expect(Tmuxinator::Config.directory).to eq(non_existant + '/tmuxinator')
+      end
     end
+  end
 
     context "only ~/.tmuxinator exists" do
       it "is ~/.tmuxinator" do
