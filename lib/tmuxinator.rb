@@ -1,4 +1,5 @@
 require "erubis"
+require "fileutils"
 require "shellwords"
 require "thor"
 require "thor/version"

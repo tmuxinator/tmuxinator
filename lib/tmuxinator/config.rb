@@ -8,13 +8,13 @@ module Tmuxinator
       def directory
         environment = ENV['TMUXINATOR_CONFIG']
         if !environment.nil? && !environment.empty?
-          Dir.mkdir(environment) unless File.directory?(environment)
+          FileUtils::mkpath(environment) unless File.directory?(environment)
           return environment
         end
         return xdg if File.directory?(xdg)
         return home if File.directory?(home)
         # No project directory specified or existant, default to XDG:
-        Dir.mkdir(xdg)
+        FileUtils::mkpath(xdg)
         xdg
       end
 

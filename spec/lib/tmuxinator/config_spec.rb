@@ -13,22 +13,7 @@ describe Tmuxinator::Config do
         allow(File).to receive(:directory?).and_return true
         expect(Tmuxinator::Config.directory).to eq 'expected'
       end
-    context 'parent directory does not exist' do
-      it 'creates parent directories if required' do
-        non_existant = '/does-not-exist' # a directory which does not exist
-        allow(Tmuxinator::Config).to receive(:xdg) \
-         .and_return non_existant + '/tmuxinator'
-        # allow(ENV).to receive(:[]).and_call_original
-        # allow(ENV).to receive(:[]).with('XDG_CONFIG_HOME')
-          # .and_return non_existant
-        # allow(Dir).to receive(:mkdir).with(non_existant)
-        allow(File).to receive(:directory?).and_return false
-        expect(Dir).to receive(:mkdir).with(non_existant)
-        allow(Dir).to receive(:mkdir).with(non_existant + '/tmuxinator')
-        expect(Tmuxinator::Config.directory).to eq(non_existant + '/tmuxinator')
-      end
     end
-  end
 
     context "only ~/.tmuxinator exists" do
       it "is ~/.tmuxinator" do
@@ -57,6 +42,20 @@ describe Tmuxinator::Config do
         allow(File).to receive(:directory?).with(Tmuxinator::Config.home)
           .and_return true
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
+      end
+    end
+
+    context 'parent directory(s) do not exist' do
+      it 'creates parent directories if required' do
+        allow(File).to receive(:directory?).and_call_original
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.home) \
+         .and_return false
+        Dir.mktmpdir do |dir|
+          config_parent = "#{dir}/non_existant_parent/s"
+          allow(XDG).to receive(:[]).with('CONFIG').and_return config_parent
+          expect(Tmuxinator::Config.directory).to eq "#{config_parent}/tmuxinator"
+          expect(File.directory? "#{config_parent}/tmuxinator").to be true
+        end
       end
     end
   end
