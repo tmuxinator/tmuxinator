@@ -6,7 +6,7 @@ module Tmuxinator
     class << self
       # The directory (created if needed) in which to store new projects
       def directory
-        environment = ENV['TMUXINATOR_CONFIG']
+        environment = ENV["TMUXINATOR_CONFIG"]
         if !environment.nil? && !environment.empty?
           FileUtils::mkpath(environment) unless File.directory?(environment)
           return environment
@@ -19,11 +19,11 @@ module Tmuxinator
       end
 
       def home
-        ENV['HOME'] + "/.tmuxinator"
+        ENV["HOME"] + "/.tmuxinator"
       end
 
       def xdg
-        XDG['CONFIG'].to_s + "/tmuxinator"
+        XDG["CONFIG"].to_s + "/tmuxinator"
       end
 
       def sample
@@ -68,9 +68,9 @@ module Tmuxinator
 
       # Pathname of given project searching only global directories
       def global_project(name)
-        project_in(ENV['TMUXINATOR_CONFIG'], name) ||
-        project_in(xdg, name) ||
-        project_in(home, name)
+        project_in(ENV["TMUXINATOR_CONFIG"], name) ||
+          project_in(xdg, name) ||
+          project_in(home, name)
       end
 
       def local_project
@@ -84,8 +84,8 @@ module Tmuxinator
       # Pathname of the given project
       def project(name)
         global_project(name) ||
-        local_project ||
-        default_project(name)
+          local_project ||
+          default_project(name)
       end
 
       def template
@@ -100,7 +100,7 @@ module Tmuxinator
       def configs
         configs = []
         directories.each do |directory|
-          configs += Dir["#{directory}/**/*.yml"].collect do |path|
+          configs += Dir["#{directory}/**/*.yml"].map do |path|
             path.gsub("#{directory}/", "").gsub(".yml", "")
           end
         end
@@ -111,7 +111,7 @@ module Tmuxinator
       # Listed in search order
       # Used by `implode` and `list` commands
       def directories
-        environment = ENV['TMUXINATOR_CONFIG']
+        environment = ENV["TMUXINATOR_CONFIG"]
         if !environment.nil? && !environment.empty?
           [environment]
         else

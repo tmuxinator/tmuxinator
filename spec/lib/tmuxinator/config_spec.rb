@@ -6,54 +6,55 @@ describe Tmuxinator::Config do
   let(:home_config_dir) { "#{fixtures_dir}/dot-tmuxinator" }
 
   describe "#directory" do
-    context 'environment variable $TMUXINATOR_CONFIG set' do
+    context "environment variable $TMUXINATOR_CONFIG set" do
       it "is $TMUXINATOR_CONFIG" do
-        allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG')
-          .and_return 'expected'
+        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
+          and_return "expected"
         allow(File).to receive(:directory?).and_return true
-        expect(Tmuxinator::Config.directory).to eq 'expected'
+        expect(Tmuxinator::Config.directory).to eq "expected"
       end
     end
 
     context "only ~/.tmuxinator exists" do
       it "is ~/.tmuxinator" do
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg)
-          .and_return false
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home)
-          .and_return true
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
+          and_return false
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
+          and_return true
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.home
       end
     end
 
     context "only $XDG_CONFIG_HOME/tmuxinator exists" do
       it "is #xdg" do
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg)
-          .and_return true
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home)
-          .and_return false
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
+          and_return true
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
+          and_return false
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
       end
     end
 
     context "both $XDG_CONFIG_HOME/tmuxinator and ~/.tmuxinator exist" do
       it "is #xdg" do
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg)
-          .and_return true
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home)
-          .and_return true
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
+          and_return true
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
+          and_return true
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
       end
     end
 
-    context 'parent directory(s) do not exist' do
-      it 'creates parent directories if required' do
+    context "parent directory(s) do not exist" do
+      it "creates parent directories if required" do
         allow(File).to receive(:directory?).and_call_original
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home) \
-         .and_return false
+        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
+          and_return false
         Dir.mktmpdir do |dir|
           config_parent = "#{dir}/non_existant_parent/s"
-          allow(XDG).to receive(:[]).with('CONFIG').and_return config_parent
-          expect(Tmuxinator::Config.directory).to eq "#{config_parent}/tmuxinator"
+          allow(XDG).to receive(:[]).with("CONFIG").and_return config_parent
+          expect(Tmuxinator::Config.directory).
+            to eq "#{config_parent}/tmuxinator"
           expect(File.directory? "#{config_parent}/tmuxinator").to be true
         end
       end
@@ -67,17 +68,17 @@ describe Tmuxinator::Config do
     end
 
     it "is only [$TMUXINATOR_CONFIG] if set" do
-      allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG')
-        .and_return 'expected'
+      allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
+        and_return "expected"
       allow(File).to receive(:directory?).and_return true
-      expect(Tmuxinator::Config.directories).to eq ['expected']
+      expect(Tmuxinator::Config.directories).to eq ["expected"]
     end
 
     it "contains #xdg before #home" do
-      allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg)
-        .and_return true
-      allow(File).to receive(:directory?).with(Tmuxinator::Config.home)
-        .and_return true
+      allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
+        and_return true
+      allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
+        and_return true
       expect(Tmuxinator::Config.directories).to eq \
         [Tmuxinator::Config.xdg, Tmuxinator::Config.home]
     end
@@ -164,12 +165,13 @@ describe Tmuxinator::Config do
     end
 
     it "gets a sorted list of all projects" do
-      expect(Tmuxinator::Config.configs).to eq ["both", "both", "dup/local-dup", "home", "local-dup", "xdg"]
+      expect(Tmuxinator::Config.configs).
+        to eq ["both", "both", "dup/local-dup", "home", "local-dup", "xdg"]
     end
 
     it "lists only projects in $TMUXINATOR_CONFIG when set" do
-      allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG')
-        .and_return "#{fixtures_dir}/TMUXINATOR_CONFIG"
+      allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
+        and_return "#{fixtures_dir}/TMUXINATOR_CONFIG"
       expect(Tmuxinator::Config.configs).to eq ["TMUXINATOR_CONFIG"]
     end
   end
@@ -315,7 +317,8 @@ describe Tmuxinator::Config do
       end
 
       it "gets the project as path to the yml file" do
-        expect(Tmuxinator::Config.project("sample")).to eq "#{directory}/sample.yml"
+        expect(Tmuxinator::Config.project("sample")).
+          to eq "#{directory}/sample.yml"
       end
     end
 

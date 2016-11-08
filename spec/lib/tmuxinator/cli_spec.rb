@@ -446,14 +446,12 @@ describe Tmuxinator::Cli do
     end
 
     it "deletes the configuration directory(s)" do
-      # allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg) { true }
-      # allow(File).to receive(:directory?).with(Tmuxinator::Config.home) { true }
-      allow(Tmuxinator::Config).to receive(:directories) { \
-        [Tmuxinator::Config.xdg, Tmuxinator::Config.home] }
-      expect(FileUtils).to receive(:remove_dir).once
-        .with(Tmuxinator::Config.xdg)
-      expect(FileUtils).to receive(:remove_dir).once
-        .with(Tmuxinator::Config.home)
+      allow(Tmuxinator::Config).to receive(:directories) \
+        { [Tmuxinator::Config.xdg, Tmuxinator::Config.home] }
+      expect(FileUtils).to receive(:remove_dir).once.
+        with(Tmuxinator::Config.xdg)
+      expect(FileUtils).to receive(:remove_dir).once.
+        with(Tmuxinator::Config.home)
       expect(FileUtils).to receive(:remove_dir).never
       capture_io { cli.start }
     end
@@ -461,7 +459,7 @@ describe Tmuxinator::Cli do
     context "$TMUXINATOR_CONFIG specified" do
       it "only deletes projects in that directory" do
         allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG').and_return "dir"
+        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").and_return "dir"
         allow(File).to receive(:directory?).with("dir").and_return true
         expect(FileUtils).to receive(:remove_dir).once.with("dir")
         expect(FileUtils).to receive(:remove_dir).never
