@@ -62,15 +62,15 @@ module Tmuxinator
         File.exist?(project(name))
       end
 
-      # The first project found matching 'name'
+      def local?
+        local_project
+      end
+
+      # Pathname of given project searching only global directories
       def global_project(name)
         project_in(ENV['TMUXINATOR_CONFIG'], name) ||
         project_in(xdg, name) ||
         project_in(home, name)
-      end
-
-      def local?
-        local_project
       end
 
       def local_project
@@ -81,12 +81,10 @@ module Tmuxinator
         "#{directory}/#{name}.yml"
       end
 
-      # Pathname of project file
+      # Pathname of the given project
       def project(name)
-        project_in(ENV['TMUXINATOR_CONFIG'], name) ||
-        project_in(xdg, name) ||
-        project_in(home, name) ||
-        local_project || # refactor?
+        global_project(name) ||
+        local_project ||
         default_project(name)
       end
 
