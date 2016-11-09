@@ -135,7 +135,8 @@ module Tmuxinator
       elsif pre_tab?
         yaml["pre_tab"]
       else
-        yaml["pre_window"]
+        pre_window = yaml["pre_window"]
+        pre_window.is_a?(Array) ? pre_window.join("; ") : pre_window
       end
     end
 
