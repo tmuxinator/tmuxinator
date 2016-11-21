@@ -6,7 +6,6 @@ module Tmuxinator
     class << self
       # The directory (created if needed) in which to store new projects
       def directory
-        environment = ENV["TMUXINATOR_CONFIG"]
         if !environment.nil? && !environment.empty?
           FileUtils::mkpath(environment) unless File.directory?(environment)
           return environment
@@ -22,8 +21,13 @@ module Tmuxinator
         ENV["HOME"] + "/.tmuxinator"
       end
 
+      # Is ~/.config/tmuxinator unless $XDG_CONFIG_DIR is set
       def xdg
         XDG["CONFIG"].to_s + "/tmuxinator"
+      end
+
+      def environment
+        ENV["TMUXINATOR_CONFIG"]
       end
 
       def sample
@@ -68,7 +72,7 @@ module Tmuxinator
 
       # Pathname of given project searching only global directories
       def global_project(name)
-        project_in(ENV["TMUXINATOR_CONFIG"], name) ||
+        project_in(environment, name) ||
           project_in(xdg, name) ||
           project_in(home, name)
       end
@@ -107,7 +111,6 @@ module Tmuxinator
       # Listed in search order
       # Used by `implode` and `list` commands
       def directories
-        environment = ENV["TMUXINATOR_CONFIG"]
         if !environment.nil? && !environment.empty?
           [environment]
         else
