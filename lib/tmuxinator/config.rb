@@ -96,13 +96,11 @@ module Tmuxinator
 
       # Sorted list of all .yml files, including duplicates
       def configs
-        configs = []
-        directories.each do |directory|
-          configs += Dir["#{directory}/**/*.yml"].map do |path|
+        directories.map do |directory|
+          Dir["#{directory}/**/*.yml"].map do |path|
             path.gsub("#{directory}/", "").gsub(".yml", "")
           end
-        end
-        configs.sort
+        end.flatten.sort
       end
 
       # Existant directories which may contain project files
