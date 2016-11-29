@@ -90,6 +90,11 @@ module Tmuxinator
       Erubis::Eruby.new(template).result(binding)
     end
 
+    def kill
+      template = File.read(Tmuxinator::Config.stop_template)
+      Erubis::Eruby.new(template).result(binding)
+    end
+
     def windows
       windows_yml = yaml["tabs"] || yaml["windows"]
 

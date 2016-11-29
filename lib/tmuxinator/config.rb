@@ -71,6 +71,10 @@ module Tmuxinator
         asset_path "template.erb"
       end
 
+      def stop_template
+        asset_path "template-stop.erb"
+      end
+
       def wemux_template
         asset_path "wemux_template.erb"
       end
