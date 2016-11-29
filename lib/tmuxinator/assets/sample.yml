@@ -9,6 +9,13 @@ root: ~/
 # Runs before everything. Use it to start daemons etc.
 # pre: sudo /etc/rc.d/mysqld start
 
+# Runs at session reattach.
+# on_reattach: command
+# Runs at session detach.
+# on_detach: command
+# Runs at session stop.
+# on_stop: command
+
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
 # pre_window: rbenv shell 2.0.0-p247
 
