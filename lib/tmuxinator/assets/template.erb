@@ -73,6 +73,9 @@ unset RBENV_DIR
 
   <%= tmux %> select-window -t <%= startup_window %>
   <%= tmux %> select-pane -t <%= startup_pane %>
+<%- else -%>
+  # Run reattach command.
+  <%= hook_on_reattach %>
 <%- end -%>
 
 <%- if attach? -%>

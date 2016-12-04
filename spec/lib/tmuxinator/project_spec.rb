@@ -28,6 +28,10 @@ describe Tmuxinator::Project do
     FactoryGirl.build(:nameless_window_project)
   end
 
+  it "should include Hooks" do
+    expect(project).to be_kind_of(Tmuxinator::Hooks)
+  end
+
   describe "#initialize" do
     context "valid yaml" do
       it "creates an instance" do
