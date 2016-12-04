@@ -4,6 +4,9 @@
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
 
+### New Features
+- add on_start, on_detach, on_reattach and on_stop hooks for project
+
 ## 0.9.0
 ### Misc
 - Temporarily hiding Shorthand entry in README.md to prevent new bug reports
