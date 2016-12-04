@@ -11,6 +11,9 @@ unset RBENV_DIR
 
   # Run pre command.
   <%= pre %>
+  
+  # Run on_start hook command.
+  <%= hook_on_start %>
 
   # Create the session and the first window. Manually switch to root
   # directory if required to support tmux < 1.9
@@ -84,6 +87,13 @@ unset RBENV_DIR
   else
     <%= tmux %> -u switch-client -t <%= name %>
   fi
+  
+  # Run detach command.
+  <%= hook_on_detach %>
 <%- end -%>
 
 <%= post %>
+<%- unless attach? -%>
+  # Run detach command.
+  <%= hook_on_detach %>
+<%- end -%>

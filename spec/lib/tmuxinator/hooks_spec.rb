@@ -35,6 +35,18 @@ describe Tmuxinator::Hooks do
     end
   end
 
+  describe "#hook_on_detach" do
+    it_should_behave_like "a project hook" do
+      let(:hook) { "detach" }
+    end
+  end
+
+  describe "#hook_on_start" do
+    it_should_behave_like "a project hook" do
+      let(:hook) { "start" }
+    end
+  end
+
   describe "#hook_on_stop" do
     it_should_behave_like "a project hook" do
       let(:hook) { "stop" }
