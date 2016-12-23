@@ -6,14 +6,17 @@ unset RBENV_DIR
 
 <%= tmux %> start-server;
 
+# Run on_project_start command.
+<%= hook_on_project_start %>
+
 <%- if !tmux_has_session? name -%>
   cd <%= root || "." %>
 
   # Run pre command.
   <%= pre %>
   
-  # Run on_start hook command.
-  <%= hook_on_start %>
+  # Run on_project_first_start command.
+  <%= hook_on_project_first_start %>
 
   # Create the session and the first window. Manually switch to root
   # directory if required to support tmux < 1.9
@@ -77,8 +80,8 @@ unset RBENV_DIR
   <%= tmux %> select-window -t <%= startup_window %>
   <%= tmux %> select-pane -t <%= startup_pane %>
 <%- else -%>
-  # Run reattach command.
-  <%= hook_on_reattach %>
+  # Run on_project_restart command.
+  <%= hook_on_project_restart %>
 <%- end -%>
 
 <%- if attach? -%>
@@ -87,13 +90,10 @@ unset RBENV_DIR
   else
     <%= tmux %> -u switch-client -t <%= name %>
   fi
-  
-  # Run detach command.
-  <%= hook_on_detach %>
 <%- end -%>
 
 <%= post %>
 <%- unless attach? -%>
-  # Run detach command.
-  <%= hook_on_detach %>
+  # Run on_project_exit command.
+  <%= hook_on_project_exit %>
 <%- end -%>

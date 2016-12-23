@@ -3,21 +3,40 @@ module Tmuxinator
     module Project
       module_function
 
-      def hook_on_reattach
-        Tmuxinator::Hooks.commands_from yaml["on_reattach"]
+      # Commands specified in this hook run when "tmuxinator start project"
+      # command is issued
+      def hook_on_project_start
+        # this method can only be used from inside Tmuxinator::Project
+        Tmuxinator::Hooks.commands_from self, "on_project_start"
       end
 
-      def hook_on_detach
-        Tmuxinator::Hooks.commands_from yaml["on_detach"]
+      # Commands specified in this hook run when "tmuxinator start project"
+      # command is issued and there is no tmux session available named "project"
+      def hook_on_project_first_start
+        # this method can only be used from inside Tmuxinator::Project
+        Tmuxinator::Hooks.commands_from self, "on_project_first_start"
       end
 
-      def hook_on_start
-        Tmuxinator::Hooks.commands_from yaml["on_start"]
+      # Commands specified in this hook run when "tmuxinator start project"
+      # command is issued and there is no tmux session available named "project"
+      def hook_on_project_restart
+        # this method can only be used from inside Tmuxinator::Project
+        Tmuxinator::Hooks.commands_from self, "on_project_restart"
       end
 
-      def hook_on_stop
-        Tmuxinator::Hooks.commands_from yaml["on_stop"]
+      # Commands specified in this hook run when you exit from a project ( aka
+      # detach from a tmux session )
+      def hook_on_project_exit
+        # this method can only be used from inside Tmuxinator::Project
+        Tmuxinator::Hooks.commands_from self, "on_project_exit"
       end
-    end
-  end
-end
+
+      # Command specified in this hook run when "tmuxinator stop project"
+      # command is issued
+      def hook_on_project_stop
+        # this method can only be used from inside Tmuxinator::Project
+        Tmuxinator::Hooks.commands_from self, "on_project_stop"
+      end
+    end # End Project
+  end # End Hooks
+end # End Tmuxinator

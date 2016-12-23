@@ -1,55 +1,31 @@
 require "spec_helper"
 
-shared_examples_for "a project hook" do
-  let(:project) { FactoryGirl.build(:project) }
-
-  context "hook value in yaml is string" do
-    before { project.yaml["on_#{hook}"] = "echo 'on reattach'" }
-
-    it "returns the string" do
-      expect(project.send("hook_on_#{hook}")).to eq("echo 'on reattach'")
-    end
-  end
-
-  context "hook value in yaml is Array" do
-    before do
-      project.yaml["on_#{hook}"] = [
-        "echo 'on reattach'",
-        "echo 'another command here'"
-      ]
-    end
-
-    it "joins array using ;" do
-      expect(project.send("hook_on_#{hook}")).
-        to eq("echo 'on reattach'; echo 'another command here'")
-    end
-  end
-end
-
 describe Tmuxinator::Hooks do
-  let(:project) { FactoryGirl.build(:project) }
+  describe "#commands_from" do
+    let(:project) { FactoryGirl.build(:project) }
+    let(:hook_name) { "generic_hook" }
 
-  describe "#hook_on_reattach" do
-    it_should_behave_like "a project hook" do
-      let(:hook) { "reattach" }
+    context "config value is string" do
+      before { project.yaml[hook_name] = "echo 'on hook'" }
+
+      it "returns the string" do
+        expect(subject.commands_from(project, hook_name)).
+          to eq("echo 'on hook'")
+      end
     end
-  end
 
-  describe "#hook_on_detach" do
-    it_should_behave_like "a project hook" do
-      let(:hook) { "detach" }
-    end
-  end
+    context "config value is Array" do
+      before do
+        project.yaml[hook_name] = [
+          "echo 'on hook'",
+          "echo 'another command here'"
+        ]
+      end
 
-  describe "#hook_on_start" do
-    it_should_behave_like "a project hook" do
-      let(:hook) { "start" }
-    end
-  end
-
-  describe "#hook_on_stop" do
-    it_should_behave_like "a project hook" do
-      let(:hook) { "stop" }
+      it "joins array using ;" do
+        expect(subject.commands_from(project, hook_name)).
+          to eq("echo 'on hook'; echo 'another command here'")
+      end
     end
   end
 end
