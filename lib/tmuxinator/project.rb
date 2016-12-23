@@ -2,7 +2,7 @@ module Tmuxinator
   class Project
     include Tmuxinator::Util
     include Tmuxinator::Deprecations
-    include Tmuxinator::Hooks
+    include Tmuxinator::Hooks::Project
     include Tmuxinator::WemuxSupport
 
     RBENVRVM_DEP_MSG = <<-M

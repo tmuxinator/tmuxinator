@@ -29,7 +29,7 @@ describe Tmuxinator::Project do
   end
 
   it "should include Hooks" do
-    expect(project).to be_kind_of(Tmuxinator::Hooks)
+    expect(project).to be_kind_of(Tmuxinator::Hooks::Project)
   end
 
   describe "#initialize" do
