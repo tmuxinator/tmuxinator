@@ -257,7 +257,7 @@ root: ~/<%= @settings["workspace"] %>
 
 ## Starting a session
 
-This will fire up tmux with all the tabs and panes you configured.
+This will fire up tmux with all the tabs and panes you configured, `start` is aliased to `s`.
 
 ```
 tmuxinator start [project] -n [name]
