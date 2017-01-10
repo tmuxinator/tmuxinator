@@ -31,7 +31,7 @@ describe Tmuxinator::Project do
   describe "#initialize" do
     context "valid yaml" do
       it "creates an instance" do
-        expect(project).to be_a(Tmuxinator::Project)
+        expect(project).to be_a(Tmuxinator::Project::Tmux)
       end
     end
   end
@@ -545,7 +545,8 @@ describe Tmuxinator::Project do
     end
 
     it "should return an instance of the class if the file loads" do
-      expect(described_class.load(path, options)).to be_a Tmuxinator::Project
+      expect(described_class.load(path, options)).
+        to be_a Tmuxinator::Project::Tmux
     end
   end
 

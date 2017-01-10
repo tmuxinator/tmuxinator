@@ -551,7 +551,7 @@ describe Tmuxinator::Cli do
   describe "#create_project" do
     shared_examples_for :a_proper_project do
       it "should create a valid project" do
-        expect(subject).to be_a Tmuxinator::Project
+        expect(subject).to be_a Tmuxinator::Project::Tmux
         expect(subject.name).to eq name
       end
     end
