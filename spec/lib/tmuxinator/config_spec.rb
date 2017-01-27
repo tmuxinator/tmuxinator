@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Tmuxinator::Config do
   describe "#root" do
-    it "is ~/.tmuxintaor" do
+    it "is ~/.tmuxinator" do
       expect(Tmuxinator::Config.root).to eq "#{ENV['HOME']}/.tmuxinator"
     end
   end

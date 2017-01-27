@@ -3,6 +3,7 @@
 - Removed support for Ruby 1.9.3
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
+- Fix typos
 
 ## 0.9.0
 ### Misc
@@ -13,14 +14,14 @@
 - Refactor Config.root
 
 ### New Features
-- Allow mulitple panes to be defined using yaml hash or array #266, #406
+- Allow multiple panes to be defined using yaml hash or array #266, #406
 - Add `startup_pane` #380
 - Add synchronizations panes support #97
 - Add `before` and `after` options to synchronization functionality
 - Add deprecation warning if `synchronize: true` or `before` is used
 
 ### Bugfixes
-- Supress `tmux ls` non-zero exit status/message when no sessions exist (#414)
+- Suppress `tmux ls` non-zero exit status/message when no sessions exist (#414)
 - Will no longer crash when no panes are specified in a window
 - Locking activesupport at < 5.0.0 to prevent broken builds on Ruby < 2.2.3
 - Fixed whitespace issues in help
@@ -59,7 +60,7 @@
 
 ### Bug fixes and Misc
 - Fix some RSpec deprecations
-- Explain what EBR is in the readme #319
+- Explain what ERB is in the readme #319
 - Prevent project names containing only numbers from raising a NoMethodError #324
 - Fix YAML syntax highlighting in readme #325
 - Add `asset_path` helper #326
@@ -117,8 +118,8 @@
 - Improve error messages when $EDITOR isn't set #186, #194
 - Add confirmation to deletion prompt #197
 - Fix broken badge references after organisation move
-- Remove dependancy on ActiveSupport #199
-- Fix compatability with tmux 1.9
+- Remove dependency on ActiveSupport #199
+- Fix compatibility with tmux 1.9
 
 ## 0.6.6
 - Fix a bug caused by not escaping the root path #145
