@@ -1,0 +1,6 @@
+name: simple
+attach: false
+windows:
+  - one: echo "one"
+  - two: echo "two"
+  - three: echo "three"

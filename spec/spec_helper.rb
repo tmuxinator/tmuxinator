@@ -21,6 +21,9 @@ require_relative "matchers/pane_matcher"
 
 RSpec.configure do |config|
   config.order = "random"
+
+  # Don't run integration tests by default
+  config.filter_run_excluding integration: true
 end
 
 # Copied from minitest.
@@ -60,4 +63,8 @@ def tmux_config(options = {})
   end
 
   "echo '#{standard_options.join("\n")}'"
+end
+
+def fixture_path(file)
+  [File.dirname(__FILE__), "fixtures", file].join("/")
 end

@@ -51,5 +51,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl", "~> 4.5"
   s.add_development_dependency "activesupport", "< 5.0.0" # Please see issue #432
   s.add_development_dependency "rubocop", "~> 0.35.1"
+  s.add_development_dependency "childprocess", "0.6.1"
 end
 
