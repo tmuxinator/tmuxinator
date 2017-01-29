@@ -1,12 +1,13 @@
 require "spec_helper"
 require "integration_helper"
+require "securerandom"
 require "childprocess"
 
 describe "tmux integration test", integration: true do
   def wait_for_session(session_name)
     Timeout::timeout(15) do
       loop do
-        break if tmux_list_sessions.include?(session_name)
+        break if tmux_list_sessions.any? { |s| s.include?(session_name) }
       end
     end
     # Session may have started, but commands and shells may not be up yet
@@ -36,18 +37,23 @@ describe "tmux integration test", integration: true do
 
     it "starts the session with the correct name" do
       sessions = tmux_list_sessions
-      expect(sessions).to include(@project.name)
+      expect(sessions).to include(a_string_starting_with(@project.name))
     end
 
     it "has the correct windows" do
       windows = tmux_list_windows(@project.name)
-      expect(windows).to include("one", "two", "three")
+      expect(windows).to include(
+        a_string_starting_with("1: one"),
+        a_string_starting_with("2: two"),
+        a_string_starting_with("3: three")
+      )
     end
 
     it "correctly executes commands" do
+      random = SecureRandom.hex(5)
       %w(one two three).each do |window|
-        `tmux capture-pane -t #{@project.name}:#{window} -b test`
-        output = `tmux show-buffer -b test`.strip!
+        `tmux capture-pane -t #{@project.name}:#{window} -b #{random}`
+        output = `tmux show-buffer -b #{random}`.strip!
         expect(output).to include("echo \"#{window}\"")
       end
     end
