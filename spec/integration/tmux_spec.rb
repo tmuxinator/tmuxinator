@@ -50,10 +50,9 @@ describe "tmux integration test", integration: true do
     end
 
     it "correctly executes commands" do
-      random = SecureRandom.hex(5)
       %w(one two three).each do |window|
-        `tmux capture-pane -t #{@project.name}:#{window} -b #{random}`
-        output = `tmux show-buffer -b #{random}`.strip!
+        `tmux capture-pane -t #{@project.name}:#{window} -b %1`
+        output = `tmux show-buffer -b %1`.strip!
         expect(output).to include("echo \"#{window}\"")
       end
     end
