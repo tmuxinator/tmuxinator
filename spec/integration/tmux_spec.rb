@@ -46,7 +46,8 @@ describe "tmux integration test", integration: true do
 
     it "correctly executes commands" do
       %w(one two three).each do |window|
-        output = `tmux capture-pane -t #{@project.name}:#{window} -p`.strip!
+        `tmux capture-pane -t #{@project.name}:#{window} -b test`
+        output = `tmux show-buffer -b test`.strip!
         expect(output).to include("echo \"#{window}\"")
       end
     end
