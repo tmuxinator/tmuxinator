@@ -43,9 +43,9 @@ describe "tmux integration test", integration: true do
     it "has the correct windows" do
       windows = tmux_list_windows(@project.name)
       expect(windows).to include(
-        a_string_starting_with("1: one"),
-        a_string_starting_with("2: two"),
-        a_string_starting_with("3: three")
+        a_string_matching(/one/),
+        a_string_matching(/two/),
+        a_string_matching(/three/)
       )
     end
 
