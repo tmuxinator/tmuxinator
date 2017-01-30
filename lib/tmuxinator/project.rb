@@ -123,17 +123,17 @@ module Tmuxinator
       attach
     end
 
-    def pre_window
+    def pre_window      
       if rbenv?
-        "rbenv shell #{yaml['rbenv']}"
+        params = "rbenv shell #{yaml['rbenv']}"
       elsif rvm?
-        "rvm use #{yaml['rvm']}"
+        params = "rvm use #{yaml['rvm']}"
       elsif pre_tab?
-        yaml["pre_tab"]
+        params = yaml["pre_tab"]
       else
-        pre_window = yaml["pre_window"]
-        parsed_parameters(pre_window)
+        params = yaml["pre_window"]        
       end
+      parsed_parameters(params)
     end
 
     def post
