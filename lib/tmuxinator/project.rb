@@ -110,11 +110,7 @@ module Tmuxinator
 
     def pre
       pre_config = yaml["pre"]
-      if pre_config.is_a?(Array)
-        pre_config.join("; ")
-      else
-        pre_config
-      end
+      parsed_parameters(pre_config)
     end
 
     def attach?
@@ -136,17 +132,13 @@ module Tmuxinator
         yaml["pre_tab"]
       else
         pre_window = yaml["pre_window"]
-        pre_window.is_a?(Array) ? pre_window.join("; ") : pre_window
+        parsed_parameters(pre_window)
       end
     end
 
     def post
       post_config = yaml["post"]
-      if post_config.is_a?(Array)
-        post_config.join("; ")
-      else
-        post_config
-      end
+      parsed_parameters(post_config)
     end
 
     def tmux
@@ -306,6 +298,10 @@ module Tmuxinator
 
     def window_options
       yaml["windows"].map(&:values).flatten
+    end
+
+    def parsed_parameters(parameters)
+      parameters.is_a?(Array) ? parameters.join("; ") : parameters
     end
   end
 end
