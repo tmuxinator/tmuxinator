@@ -296,7 +296,7 @@ describe Tmuxinator::Cli do
       end
     end
 
-    context "existing project doens't exist" do
+    context "existing project doesn't exist" do
       before do
         allow(Tmuxinator::Config).to receive(:exists?) { false }
       end

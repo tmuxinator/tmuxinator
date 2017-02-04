@@ -502,7 +502,7 @@ describe Tmuxinator::Project do
     let(:window) { project.windows.first.name }
 
     context "when first window has a name" do
-      it "returns command to start a new detatched session" do
+      it "returns command to start a new detached session" do
         expect(project.tmux_new_session_command).to eq command
       end
     end
@@ -511,7 +511,7 @@ describe Tmuxinator::Project do
       let(:project) { nameless_window_project }
       let(:command) { "#{project.tmux} new-session -d -s #{project.name} " }
 
-      it "returns command to for new detatched session without a window name" do
+      it "returns command to for new detached session without a window name" do
         expect(project.tmux_new_session_command).to eq command
       end
     end
@@ -523,7 +523,7 @@ describe Tmuxinator::Project do
     let(:session) { project.name }
 
     context "when first window has a name" do
-      it "returns command to start a new detatched session" do
+      it "returns command to start a new detached session" do
         expect(project.tmux_kill_session_command).to eq command
       end
     end
