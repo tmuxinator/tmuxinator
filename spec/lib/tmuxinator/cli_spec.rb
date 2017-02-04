@@ -546,6 +546,17 @@ describe Tmuxinator::Cli do
       expect(new_path).to eq path
       expect(File).to exist new_path
     end
+
+    context "when path is nested" do
+      let(:name) { "foobar/baz" }
+      let(:path) { Tmuxinator::Config.default_project(name) }
+
+      it "should always generate a project file" do
+        new_path = Tmuxinator::Cli.new.generate_project_file(name, path)
+        expect(new_path).to eq path
+        expect(File).to exist new_path
+      end
+    end
   end
 
   describe "#create_project" do

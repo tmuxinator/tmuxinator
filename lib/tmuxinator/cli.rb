@@ -91,6 +91,10 @@ module Tmuxinator
         template = Tmuxinator::Config.default? ? :default : :sample
         content = File.read(Tmuxinator::Config.send(template.to_sym))
         erb = Erubis::Eruby.new(content).result(binding)
+        dirname = File.dirname(path)
+        unless File.directory?(dirname)
+          FileUtils.mkdir_p(dirname)
+        end
         File.open(path, "w") { |f| f.write(erb) }
         path
       end
