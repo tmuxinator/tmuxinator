@@ -1,5 +1,4 @@
 require "spec_helper"
-
 describe Tmuxinator::Cli do
   let(:cli) { Tmuxinator::Cli }
 
@@ -232,16 +231,16 @@ describe Tmuxinator::Cli do
         end
       end
 
-      context "file exists" do
-        let(:project_path) { "#{Tmuxinator::Config.project(name)}" }
+      context "files exists" do
+        let(:root_path) { "#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml" }
 
         before do
           allow(File).to receive(:exist?).with(anything).and_return(false)
-          expect(File).to receive(:exist?).with(project_path).and_return(true)
+          expect(File).to receive(:exist?).with(root_path).and_return(true)
         end
 
         it "just opens the file" do
-          expect(Kernel).to receive(:system).with(%r{#{project_path}})
+          expect(Kernel).to receive(:system).with(%r{#{root_path}})
           capture_io { cli.start }
         end
       end
@@ -265,7 +264,7 @@ describe Tmuxinator::Cli do
         end
       end
 
-      context "file exists" do
+      context "files exists" do
         let(:path) { Tmuxinator::Config::LOCAL_DEFAULT }
         before do
           expect(File).to receive(:exist?).with(path) { true }
@@ -445,26 +444,9 @@ describe Tmuxinator::Cli do
       capture_io { cli.start }
     end
 
-    it "deletes the configuration directory(s)" do
-      allow(Tmuxinator::Config).to receive(:directories) \
-        { [Tmuxinator::Config.xdg, Tmuxinator::Config.home] }
-      expect(FileUtils).to receive(:remove_dir).once.
-        with(Tmuxinator::Config.xdg)
-      expect(FileUtils).to receive(:remove_dir).once.
-        with(Tmuxinator::Config.home)
-      expect(FileUtils).to receive(:remove_dir).never
+    it "deletes all projects" do
+      expect(FileUtils).to receive(:remove_dir)
       capture_io { cli.start }
-    end
-
-    context "$TMUXINATOR_CONFIG specified" do
-      it "only deletes projects in that directory" do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").and_return "dir"
-        allow(File).to receive(:directory?).with("dir").and_return true
-        expect(FileUtils).to receive(:remove_dir).once.with("dir")
-        expect(FileUtils).to receive(:remove_dir).never
-        capture_io { cli.start }
-      end
     end
   end
 
@@ -589,7 +571,7 @@ describe Tmuxinator::Cli do
       subject { described_class.new.create_project(params) }
 
       before do
-        allow(Tmuxinator::Config).to receive_messages(directory: path)
+        allow(Tmuxinator::Config).to receive_messages(root: path)
       end
 
       it_should_behave_like :a_proper_project
