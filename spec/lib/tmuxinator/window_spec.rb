@@ -341,7 +341,7 @@ describe Tmuxinator::Window do
       allow(Tmuxinator::Config).to receive(:default_path_option) { path_option }
     end
 
-    it "contstructs window command with path, target, and name options" do
+    it "constructs window command with path, target, and name options" do
       expect(window.tmux_new_window_command).to eq full_command
     end
 
