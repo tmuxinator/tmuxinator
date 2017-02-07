@@ -150,7 +150,7 @@ module Tmuxinator
       # recursively searching 'directory'
       def project_in(directory, name)
         return nil if String(directory).empty?
-        projects = Dir.glob("#{directory}/**/*.yml")
+        projects = Dir.glob("#{directory}/**/*.yml").sort
         projects.detect { |project| File.basename(project, ".yml") == name }
       end
     end
