@@ -15,5 +15,13 @@ module Tmuxinator
     def cli_args?
       yaml["cli_args"]
     end
+
+    def pre?
+      yaml["pre"]
+    end
+
+    def post?
+      yaml["post"]
+    end
   end
 end
