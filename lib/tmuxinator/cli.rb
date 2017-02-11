@@ -32,6 +32,40 @@ module Tmuxinator
       list: "Lists all tmuxinator projects"
     }
 
+    SET_PROJECTS_DIR_OPTION = [
+      :projects_dir,
+      type: :string,
+      aliases: ["--projects", "-p"],
+      desc: "The path to search for projects (defaults to ~/.tmuxinator)",
+      banner: "PATH_TO_PROJECTS"
+    ]
+
+    no_commands do
+      def empty_string_option?(options, key)
+        options[key] == key.to_s || options[key].to_s.empty?
+      end
+
+      def ensure_tmuxinator_dir(projects_dir)
+        if projects_dir.end_with?(".tmuxinator")
+          projects_dir
+        else
+          File.join(projects_dir, ".tmuxinator")
+        end
+      end
+
+      def handle_projects_dir_option
+        return if empty_string_option?(options, :projects_dir)
+
+        projects_dir = ensure_tmuxinator_dir(options[:projects_dir])
+
+        if File.exist?(projects_dir)
+          Tmuxinator::Config.config_dir = projects_dir
+        else
+          exit! "The given projects path doesn't contain a .tmuxinator directory."
+        end
+      end
+    end
+
     package_name "tmuxinator" \
       unless Gem::Version.create(Thor::VERSION) < Gem::Version.create("0.18")
 
@@ -50,8 +84,10 @@ module Tmuxinator
     end
 
     desc "completions [arg1 arg2]", COMMANDS[:completions]
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def completions(arg)
+      handle_projects_dir_option
       if %w(start stop edit open copy delete).include?(arg)
         configs = Tmuxinator::Config.configs
         say configs.join("\n")
@@ -67,8 +103,10 @@ module Tmuxinator
     method_option :local, type: :boolean,
                           aliases: ["-l"],
                           desc: "Create local project file at ./.tmuxinator.yml"
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def new(name)
+      handle_projects_dir_option
       project_file = find_project_file(name, options[:local])
       Kernel.system("$EDITOR #{project_file}") || doctor
     end
@@ -138,8 +176,10 @@ module Tmuxinator
                            desc: "Attach to tmux session after creation."
     method_option :name, aliases: "-n",
                          desc: "Give the session a different name"
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def start(name, *args)
+      handle_projects_dir_option
       params = {
         name: name,
         custom_name: options[:name],
@@ -152,8 +192,10 @@ module Tmuxinator
 
     desc "stop [PROJECT]", COMMANDS[:stop]
     map "st" => :stop
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def stop(name)
+      handle_projects_dir_option
       params = {
         name: name
       }
@@ -174,8 +216,11 @@ module Tmuxinator
     method_option :name, aliases: "-n",
                          desc: "Give the session a different name"
     desc "debug [PROJECT] [ARGS]", COMMANDS[:debug]
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def debug(name, *args)
+      handle_projects_dir_option
+
       params = {
         name: name,
         custom_name: options[:name],
@@ -189,8 +234,10 @@ module Tmuxinator
     desc "copy [EXISTING] [NEW]", COMMANDS[:copy]
     map "c" => :copy
     map "cp" => :copy
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def copy(existing, new)
+      handle_projects_dir_option
       existing_config_path = Tmuxinator::Config.project(existing)
       new_config_path = Tmuxinator::Config.project(new)
 
@@ -210,8 +257,10 @@ module Tmuxinator
     desc "delete [PROJECT1] [PROJECT2] ...", COMMANDS[:delete]
     map "d" => :delete
     map "rm" => :delete
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def delete(*projects)
+      handle_projects_dir_option
       projects.each do |project|
         if Tmuxinator::Config.exists?(project)
           config = Tmuxinator::Config.project(project)
@@ -239,8 +288,10 @@ module Tmuxinator
     desc "list", COMMANDS[:list]
     map "l" => :list
     map "ls" => :list
+    method_option *SET_PROJECTS_DIR_OPTION
 
     def list
+      handle_projects_dir_option
       say "tmuxinator projects:"
 
       print_in_columns Tmuxinator::Config.configs
