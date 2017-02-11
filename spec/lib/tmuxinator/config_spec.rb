@@ -2,8 +2,19 @@ require "spec_helper"
 
 describe Tmuxinator::Config do
   describe "#root" do
-    it "is ~/.tmuxinator" do
-      expect(Tmuxinator::Config.root).to eq "#{ENV['HOME']}/.tmuxinator"
+    context "#config_dir not set" do
+      it "is ~/.tmuxinator" do
+        expect(Tmuxinator::Config.root).to eq "#{ENV['HOME']}/.tmuxinator"
+      end
+    end
+
+    context "#config_dir set" do
+      let(:path) { File.expand_path("./.tmuxinator") }
+
+      it "is the value in the config_dir" do
+        Tmuxinator::Config.config_dir = path
+        expect(Tmuxinator::Config.root).to eq path
+      end
     end
   end
 

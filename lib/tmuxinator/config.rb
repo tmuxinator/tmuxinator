@@ -1,11 +1,18 @@
 module Tmuxinator
   class Config
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
+    CONFIG_DEFAULT = "#{ENV['HOME']}/.tmuxinator".freeze
     NO_LOCAL_FILE_MSG = "Project file at ./.tmuxinator.yml doesn't exist."
 
     class << self
+      attr_writer :config_dir
+
+      def config_dir
+        @config_dir || CONFIG_DEFAULT
+      end
+
       def root
-        root_dir = File.expand_path("#{ENV['HOME']}/.tmuxinator")
+        root_dir = File.expand_path(config_dir)
         Dir.mkdir(root_dir) unless File.directory?(root_dir)
         root_dir
       end
@@ -15,7 +22,7 @@ module Tmuxinator
       end
 
       def default
-        "#{ENV['HOME']}/.tmuxinator/default.yml"
+        File.join(config_dir, "default.yml")
       end
 
       def default?
