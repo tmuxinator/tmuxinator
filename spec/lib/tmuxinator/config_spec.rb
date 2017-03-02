@@ -6,7 +6,7 @@ describe Tmuxinator::Config do
   let(:home_config_dir) { "#{fixtures_dir}/dot-tmuxinator" }
 
   describe "#directory" do
-    context "environment variable $TMUXINATOR_CONFIG set" do
+    context "environment variable $TMUXINATOR_CONFIG non-blank" do
       it "is $TMUXINATOR_CONFIG" do
         allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
           and_return "expected"
@@ -17,30 +17,36 @@ describe Tmuxinator::Config do
 
     context "only ~/.tmuxinator exists" do
       it "is ~/.tmuxinator" do
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
-          and_return false
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
-          and_return true
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.environment).and_return false
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.xdg).and_return false
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.home).and_return true
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.home
       end
     end
 
     context "only $XDG_CONFIG_HOME/tmuxinator exists" do
       it "is #xdg" do
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
-          and_return true
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
-          and_return false
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.environment).and_return false
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.xdg).and_return true
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.home).and_return false
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
       end
     end
 
     context "both $XDG_CONFIG_HOME/tmuxinator and ~/.tmuxinator exist" do
       it "is #xdg" do
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
-          and_return true
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
-          and_return true
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.environment).and_return false
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.xdg).and_return true
+        allow(File).to receive(:directory?).
+          with(Tmuxinator::Config.home).and_return true
         expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
       end
     end
@@ -57,6 +63,35 @@ describe Tmuxinator::Config do
             to eq "#{config_parent}/tmuxinator"
           expect(File.directory? "#{config_parent}/tmuxinator").to be true
         end
+      end
+    end
+  end
+
+  describe "#enviroment" do
+    context "environment variable $TMUXINATOR_CONFIG is not empty" do
+      it "is $TMUXINATOR_CONFIG" do
+        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
+          and_return "expected"
+        # allow(XDG).to receive(:[]).with("CONFIG").and_return "expected"
+        allow(File).to receive(:directory?).and_return true
+        expect(Tmuxinator::Config.environment).to eq "expected"
+      end
+    end
+
+    context "environment variable $TMUXINATOR_CONFIG is nil" do
+      it "is an empty string" do
+        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
+          and_return nil
+        # allow(XDG).to receive(:[]).with("CONFIG").and_return nil
+        allow(File).to receive(:directory?).and_return true
+        expect(Tmuxinator::Config.environment).to eq ""
+      end
+    end
+
+    context "environment variable $TMUXINATOR_CONFIG is set and empty" do
+      it "is an empty string" do
+        allow(XDG).to receive(:[]).with("CONFIG").and_return ""
+        expect(Tmuxinator::Config.environment).to eq ""
       end
     end
   end
