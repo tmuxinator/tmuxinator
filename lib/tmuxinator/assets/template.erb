@@ -6,11 +6,12 @@ unset RBENV_DIR
 
 <%= tmux %> start-server;
 
+cd <%= root || "." %>
+
 # Run on_project_start command.
 <%= hook_on_project_start %>
 
 <%- if !tmux_has_session? name -%>
-  cd <%= root || "." %>
 
   # Run pre command.
   <%= pre %>
