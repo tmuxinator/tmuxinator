@@ -51,7 +51,8 @@ describe Tmuxinator::Cli do
                     implode
                     version
                     doctor
-                    list)
+                    list
+                    append)
       expect(out).to eq "#{expected.join("\n")}\n"
     end
   end
