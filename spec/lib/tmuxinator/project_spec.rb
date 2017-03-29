@@ -172,8 +172,27 @@ describe Tmuxinator::Project do
   end
 
   describe "#pre_window" do
-    it "gets the pre_window command" do
-      expect(project.pre_window).to eq "rbenv shell 2.0.0-p247"
+    subject(:pre_window) { project.pre_window }
+
+    context "pre_window in yaml is string" do
+      before { project.yaml["pre_window"] = "mysql.server start" }
+
+      it "returns the string" do
+        expect(pre_window).to eq("mysql.server start")
+      end
+    end
+
+    context "pre_window in yaml is Array" do
+      before do
+        project.yaml["pre_window"] = [
+          "mysql.server start",
+          "memcached -d"
+        ]
+      end
+
+      it "joins array using ;" do
+        expect(pre_window).to eq("mysql.server start; memcached -d")
+      end
     end
 
     context "with deprecations" do
