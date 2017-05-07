@@ -110,11 +110,7 @@ module Tmuxinator
 
     def pre
       pre_config = yaml["pre"]
-      if pre_config.is_a?(Array)
-        pre_config.join("; ")
-      else
-        pre_config
-      end
+      parsed_parameters(pre_config)
     end
 
     def attach?
@@ -129,23 +125,20 @@ module Tmuxinator
 
     def pre_window
       if rbenv?
-        "rbenv shell #{yaml['rbenv']}"
+        params = "rbenv shell #{yaml['rbenv']}"
       elsif rvm?
-        "rvm use #{yaml['rvm']}"
+        params = "rvm use #{yaml['rvm']}"
       elsif pre_tab?
-        yaml["pre_tab"]
+        params = yaml["pre_tab"]
       else
-        yaml["pre_window"]
+        params = yaml["pre_window"]
       end
+      parsed_parameters(params)
     end
 
     def post
       post_config = yaml["post"]
-      if post_config.is_a?(Array)
-        post_config.join("; ")
-      else
-        post_config
-      end
+      parsed_parameters(post_config)
     end
 
     def tmux
@@ -305,6 +298,10 @@ module Tmuxinator
 
     def window_options
       yaml["windows"].map(&:values).flatten
+    end
+
+    def parsed_parameters(parameters)
+      parameters.is_a?(Array) ? parameters.join("; ") : parameters
     end
   end
 end
