@@ -41,8 +41,8 @@ module Tmuxinator
 
         content = Erubis::Eruby.new(raw_content).result(binding)
         YAML.load(content)
-      rescue SyntaxError, StandardError => e
-        raise "Failed to parse config file: " + e.message
+      rescue SyntaxError, StandardError => error
+        raise "Failed to parse config file: #{error.message}"
       end
 
       new(yaml, options)
