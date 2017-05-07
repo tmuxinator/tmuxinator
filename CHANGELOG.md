@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Attach original exception message to exception re-raised by Project::load
 - Add ability for pre_window commands to parse yaml arrays
 
 ### Misc
