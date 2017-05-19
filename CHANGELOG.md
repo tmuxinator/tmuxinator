@@ -7,6 +7,7 @@
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
 - Fix typos
+- Support user-specified and XDG Base Dirs configuration directories
 
 ## 0.9.0
 ### Misc
