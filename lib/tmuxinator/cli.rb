@@ -123,11 +123,11 @@ module Tmuxinator
           STDIN.getc
         end
 
-        Kernel.exec(project.render)
+        Kernel.exec(ENV["SHELL"] || "/bin/sh", "-c", project.render)
       end
 
       def kill_project(project)
-        Kernel.exec(project.tmux_kill_session_command)
+        Kernel.exec(ENV["SHELL"] || "/bin/sh", "-c", project.tmux_kill_session_command)
       end
     end
 
