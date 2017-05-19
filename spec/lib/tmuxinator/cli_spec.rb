@@ -233,7 +233,7 @@ describe Tmuxinator::Cli do
       end
 
       context "file exists" do
-        let(:project_path) { "#{Tmuxinator::Config.project(name)}" }
+        let(:project_path) { Tmuxinator::Config.project(name).to_s }
 
         before do
           allow(File).to receive(:exist?).with(anything).and_return(false)
