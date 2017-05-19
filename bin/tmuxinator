@@ -6,7 +6,7 @@ require "tmuxinator"
 
 name = ARGV[0] || nil
 
-if ARGV.length == 0 && Tmuxinator::Config.local?
+if ARGV.empty? && Tmuxinator::Config.local?
   Tmuxinator::Cli.new.local
 elsif name && !Tmuxinator::Cli::COMMANDS.keys.include?(name.to_sym) &&
       Tmuxinator::Config.exists?(name)
