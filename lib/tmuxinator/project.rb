@@ -62,9 +62,9 @@ module Tmuxinator
 
     def validate!
       raise "Your project file should include some windows." \
-        unless self.windows?
+        unless windows?
       raise "Your project file didn't specify a 'project_name'" \
-        unless self.name?
+        unless name?
       self
     end
 
@@ -110,42 +110,35 @@ module Tmuxinator
 
     def pre
       pre_config = yaml["pre"]
-      if pre_config.is_a?(Array)
-        pre_config.join("; ")
-      else
-        pre_config
-      end
+      parsed_parameters(pre_config)
     end
 
     def attach?
-      if yaml["attach"].nil?
-        yaml_attach = true
-      else
-        yaml_attach = yaml["attach"]
-      end
+      yaml_attach = if yaml["attach"].nil?
+                      true
+                    else
+                      yaml["attach"]
+                    end
       attach = force_attach || !force_detach && yaml_attach
       attach
     end
 
     def pre_window
-      if rbenv?
-        "rbenv shell #{yaml['rbenv']}"
-      elsif rvm?
-        "rvm use #{yaml['rvm']}"
-      elsif pre_tab?
-        yaml["pre_tab"]
-      else
-        yaml["pre_window"]
-      end
+      params = if rbenv?
+                 "rbenv shell #{yaml['rbenv']}"
+               elsif rvm?
+                 "rvm use #{yaml['rvm']}"
+               elsif pre_tab?
+                 yaml["pre_tab"]
+               else
+                 yaml["pre_window"]
+               end
+      parsed_parameters(params)
     end
 
     def post
       post_config = yaml["post"]
-      if post_config.is_a?(Array)
-        post_config.join("; ")
-      else
-        post_config
-      end
+      parsed_parameters(post_config)
     end
 
     def tmux
@@ -305,6 +298,10 @@ module Tmuxinator
 
     def window_options
       yaml["windows"].map(&:values).flatten
+    end
+
+    def parsed_parameters(parameters)
+      parameters.is_a?(Array) ? parameters.join("; ") : parameters
     end
   end
 end

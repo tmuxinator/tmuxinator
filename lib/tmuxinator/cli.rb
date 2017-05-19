@@ -30,7 +30,7 @@ module Tmuxinator
       version: "Display installed tmuxinator version",
       doctor: "Look for problems in your configuration",
       list: "Lists all tmuxinator projects"
-    }
+    }.freeze
 
     package_name "tmuxinator" \
       unless Gem::Version.create(Thor::VERSION) < Gem::Version.create("0.18")

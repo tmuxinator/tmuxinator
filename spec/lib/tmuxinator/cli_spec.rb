@@ -74,7 +74,7 @@ describe Tmuxinator::Cli do
       end
 
       it "accepts a flag for alternate name" do
-        ARGV.replace(["start", "foo" "--name=bar"])
+        ARGV.replace(["start", "foo", "--name=bar"])
 
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
