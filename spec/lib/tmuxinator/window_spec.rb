@@ -99,11 +99,13 @@ describe Tmuxinator::Window do
           project: project, tab: window
         )
 
-        expect(window.panes).to match([
-          a_pane.with(index: 0).and_commands("vim"),
-          a_pane.with(index: 1).and_commands("ls"),
-          a_pane.with(index: 2).and_commands("top")
-        ])
+        expect(window.panes).to match(
+          [
+            a_pane.with(index: 0).and_commands("vim"),
+            a_pane.with(index: 1).and_commands("ls"),
+            a_pane.with(index: 2).and_commands("top")
+          ]
+        )
       end
     end
 

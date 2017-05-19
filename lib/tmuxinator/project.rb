@@ -62,9 +62,9 @@ module Tmuxinator
 
     def validate!
       raise "Your project file should include some windows." \
-        unless self.windows?
+        unless windows?
       raise "Your project file didn't specify a 'project_name'" \
-        unless self.name?
+        unless name?
       self
     end
 
@@ -114,25 +114,25 @@ module Tmuxinator
     end
 
     def attach?
-      if yaml["attach"].nil?
-        yaml_attach = true
-      else
-        yaml_attach = yaml["attach"]
-      end
+      yaml_attach = if yaml["attach"].nil?
+                      true
+                    else
+                      yaml["attach"]
+                    end
       attach = force_attach || !force_detach && yaml_attach
       attach
     end
 
     def pre_window
-      if rbenv?
-        params = "rbenv shell #{yaml['rbenv']}"
-      elsif rvm?
-        params = "rvm use #{yaml['rvm']}"
-      elsif pre_tab?
-        params = yaml["pre_tab"]
-      else
-        params = yaml["pre_window"]
-      end
+      params = if rbenv?
+                 "rbenv shell #{yaml['rbenv']}"
+               elsif rvm?
+                 "rvm use #{yaml['rvm']}"
+               elsif pre_tab?
+                 yaml["pre_tab"]
+               else
+                 yaml["pre_window"]
+               end
       parsed_parameters(params)
     end
 

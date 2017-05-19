@@ -1,7 +1,8 @@
 module Tmuxinator
   class Config
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
-    NO_LOCAL_FILE_MSG = "Project file at ./.tmuxinator.yml doesn't exist."
+    NO_LOCAL_FILE_MSG =
+      "Project file at ./.tmuxinator.yml doesn't exist.".freeze
 
     class << self
       def root
