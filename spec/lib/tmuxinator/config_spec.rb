@@ -61,7 +61,7 @@ describe Tmuxinator::Config do
           allow(XDG).to receive(:[]).with("CONFIG").and_return config_parent
           expect(Tmuxinator::Config.directory).
             to eq "#{config_parent}/tmuxinator"
-          expect(File.directory? "#{config_parent}/tmuxinator").to be true
+          expect(File.directory?("#{config_parent}/tmuxinator")).to be true
         end
       end
     end
