@@ -1,7 +1,7 @@
 ---
 engines:
   bundler-audit:
-    enabled: true
+    enabled: false
   brakeman:
     enabled: false
   complexity-ruby:
