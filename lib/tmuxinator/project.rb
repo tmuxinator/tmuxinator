@@ -95,13 +95,16 @@ module Tmuxinator
     end
 
     def render
-      template = File.read(Tmuxinator::Config.template)
-      Erubis::Eruby.new(template).result(binding)
+      self.class.render_template(Tmuxinator::Config.template, binding)
     end
 
     def kill
-      template = File.read(Tmuxinator::Config.stop_template)
-      Erubis::Eruby.new(template).result(binding)
+      self.class.render_template(Tmuxinator::Config.stop_template, binding)
+    end
+
+    def self.render_template(template, bndg)
+      content = File.read(template)
+      Erubis::Eruby.new(content).result(bndg)
     end
 
     def windows
@@ -235,11 +238,7 @@ module Tmuxinator
     end
 
     def send_pane_command(cmd, window_index, _pane_index)
-      if cmd.empty?
-        ""
-      else
-        "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
-      end
+      send_keys(cmd, window_index)
     end
 
     def send_keys(cmd, window_index)
@@ -251,14 +250,61 @@ module Tmuxinator
     end
 
     def deprecations
-      deprecations = []
-      deprecations << RBENVRVM_DEP_MSG if yaml["rbenv"] || yaml["rvm"]
-      deprecations << TABS_DEP_MSG if yaml["tabs"]
-      deprecations << CLIARGS_DEP_MSG if yaml["cli_args"]
-      deprecations << SYNC_DEP_MSG if legacy_synchronize?
-      deprecations << PRE_DEP_MSG if yaml["pre"]
-      deprecations << POST_DEP_MSG if yaml["post"]
-      deprecations
+      deprecation_checks.zip(deprecation_messages).
+        inject([]) do |deps, (chk, msg)|
+        deps << msg if chk
+        deps
+      end
+    end
+
+    def deprecation_checks
+      [
+        rvm_or_rbenv?,
+        tabs?,
+        cli_args?,
+        legacy_synchronize?,
+        pre?,
+        post?
+      ]
+    end
+
+    def deprecation_messages
+      [
+        RBENVRVM_DEP_MSG,
+        TABS_DEP_MSG,
+        CLIARGS_DEP_MSG,
+        SYNC_DEP_MSG,
+        PRE_DEP_MSG,
+        POST_DEP_MSG
+      ]
+    end
+
+    def rbenv?
+      yaml["rbenv"]
+    end
+
+    def rvm?
+      yaml["rvm"]
+    end
+
+    def rvm_or_rbenv?
+      rvm? || rbenv?
+    end
+
+    def tabs?
+      yaml["tabs"]
+    end
+
+    def cli_args?
+      yaml["cli_args"]
+    end
+
+    def pre?
+      yaml["pre"]
+    end
+
+    def post?
+      yaml["post"]
     end
 
     def get_pane_base_index
