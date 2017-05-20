@@ -45,7 +45,7 @@ module Tmuxinator
       end
 
       def installed?
-        Kernel.system("type tmux > /dev/null")
+        Kernel.system("tmux -V > /dev/null")
       end
 
       def version
