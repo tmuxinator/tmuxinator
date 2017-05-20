@@ -2,6 +2,7 @@ module Tmuxinator
   class Project
     include Tmuxinator::Util
     include Tmuxinator::Deprecations
+    include Tmuxinator::Hooks::Project
     include Tmuxinator::WemuxSupport
 
     RBENVRVM_DEP_MSG = <<-M
@@ -24,6 +25,14 @@ module Tmuxinator
     have run. At that time, the current behavior will need to be explicitly
     enabled, using the `synchronize: before` option.  To use this behaviour
     now, use the 'synchronize: after' option.
+    M
+    PRE_DEP_MSG = <<-M
+    DEPRECATION: the pre option has been replaced by project hooks and will
+    not be supported anymore.
+    M
+    POST_DEP_MSG = <<-M
+    DEPRECATION: the post option has been replaced by project hooks and will
+    not be supported anymore.
     M
 
     attr_reader :yaml
@@ -87,6 +96,11 @@ module Tmuxinator
 
     def render
       template = File.read(Tmuxinator::Config.template)
+      Erubis::Eruby.new(template).result(binding)
+    end
+
+    def kill
+      template = File.read(Tmuxinator::Config.stop_template)
       Erubis::Eruby.new(template).result(binding)
     end
 
@@ -242,6 +256,8 @@ module Tmuxinator
       deprecations << TABS_DEP_MSG if yaml["tabs"]
       deprecations << CLIARGS_DEP_MSG if yaml["cli_args"]
       deprecations << SYNC_DEP_MSG if legacy_synchronize?
+      deprecations << PRE_DEP_MSG if yaml["pre"]
+      deprecations << POST_DEP_MSG if yaml["post"]
       deprecations
     end
 

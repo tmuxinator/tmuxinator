@@ -9,6 +9,9 @@
 - Fix typos
 - Support user-specified and XDG Base Dirs configuration directories
 
+### New Features
+- add on_project_start, on_project_first_start, on_project_restart, on_project_exit and on_project_stop hooks for project
+
 ## 0.9.0
 ### Misc
 - Temporarily hiding Shorthand entry in README.md to prevent new bug reports

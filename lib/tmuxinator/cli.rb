@@ -127,7 +127,7 @@ module Tmuxinator
       end
 
       def kill_project(project)
-        Kernel.exec(project.tmux_kill_session_command)
+        Kernel.exec(project.kill)
       end
     end
 
