@@ -16,18 +16,16 @@ module Tmuxinator
     end
 
     def tmux_pre_command
-      return unless tab.pre
-
-      t = tmux_window_and_pane_target
-      e = tab.pre.shellescape
-      "#{project.tmux} send-keys -t #{t} #{e} C-m"
+      _send_keys(tab.pre.shellescape) if tab.pre
     end
 
     def tmux_pre_window_command
-      return unless project.pre_window
+      _send_keys(project.pre_window.shellescape) if project.pre_window
+    end
 
+    def _send_keys(e)
       t = tmux_window_and_pane_target
-      e = project.pre_window.shellescape
+
       "#{project.tmux} send-keys -t #{t} #{e} C-m"
     end
 

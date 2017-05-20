@@ -1,0 +1,29 @@
+---
+engines:
+  bundler-audit:
+    enabled: true
+  brakeman:
+    enabled: false
+  complexity-ruby:
+    enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+  fixme:
+    enabled: true
+    exclude_paths:
+      - ".rubocop.yml"
+  flog:
+    enabled: false
+  reek:
+    enabled: false
+  rubocop:
+    enabled: true
+ratings:
+  paths:
+  - Gemfile.lock
+  - "**.rb"
+exclude_paths:
+- spec/

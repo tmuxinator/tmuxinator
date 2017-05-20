@@ -235,11 +235,7 @@ module Tmuxinator
     end
 
     def send_pane_command(cmd, window_index, _pane_index)
-      if cmd.empty?
-        ""
-      else
-        "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
-      end
+      send_keys(cmd, window_index)
     end
 
     def send_keys(cmd, window_index)
