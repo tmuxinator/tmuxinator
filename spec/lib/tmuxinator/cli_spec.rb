@@ -286,7 +286,7 @@ describe Tmuxinator::Cli do
           allow(Tmuxinator::Config).to receive(:installed?).and_return(true)
         end
 
-        context "session exists" do
+        context "session exists", if: ENV["TMUX"].nil? do
           before(:all) do
             # Can't add variables through `let` in `before :all`.
             @session = "for-testing-tmuxinator"
