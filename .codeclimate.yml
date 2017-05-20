@@ -16,7 +16,7 @@ engines:
     exclude_paths:
       - ".rubocop.yml"
   flog:
-    enabled: false
+    enabled: true
   reek:
     enabled: false
   rubocop:

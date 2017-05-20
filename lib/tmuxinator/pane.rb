@@ -10,35 +10,35 @@ module Tmuxinator
     end
 
     def tmux_window_and_pane_target
-      x = tab.index + project.base_index
-      y = index + project.base_index
-      "#{project.name}:#{x}.#{y}"
+      "#{project.name}:#{window_index}.#{pane_index}"
     end
 
     def tmux_pre_command
-      _send_keys(tab.pre.shellescape) if tab.pre
+      _send_target(tab.pre.shellescape) if tab.pre
     end
 
     def tmux_pre_window_command
-      _send_keys(project.pre_window.shellescape) if project.pre_window
-    end
-
-    def _send_keys(e)
-      t = tmux_window_and_pane_target
-
-      "#{project.tmux} send-keys -t #{t} #{e} C-m"
+      _send_target(project.pre_window.shellescape) if project.pre_window
     end
 
     def tmux_main_command(command)
       if command
-        x = tab.index + project.base_index
-        y = index + tab.project.base_index
-        e = command.shellescape
-        n = project.name
-        "#{project.tmux} send-keys -t #{n}:#{x}.#{y} #{e} C-m"
+        _send_target(command.shellescape)
       else
         ""
       end
+    end
+
+    def name
+      project.name
+    end
+
+    def window_index
+      tab.index + project.base_index
+    end
+
+    def pane_index
+      index + tab.project.base_index
     end
 
     def tmux_split_command
@@ -50,6 +50,16 @@ module Tmuxinator
 
     def last?
       index == tab.panes.length - 1
+    end
+
+    private
+
+    def _send_target(e)
+      _send_keys(tmux_window_and_pane_target, e)
+    end
+
+    def _send_keys(t, e)
+      "#{project.tmux} send-keys -t #{t} #{e} C-m"
     end
   end
 end
