@@ -23,7 +23,7 @@ module Tmuxinator
         @layout = value["layout"] ? value["layout"].shellescape : nil
         @pre = value["pre"] if value["pre"]
         @root = if value["root"]
-                  File.expand_path(value["root"]).shellescape
+                  File.expand_path(value["root"], project.root? ? project.root : nil).shellescape
                 elsif project.root?
                   project.root
                 end
