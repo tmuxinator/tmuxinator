@@ -286,7 +286,7 @@ describe Tmuxinator::Cli do
           allow(Tmuxinator::Config).to receive(:installed?).and_return(true)
         end
 
-        context "session exists" do
+        context "session exists", if: ENV["TMUX"].nil? do
           before(:all) do
             # Can't add variables through `let` in `before :all`.
             @session = "for-testing-tmuxinator"
@@ -308,6 +308,12 @@ describe Tmuxinator::Cli do
             expect(file.string).to_not be_empty
             # make sure the output is valid YAML
             expect { YAML.parse file.string }.to_not raise_error
+          end
+        end
+
+        context "session exists", unless: ENV["TMUX"].nil? do
+          it "creates a project file" do
+            skip "can not be run from within a tmux session"
           end
         end
 
