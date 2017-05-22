@@ -280,13 +280,13 @@ describe Tmuxinator::Cli do
 
     # this command variant only works for tmux version 1.6 and up.
     context "from a session" do
-      context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
+      context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 && ENV["TMUX"].nil? do
         before do
           # Necessary to make `Config.installed?` work in specs
           allow(Tmuxinator::Config).to receive(:installed?).and_return(true)
         end
 
-        context "session exists", if: ENV["TMUX"].nil? do
+        context "session exists" do
           before(:all) do
             # Can't add variables through `let` in `before :all`.
             @session = "for-testing-tmuxinator"

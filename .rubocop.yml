@@ -505,7 +505,7 @@ Metrics/LineLength:
   - https
   Exclude:
     - lib/tmuxinator/window.rb
-    - spec/lib/tmuxinator/window_spec.rb
+    - spec/lib/tmuxinator/**/*spec.rb
 Metrics/MethodLength:
   Description: Avoid methods longer than 10 lines of code.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#short-methods
