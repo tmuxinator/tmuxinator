@@ -1,3 +1,5 @@
+require "open3"
+
 module Tmuxinator
   class Cli < Thor
     # By default, Thor returns exit(0) when an error occurs.
@@ -58,7 +60,7 @@ module Tmuxinator
       end
     end
 
-    desc "new [PROJECT]", COMMANDS[:new]
+    desc "new [PROJECT] [SESSION]", COMMANDS[:new]
     map "open" => :new
     map "edit" => :new
     map "o" => :new
@@ -68,22 +70,88 @@ module Tmuxinator
                           aliases: ["-l"],
                           desc: "Create local project file at ./.tmuxinator.yml"
 
-    def new(name)
-      project_file = find_project_file(name, options[:local])
-      Kernel.system("$EDITOR #{project_file}") || doctor
+    def new(name, session = nil)
+      if session
+        new_project_with_session(name, session)
+      else
+        new_project(name)
+      end
     end
 
     no_commands do
+      def new_project(name)
+        project_file = find_project_file(name, options[:local])
+        Kernel.system("$EDITOR #{project_file}") || doctor
+      end
+
+      def new_project_with_session(name, session)
+        if Tmuxinator::Config.version < 1.6
+          raise "Creating projects from sessions is unsupported\
+            for tmux version 1.5 or lower."
+        end
+
+        windows, _, s0 = Open3.capture3(<<-CMD)
+          tmux list-windows -t #{session}\
+          -F "#W \#{window_layout} \#{window_active} \#{pane_current_path}"
+        CMD
+        panes, _, s1 = Open3.capture3(<<-CMD)
+          tmux list-panes -s -t #{session} -F "#W \#{pane_current_path}"
+        CMD
+        tmux_options, _, s2 = Open3.capture3(<<-CMD)
+          tmux show-options -t #{session}
+        CMD
+        project_root = tmux_options[/^default-path "(.+)"$/, 1]
+
+        unless [s0, s1, s2].all?(&:success?)
+          raise "Session '#{session}' doesn't exist."
+        end
+
+        panes = panes.each_line.map(&:split).group_by(&:first)
+        windows = windows.each_line.map do |line|
+          window_name, layout, active, path = line.split(" ")
+          project_root ||= path if active.to_i == 1
+          [
+            window_name,
+            layout,
+            Array(panes[window_name]).map do |_, pane_path|
+              "cd #{pane_path}"
+            end
+          ]
+        end
+
+        yaml = {
+          "name" => name,
+          "project_root" => project_root,
+          "windows" => windows.map do |window_name, layout, window_panes|
+            {
+              window_name => {
+                "layout" => layout,
+                "panes" => window_panes
+              }
+            }
+          end
+        }
+
+        path = config_path(name, options[:local])
+        File.open(path, "w") do |f|
+          f.write(YAML.dump(yaml))
+        end
+      end
+
       def find_project_file(name, local = false)
-        path = if local
-                 Tmuxinator::Config::LOCAL_DEFAULT
-               else
-                 Tmuxinator::Config.default_project(name)
-               end
+        path = config_path(name, local)
         if File.exist?(path)
           path
         else
           generate_project_file(name, path)
+        end
+      end
+
+      def config_path(name, local = false)
+        if local
+          Tmuxinator::Config::LOCAL_DEFAULT
+        else
+          Tmuxinator::Config.default_project(name)
         end
       end
 
