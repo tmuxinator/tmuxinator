@@ -15,10 +15,11 @@ env:
   - TMUX_VERSION=1.6
   - TMUX_VERSION=1.5
 matrix:
+  fail_fast: true
   allow_failures:
     - env: TMUX_VERSION=1.7
 before_install:
-  - gem install bundler
+  - gem install bundler --no-ri --no-rdoc
   - sudo apt-get update -qq
   - sudo apt-get install -qq libevent-dev libncurses-dev
   - git clone https://github.com/tmux/tmux.git tmux

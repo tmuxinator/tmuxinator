@@ -49,7 +49,10 @@ module Tmuxinator
       end
 
       def version
-        `tmux -V`.split(" ")[1].to_f if installed?
+        if installed?
+          tmux_version = `tmux -V`.split(" ")[1]
+          tmux_version == "master" ? 9.9 : tmux_version.to_f
+        end
       end
 
       def default_path_option
