@@ -1,6 +1,6 @@
 _tmuxinator() {
   local commands projects
-  commands=(${(f)"$(tmuxinator commands zsh)"})
+  commands=(${(f)"$(tmuxinator commands)"})
   projects=(${(f)"$(tmuxinator completions start)"})
 
   if (( CURRENT == 2 )); then
