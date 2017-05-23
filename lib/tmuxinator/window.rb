@@ -2,7 +2,7 @@ module Tmuxinator
   class Window
     include Tmuxinator::Util
 
-    attr_reader :name, :root, :panes, :layout, :commands, :index, :project, :synchronize
+    attr_reader :commands, :index, :name, :project
 
     def initialize(window_yaml, index, project)
       first_key = window_yaml.keys.first
