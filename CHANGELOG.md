@@ -4,7 +4,7 @@
 - Add ability for pre_window commands to parse yaml arrays
 
 ### Misc
-- Removed support for Ruby 1.9.3
+- Removed support for Ruby 1.9.3, 2.0, & 2.1
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
 - Fix typos
