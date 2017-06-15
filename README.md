@@ -30,7 +30,7 @@ export EDITOR='vim'
 
 ## tmux
 
-The recommended version of tmux to use is 1.8. Your mileage may vary for
+The recommended version of tmux to use is 1.8 or later, with the exception of 2.5, which is **not** supported (see [issue 536](https://github.com/tmuxinator/tmuxinator/issues/536) for details). Your mileage may vary for
 earlier versions. Refer to the FAQ for any odd behaviour.
 
 ### base-index
