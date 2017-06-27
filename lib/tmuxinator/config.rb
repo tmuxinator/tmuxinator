@@ -53,7 +53,7 @@ module Tmuxinator
       end
 
       def default_path_option
-        version && version < 1.8 ? "default-path" : "-c"
+        version && version < 1.8 && version > 0.0 ? "default-path" : "-c"
       end
 
       def editor?
