@@ -210,11 +210,11 @@ module Tmuxinator
     end
 
     def startup_window
-      yaml["startup_window"] || base_index
+      "#{name}:#{yaml['startup_window'] || base_index}"
     end
 
     def startup_pane
-      yaml["startup_pane"] || pane_base_index
+      "#{startup_window}.#{yaml['startup_pane'] || pane_base_index}"
     end
 
     def tmux_options?
