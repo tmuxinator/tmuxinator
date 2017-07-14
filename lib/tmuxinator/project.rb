@@ -316,7 +316,9 @@ module Tmuxinator
     end
 
     def show_tmux_options
-      "#{tmux} start-server\\; show-option -g"
+      "#{tmux} start-server\\; " \
+        "show-option -g base-index\\; " \
+        "show-window-option -g pane-base-index\\;"
     end
 
     def tmux_new_session_command

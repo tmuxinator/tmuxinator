@@ -2,6 +2,8 @@
 
 - Remove unused attr_readers from Tmuxinator::Window
 - Add ability for pre_window commands to parse yaml arrays
+- Fix a bug causing the user's global pane-base-index setting not to be
+  respected
 
 ### Misc
 - Removed support for Ruby 1.9.3
