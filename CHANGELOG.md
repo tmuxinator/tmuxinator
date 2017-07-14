@@ -3,6 +3,7 @@
 - Remove unused attr_readers from Tmuxinator::Window
 - Add ability for pre_window commands to parse yaml arrays
 - Refactor Tmuxinator::Config by extracting a Tmuxinator::Doctor class (#457)
+- Refactors Tmuxinator::Confir.version to display a high value number for `tmux`'s `master` branch
 
 ### Misc
 - Removed support for Ruby 1.9.3
