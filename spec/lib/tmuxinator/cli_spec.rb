@@ -282,8 +282,8 @@ describe Tmuxinator::Cli do
     context "from a session" do
       context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
         before do
-          # Necessary to make `Config.installed?` work in specs
-          allow(Tmuxinator::Config).to receive(:installed?).and_return(true)
+          # Necessary to make `Doctor.installed?` work in specs
+          allow(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
         end
 
         context "session exists" do
@@ -552,9 +552,9 @@ describe Tmuxinator::Cli do
     end
 
     it "checks requirements" do
-      expect(Tmuxinator::Config).to receive(:installed?)
-      expect(Tmuxinator::Config).to receive(:editor?)
-      expect(Tmuxinator::Config).to receive(:shell?)
+      expect(Tmuxinator::Doctor).to receive(:installed?)
+      expect(Tmuxinator::Doctor).to receive(:editor?)
+      expect(Tmuxinator::Doctor).to receive(:shell?)
       capture_io { cli.start }
     end
   end
