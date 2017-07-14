@@ -202,7 +202,7 @@ module Tmuxinator
     end
 
     def base_index
-      get_pane_base_index ? get_pane_base_index.to_i : get_base_index.to_i
+      get_base_index.to_i
     end
 
     def pane_base_index
