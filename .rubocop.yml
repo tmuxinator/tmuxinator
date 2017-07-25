@@ -10,9 +10,10 @@ AllCops:
   Exclude:
   - "vendor/**/*"
   - "db/schema.rb"
-  RunRailsCops: false
-  DisplayCopNames: false
+  DisplayCopNames: true
   StyleGuideCopsOnly: false
+Rails:
+  Enabled: false
 Style/AccessModifierIndentation:
   Description: Check indentation of private/protected visibility modifiers.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#indent-public-private-protected
@@ -425,14 +426,10 @@ Style/TrailingBlankLines:
   SupportedStyles:
   - final_newline
   - final_blank_line
-Style/TrailingComma:
-  Description: Checks for trailing comma in parameter lists and literals.
-  StyleGuide: https://github.com/bbatsov/ruby-style-guide#no-trailing-array-commas
+Style/TrailingCommaInLiteral:
   Enabled: false
-  EnforcedStyleForMultiline: no_comma
-  SupportedStyles:
-  - comma
-  - no_comma
+Style/TrailingCommaInArguments:
+  Enabled: true
 Style/TrivialAccessors:
   Description: Prefer attr_* methods to trivial readers/writers.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#attr_family
@@ -526,6 +523,18 @@ Metrics/PerceivedComplexity:
     reader.
   Enabled: false
   Max: 7
+Metrics/BlockLength:
+  Exclude:
+    - lib/tmuxinator/cli.rb
+    - spec/factories/**/*.rb
+    - spec/matchers/**/*.rb
+    - spec/**/*_spec.rb
+Lint/PercentStringArray:
+  Exclude:
+    - lib/tmuxinator/cli.rb
+Style/MutableConstant:
+  Exclude:
+    - lib/tmuxinator/project.rb
 Lint/AssignmentInCondition:
   Description: Don't use assignment in conditions.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#safe-assignment-in-condition
@@ -545,48 +554,6 @@ Lint/DefEndAlignment:
   SupportedStyles:
   - start_of_line
   - def
-Rails/ActionFilter:
-  Description: Enforces consistent use of action filter methods.
-  Enabled: false
-  EnforcedStyle: action
-  SupportedStyles:
-  - action
-  - filter
-  Include:
-  - app/controllers/**/*.rb
-Rails/DefaultScope:
-  Description: Checks if the argument passed to default_scope is a block.
-  Enabled: true
-  Include:
-  - app/models/**/*.rb
-Rails/HasAndBelongsToMany:
-  Description: Prefer has_many :through to has_and_belongs_to_many.
-  Enabled: true
-  Include:
-  - app/models/**/*.rb
-Rails/Output:
-  Description: Checks for calls to puts, print, etc.
-  Enabled: true
-  Include:
-  - app/**/*.rb
-  - config/**/*.rb
-  - db/**/*.rb
-  - lib/**/*.rb
-Rails/ReadWriteAttribute:
-  Description: Checks for read_attribute(:attr) and write_attribute(:attr, val).
-  Enabled: true
-  Include:
-  - app/models/**/*.rb
-Rails/ScopeArgs:
-  Description: Checks the arguments of ActiveRecord scopes.
-  Enabled: true
-  Include:
-  - app/models/**/*.rb
-Rails/Validation:
-  Description: Use validates :attribute, hash of validations.
-  Enabled: true
-  Include:
-  - app/models/**/*.rb
 Style/InlineComment:
   Description: Avoid inline comments.
   Enabled: false
@@ -679,10 +646,6 @@ Style/DefWithParentheses:
   Description: Use def with parentheses when there are arguments.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#method-parens
   Enabled: true
-Style/DeprecatedHashMethods:
-  Description: Checks for use of deprecated Hash methods.
-  StyleGuide: https://github.com/bbatsov/ruby-style-guide#hash-key
-  Enabled: false
 Style/Documentation:
   Description: Document classes and non-namespace modules.
   Enabled: false
@@ -834,7 +797,7 @@ Style/SelfAssignment:
     used.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#self-assignment
   Enabled: false
-Style/SingleSpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Description: Checks that exactly one space is used between a method name and the
     first argument for method calls without parentheses.
   Enabled: true
@@ -846,8 +809,7 @@ Style/SpaceAfterComma:
   Description: Use spaces after commas.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#spaces-operators
   Enabled: true
-Style/SpaceAfterControlKeyword:
-  Description: Use spaces after if/elsif/unless/while/until/case/when.
+Style/SpaceAroundKeyword:
   Enabled: true
 Style/SpaceAfterMethodName:
   Description: Do not put a space between a method name and the opening parenthesis
@@ -874,9 +836,6 @@ Style/SpaceBeforeSemicolon:
 Style/SpaceAroundOperators:
   Description: Use spaces around operators.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#spaces-operators
-  Enabled: true
-Style/SpaceBeforeModifierKeyword:
-  Description: Put a space before the modifier keyword.
   Enabled: true
 Style/SpaceInsideBrackets:
   Description: No spaces after [ or before ].
@@ -1013,10 +972,6 @@ Lint/ShadowingOuterLocalVariable:
   Description: Do not use the same name as outer local variable for block arguments
     or block local variables.
   Enabled: true
-Lint/SpaceBeforeFirstArg:
-  Description: Put a space between a method name and the first argument in a method
-    call without parentheses.
-  Enabled: true
 Lint/StringConversionInInterpolation:
   Description: Checks for Object#to_s usage in string interpolation.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#no-to-s
@@ -1053,7 +1008,4 @@ Lint/UselessSetterCall:
   Enabled: true
 Lint/Void:
   Description: Possible use of operator/literal/variable in void context.
-  Enabled: false
-Rails/Delegate:
-  Description: Prefer delegate method for delegations.
   Enabled: false

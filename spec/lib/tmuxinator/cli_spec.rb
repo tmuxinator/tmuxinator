@@ -1,4 +1,5 @@
 require "spec_helper"
+
 describe Tmuxinator::Cli do
   let(:cli) { Tmuxinator::Cli }
 
@@ -73,7 +74,7 @@ describe Tmuxinator::Cli do
       end
 
       it "accepts a flag for alternate name" do
-        ARGV.replace(["start", "foo" "--name=bar"])
+        ARGV.replace(["start", "foo", "--name=bar"])
 
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
@@ -231,16 +232,16 @@ describe Tmuxinator::Cli do
         end
       end
 
-      context "files exists" do
-        let(:root_path) { "#{ENV['HOME']}\/\.tmuxinator\/#{name}\.yml" }
+      context "file exists" do
+        let(:project_path) { Tmuxinator::Config.project(name).to_s }
 
         before do
           allow(File).to receive(:exist?).with(anything).and_return(false)
-          expect(File).to receive(:exist?).with(root_path).and_return(true)
+          expect(File).to receive(:exist?).with(project_path).and_return(true)
         end
 
         it "just opens the file" do
-          expect(Kernel).to receive(:system).with(%r{#{root_path}})
+          expect(Kernel).to receive(:system).with(%r{#{project_path}})
           capture_io { cli.start }
         end
       end
@@ -264,7 +265,7 @@ describe Tmuxinator::Cli do
         end
       end
 
-      context "files exists" do
+      context "file exists" do
         let(:path) { Tmuxinator::Config::LOCAL_DEFAULT }
         before do
           expect(File).to receive(:exist?).with(path) { true }
@@ -273,6 +274,62 @@ describe Tmuxinator::Cli do
         it "just opens the file" do
           expect(Kernel).to receive(:system).with(%r{#{path}})
           capture_io { cli.start }
+        end
+      end
+    end
+
+    # this command variant only works for tmux version 1.6 and up.
+    context "from a session" do
+      context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
+        before do
+          # Necessary to make `Doctor.installed?` work in specs
+          allow(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
+        end
+
+        context "session exists" do
+          before(:all) do
+            # Can't add variables through `let` in `before :all`.
+            @session = "for-testing-tmuxinator"
+            # Pass the -d option, so that the session is not attached.
+            Kernel.system "tmux new-session -d -s #{@session}"
+          end
+
+          before do
+            ARGV.replace ["new", name, @session]
+          end
+
+          after(:all) do
+            puts @session
+            Kernel.system "tmux kill-session -t #{@session}"
+          end
+
+          it "creates a project file" do
+            capture_io { cli.start }
+            expect(file.string).to_not be_empty
+            # make sure the output is valid YAML
+            expect { YAML.parse file.string }.to_not raise_error
+          end
+        end
+
+        context "session doesn't exist" do
+          before do
+            ARGV.replace ["new", name, "sessiondoesnotexist"]
+          end
+
+          it "fails" do
+            expect { cli.start }.to raise_error RuntimeError
+          end
+        end
+      end
+
+      context "with tmux < 1.6" do
+        before do
+          ARGV.replace ["new", name, "sessionname"]
+          allow(Tmuxinator::Config).to receive(:version).and_return(1.5)
+        end
+
+        it "is unsupported" do
+          expect { cli.start }.to raise_error RuntimeError
         end
       end
     end
@@ -444,9 +501,26 @@ describe Tmuxinator::Cli do
       capture_io { cli.start }
     end
 
-    it "deletes all projects" do
-      expect(FileUtils).to receive(:remove_dir)
+    it "deletes the configuration directory(s)" do
+      allow(Tmuxinator::Config).to receive(:directories) \
+        { [Tmuxinator::Config.xdg, Tmuxinator::Config.home] }
+      expect(FileUtils).to receive(:remove_dir).once.
+        with(Tmuxinator::Config.xdg)
+      expect(FileUtils).to receive(:remove_dir).once.
+        with(Tmuxinator::Config.home)
+      expect(FileUtils).to receive(:remove_dir).never
       capture_io { cli.start }
+    end
+
+    context "$TMUXINATOR_CONFIG specified" do
+      it "only deletes projects in that directory" do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").and_return "dir"
+        allow(File).to receive(:directory?).with("dir").and_return true
+        expect(FileUtils).to receive(:remove_dir).once.with("dir")
+        expect(FileUtils).to receive(:remove_dir).never
+        capture_io { cli.start }
+      end
     end
   end
 
@@ -478,9 +552,9 @@ describe Tmuxinator::Cli do
     end
 
     it "checks requirements" do
-      expect(Tmuxinator::Config).to receive(:installed?)
-      expect(Tmuxinator::Config).to receive(:editor?)
-      expect(Tmuxinator::Config).to receive(:shell?)
+      expect(Tmuxinator::Doctor).to receive(:installed?)
+      expect(Tmuxinator::Doctor).to receive(:editor?)
+      expect(Tmuxinator::Doctor).to receive(:shell?)
       capture_io { cli.start }
     end
   end
@@ -571,7 +645,7 @@ describe Tmuxinator::Cli do
       subject { described_class.new.create_project(params) }
 
       before do
-        allow(Tmuxinator::Config).to receive_messages(root: path)
+        allow(Tmuxinator::Config).to receive_messages(directory: path)
       end
 
       it_should_behave_like :a_proper_project

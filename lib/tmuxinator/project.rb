@@ -2,6 +2,7 @@ module Tmuxinator
   class Project
     include Tmuxinator::Util
     include Tmuxinator::Deprecations
+    include Tmuxinator::Hooks::Project
     include Tmuxinator::WemuxSupport
 
     RBENVRVM_DEP_MSG = <<-M
@@ -24,6 +25,14 @@ module Tmuxinator
     have run. At that time, the current behavior will need to be explicitly
     enabled, using the `synchronize: before` option.  To use this behaviour
     now, use the 'synchronize: after' option.
+    M
+    PRE_DEP_MSG = <<-M
+    DEPRECATION: the pre option has been replaced by project hooks and will
+    not be supported anymore.
+    M
+    POST_DEP_MSG = <<-M
+    DEPRECATION: the post option has been replaced by project hooks and will
+    not be supported anymore.
     M
 
     attr_reader :yaml
@@ -62,9 +71,9 @@ module Tmuxinator
 
     def validate!
       raise "Your project file should include some windows." \
-        unless self.windows?
+        unless windows?
       raise "Your project file didn't specify a 'project_name'" \
-        unless self.name?
+        unless name?
       self
     end
 
@@ -86,8 +95,16 @@ module Tmuxinator
     end
 
     def render
-      template = File.read(Tmuxinator::Config.template)
-      Erubis::Eruby.new(template).result(binding)
+      self.class.render_template(Tmuxinator::Config.template, binding)
+    end
+
+    def kill
+      self.class.render_template(Tmuxinator::Config.stop_template, binding)
+    end
+
+    def self.render_template(template, bndg)
+      content = File.read(template)
+      Erubis::Eruby.new(content).result(bndg)
     end
 
     def windows
@@ -114,25 +131,25 @@ module Tmuxinator
     end
 
     def attach?
-      if yaml["attach"].nil?
-        yaml_attach = true
-      else
-        yaml_attach = yaml["attach"]
-      end
+      yaml_attach = if yaml["attach"].nil?
+                      true
+                    else
+                      yaml["attach"]
+                    end
       attach = force_attach || !force_detach && yaml_attach
       attach
     end
 
     def pre_window
-      if rbenv?
-        params = "rbenv shell #{yaml['rbenv']}"
-      elsif rvm?
-        params = "rvm use #{yaml['rvm']}"
-      elsif pre_tab?
-        params = yaml["pre_tab"]
-      else
-        params = yaml["pre_window"]
-      end
+      params = if rbenv?
+                 "rbenv shell #{yaml['rbenv']}"
+               elsif rvm?
+                 "rvm use #{yaml['rvm']}"
+               elsif pre_tab?
+                 yaml["pre_tab"]
+               else
+                 yaml["pre_window"]
+               end
       parsed_parameters(params)
     end
 
@@ -221,11 +238,7 @@ module Tmuxinator
     end
 
     def send_pane_command(cmd, window_index, _pane_index)
-      if cmd.empty?
-        ""
-      else
-        "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
-      end
+      send_keys(cmd, window_index)
     end
 
     def send_keys(cmd, window_index)
@@ -237,12 +250,61 @@ module Tmuxinator
     end
 
     def deprecations
-      deprecations = []
-      deprecations << RBENVRVM_DEP_MSG if yaml["rbenv"] || yaml["rvm"]
-      deprecations << TABS_DEP_MSG if yaml["tabs"]
-      deprecations << CLIARGS_DEP_MSG if yaml["cli_args"]
-      deprecations << SYNC_DEP_MSG if legacy_synchronize?
-      deprecations
+      deprecation_checks.zip(deprecation_messages).
+        inject([]) do |deps, (chk, msg)|
+        deps << msg if chk
+        deps
+      end
+    end
+
+    def deprecation_checks
+      [
+        rvm_or_rbenv?,
+        tabs?,
+        cli_args?,
+        legacy_synchronize?,
+        pre?,
+        post?
+      ]
+    end
+
+    def deprecation_messages
+      [
+        RBENVRVM_DEP_MSG,
+        TABS_DEP_MSG,
+        CLIARGS_DEP_MSG,
+        SYNC_DEP_MSG,
+        PRE_DEP_MSG,
+        POST_DEP_MSG
+      ]
+    end
+
+    def rbenv?
+      yaml["rbenv"]
+    end
+
+    def rvm?
+      yaml["rvm"]
+    end
+
+    def rvm_or_rbenv?
+      rvm? || rbenv?
+    end
+
+    def tabs?
+      yaml["tabs"]
+    end
+
+    def cli_args?
+      yaml["cli_args"]
+    end
+
+    def pre?
+      yaml["pre"]
+    end
+
+    def post?
+      yaml["post"]
     end
 
     def get_pane_base_index

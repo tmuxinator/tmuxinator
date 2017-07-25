@@ -1,13 +1,19 @@
 ## Unreleased
 
 - Attach original exception message to exception re-raised by Project::load
+- Remove unused attr_readers from Tmuxinator::Window
 - Add ability for pre_window commands to parse yaml arrays
+- Refactor Tmuxinator::Config by extracting a Tmuxinator::Doctor class (#457)
 
 ### Misc
 - Removed support for Ruby 1.9.3
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
 - Fix typos
+- Support user-specified and XDG Base Dirs configuration directories
+
+### New Features
+- add on_project_start, on_project_first_start, on_project_restart, on_project_exit and on_project_stop hooks for project
 
 ## 0.9.0
 ### Misc
