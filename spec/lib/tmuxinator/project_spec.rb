@@ -565,7 +565,7 @@ describe Tmuxinator::Project do
       expect(File).to receive(:read).with(path) { bad_yaml }
       expect do
         described_class.load(path, options)
-      end.to raise_error RuntimeError, %r{Failed.to.parse.config.file}
+      end.to raise_error RuntimeError, /\AFailed to parse config file: .+\z/
     end
 
     it "should return an instance of the class if the file loads" do

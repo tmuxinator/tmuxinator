@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Attach original exception message to exception re-raised by Project::load
 - Remove unused attr_readers from Tmuxinator::Window
 - Add ability for pre_window commands to parse yaml arrays
 - Refactor Tmuxinator::Config by extracting a Tmuxinator::Doctor class (#457)
