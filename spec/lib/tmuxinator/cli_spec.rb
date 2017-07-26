@@ -60,6 +60,7 @@ describe Tmuxinator::Cli do
   describe "#start" do
     before do
       ARGV.replace(["start", "foo"])
+      allow(Tmuxinator::Config).to receive(:installed?).and_return true
       allow(Tmuxinator::Config).to receive_messages(validate: project)
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
@@ -105,6 +106,7 @@ describe Tmuxinator::Cli do
   describe "#stop" do
     before do
       ARGV.replace(["stop", "foo"])
+      allow(Tmuxinator::Config).to receive(:installed?).and_return true
       allow(Tmuxinator::Config).to receive_messages(validate: project)
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
@@ -158,6 +160,7 @@ describe Tmuxinator::Cli do
   describe "#start(custom_name)" do
     before do
       ARGV.replace(["start", "foo", "bar"])
+      allow(Tmuxinator::Config).to receive(:installed?).and_return true
       allow(Tmuxinator::Config).to receive_messages(validate: project)
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)

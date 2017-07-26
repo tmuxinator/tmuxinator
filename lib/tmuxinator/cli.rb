@@ -208,6 +208,7 @@ module Tmuxinator
                          desc: "Give the session a different name"
 
     def start(name, *args)
+      Tmuxinator::TmuxValidator::validate!
       params = {
         name: name,
         custom_name: options[:name],
