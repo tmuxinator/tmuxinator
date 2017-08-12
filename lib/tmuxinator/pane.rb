@@ -1,9 +1,10 @@
 module Tmuxinator
   class Pane
-    attr_reader :commands, :project, :index, :tab
+    attr_reader :project, :index, :tab
 
-    def initialize(index, project, tab, *commands)
+    def initialize(index, title, project, tab, *commands)
       @commands = commands
+      @title = title
       @index = index
       @project = project
       @tab = tab
@@ -29,8 +30,19 @@ module Tmuxinator
       end
     end
 
+    def commands
+      if @title != nil
+        [
+          "printf '\\033]2;#{@title}\\033\\\\'",
+          "clear"
+        ] + @commands
+      else
+        @commands
+      end
+    end
+
     def name
-      project.name
+      @title or project.name
     end
 
     def window_index
