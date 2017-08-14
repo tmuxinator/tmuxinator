@@ -10,6 +10,7 @@ AllCops:
   Exclude:
   - "vendor/**/*"
   - "db/schema.rb"
+  - "Vagrantfile"
   DisplayCopNames: true
   StyleGuideCopsOnly: false
 Rails:
