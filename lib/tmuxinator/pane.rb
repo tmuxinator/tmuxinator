@@ -31,7 +31,7 @@ module Tmuxinator
     end
 
     def commands
-      if @title != nil
+      if @title.nil?
         [
           "printf '\\033]2;#{@title}\\033\\\\'",
           "clear"
@@ -42,7 +42,7 @@ module Tmuxinator
     end
 
     def name
-      @title or project.name
+      @title || project.name
     end
 
     def window_index
