@@ -31,7 +31,7 @@ module Tmuxinator
     end
 
     def commands
-      if @title.nil?
+      if !@title.nil?
         [
           "printf '\\033]2;#{@title}\\033\\\\'",
           "clear"
