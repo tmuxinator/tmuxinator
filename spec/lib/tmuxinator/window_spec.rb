@@ -138,7 +138,11 @@ describe Tmuxinator::Window do
         it "returns two panes in an Array" do
           expect(window.panes).to match [
             a_pane.with(index: 0).and_commands("vim"),
-            a_pane.with(index: 1).and_commands(command1, command2)
+            a_pane.with(index: 1).and_commands(
+              # Expects the pane title to be set to "pane2"
+              "printf '\\033]2;pane2\\033\\\\'", "clear",
+              command1, command2
+            )
           ]
         end
       end
