@@ -330,8 +330,8 @@ order) when creating or searching for existing project configuration files:
 - ~/.tmuxinator
 
 This behavior is opt-in. If you do nothing, Tmuxinator will continue to use
-~/.tmuxinator or local .tmuxinator.yml files when searching for existing
-project configuration files or creating new project configuration files.
+~/.tmuxinator when searching for existing project configuration files or
+creating new project configuration files.
 
 ## FAQ
 
