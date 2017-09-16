@@ -338,7 +338,7 @@ describe Tmuxinator::Project do
       it "gets the startup window from project config" do
         project.yaml["startup_window"] = "logs"
 
-        expect(project.startup_window).to eq("logs")
+        expect(project.startup_window).to eq("sample:logs")
       end
     end
 
@@ -346,7 +346,7 @@ describe Tmuxinator::Project do
       it "returns base index instead" do
         allow(project).to receive_messages(base_index: 8)
 
-        expect(project.startup_window).to eq 8
+        expect(project.startup_window).to eq("sample:8")
       end
     end
   end
@@ -356,7 +356,7 @@ describe Tmuxinator::Project do
       it "get the startup pane index from project config" do
         project.yaml["startup_pane"] = 1
 
-        expect(project.startup_pane).to eq(1)
+        expect(project.startup_pane).to eq("sample:0.1")
       end
     end
 
@@ -364,7 +364,7 @@ describe Tmuxinator::Project do
       it "returns the base pane instead" do
         allow(project).to receive_messages(pane_base_index: 4)
 
-        expect(project.startup_pane).to eq(4)
+        expect(project.startup_pane).to eq("sample:0.4")
       end
     end
   end
@@ -565,7 +565,7 @@ describe Tmuxinator::Project do
       expect(File).to receive(:read).with(path) { bad_yaml }
       expect do
         described_class.load(path, options)
-      end.to raise_error RuntimeError, %r{Failed.to.parse.config.file}
+      end.to raise_error RuntimeError, /\AFailed to parse config file: .+\z/
     end
 
     it "should return an instance of the class if the file loads" do

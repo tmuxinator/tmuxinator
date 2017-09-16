@@ -44,24 +44,12 @@ module Tmuxinator
         exists?("default")
       end
 
-      def installed?
-        Kernel.system("type tmux > /dev/null")
-      end
-
       def version
-        `tmux -V`.split(" ")[1].to_f if installed?
+        `tmux -V`.split(" ")[1].to_f if Tmuxinator::Doctor.installed?
       end
 
       def default_path_option
         version && version < 1.8 ? "default-path" : "-c"
-      end
-
-      def editor?
-        !ENV["EDITOR"].nil? && !ENV["EDITOR"].empty?
-      end
-
-      def shell?
-        !ENV["SHELL"].nil? && !ENV["SHELL"].empty?
       end
 
       def exists?(name)

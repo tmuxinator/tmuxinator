@@ -1,8 +1,12 @@
 ## Unreleased
-
+- Remove Object#blank? monkey patch (#458)
+- Add _Project Configuration Location_ entry to README (#360, #534)
+- Attach original exception message to exception re-raised by Project::load
 - Remove unused attr_readers from Tmuxinator::Window
 - Add ability for pre_window commands to parse yaml arrays
-- Remove Object#blank? monkey patch (#458)
+- Refactor Tmuxinator::Config by extracting a Tmuxinator::Doctor class (#457)
+- Fix a bug where startup_window and startup_pane were not respected if running
+  tmuxinator from within an existing tmux session (#537)
 
 ### Misc
 - Removed support for Ruby 1.9.3
