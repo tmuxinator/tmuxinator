@@ -117,12 +117,12 @@ module Tmuxinator
 
     def root
       root = yaml["project_root"] || yaml["root"]
-      root.blank? ? nil : File.expand_path(root).shellescape
+      blank?(root) ? nil : File.expand_path(root).shellescape
     end
 
     def name
       name = custom_name || yaml["project_name"] || yaml["name"]
-      name.blank? ? nil : name.to_s.shellescape
+      blank?(name) ? nil : name.to_s.shellescape
     end
 
     def pre
@@ -329,6 +329,10 @@ module Tmuxinator
     end
 
     private
+
+    def blank?(object)
+      (object.respond_to?(:empty?) && object.empty?) || !object
+    end
 
     def tmux_config
       @tmux_config ||= extract_tmux_config

@@ -1,5 +1,5 @@
 ## Unreleased
-
+- Remove Object#blank? monkey patch (#458)
 - Add _Project Configuration Location_ entry to README (#360, #534)
 - Attach original exception message to exception re-raised by Project::load
 - Remove unused attr_readers from Tmuxinator::Window
