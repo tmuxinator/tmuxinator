@@ -50,8 +50,8 @@ module Tmuxinator
 
         content = Erubis::Eruby.new(raw_content).result(binding)
         YAML.load(content)
-      rescue SyntaxError, StandardError
-        raise "Failed to parse config file. Please check your formatting."
+      rescue SyntaxError, StandardError => error
+        raise "Failed to parse config file: #{error.message}"
       end
 
       new(yaml, options)
@@ -117,12 +117,12 @@ module Tmuxinator
 
     def root
       root = yaml["project_root"] || yaml["root"]
-      root.blank? ? nil : File.expand_path(root).shellescape
+      blank?(root) ? nil : File.expand_path(root).shellescape
     end
 
     def name
       name = custom_name || yaml["project_name"] || yaml["name"]
-      name.blank? ? nil : name.to_s.shellescape
+      blank?(name) ? nil : name.to_s.shellescape
     end
 
     def pre
@@ -210,11 +210,11 @@ module Tmuxinator
     end
 
     def startup_window
-      yaml["startup_window"] || base_index
+      "#{name}:#{yaml['startup_window'] || base_index}"
     end
 
     def startup_pane
-      yaml["startup_pane"] || pane_base_index
+      "#{startup_window}.#{yaml['startup_pane'] || pane_base_index}"
     end
 
     def tmux_options?
@@ -331,6 +331,10 @@ module Tmuxinator
     end
 
     private
+
+    def blank?(object)
+      (object.respond_to?(:empty?) && object.empty?) || !object
+    end
 
     def tmux_config
       @tmux_config ||= extract_tmux_config

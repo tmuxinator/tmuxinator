@@ -327,13 +327,13 @@ module Tmuxinator
 
     def doctor
       say "Checking if tmux is installed ==> "
-      yes_no Tmuxinator::Config.installed?
+      yes_no Tmuxinator::Doctor.installed?
 
       say "Checking if $EDITOR is set ==> "
-      yes_no Tmuxinator::Config.editor?
+      yes_no Tmuxinator::Doctor.editor?
 
       say "Checking if $SHELL is set ==> "
-      yes_no Tmuxinator::Config.shell?
+      yes_no Tmuxinator::Doctor.shell?
     end
   end
 end

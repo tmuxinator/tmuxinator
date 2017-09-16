@@ -11,6 +11,7 @@ require "tmuxinator/deprecations"
 require "tmuxinator/wemux_support"
 require "tmuxinator/cli"
 require "tmuxinator/config"
+require "tmuxinator/doctor"
 require "tmuxinator/hooks"
 require "tmuxinator/hooks/project"
 require "tmuxinator/pane"
@@ -19,10 +20,4 @@ require "tmuxinator/window"
 require "tmuxinator/version"
 
 module Tmuxinator
-end
-
-class Object
-  def blank?
-    respond_to?(:empty?) ? !!empty? : !self
-  end
 end
