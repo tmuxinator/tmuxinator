@@ -327,10 +327,10 @@ order) when creating or searching for existing project configuration files:
 
 - `$TMUXINATOR_CONFIG`
 - `$XDG_CONFIG_HOME/tmuxinator`
-- ~/.tmuxinator
+- `~/.tmuxinator`
 
 This behavior is opt-in. If you do nothing, Tmuxinator will continue to use
-~/.tmuxinator when searching for existing project configuration files or
+`~/.tmuxinator` when searching for existing project configuration files or
 creating new project configuration files.
 
 ## FAQ
