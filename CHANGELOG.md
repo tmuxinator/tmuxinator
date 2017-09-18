@@ -1,4 +1,6 @@
 ## Unreleased
+- Fix a bug causing the user's global pane-base-index setting not to be
+  respected
 - Remove Object#blank? monkey patch (#458)
 - Add _Project Configuration Location_ entry to README (#360, #534)
 - Attach original exception message to exception re-raised by Project::load

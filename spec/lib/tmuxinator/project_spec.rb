@@ -292,18 +292,20 @@ describe Tmuxinator::Project do
   end
 
   describe "#get_pane_base_index" do
-    it "extracts the pane_base_index from tmux_options" do
-      allow(project).to \
-        receive_messages(show_tmux_options: tmux_config(pane_base_index: 3))
+    it "extracts pane-base-index from the global tmux window options" do
+      allow_any_instance_of(Kernel).to receive(:`).
+        with(Regexp.new("tmux.+ show-window-option -g pane-base-index")).
+        and_return("pane-base-index 3\n")
 
       expect(project.get_pane_base_index).to eq("3")
     end
   end
 
   describe "#get_base_index" do
-    it "extracts the base index from options" do
-      allow(project).to \
-        receive_messages(show_tmux_options: tmux_config(base_index: 1))
+    it "extracts base-index from the global tmux options" do
+      allow_any_instance_of(Kernel).to receive(:`).
+        with(Regexp.new("tmux.+ show-option -g base-index")).
+        and_return("base-index 1\n")
 
       expect(project.get_base_index).to eq("1")
     end
