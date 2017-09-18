@@ -24,7 +24,7 @@ RSpec.configure do |config|
   config.order = "random"
 
   # Don't run integration tests by default
-  config.filter_run_excluding integration: true
+  # config.filter_run_excluding integration: true
 end
 
 # Copied from minitest.
