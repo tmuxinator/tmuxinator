@@ -28,6 +28,10 @@ describe Tmuxinator::Project do
     FactoryGirl.build(:nameless_window_project)
   end
 
+  it "should include Hooks" do
+    expect(project).to be_kind_of(Tmuxinator::Hooks::Project)
+  end
+
   describe "#initialize" do
     context "valid yaml" do
       it "creates an instance" do
@@ -166,14 +170,34 @@ describe Tmuxinator::Project do
         rendered = project_with_literals_as_window_name
         expect(rendered.windows.map(&:name)).to match_array(
           %w(222 222333 111222333444555666777 222.3 4e5 4E5
-             true false nil // /sample/))
+             true false nil // /sample/)
+        )
       end
     end
   end
 
   describe "#pre_window" do
-    it "gets the pre_window command" do
-      expect(project.pre_window).to eq "rbenv shell 2.0.0-p247"
+    subject(:pre_window) { project.pre_window }
+
+    context "pre_window in yaml is string" do
+      before { project.yaml["pre_window"] = "mysql.server start" }
+
+      it "returns the string" do
+        expect(pre_window).to eq("mysql.server start")
+      end
+    end
+
+    context "pre_window in yaml is Array" do
+      before do
+        project.yaml["pre_window"] = [
+          "mysql.server start",
+          "memcached -d"
+        ]
+      end
+
+      it "joins array using ;" do
+        expect(pre_window).to eq("mysql.server start; memcached -d")
+      end
     end
 
     context "with deprecations" do
@@ -268,42 +292,53 @@ describe Tmuxinator::Project do
   end
 
   describe "#get_pane_base_index" do
-    it "extracts the pane_base_index from tmux_options" do
-      allow(project).to \
-        receive_messages(show_tmux_options: tmux_config(pane_base_index: 3))
+    it "extracts pane-base-index from the global tmux window options" do
+      allow_any_instance_of(Kernel).to receive(:`).
+        with(Regexp.new("tmux.+ show-window-option -g pane-base-index")).
+        and_return("pane-base-index 3\n")
 
       expect(project.get_pane_base_index).to eq("3")
     end
   end
 
   describe "#get_base_index" do
-    it "extracts the base index from options" do
-      allow(project).to \
-        receive_messages(show_tmux_options: tmux_config(base_index: 1))
+    it "extracts base-index from the global tmux options" do
+      allow_any_instance_of(Kernel).to receive(:`).
+        with(Regexp.new("tmux.+ show-option -g base-index")).
+        and_return("base-index 1\n")
 
       expect(project.get_base_index).to eq("1")
     end
   end
 
   describe "#base_index" do
-    context "pane base index present" do
+    context "when pane_base_index is 1 and base_index is unset" do
       before do
         allow(project).to receive_messages(get_pane_base_index: "1")
+        allow(project).to receive_messages(get_base_index: nil)
+      end
+
+      it "gets the tmux default of 0" do
+        expect(project.base_index).to eq(0)
+      end
+    end
+
+    context "base index present" do
+      before do
         allow(project).to receive_messages(get_base_index: "1")
       end
 
-      it "gets the pane base index" do
+      it "gets the base index" do
         expect(project.base_index).to eq 1
       end
     end
 
-    context "pane base index no present" do
+    context "base index not present" do
       before do
-        allow(project).to receive_messages(get_pane_base_index: nil)
-        allow(project).to receive_messages(get_base_index: "0")
+        allow(project).to receive_messages(get_base_index: nil)
       end
 
-      it "gets the base index" do
+      it "defaults to 0" do
         expect(project.base_index).to eq 0
       end
     end
@@ -314,7 +349,7 @@ describe Tmuxinator::Project do
       it "gets the startup window from project config" do
         project.yaml["startup_window"] = "logs"
 
-        expect(project.startup_window).to eq("logs")
+        expect(project.startup_window).to eq("sample:logs")
       end
     end
 
@@ -322,7 +357,7 @@ describe Tmuxinator::Project do
       it "returns base index instead" do
         allow(project).to receive_messages(base_index: 8)
 
-        expect(project.startup_window).to eq 8
+        expect(project.startup_window).to eq("sample:8")
       end
     end
   end
@@ -332,7 +367,7 @@ describe Tmuxinator::Project do
       it "get the startup pane index from project config" do
         project.yaml["startup_pane"] = 1
 
-        expect(project.startup_pane).to eq(1)
+        expect(project.startup_pane).to eq("sample:0.1")
       end
     end
 
@@ -340,7 +375,7 @@ describe Tmuxinator::Project do
       it "returns the base pane instead" do
         allow(project).to receive_messages(pane_base_index: 4)
 
-        expect(project.startup_pane).to eq(4)
+        expect(project.startup_pane).to eq("sample:0.4")
       end
     end
   end
@@ -502,7 +537,7 @@ describe Tmuxinator::Project do
     let(:window) { project.windows.first.name }
 
     context "when first window has a name" do
-      it "returns command to start a new detatched session" do
+      it "returns command to start a new detached session" do
         expect(project.tmux_new_session_command).to eq command
       end
     end
@@ -511,7 +546,7 @@ describe Tmuxinator::Project do
       let(:project) { nameless_window_project }
       let(:command) { "#{project.tmux} new-session -d -s #{project.name} " }
 
-      it "returns command to for new detatched session without a window name" do
+      it "returns command to for new detached session without a window name" do
         expect(project.tmux_new_session_command).to eq command
       end
     end
@@ -523,7 +558,7 @@ describe Tmuxinator::Project do
     let(:session) { project.name }
 
     context "when first window has a name" do
-      it "returns command to start a new detatched session" do
+      it "returns command to start a new detached session" do
         expect(project.tmux_kill_session_command).to eq command
       end
     end
@@ -541,7 +576,7 @@ describe Tmuxinator::Project do
       expect(File).to receive(:read).with(path) { bad_yaml }
       expect do
         described_class.load(path, options)
-      end.to raise_error RuntimeError, %r{Failed.to.parse.config.file}
+      end.to raise_error RuntimeError, /\AFailed to parse config file: .+\z/
     end
 
     it "should return an instance of the class if the file loads" do

@@ -1,8 +1,25 @@
 ## Unreleased
+- Fix a bug causing the user's global pane-base-index setting not to be
+  respected
+- Remove Object#blank? monkey patch (#458)
+- Add _Project Configuration Location_ entry to README (#360, #534)
+- Attach original exception message to exception re-raised by Project::load
+- Remove unused attr_readers from Tmuxinator::Window
+- Add ability for pre_window commands to parse yaml arrays
+- Refactor Tmuxinator::Config by extracting a Tmuxinator::Doctor class (#457)
+- Fix a bug where startup_window and startup_pane were not respected if running
+  tmuxinator from within an existing tmux session (#537)
+- Fix a bug causing the pane-base-index option to override base-index
+
 ### Misc
 - Removed support for Ruby 1.9.3
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
+- Fix typos
+- Support user-specified and XDG Base Dirs configuration directories
+
+### New Features
+- add on_project_start, on_project_first_start, on_project_restart, on_project_exit and on_project_stop hooks for project
 
 ## 0.9.0
 ### Misc
@@ -13,14 +30,14 @@
 - Refactor Config.root
 
 ### New Features
-- Allow mulitple panes to be defined using yaml hash or array #266, #406
+- Allow multiple panes to be defined using yaml hash or array #266, #406
 - Add `startup_pane` #380
 - Add synchronizations panes support #97
 - Add `before` and `after` options to synchronization functionality
 - Add deprecation warning if `synchronize: true` or `before` is used
 
 ### Bugfixes
-- Supress `tmux ls` non-zero exit status/message when no sessions exist (#414)
+- Suppress `tmux ls` non-zero exit status/message when no sessions exist (#414)
 - Will no longer crash when no panes are specified in a window
 - Locking activesupport at < 5.0.0 to prevent broken builds on Ruby < 2.2.3
 - Fixed whitespace issues in help
@@ -59,7 +76,7 @@
 
 ### Bug fixes and Misc
 - Fix some RSpec deprecations
-- Explain what EBR is in the readme #319
+- Explain what ERB is in the readme #319
 - Prevent project names containing only numbers from raising a NoMethodError #324
 - Fix YAML syntax highlighting in readme #325
 - Add `asset_path` helper #326
@@ -117,8 +134,8 @@
 - Improve error messages when $EDITOR isn't set #186, #194
 - Add confirmation to deletion prompt #197
 - Fix broken badge references after organisation move
-- Remove dependancy on ActiveSupport #199
-- Fix compatability with tmux 1.9
+- Remove dependency on ActiveSupport #199
+- Fix compatibility with tmux 1.9
 
 ## 0.6.6
 - Fix a bug caused by not escaping the root path #145

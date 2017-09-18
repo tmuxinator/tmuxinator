@@ -2,39 +2,53 @@ module Tmuxinator
   class Window
     include Tmuxinator::Util
 
-    attr_reader :name, :root, :panes, :layout, :commands, :index, :project, :synchronize
+    attr_reader :commands, :index, :name, :project
 
     def initialize(window_yaml, index, project)
-      @name = if !window_yaml.keys.first.nil?
-                window_yaml.keys.first.to_s.shellescape
-              end
-      @root = nil
-      @panes = []
-      @synchronize = false
-      @layout = nil
-      @pre = nil
+      first_key = window_yaml.keys.first
+
+      @name = first_key.to_s.shellescape unless first_key.nil?
+      @yaml = window_yaml.values.first
       @project = project
       @index = index
+      @commands = build_commands(tmux_window_command_prefix, @yaml)
+    end
 
-      value = window_yaml.values.first
+    def panes
+      build_panes(yaml["panes"]) || []
+    end
 
-      if value.is_a?(Hash)
-        @synchronize = value["synchronize"] || false
-        @layout = value["layout"] ? value["layout"].shellescape : nil
-        @pre = value["pre"] if value["pre"]
-        @root = if value["root"]
-                  File.expand_path(value["root"]).shellescape
-                elsif project.root?
-                  project.root
-                end
+    def _hashed?
+      @yaml.is_a?(Hash)
+    end
 
-        @panes = build_panes(value["panes"])
-      end
+    def yaml
+      _hashed? ? @yaml : {}
+    end
 
-      @commands = build_commands(tmux_window_command_prefix, value)
+    def layout
+      yaml["layout"] ? yaml["layout"].shellescape : nil
+    end
+
+    def synchronize
+      yaml["synchronize"] || false
+    end
+
+    def root
+      _yaml_root || _project_root
+    end
+
+    def _yaml_root
+      File.expand_path(yaml["root"]).shellescape if yaml["root"]
+    end
+
+    def _project_root
+      project.root if project.root?
     end
 
     def build_panes(panes_yml)
+      return if panes_yml.nil?
+
       Array(panes_yml).map.with_index do |pane_yml, index|
         commands =  case pane_yml
                     when Hash
@@ -62,10 +76,12 @@ module Tmuxinator
     end
 
     def pre
-      if @pre.is_a?(Array)
-        @pre.join(" && ")
-      elsif @pre.is_a?(String)
-        @pre
+      _pre = yaml["pre"]
+
+      if _pre.is_a?(Array)
+        _pre.join(" && ")
+      elsif _pre.is_a?(String)
+        _pre
       end
     end
 

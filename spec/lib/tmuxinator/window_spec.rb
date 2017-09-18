@@ -99,11 +99,13 @@ describe Tmuxinator::Window do
           project: project, tab: window
         )
 
-        expect(window.panes).to match([
-          a_pane.with(index: 0).and_commands("vim"),
-          a_pane.with(index: 1).and_commands("ls"),
-          a_pane.with(index: 2).and_commands("top")
-        ])
+        expect(window.panes).to match(
+          [
+            a_pane.with(index: 0).and_commands("vim"),
+            a_pane.with(index: 1).and_commands("ls"),
+            a_pane.with(index: 2).and_commands("top")
+          ]
+        )
       end
     end
 
@@ -341,7 +343,7 @@ describe Tmuxinator::Window do
       allow(Tmuxinator::Config).to receive(:default_path_option) { path_option }
     end
 
-    it "contstructs window command with path, target, and name options" do
+    it "constructs window command with path, target, and name options" do
       expect(window.tmux_new_window_command).to eq full_command
     end
 

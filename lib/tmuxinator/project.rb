@@ -2,6 +2,7 @@ module Tmuxinator
   class Project
     include Tmuxinator::Util
     include Tmuxinator::Deprecations
+    include Tmuxinator::Hooks::Project
     include Tmuxinator::WemuxSupport
 
     RBENVRVM_DEP_MSG = <<-M
@@ -19,11 +20,19 @@ module Tmuxinator
     SYNC_DEP_MSG = <<-M
     DEPRECATION: The synchronize option's current default behaviour is to
     enable pane synchronization before running commands. In a future release,
-    the default syncronization option will be `after`, i.e. synchronization of
+    the default synchronization option will be `after`, i.e. synchronization of
     panes will occur after the commands described in each of the panes
     have run. At that time, the current behavior will need to be explicitly
     enabled, using the `synchronize: before` option.  To use this behaviour
     now, use the 'synchronize: after' option.
+    M
+    PRE_DEP_MSG = <<-M
+    DEPRECATION: the pre option has been replaced by project hooks and will
+    not be supported anymore.
+    M
+    POST_DEP_MSG = <<-M
+    DEPRECATION: the post option has been replaced by project hooks and will
+    not be supported anymore.
     M
 
     attr_reader :yaml
@@ -41,8 +50,8 @@ module Tmuxinator
 
         content = Erubis::Eruby.new(raw_content).result(binding)
         YAML.load(content)
-      rescue SyntaxError, StandardError
-        raise "Failed to parse config file. Please check your formatting."
+      rescue SyntaxError, StandardError => error
+        raise "Failed to parse config file: #{error.message}"
       end
 
       new(yaml, options)
@@ -62,9 +71,9 @@ module Tmuxinator
 
     def validate!
       raise "Your project file should include some windows." \
-        unless self.windows?
+        unless windows?
       raise "Your project file didn't specify a 'project_name'" \
-        unless self.name?
+        unless name?
       self
     end
 
@@ -86,8 +95,16 @@ module Tmuxinator
     end
 
     def render
-      template = File.read(Tmuxinator::Config.template)
-      Erubis::Eruby.new(template).result(binding)
+      self.class.render_template(Tmuxinator::Config.template, binding)
+    end
+
+    def kill
+      self.class.render_template(Tmuxinator::Config.stop_template, binding)
+    end
+
+    def self.render_template(template, bndg)
+      content = File.read(template)
+      Erubis::Eruby.new(content).result(bndg)
     end
 
     def windows
@@ -100,52 +117,45 @@ module Tmuxinator
 
     def root
       root = yaml["project_root"] || yaml["root"]
-      root.blank? ? nil : File.expand_path(root).shellescape
+      blank?(root) ? nil : File.expand_path(root).shellescape
     end
 
     def name
       name = custom_name || yaml["project_name"] || yaml["name"]
-      name.blank? ? nil : name.to_s.shellescape
+      blank?(name) ? nil : name.to_s.shellescape
     end
 
     def pre
       pre_config = yaml["pre"]
-      if pre_config.is_a?(Array)
-        pre_config.join("; ")
-      else
-        pre_config
-      end
+      parsed_parameters(pre_config)
     end
 
     def attach?
-      if yaml["attach"].nil?
-        yaml_attach = true
-      else
-        yaml_attach = yaml["attach"]
-      end
+      yaml_attach = if yaml["attach"].nil?
+                      true
+                    else
+                      yaml["attach"]
+                    end
       attach = force_attach || !force_detach && yaml_attach
       attach
     end
 
     def pre_window
-      if rbenv?
-        "rbenv shell #{yaml['rbenv']}"
-      elsif rvm?
-        "rvm use #{yaml['rvm']}"
-      elsif pre_tab?
-        yaml["pre_tab"]
-      else
-        yaml["pre_window"]
-      end
+      params = if rbenv?
+                 "rbenv shell #{yaml['rbenv']}"
+               elsif rvm?
+                 "rvm use #{yaml['rvm']}"
+               elsif pre_tab?
+                 yaml["pre_tab"]
+               else
+                 yaml["pre_window"]
+               end
+      parsed_parameters(params)
     end
 
     def post
       post_config = yaml["post"]
-      if post_config.is_a?(Array)
-        post_config.join("; ")
-      else
-        post_config
-      end
+      parsed_parameters(post_config)
     end
 
     def tmux
@@ -192,7 +202,7 @@ module Tmuxinator
     end
 
     def base_index
-      get_pane_base_index ? get_pane_base_index.to_i : get_base_index.to_i
+      get_base_index.to_i
     end
 
     def pane_base_index
@@ -200,11 +210,11 @@ module Tmuxinator
     end
 
     def startup_window
-      yaml["startup_window"] || base_index
+      "#{name}:#{yaml['startup_window'] || base_index}"
     end
 
     def startup_pane
-      yaml["startup_pane"] || pane_base_index
+      "#{startup_window}.#{yaml['startup_pane'] || pane_base_index}"
     end
 
     def tmux_options?
@@ -228,11 +238,7 @@ module Tmuxinator
     end
 
     def send_pane_command(cmd, window_index, _pane_index)
-      if cmd.empty?
-        ""
-      else
-        "#{tmux} send-keys -t #{window(window_index)} #{cmd.shellescape} C-m"
-      end
+      send_keys(cmd, window_index)
     end
 
     def send_keys(cmd, window_index)
@@ -244,12 +250,61 @@ module Tmuxinator
     end
 
     def deprecations
-      deprecations = []
-      deprecations << RBENVRVM_DEP_MSG if yaml["rbenv"] || yaml["rvm"]
-      deprecations << TABS_DEP_MSG if yaml["tabs"]
-      deprecations << CLIARGS_DEP_MSG if yaml["cli_args"]
-      deprecations << SYNC_DEP_MSG if legacy_synchronize?
-      deprecations
+      deprecation_checks.zip(deprecation_messages).
+        inject([]) do |deps, (chk, msg)|
+        deps << msg if chk
+        deps
+      end
+    end
+
+    def deprecation_checks
+      [
+        rvm_or_rbenv?,
+        tabs?,
+        cli_args?,
+        legacy_synchronize?,
+        pre?,
+        post?
+      ]
+    end
+
+    def deprecation_messages
+      [
+        RBENVRVM_DEP_MSG,
+        TABS_DEP_MSG,
+        CLIARGS_DEP_MSG,
+        SYNC_DEP_MSG,
+        PRE_DEP_MSG,
+        POST_DEP_MSG
+      ]
+    end
+
+    def rbenv?
+      yaml["rbenv"]
+    end
+
+    def rvm?
+      yaml["rvm"]
+    end
+
+    def rvm_or_rbenv?
+      rvm? || rbenv?
+    end
+
+    def tabs?
+      yaml["tabs"]
+    end
+
+    def cli_args?
+      yaml["cli_args"]
+    end
+
+    def pre?
+      yaml["pre"]
+    end
+
+    def post?
+      yaml["post"]
     end
 
     def get_pane_base_index
@@ -261,7 +316,9 @@ module Tmuxinator
     end
 
     def show_tmux_options
-      "#{tmux} start-server\\; show-option -g"
+      "#{tmux} start-server\\; " \
+        "show-option -g base-index\\; " \
+        "show-window-option -g pane-base-index\\;"
     end
 
     def tmux_new_session_command
@@ -274,6 +331,10 @@ module Tmuxinator
     end
 
     private
+
+    def blank?(object)
+      (object.respond_to?(:empty?) && object.empty?) || !object
+    end
 
     def tmux_config
       @tmux_config ||= extract_tmux_config
@@ -305,6 +366,10 @@ module Tmuxinator
 
     def window_options
       yaml["windows"].map(&:values).flatten
+    end
+
+    def parsed_parameters(parameters)
+      parameters.is_a?(Array) ? parameters.join("; ") : parameters
     end
   end
 end

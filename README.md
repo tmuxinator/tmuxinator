@@ -1,6 +1,6 @@
 # Tmuxinator
 
-[![Gem Version](https://badge.fury.io/rb/tmuxinator.svg)](http://badge.fury.io/rb/tmuxinator) [![Build Status](https://secure.travis-ci.org/tmuxinator/tmuxinator.png)](http://travis-ci.org/tmuxinator/tmuxinator?branch=master) [![Coverage Status](https://img.shields.io/coveralls/tmuxinator/tmuxinator.svg)](https://coveralls.io/r/tmuxinator/tmuxinator?branch=master) [![Code Climate](https://codeclimate.com/github/tmuxinator/tmuxinator/badges/gpa.svg)](https://codeclimate.com/github/tmuxinator/tmuxinator) [![Dependency Status](https://gemnasium.com/tmuxinator/tmuxinator.svg)](https://gemnasium.com/tmuxinator/tmuxinator) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tmuxinator/tmuxinator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gem Version](https://badge.fury.io/rb/tmuxinator.svg)](http://badge.fury.io/rb/tmuxinator) [![Build Status](https://secure.travis-ci.org/tmuxinator/tmuxinator.png?branch=master)](http://travis-ci.org/tmuxinator/tmuxinator?branch=master) [![Coverage Status](https://img.shields.io/coveralls/tmuxinator/tmuxinator.svg)](https://coveralls.io/r/tmuxinator/tmuxinator?branch=master) [![Code Climate](https://codeclimate.com/github/tmuxinator/tmuxinator/badges/gpa.svg)](https://codeclimate.com/github/tmuxinator/tmuxinator) [![Dependency Status](https://gemnasium.com/tmuxinator/tmuxinator.svg)](https://gemnasium.com/tmuxinator/tmuxinator) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tmuxinator/tmuxinator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Create and manage tmux sessions easily.
 
@@ -30,7 +30,7 @@ export EDITOR='vim'
 
 ## tmux
 
-The recommended version of tmux to use is 1.8. Your mileage may vary for
+The recommended version of tmux to use is 1.8 or later, with the exception of 2.5, which is **not** supported (see [issue 536](https://github.com/tmuxinator/tmuxinator/issues/536) for details). Your mileage may vary for
 earlier versions. Refer to the FAQ for any odd behaviour.
 
 ### base-index
@@ -257,7 +257,7 @@ root: ~/<%= @settings["workspace"] %>
 
 ## Starting a session
 
-This will fire up tmux with all the tabs and panes you configured.
+This will fire up tmux with all the tabs and panes you configured, `start` is aliased to `s`.
 
 ```
 tmuxinator start [project] -n [name]
@@ -316,6 +316,22 @@ Shows tmuxinator's version.
 ```
 tmuxinator version
 ```
+
+## Project Configuration Location
+
+Using environment variables, it's possible to house project configuration files
+in non-standard directories. (See [PR #511](https://github.com/tmuxinator/tmuxinator/pull/511).)
+
+Tmuxinator will attempt to use the following environment variables (in this
+order) when creating or searching for existing project configuration files:
+
+- `$TMUXINATOR_CONFIG`
+- `$XDG_CONFIG_HOME/tmuxinator`
+- `~/.tmuxinator`
+
+This behavior is opt-in. If you do nothing, Tmuxinator will continue to use
+`~/.tmuxinator` when searching for existing project configuration files or
+creating new project configuration files.
 
 ## FAQ
 
