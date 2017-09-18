@@ -9,6 +9,7 @@
 - Refactor Tmuxinator::Config by extracting a Tmuxinator::Doctor class (#457)
 - Fix a bug where startup_window and startup_pane were not respected if running
   tmuxinator from within an existing tmux session (#537)
+- Fix a bug causing the pane-base-index option to override base-index
 
 ### Misc
 - Removed support for Ruby 1.9.3

@@ -312,24 +312,33 @@ describe Tmuxinator::Project do
   end
 
   describe "#base_index" do
-    context "pane base index present" do
+    context "when pane_base_index is 1 and base_index is unset" do
       before do
         allow(project).to receive_messages(get_pane_base_index: "1")
+        allow(project).to receive_messages(get_base_index: nil)
+      end
+
+      it "gets the tmux default of 0" do
+        expect(project.base_index).to eq(0)
+      end
+    end
+
+    context "base index present" do
+      before do
         allow(project).to receive_messages(get_base_index: "1")
       end
 
-      it "gets the pane base index" do
+      it "gets the base index" do
         expect(project.base_index).to eq 1
       end
     end
 
-    context "pane base index no present" do
+    context "base index not present" do
       before do
-        allow(project).to receive_messages(get_pane_base_index: nil)
-        allow(project).to receive_messages(get_base_index: "0")
+        allow(project).to receive_messages(get_base_index: nil)
       end
 
-      it "gets the base index" do
+      it "defaults to 0" do
         expect(project.base_index).to eq 0
       end
     end
