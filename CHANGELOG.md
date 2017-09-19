@@ -1,4 +1,4 @@
-## Unreleased
+## 0.10.0
 - Fix a bug causing the user's global pane-base-index setting not to be
   respected
 - Remove Object#blank? monkey patch (#458)
