@@ -33,14 +33,6 @@ export EDITOR='vim'
 The recommended version of tmux to use is 1.8 or later, with the exception of 2.5, which is **not** supported (see [issue 536](https://github.com/tmuxinator/tmuxinator/issues/536) for details). Your mileage may vary for
 earlier versions. Refer to the FAQ for any odd behaviour.
 
-### base-index
-
-If you use a `base-index` other than the default, please be sure to also set the `pane-base-index`
-
-```
-set-window-option -g pane-base-index 1
-```
-
 ## Completion
 
 Download the appropriate completion file from the repo and `source` the file.
