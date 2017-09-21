@@ -1,3 +1,7 @@
+## Unreleased
+
+- Use correct tmux socket when checking if a session exists
+
 ## 0.10.0
 - Fix a bug causing the user's global pane-base-index setting not to be
   respected
