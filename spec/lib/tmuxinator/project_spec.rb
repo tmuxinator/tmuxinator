@@ -8,6 +8,9 @@ describe Tmuxinator::Project do
   let(:project_with_number_as_name) do
     FactoryGirl.build(:project_with_number_as_name)
   end
+  let(:project_with_emoji_as_name) do
+    FactoryGirl.build(:project_with_emoji_as_name)
+  end
   let(:project_with_literals_as_window_name) do
     FactoryGirl.build(:project_with_literals_as_window_name)
   end
@@ -162,6 +165,14 @@ describe Tmuxinator::Project do
       it "will gracefully handle a name given as a number" do
         rendered = project_with_number_as_name
         expect(rendered.name.to_i).to_not equal 0
+      end
+    end
+
+    context "as emoji" do
+      it "will gracefully handle a name given as an emoji" do
+        rendered = project_with_emoji_as_name
+        # needs to allow for \\ present in shellescape'd project name
+        expect(rendered.name).to match(/^\\*🍩/)
       end
     end
 

@@ -41,6 +41,14 @@ FactoryGirl.define do
     initialize_with { Tmuxinator::Project.new(file) }
   end
 
+  factory :project_with_emoji_as_name, class: Tmuxinator::Project do
+    transient do
+      file { yaml_load("spec/fixtures/sample_emoji_as_name.yml") }
+    end
+
+    initialize_with { Tmuxinator::Project.new(file) }
+  end
+
   factory :project_with_literals_as_window_name, class: Tmuxinator::Project do
     transient do
       file { yaml_load("spec/fixtures/sample_literals_as_window_name.yml") }

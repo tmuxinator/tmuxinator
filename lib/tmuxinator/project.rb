@@ -171,8 +171,9 @@ module Tmuxinator
       # to server: Connection refused" error message and non-zero exit status
       # if no tmux sessions exist.
       # Please see issues #402 and #414.
+      unescaped_name = name.shellsplit.join("")
       sessions = `#{tmux_command} ls 2> /dev/null`
-      !!sessions.match("^#{name}:")
+      !!(sessions =~ /^#{unescaped_name}:/)
     end
 
     def socket
