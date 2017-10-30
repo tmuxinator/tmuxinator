@@ -1,0 +1,5 @@
+# ~/.tmuxinator/sample_emoji_as_name.yml
+
+name: 🍩
+windows:
+  - emoji: echo 🍩

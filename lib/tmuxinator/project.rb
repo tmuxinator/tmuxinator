@@ -172,7 +172,14 @@ module Tmuxinator
       # if no tmux sessions exist.
       # Please see issues #402 and #414.
       sessions = `#{tmux_command} ls 2> /dev/null`
-      !!sessions.match("^#{name}:")
+
+      # Remove any escape sequences added by `shellescape` in Project#name.
+      # Escapes can result in: "ArgumentError: invalid multibyte character"
+      # when attempting to match `name` against `sessions`.
+      # Please see issue #564.
+      unescaped_name = name.shellsplit.join("")
+
+      !!(sessions =~ /^#{unescaped_name}:/)
     end
 
     def socket
