@@ -27,12 +27,12 @@ module Tmuxinator
     now, use the 'synchronize: after' option.
     M
     PRE_DEP_MSG = <<-M
-    DEPRECATION: the pre option has been replaced by project hooks and will
-    not be supported anymore.
+    DEPRECATION: the pre option has been replaced by the 'on_start' project hook and will
+    not be supported anymore. Edit your project .yml accordingly.
     M
     POST_DEP_MSG = <<-M
-    DEPRECATION: the post option has been replaced by project hooks and will
-    not be supported anymore.
+    DEPRECATION: the post option has been replaced by the 'on_detach' project hook and will
+    not be supported anymore. Edit your project .yml accordingly.
     M
 
     attr_reader :yaml
