@@ -15,6 +15,7 @@ describe Tmuxinator::Pane do
   before do
     allow(project).to receive(:name).and_return "foo"
     allow(project).to receive(:base_index).and_return 0
+    allow(project).to receive(:pane_base_index).and_return 1
 
     allow(window).to receive(:project).and_return project
     allow(window).to receive(:index).and_return 0
@@ -26,5 +27,5 @@ describe Tmuxinator::Pane do
     expect(subject).to be_a(Tmuxinator::Pane)
   end
 
-  it { expect(subject.tmux_window_and_pane_target).to eql "foo:0.0" }
+  it { expect(subject.tmux_window_and_pane_target).to eql "foo:0.1" }
 end
