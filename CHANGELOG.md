@@ -1,5 +1,7 @@
 ## Unreleased
 - Handle emojis in project names (#564)
+- Treat 'tmux master' as an arbitrarily high version and display a deprecation
+  warning.
 
 ## 0.10.0
 - Fix a bug causing the user's global pane-base-index setting not to be

@@ -34,6 +34,13 @@ module Tmuxinator
     DEPRECATION: the post option has been replaced by project hooks and will
     not be supported anymore.
     M
+    TMUX_MASTER_DEP_MSG = <<-M
+    DEPRECATION: you are running tmuxinator with an installed tmux version of
+    'master'. tmuxinator will attempt to treat this similarly to the latest
+    supported release, but since 'master' does not itself refer to a stable
+    release, it cannot be guaranteed support. Please consider using a supported
+    version of tmux.
+    M
 
     attr_reader :yaml
     attr_reader :force_attach
@@ -271,7 +278,8 @@ module Tmuxinator
         cli_args?,
         legacy_synchronize?,
         pre?,
-        post?
+        post?,
+        master?
       ]
     end
 
@@ -282,7 +290,8 @@ module Tmuxinator
         CLIARGS_DEP_MSG,
         SYNC_DEP_MSG,
         PRE_DEP_MSG,
-        POST_DEP_MSG
+        POST_DEP_MSG,
+        TMUX_MASTER_DEP_MSG
       ]
     end
 
@@ -312,6 +321,10 @@ module Tmuxinator
 
     def post?
       yaml["post"]
+    end
+
+    def master?
+      Tmuxinator::Config.version == Tmuxinator::Config::TMUX_MASTER_VERSION
     end
 
     def get_pane_base_index

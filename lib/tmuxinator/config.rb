@@ -3,6 +3,7 @@ module Tmuxinator
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
     NO_LOCAL_FILE_MSG =
       "Project file at ./.tmuxinator.yml doesn't exist.".freeze
+    TMUX_MASTER_VERSION = Float::INFINITY
 
     class << self
       # The directory (created if needed) in which to store new projects
@@ -45,7 +46,15 @@ module Tmuxinator
       end
 
       def version
-        `tmux -V`.split(" ")[1].to_f if Tmuxinator::Doctor.installed?
+        if Tmuxinator::Doctor.installed?
+          tmux_version = `tmux -V`.split(" ")[1]
+
+          if tmux_version == "master"
+            TMUX_MASTER_VERSION
+          else
+            tmux_version.to_f
+          end
+        end
       end
 
       def default_path_option
