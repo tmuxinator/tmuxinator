@@ -35,11 +35,9 @@ module Tmuxinator
     not be supported anymore.
     M
     TMUX_MASTER_DEP_MSG = <<-M
-    DEPRECATION: you are running tmuxinator with an installed tmux version of
-    'master'. tmuxinator will attempt to treat this similarly to the latest
-    supported release, but since 'master' does not itself refer to a stable
-    release, it cannot be guaranteed support. Please consider using a supported
-    version of tmux.
+    DEPRECATION: You are running tmuxinator with an unsupported version of tmux.
+    Please consider using a supported version:
+    (#{Tmuxinator::SUPPORTED_TMUX_VERSIONS.join(', ')})
     M
 
     attr_reader :yaml
@@ -279,7 +277,7 @@ module Tmuxinator
         legacy_synchronize?,
         pre?,
         post?,
-        master?
+        unsupported_version?
       ]
     end
 
@@ -323,8 +321,8 @@ module Tmuxinator
       yaml["post"]
     end
 
-    def master?
-      Tmuxinator::Config.version == Tmuxinator::Config::TMUX_MASTER_VERSION
+    def unsupported_version?
+      !Tmuxinator::SUPPORTED_TMUX_VERSIONS.include?(Tmuxinator::Config.version)
     end
 
     def get_pane_base_index
