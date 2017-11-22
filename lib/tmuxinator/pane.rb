@@ -38,7 +38,7 @@ module Tmuxinator
     end
 
     def pane_index
-      index + tab.project.base_index
+      index + tab.project.pane_base_index
     end
 
     def tmux_split_command
