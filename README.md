@@ -93,8 +93,25 @@ root: ~/
 # Optional. tmux socket
 # socket_name: foo
 
-# Runs before everything. Use it to start daemons etc.
-# pre: sudo /etc/rc.d/mysqld start
+# Note that the pre and post options have been deprecated and will be replaced by
+# project hooks.
+
+# Project hooks
+
+# Runs on project start, always
+#on_project_start: command
+
+# Run on project start, the first time
+# on_project_first_start: command
+
+# Run on project start, after the first time
+# on_project_restart: command
+
+# Run on project exit ( detaching from tmux session )
+# on_project_exit: command
+
+# Run on project stop
+# on_project_stop: command
 
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
 # pre_window: rbenv shell 2.0.0-p247
@@ -176,18 +193,17 @@ pre_window: rbenv shell 2.0.0-p247
 
 These command(s) will run before any subsequent commands in all panes and windows.
 
-## Custom attachment and post commands
+## Custom session attachment
 
 You can set tmuxinator to skip auto-attaching to the session by using the `attach` option.
 
 ```yaml
 attach: false
 ```
-
-You can also run arbitrary commands by using the `post` option. This is useful if you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2).
+If you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2), you can run arbitrary commands by using a project hook:
 
 ```yaml
-post: tmux -CC attach
+on_project_start: tmux -CC attach
 ```
 
 ## Passing directly to send-keys
