@@ -174,6 +174,16 @@ describe Tmuxinator::Config do
       end
     end
 
+    context "0.0 (master cloned)" do
+      before do
+        allow(Tmuxinator::Config).to receive(:version).and_return(0.0)
+      end
+
+      it "returns -c" do
+        expect(Tmuxinator::Config.default_path_option).to eq "-c"
+      end
+    end
+
     context "< 1.8" do
       before do
         allow(Tmuxinator::Config).to receive(:version).and_return(1.7)

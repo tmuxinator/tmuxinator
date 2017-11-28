@@ -58,7 +58,7 @@ module Tmuxinator
       end
 
       def default_path_option
-        version && version < 1.8 ? "default-path" : "-c"
+        version > 0 && version < 1.8 ? "default-path" : "-c"
       end
 
       def exists?(name)
