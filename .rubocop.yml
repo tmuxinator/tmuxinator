@@ -69,7 +69,7 @@ Style/CaseIndentation:
   Description: Indentation of when in a case/when/[else/]end.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#indent-when-to-case
   Enabled: true
-  IndentWhenRelativeTo: case
+  EnforcedStyle: case
   SupportedStyles:
   - case
   - end
@@ -374,9 +374,6 @@ Style/SpaceAroundBlockParameters:
   Description: Checks the spacing inside and after block parameters pipes.
   Enabled: true
   EnforcedStyleInsidePipes: no_space
-  SupportedStyles:
-  - space
-  - no_space
 Style/SpaceAroundEqualsInParameterDefault:
   Description: Checks that the equals signs in parameter default assignments have
     or don't have surrounding space depending on configuration.
@@ -504,6 +501,7 @@ Metrics/LineLength:
   - http
   - https
   Exclude:
+    - tmuxinator.gemspec
     - lib/tmuxinator/window.rb
     - spec/lib/tmuxinator/window_spec.rb
 Metrics/MethodLength:
@@ -525,10 +523,14 @@ Metrics/PerceivedComplexity:
   Max: 7
 Metrics/BlockLength:
   Exclude:
+    - tmuxinator.gemspec
     - lib/tmuxinator/cli.rb
     - spec/factories/**/*.rb
     - spec/matchers/**/*.rb
     - spec/**/*_spec.rb
+Lint/InverseMethods:
+  Exclude:
+    - lib/tmuxinator/project.rb
 Lint/PercentStringArray:
   Exclude:
     - lib/tmuxinator/cli.rb
@@ -543,17 +545,11 @@ Lint/AssignmentInCondition:
 Lint/EndAlignment:
   Description: Align ends correctly.
   Enabled: true
-  AlignWith: keyword
-  SupportedStyles:
-  - keyword
-  - variable
+  EnforcedStyleAlignWith: keyword
 Lint/DefEndAlignment:
   Description: Align ends corresponding to defs correctly.
   Enabled: true
-  AlignWith: start_of_line
-  SupportedStyles:
-  - start_of_line
-  - def
+  EnforcedStyleAlignWith: start_of_line
 Style/InlineComment:
   Description: Avoid inline comments.
   Enabled: false
@@ -717,7 +713,7 @@ Style/LineEndConcatenation:
   Description: Use \ instead of + or << to concatenate two string literals at line
     end.
   Enabled: false
-Style/MethodCallParentheses:
+Style/MethodCallWithoutArgsParentheses:
   Description: Do not use parentheses for method calls with no arguments.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#no-args-no-parens
   Enabled: true
@@ -876,6 +872,8 @@ Style/UnneededPercentQ:
   Description: Checks for %q/%Q when single quotes or double quotes would do.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#percent-q
   Enabled: true
+  Exclude:
+    - tmuxinator.gemspec
 # Style/UnneededPercentX:
 #   Description: Checks for %x when `` would do.
 #   StyleGuide: https://github.com/bbatsov/ruby-style-guide#percent-x

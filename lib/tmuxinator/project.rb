@@ -54,7 +54,7 @@ module Tmuxinator
         @args = args
 
         content = Erubis::Eruby.new(raw_content).result(binding)
-        YAML.load(content)
+        YAML.safe_load(content)
       rescue SyntaxError, StandardError => error
         raise "Failed to parse config file: #{error.message}"
       end
@@ -184,7 +184,7 @@ module Tmuxinator
       # Please see issue #564.
       unescaped_name = name.shellsplit.join("")
 
-      !!(sessions =~ /^#{unescaped_name}:/)
+      !(sessions !~ /^#{unescaped_name}:/)
     end
 
     def socket
