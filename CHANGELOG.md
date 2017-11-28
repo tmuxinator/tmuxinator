@@ -4,6 +4,7 @@
   used in place of the pane-base-index option.
 - Treat 'tmux master' as an arbitrarily high version and display a deprecation
   warning for unsupported tmux versions (#524, #570)
+- Add tmux 2.4, 2.5, and 2.6 to the TravisCI test matrix
 
 ## 0.10.0
 - Fix a bug causing the user's global pane-base-index setting not to be
