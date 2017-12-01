@@ -1,4 +1,4 @@
-## Unreleased
+## 0.10.1
 - Handle emojis in project names (#564)
 - Fix remaining sites where the base-index option (for windows) was incorrectly
   used in place of the pane-base-index option.
