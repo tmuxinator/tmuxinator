@@ -1,12 +1,13 @@
 module Tmuxinator
   class Pane
-    attr_reader :commands, :project, :index, :tab
+    attr_reader :commands, :project, :index, :tab, :title
 
-    def initialize(index, project, tab, *commands)
+    def initialize(index, project, tab, *commands, title)
       @commands = commands
       @index = index
       @project = project
       @tab = tab
+      @title = title
     end
 
     def tmux_window_and_pane_target

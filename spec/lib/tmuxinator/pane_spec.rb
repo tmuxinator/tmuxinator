@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Tmuxinator::Pane do
   let(:klass) { described_class }
-  let(:instance) { klass.new(index, project, window, *commands) }
+  let(:instance) { klass.new(index, project, window, *commands, title) }
   # let(:index) { "vim" }
   # let(:project) { 0 }
   # let(:tab) { nil }
@@ -11,6 +11,7 @@ describe Tmuxinator::Pane do
   let(:project) { double }
   let(:window) { double }
   let(:commands) { ["vim", "bash"] }
+  let(:title) { "pane_title" }
 
   before do
     allow(project).to receive(:name).and_return "foo"

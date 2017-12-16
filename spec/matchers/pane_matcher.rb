@@ -23,6 +23,11 @@ RSpec::Matchers.define :a_pane do
     @expected_attrs = attrs
   end
 
+  chain :with_title do |title|
+    @title = title
+  end
+  alias_method :and_title, :with_title
+
   chain :with_commands do |*expected|
     @commands = expected
   end
