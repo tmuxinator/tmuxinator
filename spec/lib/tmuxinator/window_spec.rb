@@ -88,10 +88,10 @@ describe Tmuxinator::Window do
 
   describe "#panes" do
     context "with a three element Array" do
-      let(:panes) { ["vim", "ls", "top", {'pane_title' => ["pwd"]}] }
+      let(:panes) { ["vim", "ls", "top", { "pane_title" => ["pwd"] }] }
 
       it "creates three panes" do
-        expect(Tmuxinator::Pane).to receive(:new).exactly(4).times
+        expect(Tmuxinator::Pane).to receive(:new).exactly(4).times.and_call_original
         window.panes
       end
 
@@ -105,9 +105,18 @@ describe Tmuxinator::Window do
             a_pane.with(index: 0).and_commands("vim"),
             a_pane.with(index: 1).and_commands("ls"),
             a_pane.with(index: 2).and_commands("top"),
-            a_pane.with(index: 3).and_title("pane_title").and_commands("pwd")
+            a_pane.with(index: 3).and_commands("pwd")
           ]
         )
+      end
+    end
+
+    context "with pane title" do
+      let(:panes) { [{ "pane_title" => ["pwd"] }]  }
+
+      it "returns one pane with title in an Array" do
+        expect(window.panes.first).to be_a_pane.
+          with(index: 0).and_commands("pwd").and_title("pane_title")
       end
     end
 

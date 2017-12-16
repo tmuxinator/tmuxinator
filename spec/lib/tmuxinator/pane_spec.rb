@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Tmuxinator::Pane do
   let(:klass) { described_class }
-  let(:instance) { klass.new(index, project, window, *commands, title) }
+  let(:instance) { klass.new(index, project, window, *commands) }
   # let(:index) { "vim" }
   # let(:project) { 0 }
   # let(:tab) { nil }

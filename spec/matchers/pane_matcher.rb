@@ -7,6 +7,7 @@ RSpec::Matchers.define :a_pane do
 
     result && attributes_match if @expected_attrs
     result &&= commands_match if commands
+    result &&= title_match if @title
 
     result
   end
@@ -17,6 +18,7 @@ RSpec::Matchers.define :a_pane do
     msg = "Actual pane does not match expected"
     msg << "\n  Expected #{@commands} but has #{actual.commands}" if @commands
     msg << "\n  Expected pane to have #{@expected_attrs}" if @expected_attrs
+    msg << "\n  Expected pane to have title #{@title}, but has #{actual.title}" if @title 
   end
 
   chain :with do |attrs|
@@ -41,6 +43,10 @@ RSpec::Matchers.define :a_pane do
 
   def commands_match
     @actual.commands == commands
+  end
+
+  def title_match
+    @actual.title == @title
   end
 
   def is_pane

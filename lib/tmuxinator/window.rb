@@ -62,7 +62,9 @@ module Tmuxinator
                  when Hash
                    pane_yml.keys.first
                  end
-        Tmuxinator::Pane.new(index, project, self, *commands, title)
+        pane =  Tmuxinator::Pane.new(index, project, self, *commands)
+        pane.title = title
+        pane
       end.flatten
     end
 
