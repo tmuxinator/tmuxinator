@@ -58,12 +58,10 @@ module Tmuxinator
                     else
                       pane_yml
                     end
-	title = case pane_yml
-                    when Hash
-                      pane_yml.keys.first
-                    else
-                      nil
-		    end
+        title =  case pane_yml
+                 when Hash
+                   pane_yml.keys.first
+                 end
         Tmuxinator::Pane.new(index, project, self, *commands, title)
       end.flatten
     end

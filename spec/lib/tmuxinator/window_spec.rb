@@ -88,7 +88,7 @@ describe Tmuxinator::Window do
 
   describe "#panes" do
     context "with a three element Array" do
-      let(:panes) { ["vim", "ls", "top", {'pane_title': ["pwd"]}] }
+      let(:panes) { ["vim", "ls", "top", {'pane_title' => ["pwd"]}] }
 
       it "creates three panes" do
         expect(Tmuxinator::Pane).to receive(:new).exactly(4).times
