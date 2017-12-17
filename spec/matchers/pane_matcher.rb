@@ -18,7 +18,7 @@ RSpec::Matchers.define :a_pane do
     msg = "Actual pane does not match expected"
     msg << "\n  Expected #{@commands} but has #{actual.commands}" if @commands
     msg << "\n  Expected pane to have #{@expected_attrs}" if @expected_attrs
-    msg << "\n  Expected pane to have title #{@title}, but has #{actual.title}" if @title 
+    msg << "\n  Expected pane title #{@title}, but #{actual.title}" if @title
   end
 
   chain :with do |attrs|
