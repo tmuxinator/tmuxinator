@@ -2,6 +2,7 @@
 - Remove confusing README section about the pane-base-index and
   window-base-index options. These options can be set independently of one
   another now that #542 and #543 are merged.
+- Allow YAML Anchors & Aliases as per [spec](http://yaml.org/spec/1.2/spec.html#id2765878)
 
 ## 0.11.3
 ### Misc

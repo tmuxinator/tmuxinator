@@ -31,6 +31,10 @@ describe Tmuxinator::Project do
     FactoryBot.build(:nameless_window_project)
   end
 
+  let(:project_with_alias) do
+    FactoryBot.build(:project_with_alias)
+  end
+
   it "should include Hooks" do
     expect(project).to be_kind_of(Tmuxinator::Hooks::Project)
   end
@@ -60,6 +64,14 @@ describe Tmuxinator::Project do
         expect(rendered).to_not be_empty
         expect(rendered).to include("custom")
         expect(rendered).to_not include("sample")
+      end
+    end
+
+    context "with alias" do
+      it "renders the tmux config" do
+        rendered = project_with_alias.render
+        expect(rendered).to_not be_empty
+        expect(rendered).to include("alias_is_working")
       end
     end
   end
