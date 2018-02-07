@@ -3,7 +3,6 @@ module Tmuxinator
     include Tmuxinator::Util
     include Tmuxinator::Deprecations
     include Tmuxinator::Hooks::Project
-    include Tmuxinator::WemuxSupport
 
     RBENVRVM_DEP_MSG = <<-M
     DEPRECATION: rbenv/rvm-specific options have been replaced by the
@@ -96,7 +95,7 @@ module Tmuxinator
       raise "Cannot force_attach and force_detach at the same time" \
         if @force_attach && @force_detach
 
-      load_wemux_overrides if wemux?
+      extend Tmuxinator::WemuxSupport if wemux?
     end
 
     def render
@@ -388,6 +387,10 @@ module Tmuxinator
 
     def parsed_parameters(parameters)
       parameters.is_a?(Array) ? parameters.join("; ") : parameters
+    end
+
+    def wemux?
+      yaml["tmux_command"] == "wemux"
     end
   end
 end
