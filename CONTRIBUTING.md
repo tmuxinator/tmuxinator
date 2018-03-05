@@ -14,6 +14,10 @@
     like OS version, gem versions, rbenv or rvm versions etc...
   * Even better, provide a failing test case for it.
 
+## Triage Issues [![Open Source Helpers](https://www.codetriage.com/tmuxinator/tmuxinator/badges/users.svg)](https://www.codetriage.com/tmuxinator/tmuxinator)
+
+You can triage issues which may include reproducing bug reports or asking for vital information, such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to tmuxinator on CodeTriage](https://www.codetriage.com/tmuxinator/tmuxinator).
+
 ## Pull Requests
 
 If you've gone the extra mile and have a patch that fixes the issue, you
