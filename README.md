@@ -342,7 +342,8 @@ Tmuxinator will attempt to use the following environment variables (in this
 order) when creating or searching for existing project configuration files:
 
 - `$TMUXINATOR_CONFIG`
-- `$XDG_CONFIG_HOME/tmuxinator`
+- `$XDG_CONFIG_DIR/tmuxinator`
+- `~/.config/tmuxinator`
 - `~/.tmuxinator`
 
 This behavior is opt-in. If you do nothing, Tmuxinator will continue to use
