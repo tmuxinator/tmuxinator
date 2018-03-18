@@ -20,7 +20,9 @@ module Tmuxinator
         ENV["HOME"] + "/.tmuxinator"
       end
 
-      # Is ~/.config/tmuxinator unless $XDG_CONFIG_DIR is set
+      # ~/.config/tmuxinator unless $XDG_CONFIG_HOME has been configured to use
+      # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
+      # return value will be ~/my-config/tmuxinator)
       def xdg
         XDG["CONFIG"].to_s + "/tmuxinator"
       end
