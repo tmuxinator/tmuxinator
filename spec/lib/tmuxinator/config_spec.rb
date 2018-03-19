@@ -342,6 +342,21 @@ describe Tmuxinator::Config do
         expect(Tmuxinator::Config.validate(project_config: project_config)).to \
           be_a Tmuxinator::Project
       end
+
+      it "should take precedence over a named project" do
+        allow(Tmuxinator::Config).to receive_messages(directory: fixtures_dir)
+        project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
+        project = Tmuxinator::Config.validate(name: "sample",
+                                              project_config: project_config)
+        expect(project.name).to eq("222")
+      end
+
+      it "should take precedence over a local project" do
+        expect(Tmuxinator::Config).not_to receive(:local?)
+        project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
+        project = Tmuxinator::Config.validate(project_config: project_config)
+        expect(project.name).to eq("222")
+      end
     end
 
     context "when a project name is provided" do
