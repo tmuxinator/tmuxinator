@@ -3,6 +3,7 @@ module Tmuxinator
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
     NO_LOCAL_FILE_MSG =
       "Project file at ./.tmuxinator.yml doesn't exist.".freeze
+    NO_EXPLICIT_YAML_FILEPATH_MSG = "Project file at FILEPATH doesn't exist.".freeze
     TMUX_MASTER_VERSION = Float::INFINITY
 
     class << self
@@ -71,6 +72,10 @@ module Tmuxinator
         local_project
       end
 
+      def explicit_yaml_filepath_exists?(filepath)
+        File.exist?(filepath)
+      end
+
       # Pathname of given project searching only global directories
       def global_project(name)
         project_in(environment, name) ||
@@ -127,8 +132,15 @@ module Tmuxinator
         name = options[:name]
         options[:force_attach] ||= false
         options[:force_detach] ||= false
+        yaml_filepath = options.fetch(:yaml_filepath) { false }
 
-        project_file = if name.nil?
+        project_file = if yaml_filepath
+                         raise NO_EXPLICIT_YAML_FILEPATH_MSG.gsub("FILEPATH",
+                                                                  yaml_filepath)\
+                           unless Tmuxinator::Config.
+                                    explicit_yaml_filepath_exists?(yaml_filepath)
+                         yaml_filepath
+                       elsif name.nil?
                          raise NO_LOCAL_FILE_MSG \
                            unless Tmuxinator::Config.local?
                          local_project

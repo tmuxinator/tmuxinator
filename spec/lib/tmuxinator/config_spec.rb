@@ -329,6 +329,21 @@ describe Tmuxinator::Config do
   describe "#validate" do
     let(:default) { Tmuxinator::Config::LOCAL_DEFAULT }
 
+    context "when a yaml filepath is provided" do
+      it "should raise if the yaml filepath can't be found" do
+        yaml_filepath = "dont-exist.yml"
+        expect do
+          Tmuxinator::Config.validate(yaml_filepath: yaml_filepath)
+        end.to raise_error RuntimeError, %r{Project file at #{yaml_filepath} doesn't exist\.}
+      end
+
+      it "should load and validate the project" do
+        yaml_filepath = File.join(fixtures_dir, "sample.yml")
+        expect(Tmuxinator::Config.validate(yaml_filepath: yaml_filepath)).to \
+          be_a Tmuxinator::Project
+      end
+    end
+
     context "when a project name is provided" do
       it "should raise if the project file can't be found" do
         expect do
