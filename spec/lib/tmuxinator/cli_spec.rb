@@ -80,6 +80,13 @@ describe Tmuxinator::Cli do
         capture_io { cli.start }
       end
 
+      it "accepts a project config file flag" do
+        ARGV.replace(["start", "foo", "--project-config=sample.yml"])
+
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+
       it "accepts additional arguments" do
         ARGV.replace(["start", "foo", "bar", "three=four"])
 
@@ -167,6 +174,29 @@ describe Tmuxinator::Cli do
       let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+    end
+  end
+
+  describe "#start(with project config flag)" do
+    before do
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+    end
+
+    let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
+    let(:project_config) { File.join(fixtures_dir, "sample.yml") }
+
+    context "no deprecations" do
+      it "doesn't start the project if given a bogus project config" do
+        ARGV.replace(["start", "--project-config=bogus.yml"])
+        expect(Kernel).not_to receive(:exec)
+        expect { capture_io { cli.start } }.to raise_error(SystemExit)
+      end
+
+      it "starts the project if given a project config" do
+        ARGV.replace(["start", "--project-config=#{project_config}"])
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
       end
