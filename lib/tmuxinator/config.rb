@@ -3,7 +3,8 @@ module Tmuxinator
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
     NO_LOCAL_FILE_MSG =
       "Project file at ./.tmuxinator.yml doesn't exist.".freeze
-    NO_EXPLICIT_YAML_FILEPATH_MSG = "Project file at FILEPATH doesn't exist.".freeze
+    NO_PROJECT_CONFIG_FILE_MSG =
+      "Project config file doesn't exist.".freeze
     TMUX_MASTER_VERSION = Float::INFINITY
 
     class << self
@@ -45,7 +46,7 @@ module Tmuxinator
       end
 
       def default?
-        exists?("default")
+        exists?(name: "default")
       end
 
       def version
@@ -64,16 +65,14 @@ module Tmuxinator
         version && version < 1.8 ? "default-path" : "-c"
       end
 
-      def exists?(name)
-        File.exist?(project(name))
+      def exists?(name: nil, path: nil)
+        return File.exist?(path) if path
+        return File.exist?(project(name)) if name
+        false
       end
 
       def local?
         local_project
-      end
-
-      def explicit_yaml_filepath_exists?(filepath)
-        File.exist?(filepath)
       end
 
       # Pathname of given project searching only global directories
@@ -132,23 +131,22 @@ module Tmuxinator
         name = options[:name]
         options[:force_attach] ||= false
         options[:force_detach] ||= false
-        yaml_filepath = options.fetch(:yaml_filepath) { false }
-
-        project_file = if yaml_filepath
-                         raise NO_EXPLICIT_YAML_FILEPATH_MSG.gsub("FILEPATH",
-                                                                  yaml_filepath)\
+        project_config = options.fetch(:project_config) { false }
+        project_file = if project_config
+                         raise NO_PROJECT_CONFIG_FILE_MSG \
                            unless Tmuxinator::Config.
-                                    explicit_yaml_filepath_exists?(yaml_filepath)
-                         yaml_filepath
+                                  exists?(path: project_config)
+                         project_config
                        elsif name.nil?
                          raise NO_LOCAL_FILE_MSG \
                            unless Tmuxinator::Config.local?
                          local_project
                        else
                          raise "Project #{name} doesn't exist." \
-                           unless Tmuxinator::Config.exists?(name)
+                           unless Tmuxinator::Config.exists?(name: name)
                          Tmuxinator::Config.project(name)
                        end
+
         Tmuxinator::Project.load(project_file, options).validate!
       end
 

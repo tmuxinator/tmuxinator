@@ -174,7 +174,7 @@ module Tmuxinator
           force_attach: attach,
           force_detach: detach,
           name: project_options[:name],
-          yaml_filepath: project_options[:yaml_filepath]
+          project_config: project_options[:project_config]
         }
 
         begin
@@ -207,8 +207,8 @@ module Tmuxinator
                            desc: "Attach to tmux session after creation."
     method_option :name, aliases: "-n",
                          desc: "Give the session a different name"
-    method_option :yaml_filepath, aliases: "-y",
-                         desc: "Project YAML filepath"
+    method_option "project-config", aliases: "-p",
+                                    desc: "Path to project config file"
 
     def start(name = nil, *args)
       params = {
@@ -216,8 +216,9 @@ module Tmuxinator
         attach: options[:attach],
         custom_name: options[:name],
         name: name,
-        yaml_filepath: options[:yaml_filepath]
+        project_config: options["project-config"]
       }
+
       project = create_project(params)
       render_project(project)
     end
