@@ -1,3 +1,8 @@
+## Unreleased
+### Misc
+- Make Config#xdg comment reference correct XDG variable and include example of
+  degenerate case (#597)
+
 ## 0.10.1
 - Handle emojis in project names (#564)
 - Fix remaining sites where the base-index option (for windows) was incorrectly
