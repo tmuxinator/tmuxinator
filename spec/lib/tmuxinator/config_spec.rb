@@ -332,9 +332,10 @@ describe Tmuxinator::Config do
     context "when a project config file is provided" do
       it "should raise if the project config file can't be found" do
         project_config = "dont-exist.yml"
+        regex = /Project config \(#{project_config}\) doesn't exist\./
         expect do
           Tmuxinator::Config.validate(project_config: project_config)
-        end.to raise_error RuntimeError, /Project config file doesn't exist\./
+        end.to raise_error RuntimeError, regex
       end
 
       it "should load and validate the project" do
@@ -388,6 +389,18 @@ describe Tmuxinator::Config do
         expect(File).to receive(:read).with(default).and_return(content)
 
         expect(Tmuxinator::Config.validate).to be_a Tmuxinator::Project
+      end
+    end
+
+    context "when no project can be found" do
+      it "should raise with NO_PROJECT_FOUND_MSG" do
+        config = Tmuxinator::Config
+        expect(config).to receive(:valid_project_config?).and_return(false)
+        expect(config).to receive(:valid_local_project?).and_return(false)
+        expect(config).to receive(:valid_standard_project?).and_return(false)
+        expect do
+          Tmuxinator::Config.validate
+        end.to raise_error RuntimeError, %r{Project could not be found\.}
       end
     end
   end

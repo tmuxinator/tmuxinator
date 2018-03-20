@@ -3,8 +3,7 @@ module Tmuxinator
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
     NO_LOCAL_FILE_MSG =
       "Project file at ./.tmuxinator.yml doesn't exist.".freeze
-    NO_PROJECT_CONFIG_FILE_MSG =
-      "Project config file doesn't exist.".freeze
+    NO_PROJECT_FOUND_MSG = "Project could not be found.".freeze
     TMUX_MASTER_VERSION = Float::INFINITY
 
     class << self
@@ -127,24 +126,41 @@ module Tmuxinator
         end
       end
 
+      def valid_project_config?(project_config)
+        return false unless project_config
+        unless exists?(path: project_config)
+          raise "Project config (#{project_config}) doesn't exist."
+        end
+        true
+      end
+
+      def valid_local_project?(name)
+        return false if name
+        raise NO_LOCAL_FILE_MSG unless local?
+        true
+      end
+
+      def valid_standard_project?(name)
+        return false unless name
+        raise "Project #{name} doesn't exist." unless exists?(name: name)
+        true
+      end
+
       def validate(options = {})
         name = options[:name]
         options[:force_attach] ||= false
         options[:force_detach] ||= false
         project_config = options.fetch(:project_config) { false }
-        project_file = if project_config
-                         raise NO_PROJECT_CONFIG_FILE_MSG \
-                           unless Tmuxinator::Config.
-                                  exists?(path: project_config)
+        project_file = if valid_project_config?(project_config)
                          project_config
-                       elsif name.nil?
-                         raise NO_LOCAL_FILE_MSG \
-                           unless Tmuxinator::Config.local?
+                       elsif valid_local_project?(name)
                          local_project
+                       elsif valid_standard_project?(name)
+                         project(name)
                        else
-                         raise "Project #{name} doesn't exist." \
-                           unless Tmuxinator::Config.exists?(name: name)
-                         Tmuxinator::Config.project(name)
+                         # This branch should never be reached,
+                         # but just in case ...
+                         raise NO_PROJECT_FOUND_MSG
                        end
 
         Tmuxinator::Project.load(project_file, options).validate!
