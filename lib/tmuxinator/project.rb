@@ -7,31 +7,31 @@ module Tmuxinator
 
     RBENVRVM_DEP_MSG = <<-M
     DEPRECATION: rbenv/rvm-specific options have been replaced by the
-    pre_tab option and will not be supported in 0.8.0.
+    `pre_tab` option and will not be supported in 0.8.0.
     M
     TABS_DEP_MSG = <<-M
-    DEPRECATION: The tabs option has been replaced by the windows option
+    DEPRECATION: The tabs option has been replaced by the `windows` option
     and will not be supported in 0.8.0.
     M
     CLIARGS_DEP_MSG = <<-M
-    DEPRECATION: The cli_args option has been replaced by the tmux_options
+    DEPRECATION: The `cli_args` option has been replaced by the `tmux_options`
     option and will not be supported in 0.8.0.
     M
     SYNC_DEP_MSG = <<-M
-    DEPRECATION: The synchronize option's current default behaviour is to
+    DEPRECATION: The `synchronize` option's current default behaviour is to
     enable pane synchronization before running commands. In a future release,
     the default synchronization option will be `after`, i.e. synchronization of
     panes will occur after the commands described in each of the panes
     have run. At that time, the current behavior will need to be explicitly
-    enabled, using the `synchronize: before` option.  To use this behaviour
+    enabled, using the `synchronize: before` option. To use this behaviour
     now, use the 'synchronize: after' option.
     M
     PRE_DEP_MSG = <<-M
-    DEPRECATION: the pre option has been replaced by project hooks and will
+    DEPRECATION: The `pre` option has been replaced by project hooks and will
     not be supported anymore.
     M
     POST_DEP_MSG = <<-M
-    DEPRECATION: the post option has been replaced by project hooks and will
+    DEPRECATION: The `post` option has been replaced by project hooks and will
     not be supported anymore.
     M
     TMUX_MASTER_DEP_MSG = <<-M
