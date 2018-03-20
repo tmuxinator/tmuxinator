@@ -164,9 +164,9 @@ module Tmuxinator
       end
 
       def create_project(project_options = {})
-        attach_opt = project_options[:attach]
-        attach = !attach_opt.nil? && attach_opt ? true : false
-        detach = !attach_opt.nil? && !attach_opt ? true : false
+        attach_opt = project_options.fetch(:attach) { false }
+        attach = attach_opt
+        detach = !attach_opt
 
         options = {
           args: project_options[:args],
