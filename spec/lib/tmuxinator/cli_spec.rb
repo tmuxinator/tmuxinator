@@ -653,17 +653,21 @@ describe Tmuxinator::Cli do
   end
 
   describe "#create_project" do
-    shared_examples_for :a_proper_project do
-      it "should create a valid project" do
-        expect(subject).to be_a Tmuxinator::Project
-        expect(subject.name).to eq name
-      end
+    before do
+      allow(Tmuxinator::Config).to receive_messages(directory: path)
     end
 
     let(:name) { "sample" }
     let(:custom_name) { nil }
     let(:cli_options) { {} }
     let(:path) { File.expand_path("../../../fixtures", __FILE__) }
+
+    shared_examples_for :a_proper_project do
+      it "should create a valid project" do
+        expect(subject).to be_a Tmuxinator::Project
+        expect(subject.name).to eq name
+      end
+    end
 
     context "when creating a traditional named project" do
       let(:params) do
@@ -674,11 +678,47 @@ describe Tmuxinator::Cli do
       end
       subject { described_class.new.create_project(params) }
 
-      before do
-        allow(Tmuxinator::Config).to receive_messages(directory: path)
+      it_should_behave_like :a_proper_project
+    end
+
+    context "attach option" do
+      describe "detach" do
+        it "sets force_detach to false when no attach argument is provided" do
+          project = Tmuxinator::Cli.new.create_project(name: name)
+          expect(project.force_detach).to eq(false)
+        end
+
+        it "sets force_detach to true when 'attach: false' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: false,
+                                                       name: name)
+          expect(project.force_detach).to eq(true)
+        end
+
+        it "sets force_detach to false when 'attach: true' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: true,
+                                                       name: name)
+          expect(project.force_detach).to eq(false)
+        end
       end
 
-      it_should_behave_like :a_proper_project
+      describe "attach" do
+        it "sets force_attach to false when no attach argument is provided" do
+          project = Tmuxinator::Cli.new.create_project(name: name)
+          expect(project.force_attach).to eq(false)
+        end
+
+        it "sets force_attach to true when 'attach: true' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: true,
+                                                       name: name)
+          expect(project.force_attach).to eq(true)
+        end
+
+        it "sets force_attach to false when 'attach: false' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: false,
+                                                       name: name)
+          expect(project.force_attach).to eq(false)
+        end
+      end
     end
   end
 
