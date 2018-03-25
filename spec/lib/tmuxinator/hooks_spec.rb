@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Tmuxinator::Hooks do
   describe "#commands_from" do
-    let(:project) { FactoryGirl.build(:project) }
+    let(:project) { FactoryBot.build(:project) }
     let(:hook_name) { "generic_hook" }
 
     context "config value is string" do

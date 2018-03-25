@@ -66,7 +66,7 @@ describe Tmuxinator::Cli do
     end
 
     context "no deprecations" do
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
         expect(Kernel).to receive(:exec)
@@ -93,7 +93,7 @@ describe Tmuxinator::Cli do
         allow($stdin).to receive_messages(getc: "y")
       end
 
-      let(:project) { FactoryGirl.build(:project_with_deprecations) }
+      let(:project) { FactoryBot.build(:project_with_deprecations) }
 
       it "prints the deprecations" do
         out, _err = capture_io { cli.start }
@@ -111,7 +111,7 @@ describe Tmuxinator::Cli do
     end
 
     context "with project name" do
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "stop the project" do
         expect(Kernel).to receive(:exec)
@@ -130,7 +130,7 @@ describe Tmuxinator::Cli do
         allow(Kernel).to receive(:exec)
       end
 
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
         expect(Kernel).to receive(:exec)
@@ -164,7 +164,7 @@ describe Tmuxinator::Cli do
     end
 
     context "no deprecations" do
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
         expect(Kernel).to receive(:exec)
@@ -364,12 +364,12 @@ describe Tmuxinator::Cli do
   end
 
   describe "#debug" do
-    let(:project) { FactoryGirl.build(:project) }
+    let(:project) { FactoryBot.build(:project) }
     let(:project_with_force_attach) do
-      FactoryGirl.build(:project_with_force_attach)
+      FactoryBot.build(:project_with_force_attach)
     end
     let(:project_with_force_detach) do
-      FactoryGirl.build(:project_with_force_detach)
+      FactoryBot.build(:project_with_force_detach)
     end
 
     before do

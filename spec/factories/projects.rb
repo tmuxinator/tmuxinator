@@ -2,7 +2,7 @@ def yaml_load(file)
   YAML.safe_load(File.read(File.expand_path(file)))
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :project, class: Tmuxinator::Project do
     transient do
       file { yaml_load("spec/fixtures/sample.yml") }

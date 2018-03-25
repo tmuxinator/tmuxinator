@@ -2,6 +2,8 @@
 ### Misc
 - Make Config#xdg comment reference correct XDG variable and include example of
   degenerate case (#597)
+- Introduce factory_bot, to replace factory_girl, which was renamed
+  recently.
 
 ## 0.10.1
 - Handle emojis in project names (#564)
