@@ -164,6 +164,10 @@ module Tmuxinator
       end
 
       def create_project(project_options = {})
+        # Strings provided to --attach are coerced into booleans by Thor.
+        # "f" and "false" will result in `:attach` being `false` and any other
+        # string or the empty flag will result in `:attach` being `true`.
+        # If the flag is not present, `:attach` will be `nil`.
         attach = detach = false
         attach = true if project_options[:attach] == true
         detach = true if project_options[:attach] == false
