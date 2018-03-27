@@ -1,4 +1,4 @@
-## Unreleased
+## 0.11.0
 ### Misc
 - Make Config#xdg comment reference correct XDG variable and include example of
   degenerate case (#597)
