@@ -13,9 +13,9 @@ SimpleCov.start do
 end
 
 require "tmuxinator"
-require "factory_girl"
+require "factory_bot"
 
-FactoryGirl.find_definitions
+FactoryBot.find_definitions
 
 # Custom Matchers
 require_relative "matchers/pane_matcher"
