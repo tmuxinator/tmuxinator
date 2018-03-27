@@ -4,6 +4,8 @@
   degenerate case (#597)
 - Introduce factory_bot, to replace factory_girl, which was renamed
   recently.
+### New Features
+- Add optional `--project-config=...` parameter to `tmuxinator start` (#595)
 
 ## 0.10.1
 - Handle emojis in project names (#564)

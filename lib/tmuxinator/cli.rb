@@ -17,8 +17,8 @@ module Tmuxinator
       edit: "Alias of new",
       open: "Alias of new",
       start: %w{
-        Start a tmux session using a project's tmuxinator config,
-        with an optional [ALIAS] for project reuse
+        Start a tmux session using a project's name (with an optional [ALIAS]
+        for project reuse) or a path to a project config file (via the -p flag)
       }.join(" "),
       stop: "Stop a tmux session using a project's tmuxinator config",
       local: "Start a tmux session using ./.tmuxinator.yml",
