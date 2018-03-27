@@ -493,8 +493,12 @@ describe Tmuxinator::Cli do
 
       context "only one project exists" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?).with("foo") { true }
-          allow(Tmuxinator::Config).to receive(:exists?).with("bar") { false }
+          allow(Tmuxinator::Config).to receive(:exists?).with(name: "foo") {
+            true
+          }
+          allow(Tmuxinator::Config).to receive(:exists?).with(name: "bar") {
+            false
+          }
         end
 
         it "deletes one project" do
