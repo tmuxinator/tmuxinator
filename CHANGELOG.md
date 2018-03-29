@@ -4,6 +4,7 @@
   degenerate case (#597)
 - Introduce factory_bot, to replace factory_girl, which was renamed
   recently.
+- Add Ruby 2.5 to the TravisCI test matrix
 
 ## 0.10.1
 - Handle emojis in project names (#564)
