@@ -1,11 +1,13 @@
-## Unreleased
+## 0.11.0
 ### Misc
 - Make Config#xdg comment reference correct XDG variable and include example of
   degenerate case (#597)
 - Introduce factory_bot, to replace factory_girl, which was renamed
   recently.
-- Add Ruby 2.5 to the TravisCI test matrix and bump patch level of existing Rubies 
+- Add Ruby 2.5 to the TravisCI test matrix and bump patch level of existing Rubies
   (2.2, 2.3, 2.4)
+### New Features
+- Add optional `--project-config=...` parameter to `tmuxinator start` (#595)
 
 ## 0.10.1
 - Handle emojis in project names (#564)

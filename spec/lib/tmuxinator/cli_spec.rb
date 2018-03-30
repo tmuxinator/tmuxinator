@@ -80,6 +80,13 @@ describe Tmuxinator::Cli do
         capture_io { cli.start }
       end
 
+      it "accepts a project config file flag" do
+        ARGV.replace(["start", "foo", "--project-config=sample.yml"])
+
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+
       it "accepts additional arguments" do
         ARGV.replace(["start", "foo", "bar", "three=four"])
 
@@ -167,6 +174,29 @@ describe Tmuxinator::Cli do
       let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+    end
+  end
+
+  describe "#start(with project config flag)" do
+    before do
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+    end
+
+    let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
+    let(:project_config) { File.join(fixtures_dir, "sample.yml") }
+
+    context "no deprecations" do
+      it "doesn't start the project if given a bogus project config" do
+        ARGV.replace(["start", "--project-config=bogus.yml"])
+        expect(Kernel).not_to receive(:exec)
+        expect { capture_io { cli.start } }.to raise_error(SystemExit)
+      end
+
+      it "starts the project if given a project config" do
+        ARGV.replace(["start", "--project-config=#{project_config}"])
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
       end
@@ -463,8 +493,12 @@ describe Tmuxinator::Cli do
 
       context "only one project exists" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?).with("foo") { true }
-          allow(Tmuxinator::Config).to receive(:exists?).with("bar") { false }
+          allow(Tmuxinator::Config).to receive(:exists?).with(name: "foo") {
+            true
+          }
+          allow(Tmuxinator::Config).to receive(:exists?).with(name: "bar") {
+            false
+          }
         end
 
         it "deletes one project" do
@@ -623,17 +657,21 @@ describe Tmuxinator::Cli do
   end
 
   describe "#create_project" do
-    shared_examples_for :a_proper_project do
-      it "should create a valid project" do
-        expect(subject).to be_a Tmuxinator::Project
-        expect(subject.name).to eq name
-      end
+    before do
+      allow(Tmuxinator::Config).to receive_messages(directory: path)
     end
 
     let(:name) { "sample" }
     let(:custom_name) { nil }
     let(:cli_options) { {} }
     let(:path) { File.expand_path("../../../fixtures", __FILE__) }
+
+    shared_examples_for :a_proper_project do
+      it "should create a valid project" do
+        expect(subject).to be_a Tmuxinator::Project
+        expect(subject.name).to eq name
+      end
+    end
 
     context "when creating a traditional named project" do
       let(:params) do
@@ -644,11 +682,47 @@ describe Tmuxinator::Cli do
       end
       subject { described_class.new.create_project(params) }
 
-      before do
-        allow(Tmuxinator::Config).to receive_messages(directory: path)
+      it_should_behave_like :a_proper_project
+    end
+
+    context "attach option" do
+      describe "detach" do
+        it "sets force_detach to false when no attach argument is provided" do
+          project = Tmuxinator::Cli.new.create_project(name: name)
+          expect(project.force_detach).to eq(false)
+        end
+
+        it "sets force_detach to true when 'attach: false' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: false,
+                                                       name: name)
+          expect(project.force_detach).to eq(true)
+        end
+
+        it "sets force_detach to false when 'attach: true' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: true,
+                                                       name: name)
+          expect(project.force_detach).to eq(false)
+        end
       end
 
-      it_should_behave_like :a_proper_project
+      describe "attach" do
+        it "sets force_attach to false when no attach argument is provided" do
+          project = Tmuxinator::Cli.new.create_project(name: name)
+          expect(project.force_attach).to eq(false)
+        end
+
+        it "sets force_attach to true when 'attach: true' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: true,
+                                                       name: name)
+          expect(project.force_attach).to eq(true)
+        end
+
+        it "sets force_attach to false when 'attach: false' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: false,
+                                                       name: name)
+          expect(project.force_attach).to eq(false)
+        end
+      end
     end
   end
 

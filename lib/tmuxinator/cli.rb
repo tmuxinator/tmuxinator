@@ -17,8 +17,8 @@ module Tmuxinator
       edit: "Alias of new",
       open: "Alias of new",
       start: %w{
-        Start a tmux session using a project's tmuxinator config,
-        with an optional [ALIAS] for project reuse
+        Start a tmux session using a project's name (with an optional [ALIAS]
+        for project reuse) or a path to a project config file (via the -p flag)
       }.join(" "),
       stop: "Stop a tmux session using a project's tmuxinator config",
       local: "Start a tmux session using ./.tmuxinator.yml",
@@ -164,16 +164,21 @@ module Tmuxinator
       end
 
       def create_project(project_options = {})
-        attach_opt = project_options[:attach]
-        attach = !attach_opt.nil? && attach_opt ? true : false
-        detach = !attach_opt.nil? && !attach_opt ? true : false
+        # Strings provided to --attach are coerced into booleans by Thor.
+        # "f" and "false" will result in `:attach` being `false` and any other
+        # string or the empty flag will result in `:attach` being `true`.
+        # If the flag is not present, `:attach` will be `nil`.
+        attach = detach = false
+        attach = true if project_options[:attach] == true
+        detach = true if project_options[:attach] == false
 
         options = {
+          args: project_options[:args],
+          custom_name: project_options[:custom_name],
           force_attach: attach,
           force_detach: detach,
           name: project_options[:name],
-          custom_name: project_options[:custom_name],
-          args: project_options[:args]
+          project_config: project_options[:project_config]
         }
 
         begin
@@ -206,14 +211,18 @@ module Tmuxinator
                            desc: "Attach to tmux session after creation."
     method_option :name, aliases: "-n",
                          desc: "Give the session a different name"
+    method_option "project-config", aliases: "-p",
+                                    desc: "Path to project config file"
 
-    def start(name, *args)
+    def start(name = nil, *args)
       params = {
-        name: name,
-        custom_name: options[:name],
+        args: args,
         attach: options[:attach],
-        args: args
+        custom_name: options[:name],
+        name: name,
+        project_config: options["project-config"]
       }
+
       project = create_project(params)
       render_project(project)
     end
@@ -263,12 +272,12 @@ module Tmuxinator
       new_config_path = Tmuxinator::Config.project(new)
 
       exit!("Project #{existing} doesn't exist!") \
-        unless Tmuxinator::Config.exists?(existing)
+        unless Tmuxinator::Config.exists?(name: existing)
 
-      new_exists = Tmuxinator::Config.exists?(new)
+      new_exists = Tmuxinator::Config.exists?(name: new)
       question = "#{new} already exists, would you like to overwrite it?"
       if !new_exists || yes?(question, :red)
-        say "Overwriting #{new}" if Tmuxinator::Config.exists?(new)
+        say "Overwriting #{new}" if Tmuxinator::Config.exists?(name: new)
         FileUtils.copy_file(existing_config_path, new_config_path)
       end
 
@@ -281,7 +290,7 @@ module Tmuxinator
 
     def delete(*projects)
       projects.each do |project|
-        if Tmuxinator::Config.exists?(project)
+        if Tmuxinator::Config.exists?(name: project)
           config = Tmuxinator::Config.project(project)
 
           if yes?("Are you sure you want to delete #{project}?(y/n)", :red)

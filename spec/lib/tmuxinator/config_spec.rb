@@ -238,7 +238,7 @@ describe Tmuxinator::Config do
     end
 
     it "checks if the given project exists" do
-      expect(Tmuxinator::Config.exists?("test")).to be_truthy
+      expect(Tmuxinator::Config.exists?(name: "test")).to be_truthy
     end
   end
 
@@ -329,6 +329,37 @@ describe Tmuxinator::Config do
   describe "#validate" do
     let(:default) { Tmuxinator::Config::LOCAL_DEFAULT }
 
+    context "when a project config file is provided" do
+      it "should raise if the project config file can't be found" do
+        project_config = "dont-exist.yml"
+        regex = /Project config \(#{project_config}\) doesn't exist\./
+        expect do
+          Tmuxinator::Config.validate(project_config: project_config)
+        end.to raise_error RuntimeError, regex
+      end
+
+      it "should load and validate the project" do
+        project_config = File.join(fixtures_dir, "sample.yml")
+        expect(Tmuxinator::Config.validate(project_config: project_config)).to \
+          be_a Tmuxinator::Project
+      end
+
+      it "should take precedence over a named project" do
+        allow(Tmuxinator::Config).to receive_messages(directory: fixtures_dir)
+        project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
+        project = Tmuxinator::Config.validate(name: "sample",
+                                              project_config: project_config)
+        expect(project.name).to eq("222")
+      end
+
+      it "should take precedence over a local project" do
+        expect(Tmuxinator::Config).not_to receive(:local?)
+        project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
+        project = Tmuxinator::Config.validate(project_config: project_config)
+        expect(project.name).to eq("222")
+      end
+    end
+
     context "when a project name is provided" do
       it "should raise if the project file can't be found" do
         expect do
@@ -358,6 +389,18 @@ describe Tmuxinator::Config do
         expect(File).to receive(:read).with(default).and_return(content)
 
         expect(Tmuxinator::Config.validate).to be_a Tmuxinator::Project
+      end
+    end
+
+    context "when no project can be found" do
+      it "should raise with NO_PROJECT_FOUND_MSG" do
+        config = Tmuxinator::Config
+        expect(config).to receive(:valid_project_config?).and_return(false)
+        expect(config).to receive(:valid_local_project?).and_return(false)
+        expect(config).to receive(:valid_standard_project?).and_return(false)
+        expect do
+          Tmuxinator::Config.validate
+        end.to raise_error RuntimeError, %r{Project could not be found\.}
       end
     end
   end
