@@ -1,3 +1,6 @@
+## Unreleased
+- Fix load order when multiple versions of tmuxinator are installed (#603)
+
 ## 0.11.0
 ### Misc
 - Make Config#xdg comment reference correct XDG variable and include example of
