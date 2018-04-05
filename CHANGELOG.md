@@ -2,6 +2,7 @@
 - Remove confusing README section about the pane-base-index and
   window-base-index options. These options can be set independently of one
   another now that #542 and #543 are merged.
+- Fix zsh completion when there are no projects
 
 ## 0.11.3
 ### Misc
