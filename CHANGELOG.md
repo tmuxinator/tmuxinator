@@ -1,4 +1,5 @@
 ## Unreleased
+- Add support for tmux 2.7
 - Fix load order when multiple versions of tmuxinator are installed (#603)
 
 ## 0.11.0
