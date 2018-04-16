@@ -5,6 +5,7 @@ rvm:
   - "2.4.3"
   - "2.5.0"
 env:
+  - TMUX_VERSION=2.7
   - TMUX_VERSION=2.6
   - TMUX_VERSION=2.5
   - TMUX_VERSION=2.4
