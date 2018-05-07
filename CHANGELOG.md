@@ -1,3 +1,7 @@
+## Unreleased
+- Fix [#555](https://github.com/tmuxinator/tmuxinator/issues/555), restoring
+  `on_project_exit` hook behaviour ( same as deprecated `post` )
+
 ## 0.11.1
 ### Misc
 - Add support for tmux 2.7 (#611)
