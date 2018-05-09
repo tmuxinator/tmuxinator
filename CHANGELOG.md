@@ -1,6 +1,7 @@
-## Unreleased
+## 0.11.2
+### Bugfixes
 - Fix [#555](https://github.com/tmuxinator/tmuxinator/issues/555), restoring
-  `on_project_exit` hook behaviour ( same as deprecated `post` )
+  `on_project_exit` hook behaviour (same as deprecated `post`)
 
 ## 0.11.1
 ### Misc
