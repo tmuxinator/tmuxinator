@@ -1,3 +1,6 @@
+## Unreleased
+- fix "wrong namespace" RuboCop warnings (#620)
+
 ## 0.11.2
 ### Bugfixes
 - Fix [#555](https://github.com/tmuxinator/tmuxinator/issues/555), restoring

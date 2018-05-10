@@ -528,7 +528,7 @@ Metrics/BlockLength:
     - spec/factories/**/*.rb
     - spec/matchers/**/*.rb
     - spec/**/*_spec.rb
-Lint/InverseMethods:
+Style/InverseMethods:
   Exclude:
     - lib/tmuxinator/project.rb
 Lint/PercentStringArray:
@@ -933,7 +933,7 @@ Lint/EnsureReturn:
   Description: Do not use return in an ensure block.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#no-return-ensure
   Enabled: true
-Lint/Eval:
+Security/Eval:
   Description: The use of eval represents a serious security risk.
   Enabled: true
 Lint/HandleExceptions:
