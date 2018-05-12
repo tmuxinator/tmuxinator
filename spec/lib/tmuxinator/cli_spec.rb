@@ -654,6 +654,16 @@ describe Tmuxinator::Cli do
       expect(new_path).to eq path
       expect(File).to exist new_path
     end
+
+    it "should generate a project file using the correct project file path" do
+      file = StringIO.new
+      allow(File).to receive(:open) { |&block| block.yield file }
+      Dir.mktmpdir do |dir|
+        path = "#{dir}/#{name}.yml"
+        _ = Tmuxinator::Cli.new.generate_project_file(name, path)
+        expect(file.string).to match %r{\A# #{path}$}
+      end
+    end
   end
 
   describe "#create_project" do
