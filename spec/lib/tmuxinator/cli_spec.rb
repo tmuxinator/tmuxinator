@@ -638,21 +638,16 @@ describe Tmuxinator::Cli do
   end
 
   describe "#generate_project_file" do
-    let(:name) { "foobar" }
-    let(:path) { Tmuxinator::Config.default_project(name) }
-
-    before do
-      expect(File).not_to exist(path), "expected file at #{path} not to exist"
-    end
-
-    after(:each) do
-      FileUtils.remove_file(path) if File.exist?(path)
-    end
+    let(:name) { "foobar-#{Time.now.to_i}" }
 
     it "should always generate a project file" do
-      new_path = Tmuxinator::Cli.new.generate_project_file(name, path)
-      expect(new_path).to eq path
-      expect(File).to exist new_path
+      Dir.mktmpdir do |dir|
+        path = "#{dir}/#{name}.yml"
+        expect(File).not_to exist(path), "expected file at #{path} not to exist"
+        new_path = Tmuxinator::Cli.new.generate_project_file(name, path)
+        expect(new_path).to eq path
+        expect(File).to exist new_path
+      end
     end
 
     it "should generate a project file using the correct project file path" do
