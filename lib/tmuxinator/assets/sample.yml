@@ -1,4 +1,4 @@
-# ~/.tmuxinator/<%= name %>.yml
+# <%= path %>
 
 name: <%= name %>
 root: ~/
