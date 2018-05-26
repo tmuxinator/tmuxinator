@@ -1,4 +1,5 @@
 ## Unreleased
+- replace j3rn's email with ethagnawl's in COC
 - use correct paths in generated config file comment (#440)
 - fix "wrong namespace" RuboCop warnings (#620)
 
