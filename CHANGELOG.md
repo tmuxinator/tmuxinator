@@ -1,4 +1,5 @@
 ## Unreleased
+- replace j3rn's email with ethagnawl's in COC
 - fix "wrong namespace" RuboCop warnings (#620)
 
 ## 0.11.2
