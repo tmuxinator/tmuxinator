@@ -33,6 +33,7 @@ module Tmuxinator
       doctor: "Look for problems in your configuration",
       list: "Lists all tmuxinator projects"
     }.freeze
+    RESERVED_COMMANDS = (COMMANDS.keys + %w[-v help]).map(&:to_s).freeze
 
     package_name "tmuxinator" \
       unless Gem::Version.create(Thor::VERSION) < Gem::Version.create("0.18")
