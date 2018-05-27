@@ -1,6 +1,24 @@
 require "spec_helper"
 
 describe Tmuxinator::Cli do
+  shared_context :local_project_setup do
+    let(:local_project_config) { ".tmuxinator.yml" }
+    let(:content) { File.read(File.expand_path(File.join(File.dirname(__FILE__), "../../fixtures/sample.yml"))) }
+    let(:working_dir) { FileUtils.pwd }
+    let(:local_project_path) { File.expand_path(File.join(working_dir, local_project_config)) }
+
+    before do
+      File.new(local_project_path, "w").tap do |f|
+        f.write content
+      end.close
+      expect(File.exists?(local_project_path)).to be_truthy
+      expect(File.read(local_project_path)).to eq content
+    end
+
+    after do
+      File.delete(local_project_path)
+    end
+  end
   let(:cli) { Tmuxinator::Cli }
 
   before do
@@ -15,6 +33,132 @@ describe Tmuxinator::Cli do
     it "runs without error" do
       _, err = capture_io { cli.start }
       expect(err).to be_empty
+    end
+  end
+
+  context "base thor functionality" do
+    shared_examples_for :base_thor_functionality do
+      it "supports -v" do
+        out, err = capture_io { cli.bootstrap("-v") }
+        expect(err).to eq ""
+        expect(out).to include(Tmuxinator::VERSION)
+      end
+
+      xit "supports help" do
+        out, err = capture_io { cli.bootstrap("help") }
+        expect(err).to eq ""
+        expect(out).to include("tmuxinator commands:")
+      end
+    end
+
+    it_should_behave_like :base_thor_functionality
+
+    context "with a local project config" do
+      include_context :local_project_setup
+
+      # it_should_behave_like :base_thor_functionality
+      # it { expect(true).to be_truthy }
+    end
+  end
+
+
+  describe "::bootstrap" do
+    subject { cli.bootstrap(*args) }
+    let(:args) { [] }
+
+    shared_examples_for :bootstrap_with_arguments do
+      let(:args) { [arg1] }
+
+      context "and the first arg is a tmuxinator command" do
+        let(:arg1) { "list" }
+
+        it "should call ::start" do
+          expect(cli).to receive(:start).with(*args)
+          subject
+        end
+      end
+
+      context "and the first arg is" do
+        let(:arg1) { "sample" }
+
+        context "a tmuxinator project name" do
+          before do
+            expect(Tmuxinator::Config).to receive(:exists?).with(name: arg1) { true }
+          end
+
+          it "should call #start" do
+            instance = instance_double(cli)
+            expect(cli).to receive(:new).and_return(instance)
+            expect(instance).to receive(:start).with(*args)
+            subject
+          end
+        end
+
+        context "a thor command" do
+          before do
+            # allow(Tmuxinator::Config).to receive(:version){ 2.4 }
+          end
+
+          context "(-v)" do
+            let(:arg1) { "-v" }
+
+            it "should call ::start" do
+              expect(cli).to receive(:start).with(*args)
+              subject
+            end
+          end
+
+          context "(help)" do
+            let(:arg1) { "help" }
+
+            it "should call ::start" do
+              expect(cli).to receive(:start).with(*args)
+              subject
+            end
+          end
+        end
+
+        context "something else" do
+          before do
+            expect(Tmuxinator::Config).to receive(:exists?).with(name: arg1) { false }
+          end
+
+          it "should call ::start" do
+            expect(cli).to receive(:start).with(*args)
+            subject
+          end
+        end
+      end
+    end
+
+    context "and there is a local project config" do
+      include_context :local_project_setup
+
+      context "when no args are supplied" do
+        it "should call #local" do
+          instance = instance_double(cli)
+          expect(cli).to receive(:new).and_return(instance)
+          expect(instance).to receive(:local)
+          subject
+        end
+      end
+
+      context "when one or more args are supplied" do
+        it_should_behave_like :bootstrap_with_arguments
+      end
+    end
+
+    context "and there is no local project config" do
+      context "when no args are supplied" do
+        it "should call ::start" do
+          expect(cli).to receive(:start).with(no_args)
+          subject
+        end
+      end
+
+      context "when one or more args are supplied" do
+        it_should_behave_like :bootstrap_with_arguments
+      end
     end
   end
 

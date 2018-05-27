@@ -345,5 +345,17 @@ module Tmuxinator
       say "Checking if $SHELL is set ==> "
       yes_no Tmuxinator::Doctor.shell?
     end
+
+    def self.bootstrap(*args)
+      name = args[0] || nil
+      if args.empty? && Tmuxinator::Config.local?
+        Tmuxinator::Cli.new.local
+      elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
+            Tmuxinator::Config.exists?(name: name)
+        Tmuxinator::Cli.new.start(name, *args.drop(1))
+      else
+        Tmuxinator::Cli.start(*args)
+      end
+    end
   end
 end

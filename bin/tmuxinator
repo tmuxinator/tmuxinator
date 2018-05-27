@@ -4,13 +4,4 @@ $:.unshift File.expand_path("../../lib/", __FILE__)
 require "thor"
 require "tmuxinator"
 
-name = ARGV[0] || nil
-
-if ARGV.empty? && Tmuxinator::Config.local?
-  Tmuxinator::Cli.new.local
-elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
-      Tmuxinator::Config.exists?(name: name)
-  Tmuxinator::Cli.new.start(name, *ARGV.drop(1))
-else
-  Tmuxinator::Cli.start
-end
+Tmuxinator::Cli.bootstrap

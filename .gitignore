@@ -17,3 +17,5 @@ tmp
 db
 vendor/
 tags
+.env*
+.env
