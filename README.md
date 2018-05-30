@@ -181,7 +181,7 @@ windows:
 
 The layout setting gets handed down to tmux directly, so you can choose from
 one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6)
-or [specify your own](http://stackoverflow.com/a/9976282/183537).
+or [specify your own](http://stackoverflow.com/a/9976282/183537). **Please note the indentation here is deliberate, YAML requires 4 space indentation to separate these values from the keys, if your config isn't working as expected check the indentation.**
 
 ## Interpreter Managers & Environment Variables
 
