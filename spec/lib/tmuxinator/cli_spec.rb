@@ -3,9 +3,13 @@ require "spec_helper"
 describe Tmuxinator::Cli do
   shared_context :local_project_setup do
     let(:local_project_config) { ".tmuxinator.yml" }
-    let(:content) { File.read(File.expand_path(File.join(File.dirname(__FILE__), "../../fixtures/sample.yml"))) }
+    let(:content_fixture) { "../../fixtures/sample.yml" }
+    let(:content_relpath) { File.join(File.dirname(__FILE__), content_fixture) }
+    let(:content_path) { File.expand_path(content_relpath) }
+    let(:content) { File.read(content_path) }
     let(:working_dir) { FileUtils.pwd }
-    let(:local_project_path) { File.expand_path(File.join(working_dir, local_project_config)) }
+    let(:local_project_relpath) { File.join(working_dir, local_project_config) }
+    let(:local_project_path) { File.expand_path(local_project_relpath) }
 
     before do
       File.new(local_project_path, "w").tap do |f|
@@ -60,7 +64,6 @@ describe Tmuxinator::Cli do
     end
   end
 
-
   describe "::bootstrap" do
     subject { cli.bootstrap(*args) }
     let(:args) { [] }
@@ -82,7 +85,8 @@ describe Tmuxinator::Cli do
 
         context "a tmuxinator project name" do
           before do
-            expect(Tmuxinator::Config).to receive(:exists?).with(name: arg1) { true }
+            expect(Tmuxinator::Config).to \
+              receive(:exists?).with(name: arg1) { true }
           end
 
           it "should call #start" do
@@ -115,7 +119,8 @@ describe Tmuxinator::Cli do
 
         context "something else" do
           before do
-            expect(Tmuxinator::Config).to receive(:exists?).with(name: arg1) { false }
+            expect(Tmuxinator::Config).to \
+              receive(:exists?).with(name: arg1) { false }
           end
 
           it "should call ::start" do
