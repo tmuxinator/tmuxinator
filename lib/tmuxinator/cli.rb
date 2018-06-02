@@ -346,6 +346,14 @@ module Tmuxinator
       yes_no Tmuxinator::Doctor.shell?
     end
 
+    # This method was defined as something of a workaround...  Previously
+    # the conditional contained within was in the executable (i.e.
+    # bin/tmuxinator).  It has been moved here so as to be testable. A couple
+    # of notes:
+    # - ::start (defined in Thor::Base) expects the first argument to be an
+    # array or ARGV, not a varargs.  Perhaps ::bootstrap should as well?
+    # - ::start has a different purpose from #start and hence a different
+    # signature
     def self.bootstrap(*args)
       name = args[0] || nil
       if args.empty? && Tmuxinator::Config.local?
@@ -354,7 +362,7 @@ module Tmuxinator
             Tmuxinator::Config.exists?(name: name)
         Tmuxinator::Cli.new.start(name, *args.drop(1))
       else
-        Tmuxinator::Cli.start(*args)
+        Tmuxinator::Cli.start(args)
       end
     end
   end

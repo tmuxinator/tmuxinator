@@ -44,7 +44,7 @@ describe Tmuxinator::Cli do
         expect(out).to include(Tmuxinator::VERSION)
       end
 
-      xit "supports help" do
+      it "supports help" do
         out, err = capture_io { cli.bootstrap("help") }
         expect(err).to eq ""
         expect(out).to include("tmuxinator commands:")
@@ -56,8 +56,7 @@ describe Tmuxinator::Cli do
     context "with a local project config" do
       include_context :local_project_setup
 
-      # it_should_behave_like :base_thor_functionality
-      # it { expect(true).to be_truthy }
+      it_should_behave_like :base_thor_functionality
     end
   end
 
@@ -73,7 +72,7 @@ describe Tmuxinator::Cli do
         let(:arg1) { "list" }
 
         it "should call ::start" do
-          expect(cli).to receive(:start).with(*args)
+          expect(cli).to receive(:start).with(args)
           subject
         end
       end
@@ -95,15 +94,11 @@ describe Tmuxinator::Cli do
         end
 
         context "a thor command" do
-          before do
-            # allow(Tmuxinator::Config).to receive(:version){ 2.4 }
-          end
-
           context "(-v)" do
             let(:arg1) { "-v" }
 
             it "should call ::start" do
-              expect(cli).to receive(:start).with(*args)
+              expect(cli).to receive(:start).with(args)
               subject
             end
           end
@@ -112,7 +107,7 @@ describe Tmuxinator::Cli do
             let(:arg1) { "help" }
 
             it "should call ::start" do
-              expect(cli).to receive(:start).with(*args)
+              expect(cli).to receive(:start).with(args)
               subject
             end
           end
@@ -124,7 +119,7 @@ describe Tmuxinator::Cli do
           end
 
           it "should call ::start" do
-            expect(cli).to receive(:start).with(*args)
+            expect(cli).to receive(:start).with(args)
             subject
           end
         end
@@ -151,7 +146,7 @@ describe Tmuxinator::Cli do
     context "and there is no local project config" do
       context "when no args are supplied" do
         it "should call ::start" do
-          expect(cli).to receive(:start).with(no_args)
+          expect(cli).to receive(:start).with([])
           subject
         end
       end
