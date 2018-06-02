@@ -33,7 +33,17 @@ module Tmuxinator
       doctor: "Look for problems in your configuration",
       list: "Lists all tmuxinator projects"
     }.freeze
-    RESERVED_COMMANDS = (COMMANDS.keys + %w[-v help]).map(&:to_s).freeze
+
+    # For future reference: due to how tmuxinator currently consumes
+    # command-line arguments (see ::bootstrap, below), invocations of Thor's
+    # base commands (i.e. 'help', etc) can be instead routed to #start (rather
+    # than to ::start).  In order to prevent this, the THOR_COMMANDS and
+    # RESERVED_COMMANDS constants have been introduced. The former enumerates
+    # any/all Thor commands we want to insure get passed through to Thor.start.
+    # The latter is the superset of the Thor commands and any tmuxinator
+    # commands, defined in COMMANDS, above.
+    THOR_COMMANDS = %w[-v help].freeze
+    RESERVED_COMMANDS = (COMMANDS.keys + THOR_COMMANDS).map(&:to_s).freeze
 
     package_name "tmuxinator" \
       unless Gem::Version.create(Thor::VERSION) < Gem::Version.create("0.18")
