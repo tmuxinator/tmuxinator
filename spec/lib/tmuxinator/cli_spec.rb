@@ -43,13 +43,13 @@ describe Tmuxinator::Cli do
   context "base thor functionality" do
     shared_examples_for :base_thor_functionality do
       it "supports -v" do
-        out, err = capture_io { cli.bootstrap("-v") }
+        out, err = capture_io { cli.bootstrap(["-v"]) }
         expect(err).to eq ""
         expect(out).to include(Tmuxinator::VERSION)
       end
 
       it "supports help" do
-        out, err = capture_io { cli.bootstrap("help") }
+        out, err = capture_io { cli.bootstrap(["help"]) }
         expect(err).to eq ""
         expect(out).to include("tmuxinator commands:")
       end
@@ -65,7 +65,7 @@ describe Tmuxinator::Cli do
   end
 
   describe "::bootstrap" do
-    subject { cli.bootstrap(*args) }
+    subject { cli.bootstrap(args) }
     let(:args) { [] }
 
     shared_examples_for :bootstrap_with_arguments do

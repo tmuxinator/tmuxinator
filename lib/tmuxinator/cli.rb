@@ -364,7 +364,7 @@ module Tmuxinator
     # array or ARGV, not a varargs.  Perhaps ::bootstrap should as well?
     # - ::start has a different purpose from #start and hence a different
     # signature
-    def self.bootstrap(*args)
+    def self.bootstrap(args = [])
       name = args[0] || nil
       if args.empty? && Tmuxinator::Config.local?
         Tmuxinator::Cli.new.local
