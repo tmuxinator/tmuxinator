@@ -1,7 +1,11 @@
-## Unreleased
+## 0.11.3
+### Misc
 - replace j3rn's email with ethagnawl's in COC
 - use correct paths in generated config file comment (#440)
+
+### Bugfixes
 - fix "wrong namespace" RuboCop warnings (#620)
+- fix [#431](https://github.com/tmuxinator/tmuxinator/issues/431), where Thor-based commands (e.g. "-v", "help") were failing
 
 ## 0.11.2
 ### Bugfixes
