@@ -94,7 +94,6 @@ cd <%= root || "." %>
 <%- end -%>
 
 <%= post %>
-<%- unless attach? -%>
-  # Run on_project_exit command.
-  <%= hook_on_project_exit %>
-<%- end -%>
+    
+# Run on_project_exit command.
+<%= hook_on_project_exit %>

@@ -17,8 +17,8 @@ module Tmuxinator
       edit: "Alias of new",
       open: "Alias of new",
       start: %w{
-        Start a tmux session using a project's tmuxinator config,
-        with an optional [ALIAS] for project reuse
+        Start a tmux session using a project's name (with an optional [ALIAS]
+        for project reuse) or a path to a project config file (via the -p flag)
       }.join(" "),
       stop: "Stop a tmux session using a project's tmuxinator config",
       local: "Start a tmux session using ./.tmuxinator.yml",
@@ -33,6 +33,17 @@ module Tmuxinator
       doctor: "Look for problems in your configuration",
       list: "Lists all tmuxinator projects"
     }.freeze
+
+    # For future reference: due to how tmuxinator currently consumes
+    # command-line arguments (see ::bootstrap, below), invocations of Thor's
+    # base commands (i.e. 'help', etc) can be instead routed to #start (rather
+    # than to ::start).  In order to prevent this, the THOR_COMMANDS and
+    # RESERVED_COMMANDS constants have been introduced. The former enumerates
+    # any/all Thor commands we want to insure get passed through to Thor.start.
+    # The latter is the superset of the Thor commands and any tmuxinator
+    # commands, defined in COMMANDS, above.
+    THOR_COMMANDS = %w[-v help].freeze
+    RESERVED_COMMANDS = (COMMANDS.keys + THOR_COMMANDS).map(&:to_s).freeze
 
     package_name "tmuxinator" \
       unless Gem::Version.create(Thor::VERSION) < Gem::Version.create("0.18")
@@ -164,16 +175,21 @@ module Tmuxinator
       end
 
       def create_project(project_options = {})
-        attach_opt = project_options[:attach]
-        attach = !attach_opt.nil? && attach_opt ? true : false
-        detach = !attach_opt.nil? && !attach_opt ? true : false
+        # Strings provided to --attach are coerced into booleans by Thor.
+        # "f" and "false" will result in `:attach` being `false` and any other
+        # string or the empty flag will result in `:attach` being `true`.
+        # If the flag is not present, `:attach` will be `nil`.
+        attach = detach = false
+        attach = true if project_options[:attach] == true
+        detach = true if project_options[:attach] == false
 
         options = {
+          args: project_options[:args],
+          custom_name: project_options[:custom_name],
           force_attach: attach,
           force_detach: detach,
           name: project_options[:name],
-          custom_name: project_options[:custom_name],
-          args: project_options[:args]
+          project_config: project_options[:project_config]
         }
 
         begin
@@ -206,14 +222,18 @@ module Tmuxinator
                            desc: "Attach to tmux session after creation."
     method_option :name, aliases: "-n",
                          desc: "Give the session a different name"
+    method_option "project-config", aliases: "-p",
+                                    desc: "Path to project config file"
 
-    def start(name, *args)
+    def start(name = nil, *args)
       params = {
-        name: name,
-        custom_name: options[:name],
+        args: args,
         attach: options[:attach],
-        args: args
+        custom_name: options[:name],
+        name: name,
+        project_config: options["project-config"]
       }
+
       project = create_project(params)
       render_project(project)
     end
@@ -263,12 +283,12 @@ module Tmuxinator
       new_config_path = Tmuxinator::Config.project(new)
 
       exit!("Project #{existing} doesn't exist!") \
-        unless Tmuxinator::Config.exists?(existing)
+        unless Tmuxinator::Config.exists?(name: existing)
 
-      new_exists = Tmuxinator::Config.exists?(new)
+      new_exists = Tmuxinator::Config.exists?(name: new)
       question = "#{new} already exists, would you like to overwrite it?"
       if !new_exists || yes?(question, :red)
-        say "Overwriting #{new}" if Tmuxinator::Config.exists?(new)
+        say "Overwriting #{new}" if Tmuxinator::Config.exists?(name: new)
         FileUtils.copy_file(existing_config_path, new_config_path)
       end
 
@@ -281,7 +301,7 @@ module Tmuxinator
 
     def delete(*projects)
       projects.each do |project|
-        if Tmuxinator::Config.exists?(project)
+        if Tmuxinator::Config.exists?(name: project)
           config = Tmuxinator::Config.project(project)
 
           if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
@@ -334,6 +354,26 @@ module Tmuxinator
 
       say "Checking if $SHELL is set ==> "
       yes_no Tmuxinator::Doctor.shell?
+    end
+
+    # This method was defined as something of a workaround...  Previously
+    # the conditional contained within was in the executable (i.e.
+    # bin/tmuxinator).  It has been moved here so as to be testable. A couple
+    # of notes:
+    # - ::start (defined in Thor::Base) expects the first argument to be an
+    # array or ARGV, not a varargs.  Perhaps ::bootstrap should as well?
+    # - ::start has a different purpose from #start and hence a different
+    # signature
+    def self.bootstrap(args = [])
+      name = args[0] || nil
+      if args.empty? && Tmuxinator::Config.local?
+        Tmuxinator::Cli.new.local
+      elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
+            Tmuxinator::Config.exists?(name: name)
+        Tmuxinator::Cli.new.start(name, *args.drop(1))
+      else
+        Tmuxinator::Cli.start(args)
+      end
     end
   end
 end

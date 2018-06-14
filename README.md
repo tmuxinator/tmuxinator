@@ -85,8 +85,25 @@ root: ~/
 # Optional. tmux socket
 # socket_name: foo
 
-# Runs before everything. Use it to start daemons etc.
-# pre: sudo /etc/rc.d/mysqld start
+# Note that the pre and post options have been deprecated and will be replaced by
+# project hooks.
+
+# Project hooks
+
+# Runs on project start, always
+#on_project_start: command
+
+# Run on project start, the first time
+# on_project_first_start: command
+
+# Run on project start, after the first time
+# on_project_restart: command
+
+# Run on project exit ( detaching from tmux session )
+# on_project_exit: command
+
+# Run on project stop
+# on_project_stop: command
 
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
 # pre_window: rbenv shell 2.0.0-p247
@@ -156,7 +173,9 @@ windows:
 
 The layout setting gets handed down to tmux directly, so you can choose from
 one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6)
-or [specify your own](http://stackoverflow.com/a/9976282/183537).
+or [specify your own](http://stackoverflow.com/a/9976282/183537). 
+
+**Please note the indentation here is deliberate. YAML's indentation rules can be confusing, so if your config isn't working as expected, please check the indentation.** For a more detailed explanation of _why_ YAML behaves this way, see [this](https://stackoverflow.com/questions/50594758/why-isnt-two-spaced-yaml-parsed-like-four-spaced-yaml/50600253#50600253) Stack Overflow question.
 
 ## Interpreter Managers & Environment Variables
 
@@ -168,18 +187,17 @@ pre_window: rbenv shell 2.0.0-p247
 
 These command(s) will run before any subsequent commands in all panes and windows.
 
-## Custom attachment and post commands
+## Custom session attachment
 
 You can set tmuxinator to skip auto-attaching to the session by using the `attach` option.
 
 ```yaml
 attach: false
 ```
-
-You can also run arbitrary commands by using the `post` option. This is useful if you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2).
+If you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2), you can run arbitrary commands by using a project hook:
 
 ```yaml
-post: tmux -CC attach
+on_project_start: tmux -CC attach
 ```
 
 ## Passing directly to send-keys
@@ -252,12 +270,14 @@ root: ~/<%= @settings["workspace"] %>
 This will fire up tmux with all the tabs and panes you configured, `start` is aliased to `s`.
 
 ```
-tmuxinator start [project] -n [name]
+tmuxinator start [project] -n [name] -p [project-config]
 ```
 
 If you use the optional `[name]` argument, it will start a new tmux session with the custom name provided. This is to enable reuse of a project without tmux session name collision.
 
 If there is a `./.tmuxinator.yml` file in the current working directory but not a named project file in `~/.tmuxinator`, tmuxinator will use the local file. This is primarily intended to be used for sharing tmux configurations in complex development environments.
+
+You can provide tmuxinator with a project config file using the optional `[project-config]` argument (e.g. `--project-config=path/to/my-project.yaml` or `-p path/to/my-project.yaml`). This option will override a `[project]` name (if provided) and a local tmuxinator file (if present).
 
 ## Shorthand
 
@@ -337,4 +357,4 @@ To contribute, please read the [contributing guide](https://github.com/tmuxinato
 
 ## Copyright
 
-Copyright (c) 2010-2017 Allen Bargi, Christopher Chow. See LICENSE for further details.
+Copyright (c) 2010-2018 Allen Bargi, Christopher Chow. See LICENSE for further details.

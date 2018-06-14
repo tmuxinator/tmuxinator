@@ -1,6 +1,28 @@
 require "spec_helper"
 
 describe Tmuxinator::Cli do
+  shared_context :local_project_setup do
+    let(:local_project_config) { ".tmuxinator.yml" }
+    let(:content_fixture) { "../../fixtures/sample.yml" }
+    let(:content_relpath) { File.join(File.dirname(__FILE__), content_fixture) }
+    let(:content_path) { File.expand_path(content_relpath) }
+    let(:content) { File.read(content_path) }
+    let(:working_dir) { FileUtils.pwd }
+    let(:local_project_relpath) { File.join(working_dir, local_project_config) }
+    let(:local_project_path) { File.expand_path(local_project_relpath) }
+
+    before do
+      File.new(local_project_path, "w").tap do |f|
+        f.write content
+      end.close
+      expect(File.exists?(local_project_path)).to be_truthy
+      expect(File.read(local_project_path)).to eq content
+    end
+
+    after do
+      File.delete(local_project_path)
+    end
+  end
   let(:cli) { Tmuxinator::Cli }
 
   before do
@@ -15,6 +37,128 @@ describe Tmuxinator::Cli do
     it "runs without error" do
       _, err = capture_io { cli.start }
       expect(err).to be_empty
+    end
+  end
+
+  context "base thor functionality" do
+    shared_examples_for :base_thor_functionality do
+      it "supports -v" do
+        out, err = capture_io { cli.bootstrap(["-v"]) }
+        expect(err).to eq ""
+        expect(out).to include(Tmuxinator::VERSION)
+      end
+
+      it "supports help" do
+        out, err = capture_io { cli.bootstrap(["help"]) }
+        expect(err).to eq ""
+        expect(out).to include("tmuxinator commands:")
+      end
+    end
+
+    it_should_behave_like :base_thor_functionality
+
+    context "with a local project config" do
+      include_context :local_project_setup
+
+      it_should_behave_like :base_thor_functionality
+    end
+  end
+
+  describe "::bootstrap" do
+    subject { cli.bootstrap(args) }
+    let(:args) { [] }
+
+    shared_examples_for :bootstrap_with_arguments do
+      let(:args) { [arg1] }
+
+      context "and the first arg is a tmuxinator command" do
+        let(:arg1) { "list" }
+
+        it "should call ::start" do
+          expect(cli).to receive(:start).with(args)
+          subject
+        end
+      end
+
+      context "and the first arg is" do
+        let(:arg1) { "sample" }
+
+        context "a tmuxinator project name" do
+          before do
+            expect(Tmuxinator::Config).to \
+              receive(:exists?).with(name: arg1) { true }
+          end
+
+          it "should call #start" do
+            instance = instance_double(cli)
+            expect(cli).to receive(:new).and_return(instance)
+            expect(instance).to receive(:start).with(*args)
+            subject
+          end
+        end
+
+        context "a thor command" do
+          context "(-v)" do
+            let(:arg1) { "-v" }
+
+            it "should call ::start" do
+              expect(cli).to receive(:start).with(args)
+              subject
+            end
+          end
+
+          context "(help)" do
+            let(:arg1) { "help" }
+
+            it "should call ::start" do
+              expect(cli).to receive(:start).with(args)
+              subject
+            end
+          end
+        end
+
+        context "something else" do
+          before do
+            expect(Tmuxinator::Config).to \
+              receive(:exists?).with(name: arg1) { false }
+          end
+
+          it "should call ::start" do
+            expect(cli).to receive(:start).with(args)
+            subject
+          end
+        end
+      end
+    end
+
+    context "and there is a local project config" do
+      include_context :local_project_setup
+
+      context "when no args are supplied" do
+        it "should call #local" do
+          instance = instance_double(cli)
+          expect(cli).to receive(:new).and_return(instance)
+          expect(instance).to receive(:local)
+          subject
+        end
+      end
+
+      context "when one or more args are supplied" do
+        it_should_behave_like :bootstrap_with_arguments
+      end
+    end
+
+    context "and there is no local project config" do
+      context "when no args are supplied" do
+        it "should call ::start" do
+          expect(cli).to receive(:start).with([])
+          subject
+        end
+      end
+
+      context "when one or more args are supplied" do
+        it_should_behave_like :bootstrap_with_arguments
+      end
     end
   end
 
@@ -66,7 +210,7 @@ describe Tmuxinator::Cli do
     end
 
     context "no deprecations" do
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
         expect(Kernel).to receive(:exec)
@@ -75,6 +219,13 @@ describe Tmuxinator::Cli do
 
       it "accepts a flag for alternate name" do
         ARGV.replace(["start", "foo", "--name=bar"])
+
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+
+      it "accepts a project config file flag" do
+        ARGV.replace(["start", "foo", "--project-config=sample.yml"])
 
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
@@ -93,7 +244,7 @@ describe Tmuxinator::Cli do
         allow($stdin).to receive_messages(getc: "y")
       end
 
-      let(:project) { FactoryGirl.build(:project_with_deprecations) }
+      let(:project) { FactoryBot.build(:project_with_deprecations) }
 
       it "prints the deprecations" do
         out, _err = capture_io { cli.start }
@@ -111,7 +262,7 @@ describe Tmuxinator::Cli do
     end
 
     context "with project name" do
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "stop the project" do
         expect(Kernel).to receive(:exec)
@@ -130,7 +281,7 @@ describe Tmuxinator::Cli do
         allow(Kernel).to receive(:exec)
       end
 
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
         expect(Kernel).to receive(:exec)
@@ -164,9 +315,32 @@ describe Tmuxinator::Cli do
     end
 
     context "no deprecations" do
-      let(:project) { FactoryGirl.build(:project) }
+      let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+    end
+  end
+
+  describe "#start(with project config flag)" do
+    before do
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+    end
+
+    let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
+    let(:project_config) { File.join(fixtures_dir, "sample.yml") }
+
+    context "no deprecations" do
+      it "doesn't start the project if given a bogus project config" do
+        ARGV.replace(["start", "--project-config=bogus.yml"])
+        expect(Kernel).not_to receive(:exec)
+        expect { capture_io { cli.start } }.to raise_error(SystemExit)
+      end
+
+      it "starts the project if given a project config" do
+        ARGV.replace(["start", "--project-config=#{project_config}"])
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
       end
@@ -364,12 +538,12 @@ describe Tmuxinator::Cli do
   end
 
   describe "#debug" do
-    let(:project) { FactoryGirl.build(:project) }
+    let(:project) { FactoryBot.build(:project) }
     let(:project_with_force_attach) do
-      FactoryGirl.build(:project_with_force_attach)
+      FactoryBot.build(:project_with_force_attach)
     end
     let(:project_with_force_detach) do
-      FactoryGirl.build(:project_with_force_detach)
+      FactoryBot.build(:project_with_force_detach)
     end
 
     before do
@@ -463,8 +637,12 @@ describe Tmuxinator::Cli do
 
       context "only one project exists" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?).with("foo") { true }
-          allow(Tmuxinator::Config).to receive(:exists?).with("bar") { false }
+          allow(Tmuxinator::Config).to receive(:exists?).with(name: "foo") {
+            true
+          }
+          allow(Tmuxinator::Config).to receive(:exists?).with(name: "bar") {
+            false
+          }
         end
 
         it "deletes one project" do
@@ -604,36 +782,45 @@ describe Tmuxinator::Cli do
   end
 
   describe "#generate_project_file" do
-    let(:name) { "foobar" }
-    let(:path) { Tmuxinator::Config.default_project(name) }
-
-    before do
-      expect(File).not_to exist(path), "expected file at #{path} not to exist"
-    end
-
-    after(:each) do
-      FileUtils.remove_file(path) if File.exist?(path)
-    end
+    let(:name) { "foobar-#{Time.now.to_i}" }
 
     it "should always generate a project file" do
-      new_path = Tmuxinator::Cli.new.generate_project_file(name, path)
-      expect(new_path).to eq path
-      expect(File).to exist new_path
+      Dir.mktmpdir do |dir|
+        path = "#{dir}/#{name}.yml"
+        expect(File).not_to exist(path), "expected file at #{path} not to exist"
+        new_path = Tmuxinator::Cli.new.generate_project_file(name, path)
+        expect(new_path).to eq path
+        expect(File).to exist new_path
+      end
+    end
+
+    it "should generate a project file using the correct project file path" do
+      file = StringIO.new
+      allow(File).to receive(:open) { |&block| block.yield file }
+      Dir.mktmpdir do |dir|
+        path = "#{dir}/#{name}.yml"
+        _ = Tmuxinator::Cli.new.generate_project_file(name, path)
+        expect(file.string).to match %r{\A# #{path}$}
+      end
     end
   end
 
   describe "#create_project" do
-    shared_examples_for :a_proper_project do
-      it "should create a valid project" do
-        expect(subject).to be_a Tmuxinator::Project
-        expect(subject.name).to eq name
-      end
+    before do
+      allow(Tmuxinator::Config).to receive_messages(directory: path)
     end
 
     let(:name) { "sample" }
     let(:custom_name) { nil }
     let(:cli_options) { {} }
     let(:path) { File.expand_path("../../../fixtures", __FILE__) }
+
+    shared_examples_for :a_proper_project do
+      it "should create a valid project" do
+        expect(subject).to be_a Tmuxinator::Project
+        expect(subject.name).to eq name
+      end
+    end
 
     context "when creating a traditional named project" do
       let(:params) do
@@ -644,11 +831,47 @@ describe Tmuxinator::Cli do
       end
       subject { described_class.new.create_project(params) }
 
-      before do
-        allow(Tmuxinator::Config).to receive_messages(directory: path)
+      it_should_behave_like :a_proper_project
+    end
+
+    context "attach option" do
+      describe "detach" do
+        it "sets force_detach to false when no attach argument is provided" do
+          project = Tmuxinator::Cli.new.create_project(name: name)
+          expect(project.force_detach).to eq(false)
+        end
+
+        it "sets force_detach to true when 'attach: false' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: false,
+                                                       name: name)
+          expect(project.force_detach).to eq(true)
+        end
+
+        it "sets force_detach to false when 'attach: true' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: true,
+                                                       name: name)
+          expect(project.force_detach).to eq(false)
+        end
       end
 
-      it_should_behave_like :a_proper_project
+      describe "attach" do
+        it "sets force_attach to false when no attach argument is provided" do
+          project = Tmuxinator::Cli.new.create_project(name: name)
+          expect(project.force_attach).to eq(false)
+        end
+
+        it "sets force_attach to true when 'attach: true' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: true,
+                                                       name: name)
+          expect(project.force_attach).to eq(true)
+        end
+
+        it "sets force_attach to false when 'attach: false' is provided" do
+          project = Tmuxinator::Cli.new.create_project(attach: false,
+                                                       name: name)
+          expect(project.force_attach).to eq(false)
+        end
+      end
     end
   end
 

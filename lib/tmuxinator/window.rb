@@ -129,7 +129,7 @@ module Tmuxinator
     end
 
     def tmux_select_first_pane
-      "#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.base_index}"
+      "#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.pane_base_index}"
     end
 
     def synchronize_before?

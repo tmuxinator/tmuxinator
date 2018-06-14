@@ -1,31 +1,34 @@
 require "spec_helper"
 
 describe Tmuxinator::Project do
-  let(:project) { FactoryGirl.build(:project) }
+  let(:project) { FactoryBot.build(:project) }
   let(:project_with_custom_name) do
-    FactoryGirl.build(:project_with_custom_name)
+    FactoryBot.build(:project_with_custom_name)
   end
   let(:project_with_number_as_name) do
-    FactoryGirl.build(:project_with_number_as_name)
+    FactoryBot.build(:project_with_number_as_name)
+  end
+  let(:project_with_emoji_as_name) do
+    FactoryBot.build(:project_with_emoji_as_name)
   end
   let(:project_with_literals_as_window_name) do
-    FactoryGirl.build(:project_with_literals_as_window_name)
+    FactoryBot.build(:project_with_literals_as_window_name)
   end
   let(:project_with_deprecations) do
-    FactoryGirl.build(:project_with_deprecations)
+    FactoryBot.build(:project_with_deprecations)
   end
   let(:project_with_force_attach) do
-    FactoryGirl.build(:project_with_force_attach)
+    FactoryBot.build(:project_with_force_attach)
   end
   let(:project_with_force_detach) do
-    FactoryGirl.build(:project_with_force_detach)
+    FactoryBot.build(:project_with_force_detach)
   end
 
-  let(:wemux_project) { FactoryGirl.build(:wemux_project) }
-  let(:noname_project) { FactoryGirl.build(:noname_project) }
-  let(:noroot_project) { FactoryGirl.build(:noroot_project) }
+  let(:wemux_project) { FactoryBot.build(:wemux_project) }
+  let(:noname_project) { FactoryBot.build(:noname_project) }
+  let(:noroot_project) { FactoryBot.build(:noroot_project) }
   let(:nameless_window_project) do
-    FactoryGirl.build(:nameless_window_project)
+    FactoryBot.build(:nameless_window_project)
   end
 
   it "should include Hooks" do
@@ -162,6 +165,14 @@ describe Tmuxinator::Project do
       it "will gracefully handle a name given as a number" do
         rendered = project_with_number_as_name
         expect(rendered.name.to_i).to_not equal 0
+      end
+    end
+
+    context "as emoji" do
+      it "will gracefully handle a name given as an emoji" do
+        rendered = project_with_emoji_as_name
+        # needs to allow for \\ present in shellescape'd project name
+        expect(rendered.name).to match(/^\\*🍩/)
       end
     end
 
@@ -599,7 +610,7 @@ describe Tmuxinator::Project do
 
   describe "#validate!" do
     it "should raise if there are no windows defined" do
-      nowindows_project = FactoryGirl.build(:nowindows_project)
+      nowindows_project = FactoryBot.build(:nowindows_project)
       expect do
         nowindows_project.validate!
       end.to raise_error RuntimeError, %r{should.include.some.windows}

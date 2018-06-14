@@ -1,3 +1,3 @@
 module Tmuxinator
-  VERSION = "0.10.0".freeze
+  VERSION = "0.11.3".freeze
 end

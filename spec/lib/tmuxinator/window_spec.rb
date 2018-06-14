@@ -60,6 +60,7 @@ describe Tmuxinator::Window do
       tmux: "tmux",
       name: "test",
       base_index: 1,
+      pane_base_index: 0,
       root: "/project/tmuxinator",
       root?: true
     )
@@ -367,6 +368,12 @@ describe Tmuxinator::Window do
       it "does not set name option" do
         expect(window.tmux_new_window_command).to eq full_command
       end
+    end
+  end
+
+  describe "#tmux_select_first_pane" do
+    it "targets the pane based on the configured pane_base_index" do
+      expect(window.tmux_select_first_pane).to eq("tmux select-pane -t test:1.0")
     end
   end
 end
