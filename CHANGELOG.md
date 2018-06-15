@@ -1,3 +1,8 @@
+## Unreleased
+- Remove confusing README section about the pane-base-index and
+  window-base-index options. These options can be set independently of one
+  another now that #542 and #543 are merged.
+
 ## 0.11.3
 ### Misc
 - replace j3rn's email with ethagnawl's in COC
