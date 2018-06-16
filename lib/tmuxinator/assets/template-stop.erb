@@ -3,9 +3,8 @@
 <%- if tmux_has_session? name -%>
   cd <%= root || "." %>
 
-  <%= tmux_kill_session_command %>
-  
   # Run on_project_stop command
   <%= hook_on_project_stop %>
 
+  <%= tmux_kill_session_command %>
 <%- end -%>
