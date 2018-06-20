@@ -1,0 +1,21 @@
+# ~/.tmuxinator/sample.yml
+# you can make as many tabs as you wish...
+
+defaults: &defaults
+  pre:
+    - echo "alias_is_working"
+
+name: sample_alias
+root: ~/test
+windows:
+  - editor:
+      <<: *defaults
+      layout: main-vertical
+      panes:
+        - vim
+        - #empty, will just run plain bash
+        - top
+        - pane_with_multiple_commands:
+            - ssh server
+            - echo "Hello"
+  - guard:
