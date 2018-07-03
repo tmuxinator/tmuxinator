@@ -1,10 +1,13 @@
-## Unreleased
+## 0.12.0
+### Bugfixes
+- Fix zsh completion when there are no projects
+- Run stop hook before killing the session
+
+### Misc
+- Allow YAML Anchors & Aliases as per [spec](http://yaml.org/spec/1.2/spec.html#id2765878)
 - Remove confusing README section about the pane-base-index and
   window-base-index options. These options can be set independently of one
   another now that #542 and #543 are merged.
-- Fix zsh completion when there are no projects
-- Allow YAML Anchors & Aliases as per [spec](http://yaml.org/spec/1.2/spec.html#id2765878)
-- Run stop hook before killing the session
 
 ## 0.11.3
 ### Misc
