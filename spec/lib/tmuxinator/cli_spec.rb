@@ -344,6 +344,22 @@ describe Tmuxinator::Cli do
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
       end
+
+      it "passes additional arguments through" do
+        ARGV.replace(["start", "--project-config=#{project_config}", "extra"])
+        expect(Tmuxinator::Config).
+          to(receive(:validate).
+             with(hash_including(args: array_including("extra"))))
+        capture_io { cli.start }
+      end
+
+      it "does not set the project name" do
+        ARGV.replace(["start", "--project-config=#{project_config}"])
+        expect(Tmuxinator::Config).
+          to(receive(:validate).
+             with(hash_including(name: nil)))
+        capture_io { cli.start }
+      end
     end
   end
 

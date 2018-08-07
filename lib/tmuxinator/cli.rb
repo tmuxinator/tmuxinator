@@ -226,6 +226,13 @@ module Tmuxinator
                                     desc: "Path to project config file"
 
     def start(name = nil, *args)
+      # project-config takes precedence over a named project in the case that
+      # both are provided.
+      if options["project-config"]
+        args.unshift name
+        name = nil
+      end
+
       params = {
         args: args,
         attach: options[:attach],
