@@ -1,3 +1,7 @@
+## Unreleased
+### Bugfixes
+- prevent optargs from being lost when using the project-config flag (#639)
+
 ## 0.12.0
 ### Bugfixes
 - Fix zsh completion when there are no projects
