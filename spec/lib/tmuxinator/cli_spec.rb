@@ -326,22 +326,40 @@ describe Tmuxinator::Cli do
 
   describe "#start(with project config flag)" do
     before do
+      allow(Tmuxinator::Config).to receive(:validate).and_call_original
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
     end
 
-    let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
-    let(:project_config) { File.join(fixtures_dir, "sample.yml") }
-
     context "no deprecations" do
-      it "doesn't start the project if given a bogus project config" do
+      let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
+      let(:project_config) { File.join(fixtures_dir, "sample.yml") }
+
+      it "starts the project if given a valid project config" do
+        ARGV.replace(["start", "--project-config=#{project_config}"])
+        expect(Kernel).to receive(:exec)
+        capture_io { cli.start }
+      end
+
+      it "does not start the project if given a bogus project config" do
         ARGV.replace(["start", "--project-config=bogus.yml"])
         expect(Kernel).not_to receive(:exec)
         expect { capture_io { cli.start } }.to raise_error(SystemExit)
       end
 
-      it "starts the project if given a project config" do
+      it "passes additional arguments through" do
+        ARGV.replace(["start", "--project-config=#{project_config}", "extra"])
+        expect(Tmuxinator::Config).
+          to(receive(:validate).
+             with(hash_including(args: array_including("extra"))))
+        capture_io { cli.start }
+      end
+
+      it "does not set the project name" do
         ARGV.replace(["start", "--project-config=#{project_config}"])
-        expect(Kernel).to receive(:exec)
+        expect(Tmuxinator::Config).
+          to(receive(:validate).
+             with(hash_including(name: nil)))
         capture_io { cli.start }
       end
     end
