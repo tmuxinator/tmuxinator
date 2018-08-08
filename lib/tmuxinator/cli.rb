@@ -229,7 +229,7 @@ module Tmuxinator
       # project-config takes precedence over a named project in the case that
       # both are provided.
       if options["project-config"]
-        args.unshift name
+        args.unshift name if name
         name = nil
       end
 
