@@ -263,20 +263,31 @@ module Tmuxinator
       render_project(create_project(attach: options[:attach]))
     end
 
+    desc "debug [PROJECT] [ARGS]", COMMANDS[:debug]
     method_option :attach, type: :boolean,
                            aliases: "-a",
                            desc: "Attach to tmux session after creation."
     method_option :name, aliases: "-n",
                          desc: "Give the session a different name"
-    desc "debug [PROJECT] [ARGS]", COMMANDS[:debug]
+    method_option "project-config", aliases: "-p",
+                                    desc: "Path to project config file"
 
-    def debug(name, *args)
+    def debug(name = nil, *args)
+      # project-config takes precedence over a named project in the case that
+      # both are provided.
+      if options["project-config"]
+        args.unshift name if name
+        name = nil
+      end
+
       params = {
-        name: name,
-        custom_name: options[:name],
+        args: args,
         attach: options[:attach],
-        args: args
+        custom_name: options[:name],
+        name: name,
+        project_config: options["project-config"]
       }
+
       project = create_project(params)
       say project.render
     end

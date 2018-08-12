@@ -593,6 +593,13 @@ describe Tmuxinator::Cli do
       ARGV.replace(["debug", "sample", "bar"])
       capture_io { cli.start }
     end
+
+    it "renders the project using a project config file flag" do
+      # TODO: none of these tests are actually verifying anything
+      ARGV.replace(["debug", "--project-config=qux"])
+      err, out = capture_io { cli.start }
+      # out contains string qux
+    end
   end
 
   describe "#delete" do
