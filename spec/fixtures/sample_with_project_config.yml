@@ -1,0 +1,4 @@
+# ~/.tmuxinator/sample-with-project-config.yml
+name: sample_with_project_config
+windows:
+  - editor: echo sample-with-project-config
