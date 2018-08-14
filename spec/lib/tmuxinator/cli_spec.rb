@@ -23,7 +23,13 @@ describe Tmuxinator::Cli do
       File.delete(local_project_path)
     end
   end
+
   let(:cli) { Tmuxinator::Cli }
+  let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
+  let(:project) { FactoryBot.build(:project) }
+  let(:project_config) do
+    File.join(fixtures_dir, "sample_with_project_config.yml")
+  end
 
   before do
     ARGV.clear
@@ -210,8 +216,6 @@ describe Tmuxinator::Cli do
     end
 
     context "no deprecations" do
-      let(:project) { FactoryBot.build(:project) }
-
       it "starts the project" do
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
@@ -262,8 +266,6 @@ describe Tmuxinator::Cli do
     end
 
     context "with project name" do
-      let(:project) { FactoryBot.build(:project) }
-
       it "stop the project" do
         expect(Kernel).to receive(:exec)
         out, err = capture_io { cli.start }
@@ -280,8 +282,6 @@ describe Tmuxinator::Cli do
         allow(Tmuxinator::Config).to receive_messages(version: 1.9)
         allow(Kernel).to receive(:exec)
       end
-
-      let(:project) { FactoryBot.build(:project) }
 
       it "starts the project" do
         expect(Kernel).to receive(:exec)
@@ -315,8 +315,6 @@ describe Tmuxinator::Cli do
     end
 
     context "no deprecations" do
-      let(:project) { FactoryBot.build(:project) }
-
       it "starts the project" do
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
@@ -324,7 +322,7 @@ describe Tmuxinator::Cli do
     end
   end
 
-  describe "#start(with project config flag)" do
+  describe "#start(with project config file)" do
     before do
       allow(Tmuxinator::Config).to receive(:validate).and_call_original
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
@@ -332,16 +330,13 @@ describe Tmuxinator::Cli do
     end
 
     context "no deprecations" do
-      let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
-      let(:project_config) { File.join(fixtures_dir, "sample.yml") }
-
-      it "starts the project if given a valid project config" do
+      it "starts the project if given a valid project config file" do
         ARGV.replace(["start", "--project-config=#{project_config}"])
         expect(Kernel).to receive(:exec)
         capture_io { cli.start }
       end
 
-      it "does not start the project if given a bogus project config" do
+      it "does not start the project if given a bogus project config file" do
         ARGV.replace(["start", "--project-config=bogus.yml"])
         expect(Kernel).not_to receive(:exec)
         expect { capture_io { cli.start } }.to raise_error(SystemExit)
@@ -556,42 +551,60 @@ describe Tmuxinator::Cli do
   end
 
   describe "#debug" do
-    let(:project) { FactoryBot.build(:project) }
-    let(:project_with_force_attach) do
-      FactoryBot.build(:project_with_force_attach)
-    end
-    let(:project_with_force_detach) do
-      FactoryBot.build(:project_with_force_detach)
+    context "named project" do
+      let(:project_with_force_attach) do
+        FactoryBot.build(:project_with_force_attach)
+      end
+      let(:project_with_force_detach) do
+        FactoryBot.build(:project_with_force_detach)
+      end
+
+      before do
+        allow(Tmuxinator::Config).to receive_messages(validate: project)
+        expect(project).to receive(:render)
+      end
+
+      it "renders the project" do
+        ARGV.replace(["debug", "foo"])
+        capture_io { cli.start }
+      end
+
+      it "force attach renders the project with attach code" do
+        ARGV.replace(["debug", "--attach=true", "sample"])
+        capture_io { cli.start }
+        # Currently no project is rendered at all,
+        #   because the project file is not found
+        # expect(out).to include "attach-session"
+      end
+
+      it "force detach renders the project without attach code" do
+        ARGV.replace(["debug", "--attach=false", "sample"])
+        capture_io { cli.start }
+        # Currently no project is rendered at all
+        # expect(out).to_not include "attach-session"
+      end
+
+      it "renders the project with custom session" do
+        ARGV.replace(["debug", "sample", "bar"])
+        capture_io { cli.start }
+      end
     end
 
-    before do
-      allow(Tmuxinator::Config).to receive_messages(validate: project)
-      expect(project).to receive(:render)
-    end
+    context "project config file" do
+      before do
+        allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+        expect(Tmuxinator::Config).to receive(:validate).and_call_original
+      end
 
-    it "renders the project" do
-      ARGV.replace(["debug", "foo"])
-      capture_io { cli.start }
-    end
+      it "renders the project if given a valid project config file" do
+        ARGV.replace(["debug", "--project-config=#{project_config}"])
+        expect { cli.start }.to output(/sample_with_project_config/).to_stdout
+      end
 
-    it "force attach renders the project with attach code" do
-      ARGV.replace(["debug", "--attach=true", "sample"])
-      capture_io { cli.start }
-      # Currently no project is rendered at all,
-      #   because the project file is not found
-      # expect(out).to include "attach-session"
-    end
-
-    it "force detach renders the project without attach code" do
-      ARGV.replace(["debug", "--attach=false", "sample"])
-      capture_io { cli.start }
-      # Currently no project is rendered at all
-      # expect(out).to_not include "attach-session"
-    end
-
-    it "renders the project with custom session" do
-      ARGV.replace(["debug", "sample", "bar"])
-      capture_io { cli.start }
+      it "does not render the project if given a bogus project config file" do
+        ARGV.replace(["start", "--project-config=bogus.yml"])
+        expect { capture_io { cli.start } }.to raise_error(SystemExit)
+      end
     end
   end
 
