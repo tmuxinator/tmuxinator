@@ -4,7 +4,15 @@
 
 Create and manage tmux sessions easily.
 
-![Screenshot](https://f.cloud.github.com/assets/141213/916084/065fef7c-fe82-11e2-9c23-a9622c7d83c3.png)
+<table>
+    <tbody>
+        <tr align="center">
+            <td>
+                <img src="https://user-images.githubusercontent.com/289949/44366875-1a6cee00-a49c-11e8-9322-76e70df0c88b.gif" alt="Screenshot" width="80%" />
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 ## Installation
 
@@ -173,7 +181,7 @@ windows:
 
 The layout setting gets handed down to tmux directly, so you can choose from
 one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6)
-or [specify your own](http://stackoverflow.com/a/9976282/183537). 
+or [specify your own](http://stackoverflow.com/a/9976282/183537).
 
 **Please note the indentation here is deliberate. YAML's indentation rules can be confusing, so if your config isn't working as expected, please check the indentation.** For a more detailed explanation of _why_ YAML behaves this way, see [this](https://stackoverflow.com/questions/50594758/why-isnt-two-spaced-yaml-parsed-like-four-spaced-yaml/50600253#50600253) Stack Overflow question.
 
