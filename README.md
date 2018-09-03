@@ -205,7 +205,7 @@ attach: false
 If you want to attach to tmux in a non-standard way (e.g. for a program that makes use of tmux control mode like iTerm2), you can run arbitrary commands by using a project hook:
 
 ```yaml
-on_project_start: tmux -CC attach
+on_project_exit: tmux -CC attach
 ```
 
 ## Passing directly to send-keys
