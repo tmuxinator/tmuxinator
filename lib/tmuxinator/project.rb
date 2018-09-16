@@ -86,6 +86,7 @@ module Tmuxinator
 
       @force_attach = options[:force_attach]
       @force_detach = options[:force_detach]
+      @current_session = options[:current_session]
 
       raise "Cannot force_attach and force_detach at the same time" \
         if @force_attach && @force_detach
@@ -106,6 +107,10 @@ module Tmuxinator
       Erubis::Eruby.new(content).result(bndg)
     end
 
+    def in_current_session
+      @current_session ? @current_session : yaml["current_session"]
+    end
+
     def windows
       windows_yml = yaml["tabs"] || yaml["windows"]
 
@@ -120,6 +125,12 @@ module Tmuxinator
     end
 
     def name
+      name = custom_name || yaml["project_name"] || yaml["name"]
+      name = blank?(name) ? nil : name.to_s.shellescape
+      in_current_session ? "" : name
+    end
+
+    def full_name
       name = custom_name || yaml["project_name"] || yaml["name"]
       blank?(name) ? nil : name.to_s.shellescape
     end
@@ -208,7 +219,12 @@ module Tmuxinator
     end
 
     def base_index
-      get_base_index.to_i
+      base = 0
+      if in_current_session
+        # Get the last window index + 1
+        base = 1 + `tmux list-windows  | awk '{print $1}'`.split.last.to_i
+      end
+      base + get_base_index.to_i
     end
 
     def pane_base_index
