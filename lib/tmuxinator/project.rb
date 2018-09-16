@@ -87,11 +87,21 @@ module Tmuxinator
 
       @force_attach = options[:force_attach]
       @force_detach = options[:force_detach]
+      @append = options[:append]
 
-      raise "Cannot force_attach and force_detach at the same time" \
-        if @force_attach && @force_detach
+      validate_options
 
       extend Tmuxinator::WemuxSupport if wemux?
+    end
+
+    def validate_options
+      if @force_attach && @force_detach
+        raise "Cannot force_attach and force_detach at the same time"
+      end
+
+      if append? && !tmux_has_session?(name)
+        raise "Cannot append to a session that does not exist"
+      end
     end
 
     def render
@@ -120,9 +130,23 @@ module Tmuxinator
       blank?(root) ? nil : File.expand_path(root).shellescape
     end
 
+    def current_session_name
+      `[[ -n "${TMUX+set}" ]] && tmux display-message -p "#S"`.strip
+    end
+
     def name
-      name = custom_name || yaml["project_name"] || yaml["name"]
+      name =
+        if append?
+          current_session_name
+        else
+          custom_name || yaml["project_name"] || yaml["name"]
+        end
+
       blank?(name) ? nil : name.to_s.shellescape
+    end
+
+    def append?
+      @append
     end
 
     def pre
@@ -167,6 +191,8 @@ module Tmuxinator
     end
 
     def tmux_has_session?(name)
+      return false unless name
+
       # Redirect stderr to /dev/null in order to prevent "failed to connect
       # to server: Connection refused" error message and non-zero exit status
       # if no tmux sessions exist.
@@ -208,7 +234,13 @@ module Tmuxinator
       end
     end
 
+    def last_window_index
+      `tmux list-windows -F '#I'`.split.last.to_i
+    end
+
     def base_index
+      return last_window_index + 1 if append?
+
       get_base_index.to_i
     end
 
@@ -241,7 +273,7 @@ module Tmuxinator
     end
 
     def window(index)
-      "#{name}:#{index}"
+      append? ? ":#{index}" : "#{name}:#{index}"
     end
 
     def send_pane_command(cmd, window_index, _pane_index)
@@ -329,6 +361,8 @@ module Tmuxinator
     end
 
     def tmux_new_session_command
+      return if append?
+
       window = windows.first.tmux_window_name_option
       "#{tmux} new-session -d -s #{name} #{window}"
     end

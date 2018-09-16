@@ -115,4 +115,12 @@ FactoryBot.define do
 
     initialize_with { Tmuxinator::Project.load(file) }
   end
+
+  factory :project_with_append, class: Tmuxinator::Project do
+    transient do
+      file { "spec/fixtures/sample.yml" }
+    end
+
+    initialize_with { Tmuxinator::Project.load(file, append: true) }
+  end
 end

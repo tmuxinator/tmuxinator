@@ -1,17 +1,19 @@
 #!<%= ENV["SHELL"] || "/bin/bash" %>
 
-# Clear rbenv variables before starting tmux
-unset RBENV_VERSION
-unset RBENV_DIR
+<%- if !append? -%>
+  # Clear rbenv variables before starting tmux
+  unset RBENV_VERSION
+  unset RBENV_DIR
 
-<%= tmux %> start-server;
+  <%= tmux %> start-server;
+<%- end -%>
 
 cd <%= root || "." %>
 
 # Run on_project_start command.
 <%= hook_on_project_start %>
 
-<%- if !tmux_has_session? name -%>
+<%- if append? || !tmux_has_session?(name) -%>
 
   # Run pre command.
   <%= pre %>
@@ -98,7 +100,7 @@ cd <%= root || "." %>
   <%= hook_on_project_restart %>
 <%- end -%>
 
-<%- if attach? -%>
+<%- if attach? && !append? -%>
   if [ -z "$TMUX" ]; then
     <%= tmux %> -u attach-session -t <%= name %>
   else
