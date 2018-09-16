@@ -1,4 +1,6 @@
 ## Unreleased
+### Features
+- Add support for tmuxinator start --append
 
 ## 3.3.3
 ### Features
