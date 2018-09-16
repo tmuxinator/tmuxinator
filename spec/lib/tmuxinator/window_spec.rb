@@ -50,7 +50,8 @@ describe Tmuxinator::Window do
         tmux: "tmux",
         root: root,
         root?: root?,
-        base_index: 1
+        base_index: 1,
+        in_current_session: false
       )
     end
 
@@ -64,7 +65,8 @@ describe Tmuxinator::Window do
       base_index: 1,
       pane_base_index: 0,
       root: "/project/tmuxinator",
-      root?: true
+      root?: true,
+      in_current_session: false
     )
   end
 
