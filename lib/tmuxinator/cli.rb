@@ -279,9 +279,9 @@ module Tmuxinator
     method_option "project-config", aliases: "-p",
                                     desc: "Path to project config file"
     def append(name = nil, *args)
-      has_tmux_session = ENV['TMUX'] ? true : false
+      has_tmux_session = ENV["TMUX"] ? true : false
       if !has_tmux_session
-        puts 'Creating new session...'
+        puts "Creating new session..."
       end
       params = {
         args: args,
@@ -452,19 +452,23 @@ module Tmuxinator
     # - ::start has a different purpose from #start and hence a different
     # signature
     def self.bootstrap(args = [])
-      options = Tmuxinator::Config.options
       name = args[0] || nil
       if args.empty? && Tmuxinator::Config.local?
         Tmuxinator::Cli.new.local
       elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
             Tmuxinator::Config.exists?(name: name)
-        if options && options["append"] == true
-          Tmuxinator::Cli.new.append(name, *args.drop(1))
-        else
-          Tmuxinator::Cli.new.start(name, *args.drop(1))
-        end
+        quick_start(name, *args.drop(1))
       else
         Tmuxinator::Cli.start(args)
+      end
+    end
+
+    def self.quick_start(name, args = [])
+      options = Tmuxinator::Config.options
+      if options && options["append"] == true
+        Tmuxinator::Cli.new.append(name, args)
+      else
+        Tmuxinator::Cli.new.start(name, args)
       end
     end
   end

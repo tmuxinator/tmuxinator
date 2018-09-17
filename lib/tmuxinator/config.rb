@@ -60,9 +60,9 @@ module Tmuxinator
         "#{directory}/default.yml"
       end
 
-      def options 
-        unless exists?(path: options_file) 
-          return 
+      def options
+        unless exists?(path: options_file)
+          return
         end
         YAML.safe_load(File.read(options_file), [], [], true)
       end
