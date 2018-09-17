@@ -61,7 +61,7 @@ module Tmuxinator
       end
 
       def options
-        unless exists?(path: options_file)
+        unless File.file?(options_file)
           return
         end
         YAML.safe_load(File.read(options_file), [], [], true)
