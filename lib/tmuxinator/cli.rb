@@ -453,23 +453,45 @@ module Tmuxinator
     # signature
     def self.bootstrap(args = [])
       name = args[0] || nil
-      if args.empty? && Tmuxinator::Config.local?
-        Tmuxinator::Cli.new.local
-      elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
-            Tmuxinator::Config.exists?(name: name)
-        quick_start(name, *args.drop(1))
+
+      if start_local?(args)
+        start_local
+      elsif start_named?(name)
+        start_named(name, args.drop(1))
       else
-        Tmuxinator::Cli.start(args)
+        start_default(args)
       end
     end
 
-    def self.quick_start(name, args = [])
+    def self.start_local?(args)
+      args.empty? && Tmuxinator::Config.local?
+    end
+
+    def self.start_local
+      Tmuxinator::Cli.new.local
+    end
+
+    def self.start_named?(name)
+      name &&
+        !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
+        Tmuxinator::Config.exists?(name: name)
+    end
+
+    def self.start_append?
       options = Tmuxinator::Config.options
-      if options && options["append"] == true
+      options && options["append"] == true
+    end
+
+    def self.start_named(name, args)
+      if start_append?
         Tmuxinator::Cli.new.append(name, args)
       else
         Tmuxinator::Cli.new.start(name, args)
       end
+    end
+
+    def self.start_default(args)
+      Tmuxinator::Cli.start(args)
     end
   end
 end
