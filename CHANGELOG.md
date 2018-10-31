@@ -1,6 +1,7 @@
-## Unreleased
+## 0.13.0
 ### Bugfixes
 - prevent optargs from being lost when using the project-config flag (#639)
+- Add support for tmux 2.8 (#653)
 
 ## 0.12.0
 ### Bugfixes
