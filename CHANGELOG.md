@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- quiet deprecation warnings in test output (#619)
+
 ## 0.13.0
 ### Bugfixes
 - prevent optargs from being lost when using the project-config flag (#639)
