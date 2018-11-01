@@ -1,6 +1,8 @@
 ## Unreleased
 ### Misc
 - quiet deprecation warnings in test output (#619)
+- reword "Project Configuration Location" section of README to reflect current
+behavior (#621)
 
 ## 0.13.0
 ### Bugfixes
