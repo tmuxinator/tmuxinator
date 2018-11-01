@@ -7,32 +7,37 @@ module Tmuxinator
 
     RBENVRVM_DEP_MSG = <<-M
     DEPRECATION: rbenv/rvm-specific options have been replaced by the
-    pre_tab option and will not be supported in 0.8.0.
+    `pre_tab` option and will not be supported in 0.8.0.
     M
     TABS_DEP_MSG = <<-M
-    DEPRECATION: The tabs option has been replaced by the windows option
+    DEPRECATION: The tabs option has been replaced by the `windows` option
     and will not be supported in 0.8.0.
     M
     CLIARGS_DEP_MSG = <<-M
-    DEPRECATION: The cli_args option has been replaced by the tmux_options
+    DEPRECATION: The `cli_args` option has been replaced by the `tmux_options`
     option and will not be supported in 0.8.0.
     M
     SYNC_DEP_MSG = <<-M
-    DEPRECATION: The synchronize option's current default behaviour is to
+    DEPRECATION: The `synchronize` option's current default behaviour is to
     enable pane synchronization before running commands. In a future release,
     the default synchronization option will be `after`, i.e. synchronization of
     panes will occur after the commands described in each of the panes
     have run. At that time, the current behavior will need to be explicitly
-    enabled, using the `synchronize: before` option.  To use this behaviour
+    enabled, using the `synchronize: before` option. To use this behaviour
     now, use the 'synchronize: after' option.
     M
     PRE_DEP_MSG = <<-M
-    DEPRECATION: the pre option has been replaced by the 'on_start' project hook and will
-    not be supported anymore. Edit your project .yml accordingly.
+    DEPRECATION: The `pre` option has been replaced by project hooks (`on_project_start` and 
+    `on_project_restart`) and will be removed in a future release.
     M
     POST_DEP_MSG = <<-M
-    DEPRECATION: the post option has been replaced by the 'on_detach' project hook and will
-    not be supported anymore. Edit your project .yml accordingly.
+    DEPRECATION: The `post` option has been replaced by project hooks (`on_project_stop` and 
+    `on_project_exit`) and will be removed in a future release.
+    M
+    TMUX_MASTER_DEP_MSG = <<-M
+    DEPRECATION: You are running tmuxinator with an unsupported version of tmux.
+    Please consider using a supported version:
+    (#{Tmuxinator::SUPPORTED_TMUX_VERSIONS.join(', ')})
     M
 
     attr_reader :yaml
@@ -49,7 +54,7 @@ module Tmuxinator
         @args = args
 
         content = Erubis::Eruby.new(raw_content).result(binding)
-        YAML.load(content)
+        YAML.safe_load(content, [], [], true)
       rescue SyntaxError, StandardError => error
         raise "Failed to parse config file: #{error.message}"
       end
@@ -179,7 +184,7 @@ module Tmuxinator
       # Please see issue #564.
       unescaped_name = name.shellsplit.join("")
 
-      !!(sessions =~ /^#{unescaped_name}:/)
+      !(sessions !~ /^#{unescaped_name}:/)
     end
 
     def socket
@@ -271,7 +276,8 @@ module Tmuxinator
         cli_args?,
         legacy_synchronize?,
         pre?,
-        post?
+        post?,
+        unsupported_version?
       ]
     end
 
@@ -282,7 +288,8 @@ module Tmuxinator
         CLIARGS_DEP_MSG,
         SYNC_DEP_MSG,
         PRE_DEP_MSG,
-        POST_DEP_MSG
+        POST_DEP_MSG,
+        TMUX_MASTER_DEP_MSG
       ]
     end
 
@@ -312,6 +319,10 @@ module Tmuxinator
 
     def post?
       yaml["post"]
+    end
+
+    def unsupported_version?
+      !Tmuxinator::SUPPORTED_TMUX_VERSIONS.include?(Tmuxinator::Config.version)
     end
 
     def get_pane_base_index

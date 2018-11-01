@@ -1,4 +1,5 @@
 # coding: utf-8
+
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "tmuxinator/version"
@@ -45,11 +46,14 @@ Gem::Specification.new do |s|
   s.add_development_dependency "activesupport", "< 5.0.0" # Please see issue #432
   s.add_development_dependency "awesome_print", "~> 1.2"
   s.add_development_dependency "bundler", "~> 1.3"
-  s.add_development_dependency "coveralls", "~> 0.7"
-  s.add_development_dependency "factory_girl", "~> 4.5"
+  s.add_development_dependency "coveralls", "~> 0.8"
+  s.add_development_dependency "factory_bot", "~> 4.8"
   s.add_development_dependency "pry", "~> 0.10"
   s.add_development_dependency "rake", "~> 10.4"
   s.add_development_dependency "rspec", "~> 3.3"
-  s.add_development_dependency "rubocop", "~> 0.46.0"
-  s.add_development_dependency "simplecov", "~> 0.11.0"
+  s.add_development_dependency "rubocop", "~> 0.48.1"
+  s.add_development_dependency "simplecov", "~> 0.16"
+
+  # quiet "Gem.gunzip is deprecated" deprecation warning caused by rubocop
+  s.add_development_dependency "unicode-display_width", "~> 1.3"
 end

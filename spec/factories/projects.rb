@@ -1,7 +1,8 @@
 def yaml_load(file)
-  YAML.load(File.read(File.expand_path(file)))
+  YAML.safe_load(File.read(File.expand_path(file)))
 end
-FactoryGirl.define do
+
+FactoryBot.define do
   factory :project, class: Tmuxinator::Project do
     transient do
       file { yaml_load("spec/fixtures/sample.yml") }
@@ -103,5 +104,13 @@ FactoryGirl.define do
     end
 
     initialize_with { Tmuxinator::Project.new(file) }
+  end
+
+  factory :project_with_alias, class: Tmuxinator::Project do
+    transient do
+      file { "spec/fixtures/sample_alias.yml" }
+    end
+
+    initialize_with { Tmuxinator::Project.load(file) }
   end
 end

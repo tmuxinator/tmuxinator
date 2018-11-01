@@ -1,5 +1,61 @@
 ## Unreleased
+### Misc
+- quiet deprecation warnings in test output (#619)
+
+## 0.13.0
+### Bugfixes
+- prevent optargs from being lost when using the project-config flag (#639)
+- Add support for tmux 2.8 (#653)
+
+## 0.12.0
+### Bugfixes
+- Fix zsh completion when there are no projects
+- Run stop hook before killing the session
+
+### Misc
+- Allow YAML Anchors & Aliases as per [spec](http://yaml.org/spec/1.2/spec.html#id2765878)
+- Remove confusing README section about the pane-base-index and
+  window-base-index options. These options can be set independently of one
+  another now that #542 and #543 are merged.
+
+## 0.11.3
+### Misc
+- replace j3rn's email with ethagnawl's in COC
+- use correct paths in generated config file comment (#440)
+
+### Bugfixes
+- fix "wrong namespace" RuboCop warnings (#620)
+- fix [#431](https://github.com/tmuxinator/tmuxinator/issues/431), where Thor-based commands (e.g. "-v", "help") were failing
+
+## 0.11.2
+### Bugfixes
+- Fix [#555](https://github.com/tmuxinator/tmuxinator/issues/555), restoring
+  `on_project_exit` hook behaviour (same as deprecated `post`)
+
+## 0.11.1
+### Misc
+- Add support for tmux 2.7 (#611)
+- Fix load order when multiple versions of tmuxinator are installed (#603)
+
+## 0.11.0
+### Misc
+- Make Config#xdg comment reference correct XDG variable and include example of
+  degenerate case (#597)
+- Introduce factory_bot, to replace factory_girl, which was renamed
+  recently.
+- Add Ruby 2.5 to the TravisCI test matrix and bump patch level of existing Rubies
+  (2.2, 2.3, 2.4)
+### New Features
+- Add optional `--project-config=...` parameter to `tmuxinator start` (#595)
+
+## 0.10.1
 - Handle emojis in project names (#564)
+- Fix remaining sites where the base-index option (for windows) was incorrectly
+  used in place of the pane-base-index option.
+- Treat 'tmux master' as an arbitrarily high version and display a deprecation
+  warning for unsupported tmux versions (#524, #570)
+- Add tmux 2.4, 2.5, and 2.6 to the TravisCI test matrix
+- Updates `rubocop` to resolve security vulnerability
 
 ## 0.10.0
 - Fix a bug causing the user's global pane-base-index setting not to be

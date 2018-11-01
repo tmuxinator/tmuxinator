@@ -3,6 +3,8 @@ module Tmuxinator
     LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
     NO_LOCAL_FILE_MSG =
       "Project file at ./.tmuxinator.yml doesn't exist.".freeze
+    NO_PROJECT_FOUND_MSG = "Project could not be found.".freeze
+    TMUX_MASTER_VERSION = Float::INFINITY
 
     class << self
       # The directory (created if needed) in which to store new projects
@@ -19,7 +21,9 @@ module Tmuxinator
         ENV["HOME"] + "/.tmuxinator"
       end
 
-      # Is ~/.config/tmuxinator unless $XDG_CONFIG_DIR is set
+      # ~/.config/tmuxinator unless $XDG_CONFIG_HOME has been configured to use
+      # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
+      # return value will be ~/my-config/tmuxinator)
       def xdg
         XDG["CONFIG"].to_s + "/tmuxinator"
       end
@@ -41,19 +45,29 @@ module Tmuxinator
       end
 
       def default?
-        exists?("default")
+        exists?(name: "default")
       end
 
       def version
-        `tmux -V`.split(" ")[1].to_f if Tmuxinator::Doctor.installed?
+        if Tmuxinator::Doctor.installed?
+          tmux_version = `tmux -V`.split(" ")[1]
+
+          if tmux_version == "master"
+            TMUX_MASTER_VERSION
+          else
+            tmux_version.to_f
+          end
+        end
       end
 
       def default_path_option
         version && version < 1.8 ? "default-path" : "-c"
       end
 
-      def exists?(name)
-        File.exist?(project(name))
+      def exists?(name: nil, path: nil)
+        return File.exist?(path) if path
+        return File.exist?(project(name)) if name
+        false
       end
 
       def local?
@@ -112,20 +126,43 @@ module Tmuxinator
         end
       end
 
+      def valid_project_config?(project_config)
+        return false unless project_config
+        unless exists?(path: project_config)
+          raise "Project config (#{project_config}) doesn't exist."
+        end
+        true
+      end
+
+      def valid_local_project?(name)
+        return false if name
+        raise NO_LOCAL_FILE_MSG unless local?
+        true
+      end
+
+      def valid_standard_project?(name)
+        return false unless name
+        raise "Project #{name} doesn't exist." unless exists?(name: name)
+        true
+      end
+
       def validate(options = {})
         name = options[:name]
         options[:force_attach] ||= false
         options[:force_detach] ||= false
-
-        project_file = if name.nil?
-                         raise NO_LOCAL_FILE_MSG \
-                           unless Tmuxinator::Config.local?
+        project_config = options.fetch(:project_config) { false }
+        project_file = if valid_project_config?(project_config)
+                         project_config
+                       elsif valid_local_project?(name)
                          local_project
+                       elsif valid_standard_project?(name)
+                         project(name)
                        else
-                         raise "Project #{name} doesn't exist." \
-                           unless Tmuxinator::Config.exists?(name)
-                         Tmuxinator::Config.project(name)
+                         # This branch should never be reached,
+                         # but just in case ...
+                         raise NO_PROJECT_FOUND_MSG
                        end
+
         Tmuxinator::Project.load(project_file, options).validate!
       end
 

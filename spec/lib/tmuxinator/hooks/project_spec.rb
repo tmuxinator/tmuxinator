@@ -1,7 +1,7 @@
 require "spec_helper"
 
 shared_examples_for "a project hook" do
-  let(:project) { FactoryGirl.build(:project) }
+  let(:project) { FactoryBot.build(:project) }
 
   it "calls Hooks.commands_from" do
     expect(Tmuxinator::Hooks).to receive(:commands_from).
@@ -33,7 +33,7 @@ shared_examples_for "a project hook" do
 end
 
 describe Tmuxinator::Hooks::Project do
-  let(:project) { FactoryGirl.build(:project) }
+  let(:project) { FactoryBot.build(:project) }
 
   describe "#hook_on_project_start" do
     it_should_behave_like "a project hook" do
