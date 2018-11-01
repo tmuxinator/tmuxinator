@@ -339,19 +339,16 @@ tmuxinator version
 
 ## Project Configuration Location
 
-Using environment variables, it's possible to house project configuration files
-in non-standard directories. (See [PR #511](https://github.com/tmuxinator/tmuxinator/pull/511).)
+Using environment variables, it's possible to define which directory 
+tmuxinator will use when creating or searching for project config 
+files. (See [PR #511](https://github.com/tmuxinator/tmuxinator/pull/511).)
 
-Tmuxinator will attempt to use the following environment variables (in this
-order) when creating or searching for existing project configuration files:
+Tmuxinator will attempt to use the following locations (in this order) when 
+creating or searching for existing project configuration files:
 
 - `$TMUXINATOR_CONFIG`
 - `$XDG_CONFIG_HOME/tmuxinator`
 - `~/.tmuxinator`
-
-This behavior is opt-in. If you do nothing, Tmuxinator will continue to use
-`~/.tmuxinator` when searching for existing project configuration files or
-creating new project configuration files.
 
 ## FAQ
 
