@@ -27,11 +27,11 @@ module Tmuxinator
     now, use the 'synchronize: after' option.
     M
     PRE_DEP_MSG = <<-M
-    DEPRECATION: The `pre` option has been replaced by project hooks (`on_project_start` and 
+    DEPRECATION: The `pre` option has been replaced by project hooks (`on_project_start` and
     `on_project_restart`) and will be removed in a future release.
     M
     POST_DEP_MSG = <<-M
-    DEPRECATION: The `post` option has been replaced by project hooks (`on_project_stop` and 
+    DEPRECATION: The `post` option has been replaced by project hooks (`on_project_stop` and
     `on_project_exit`) and will be removed in a future release.
     M
     TMUX_MASTER_DEP_MSG = <<-M
