@@ -60,7 +60,9 @@ cd <%= root || "." %>
   <%= pane.tmux_pre_command %>
         <% end %>
         
-        <% if pane.title %><%= tmux  %> select-pane -t <%= pane.tmux_window_and_pane_target %> -T <%= pane.title %><% end %>
+        <% if pane.title %>
+          <%= tmux  %> select-pane -t <%= pane.tmux_window_and_pane_target %> -T <%= pane.title %>
+        <% end %>
 
         <% pane.commands.each do |command| %>
   <%= pane.tmux_main_command(command) %>
