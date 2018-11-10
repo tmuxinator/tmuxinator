@@ -281,7 +281,7 @@ module Tmuxinator
     def append(name = nil, *args)
       has_tmux_session = ENV["TMUX"] ? true : false
       if !has_tmux_session
-        puts "Creating new session..."
+        say "Creating session '#{name}'"
       end
       params = {
         args: args,
