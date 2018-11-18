@@ -272,6 +272,8 @@ module Tmuxinator
     map "." => :local
 
     def local
+      show_version_warning unless Tmuxinator::TmuxVersion.supported?
+
       render_project(create_project(attach: options[:attach]))
     end
 

@@ -310,13 +310,13 @@ describe Tmuxinator::Cli do
   end
 
   describe "#local" do
-    shared_examples_for :local_project do
-      before do
-        allow(Tmuxinator::Config).to receive_messages(validate: project)
-        allow(Tmuxinator::Config).to receive_messages(version: 1.9)
-        allow(Kernel).to receive(:exec)
-      end
+    before do
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
+    end
 
+    shared_examples_for :local_project do
       it "starts the project" do
         expect(Kernel).to receive(:exec)
         out, err = capture_io { cli.start }
@@ -338,6 +338,8 @@ describe Tmuxinator::Cli do
       end
       it_should_behave_like :local_project
     end
+
+    include_examples :unsupported_version_message, :local
   end
 
   describe "#start(custom_name)" do
