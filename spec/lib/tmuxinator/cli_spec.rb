@@ -262,9 +262,9 @@ describe Tmuxinator::Cli do
         allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(false)
       end
 
-      it "prints the deprecations" do
+      it "prints the warning" do
         out, _err = capture_io { cli.start }
-        expect(out).to include "DEPRECATION"
+        expect(out).to include "WARNING"
       end
     end
   end

@@ -17,7 +17,7 @@ module Tmuxinator
       2.8
     ].freeze
     UNSUPPORTED_VERSION_MSG = <<-MSG.freeze
-    DEPRECATION: You are running tmuxinator with an unsupported version of tmux.
+    WARNING: You are running tmuxinator with an unsupported version of tmux.
     Please consider using a supported version:
     (#{SUPPORTED_TMUX_VERSIONS.join(', ')})
     MSG
