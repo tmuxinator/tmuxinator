@@ -249,6 +249,7 @@ module Tmuxinator
       }
 
       show_version_warning unless Tmuxinator::TmuxVersion.supported?
+
       project = create_project(params)
       render_project(project)
     end
@@ -260,6 +261,9 @@ module Tmuxinator
       params = {
         name: name
       }
+
+      show_version_warning unless Tmuxinator::TmuxVersion.supported?
+
       project = create_project(params)
       kill_project(project)
     end

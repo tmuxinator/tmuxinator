@@ -207,6 +207,36 @@ describe Tmuxinator::Cli do
     end
   end
 
+  shared_examples_for :unsupported_version_message do |*args|
+    before do
+      ARGV.replace([*args])
+    end
+
+    context "unsupported version" do
+      before do
+        allow($stdin).to receive_messages(getc: "y")
+        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(false)
+      end
+
+      it "prints the warning" do
+        out, _err = capture_io { cli.start }
+        expect(out).to include "WARNING"
+      end
+    end
+
+    context "supported version" do
+      before do
+        allow($stdin).to receive_messages(getc: "y")
+        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(true)
+      end
+
+      it "does not print the warning" do
+        out, _err = capture_io { cli.start }
+        expect(out).not_to include "WARNING"
+      end
+    end
+  end
+
   describe "#start" do
     before do
       ARGV.replace(["start", "foo"])
@@ -256,29 +286,7 @@ describe Tmuxinator::Cli do
       end
     end
 
-    context "unsupported version" do
-      before do
-        allow($stdin).to receive_messages(getc: "y")
-        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(false)
-      end
-
-      it "prints the warning" do
-        out, _err = capture_io { cli.start }
-        expect(out).to include "WARNING"
-      end
-    end
-
-    context "supported version" do
-      before do
-        allow($stdin).to receive_messages(getc: "y")
-        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(true)
-      end
-
-      it "does not print the warning" do
-        out, _err = capture_io { cli.start }
-        expect(out).not_to include "WARNING"
-      end
-    end
+    include_examples :unsupported_version_message, :start, :foo
   end
 
   describe "#stop" do
@@ -297,6 +305,8 @@ describe Tmuxinator::Cli do
         expect(out).to eq ""
       end
     end
+
+    include_examples :unsupported_version_message, :stop, :foo
   end
 
   describe "#local" do
