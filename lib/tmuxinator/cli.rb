@@ -211,7 +211,7 @@ module Tmuxinator
       end
 
       def show_version_warning
-        say Tmuxinator::TmuxVersion::TMUX_MASTER_DEP_MSG, :red
+        say Tmuxinator::TmuxVersion::UNSUPPORTED_VERSION_MSG, :red
         say
         print "Press ENTER to continue."
         STDIN.getc
@@ -248,7 +248,7 @@ module Tmuxinator
         project_config: options["project-config"]
       }
 
-      show_version_warning if Tmuxinator::TmuxVersion.unsupported_version?
+      show_version_warning unless Tmuxinator::TmuxVersion.supported?
       project = create_project(params)
       render_project(project)
     end

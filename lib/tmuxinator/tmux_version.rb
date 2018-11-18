@@ -16,14 +16,14 @@ module Tmuxinator
       2.7,
       2.8
     ].freeze
-    TMUX_MASTER_DEP_MSG = <<-MSG.freeze
+    UNSUPPORTED_VERSION_MSG = <<-MSG.freeze
     DEPRECATION: You are running tmuxinator with an unsupported version of tmux.
     Please consider using a supported version:
-    (#{Tmuxinator::TmuxVersion::SUPPORTED_TMUX_VERSIONS.join(', ')})
+    (#{SUPPORTED_TMUX_VERSIONS.join(', ')})
     MSG
 
-    def self.unsupported_version?
-      !SUPPORTED_TMUX_VERSIONS.include?(Tmuxinator::Config.version)
+    def self.supported?(version = Tmuxinator::Config.version)
+      SUPPORTED_TMUX_VERSIONS.include?(version)
     end
   end
 end
