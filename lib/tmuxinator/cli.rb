@@ -210,6 +210,13 @@ module Tmuxinator
         Kernel.exec(project.render)
       end
 
+      def show_version_warning
+        say Tmuxinator::TmuxVersion::TMUX_MASTER_DEP_MSG, :red
+        say
+        print "Press ENTER to continue."
+        STDIN.getc
+      end
+
       def kill_project(project)
         Kernel.exec(project.kill)
       end
@@ -241,6 +248,7 @@ module Tmuxinator
         project_config: options["project-config"]
       }
 
+      show_version_warning if Tmuxinator::TmuxVersion.unsupported_version?
       project = create_project(params)
       render_project(project)
     end
