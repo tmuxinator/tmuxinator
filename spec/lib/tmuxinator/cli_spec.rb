@@ -267,6 +267,18 @@ describe Tmuxinator::Cli do
         expect(out).to include "WARNING"
       end
     end
+
+    context "supported version" do
+      before do
+        allow($stdin).to receive_messages(getc: "y")
+        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(true)
+      end
+
+      it "does not print the warning" do
+        out, _err = capture_io { cli.start }
+        expect(out).not_to include "WARNING"
+      end
+    end
   end
 
   describe "#stop" do
