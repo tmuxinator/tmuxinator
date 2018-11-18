@@ -1,4 +1,7 @@
 ## Unreleased
+- Add `--suppress-tmux-version-warning` flag to prevent tmux version warning (#583)
+  - Separate version warning from deprecation messages
+  - Add unsupported version warnings for `stop` and `local` as well
 ### Misc
 - quiet deprecation warnings in test output (#619)
 - reword "Project Configuration Location" section of README to reflect current

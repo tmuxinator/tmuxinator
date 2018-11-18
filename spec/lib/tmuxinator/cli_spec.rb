@@ -222,6 +222,17 @@ describe Tmuxinator::Cli do
         out, _err = capture_io { cli.start }
         expect(out).to include "WARNING"
       end
+
+      context "with --suppress-tmux-version-warning flag" do
+        before do
+          ARGV.replace([*args, "--suppress-tmux-version-warning"])
+        end
+
+        it "does not print the warning" do
+          out, _err = capture_io { cli.start }
+          expect(out).not_to include "WARNING"
+        end
+      end
     end
 
     context "supported version" do
