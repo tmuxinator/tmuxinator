@@ -255,6 +255,18 @@ describe Tmuxinator::Cli do
         expect(out).to include "DEPRECATION"
       end
     end
+
+    context "unsupported version" do
+      before do
+        allow($stdin).to receive_messages(getc: "y")
+        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(false)
+      end
+
+      it "prints the deprecations" do
+        out, _err = capture_io { cli.start }
+        expect(out).to include "DEPRECATION"
+      end
+    end
   end
 
   describe "#stop" do
