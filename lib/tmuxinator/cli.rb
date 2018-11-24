@@ -202,9 +202,7 @@ module Tmuxinator
       def render_project(project)
         if project.deprecations.any?
           project.deprecations.each { |deprecation| say deprecation, :red }
-          say
-          print "Press ENTER to continue."
-          STDIN.getc
+          show_continuation_prompt
         end
 
         Kernel.exec(project.render)
@@ -216,6 +214,10 @@ module Tmuxinator
 
       def show_version_warning
         say Tmuxinator::TmuxVersion::UNSUPPORTED_VERSION_MSG, :red
+        show_continuation_prompt
+      end
+
+      def show_continuation_prompt
         say
         print "Press ENTER to continue."
         STDIN.getc
