@@ -3,6 +3,7 @@
 - quiet deprecation warnings in test output (#619)
 - reword "Project Configuration Location" section of README to reflect current
 behavior (#621)
+- correct some type on readme about aliases (#660)
 
 ## 0.13.0
 ### Bugfixes
