@@ -207,6 +207,47 @@ describe Tmuxinator::Cli do
     end
   end
 
+  shared_examples_for :unsupported_version_message do |*args|
+    before do
+      ARGV.replace([*args])
+    end
+
+    context "unsupported version" do
+      before do
+        allow($stdin).to receive_messages(getc: "y")
+        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(false)
+      end
+
+      it "prints the warning" do
+        out, _err = capture_io { cli.start }
+        expect(out).to include "WARNING"
+      end
+
+      context "with --suppress-tmux-version-warning flag" do
+        before do
+          ARGV.replace([*args, "--suppress-tmux-version-warning"])
+        end
+
+        it "does not print the warning" do
+          out, _err = capture_io { cli.start }
+          expect(out).not_to include "WARNING"
+        end
+      end
+    end
+
+    context "supported version" do
+      before do
+        allow($stdin).to receive_messages(getc: "y")
+        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(true)
+      end
+
+      it "does not print the warning" do
+        out, _err = capture_io { cli.start }
+        expect(out).not_to include "WARNING"
+      end
+    end
+  end
+
   describe "#start" do
     before do
       ARGV.replace(["start", "foo"])
@@ -255,6 +296,8 @@ describe Tmuxinator::Cli do
         expect(out).to include "DEPRECATION"
       end
     end
+
+    include_examples :unsupported_version_message, :start, :foo
   end
 
   describe "#stop" do
@@ -273,16 +316,18 @@ describe Tmuxinator::Cli do
         expect(out).to eq ""
       end
     end
+
+    include_examples :unsupported_version_message, :stop, :foo
   end
 
   describe "#local" do
-    shared_examples_for :local_project do
-      before do
-        allow(Tmuxinator::Config).to receive_messages(validate: project)
-        allow(Tmuxinator::Config).to receive_messages(version: 1.9)
-        allow(Kernel).to receive(:exec)
-      end
+    before do
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
+    end
 
+    shared_examples_for :local_project do
       it "starts the project" do
         expect(Kernel).to receive(:exec)
         out, err = capture_io { cli.start }
@@ -304,6 +349,8 @@ describe Tmuxinator::Cli do
       end
       it_should_behave_like :local_project
     end
+
+    include_examples :unsupported_version_message, :local
   end
 
   describe "#start(custom_name)" do

@@ -202,12 +202,25 @@ module Tmuxinator
       def render_project(project)
         if project.deprecations.any?
           project.deprecations.each { |deprecation| say deprecation, :red }
-          say
-          print "Press ENTER to continue."
-          STDIN.getc
+          show_continuation_prompt
         end
 
         Kernel.exec(project.render)
+      end
+
+      def version_warning?(suppress_flag)
+        !Tmuxinator::TmuxVersion.supported? && !suppress_flag
+      end
+
+      def show_version_warning
+        say Tmuxinator::TmuxVersion::UNSUPPORTED_VERSION_MSG, :red
+        show_continuation_prompt
+      end
+
+      def show_continuation_prompt
+        say
+        print "Press ENTER to continue."
+        STDIN.getc
       end
 
       def kill_project(project)
@@ -224,6 +237,8 @@ module Tmuxinator
                          desc: "Give the session a different name"
     method_option "project-config", aliases: "-p",
                                     desc: "Path to project config file"
+    method_option "suppress-tmux-version-warning",
+                  desc: "Don't show a warning for unsupported tmux versions"
 
     def start(name = nil, *args)
       # project-config takes precedence over a named project in the case that
@@ -241,25 +256,41 @@ module Tmuxinator
         project_config: options["project-config"]
       }
 
+      show_version_warning if version_warning?(
+        options["suppress-tmux-version-warning"]
+      )
+
       project = create_project(params)
       render_project(project)
     end
 
     desc "stop [PROJECT]", COMMANDS[:stop]
     map "st" => :stop
+    method_option "suppress-tmux-version-warning",
+                  desc: "Don't show a warning for unsupported tmux versions"
 
     def stop(name)
       params = {
         name: name
       }
+      show_version_warning if version_warning?(
+        options["suppress-tmux-version-warning"]
+      )
+
       project = create_project(params)
       kill_project(project)
     end
 
     desc "local", COMMANDS[:local]
     map "." => :local
+    method_option "suppress-tmux-version-warning",
+                  desc: "Don't show a warning for unsupported tmux versions"
 
     def local
+      show_version_warning if version_warning?(
+        options["suppress-tmux-version-warning"]
+      )
+
       render_project(create_project(attach: options[:attach]))
     end
 
