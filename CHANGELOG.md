@@ -1,3 +1,6 @@
+## UNRELEASED
+- add support for project config files using .yaml extension
+
 ## 0.14.0
 ### Misc
 - Add `--suppress-tmux-version-warning` flag to prevent tmux version warning (#583)
