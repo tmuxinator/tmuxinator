@@ -246,6 +246,7 @@ describe Tmuxinator::Config do
     let(:directory) { Tmuxinator::Config.directory }
     let(:base) { "#{directory}/sample.yml" }
     let(:first_dup) { "#{home_config_dir}/dup/local-dup.yml" }
+    let(:yaml) { "#{directory}/yaml.yaml" }
 
     before do
       allow(Tmuxinator::Config).to receive_messages(xdg: fixtures_dir)
@@ -255,6 +256,12 @@ describe Tmuxinator::Config do
     context "with project yml" do
       it "gets the project as path to the yml file" do
         expect(Tmuxinator::Config.global_project("sample")).to eq base
+      end
+    end
+
+    context "with project yaml" do
+      it "gets the project as path to the yaml file" do
+        expect(Tmuxinator::Config.global_project("yaml")).to eq yaml
       end
     end
 
