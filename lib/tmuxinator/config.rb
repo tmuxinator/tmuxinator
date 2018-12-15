@@ -9,9 +9,9 @@ module Tmuxinator
     class << self
       # The directory (created if needed) in which to store new projects
       def directory
-        return environment if File.directory?(environment)
-        return xdg if File.directory?(xdg)
-        return home if File.directory?(home)
+        return environment if environment?
+        return xdg if xdg?
+        return home if home?
         # No project directory specified or existant, default to XDG:
         FileUtils::mkdir_p(xdg)
         xdg
@@ -21,11 +21,19 @@ module Tmuxinator
         ENV["HOME"] + "/.tmuxinator"
       end
 
+      def home?
+        File.directory?(home)
+      end
+
       # ~/.config/tmuxinator unless $XDG_CONFIG_HOME has been configured to use
       # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
       # return value will be ~/my-config/tmuxinator)
       def xdg
         XDG["CONFIG"].to_s + "/tmuxinator"
+      end
+
+      def xdg?
+        File.directory?(xdg)
       end
 
       # $TMUXINATOR_CONFIG (and create directory) or "".
@@ -34,6 +42,10 @@ module Tmuxinator
         return "" if environment.to_s.empty? # variable is unset (nil) or blank
         FileUtils::mkdir_p(environment) unless File.directory?(environment)
         environment
+      end
+
+      def environment?
+        File.directory?(environment)
       end
 
       def sample
@@ -119,7 +131,7 @@ module Tmuxinator
       # Listed in search order
       # Used by `implode` and `list` commands
       def directories
-        if !environment.nil? && !environment.empty?
+        if environment?
           [environment]
         else
           [xdg, home].select { |d| File.directory? d }
