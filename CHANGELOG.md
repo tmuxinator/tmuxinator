@@ -1,6 +1,8 @@
-## UNRELEASED
+## 0.15.0
+### Misc
 - add support for Ruby 2.6 to the TravisCI test matrix
-- add support for project config files using .yaml extension
+- add support for project config files using .yaml extension (#663)
+- allow test suite to pass when $TMUXINATOR_CONFIG is set (#665)
 
 ## 0.14.0
 ### Misc
