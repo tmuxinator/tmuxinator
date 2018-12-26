@@ -24,7 +24,8 @@ describe Tmuxinator::Cli do
     end
   end
 
-  let(:cli) { Tmuxinator::Cli }
+  subject(:cli) { described_class }
+
   let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
   let(:project) { FactoryBot.build(:project) }
   let(:project_config) do
@@ -421,7 +422,7 @@ describe Tmuxinator::Cli do
         expect(File).not_to exist(path)
 
         # now generate a project file
-        expect(Tmuxinator::Cli.new.generate_project_file(name, path)).to eq path
+        expect(described_class.new.generate_project_file(name, path)).to eq path
         expect(File).to exist path
 
         # add some content to the project file
@@ -829,7 +830,7 @@ describe Tmuxinator::Cli do
       end
 
       it "should generate a project file" do
-        new_path = Tmuxinator::Cli.new.find_project_file(name, false)
+        new_path = described_class.new.find_project_file(name, false)
         expect(new_path).to eq path
         expect(File).to exist new_path
       end
@@ -840,7 +841,7 @@ describe Tmuxinator::Cli do
 
       before do
         expect(File).not_to exist(path), "expected file at #{path} not to exist"
-        expect(Tmuxinator::Cli.new.generate_project_file(name, path)).to eq path
+        expect(described_class.new.generate_project_file(name, path)).to eq path
         expect(File).to exist path
 
         File.open(path, "w") do |f|
@@ -851,7 +852,7 @@ describe Tmuxinator::Cli do
       end
 
       it "should _not_ generate a new project file" do
-        new_path = Tmuxinator::Cli.new.find_project_file(name, false)
+        new_path = described_class.new.find_project_file(name, false)
         expect(new_path).to eq path
         expect(File).to exist new_path
         expect(File.read(new_path)).to match %r{#{extra}}
@@ -866,7 +867,7 @@ describe Tmuxinator::Cli do
       Dir.mktmpdir do |dir|
         path = "#{dir}/#{name}.yml"
         expect(File).not_to exist(path), "expected file at #{path} not to exist"
-        new_path = Tmuxinator::Cli.new.generate_project_file(name, path)
+        new_path = described_class.new.generate_project_file(name, path)
         expect(new_path).to eq path
         expect(File).to exist new_path
       end
@@ -877,7 +878,7 @@ describe Tmuxinator::Cli do
       allow(File).to receive(:open) { |&block| block.yield file }
       Dir.mktmpdir do |dir|
         path = "#{dir}/#{name}.yml"
-        _ = Tmuxinator::Cli.new.generate_project_file(name, path)
+        _ = described_class.new.generate_project_file(name, path)
         expect(file.string).to match %r{\A# #{path}$}
       end
     end
@@ -915,18 +916,18 @@ describe Tmuxinator::Cli do
     context "attach option" do
       describe "detach" do
         it "sets force_detach to false when no attach argument is provided" do
-          project = Tmuxinator::Cli.new.create_project(name: name)
+          project = described_class.new.create_project(name: name)
           expect(project.force_detach).to eq(false)
         end
 
         it "sets force_detach to true when 'attach: false' is provided" do
-          project = Tmuxinator::Cli.new.create_project(attach: false,
+          project = described_class.new.create_project(attach: false,
                                                        name: name)
           expect(project.force_detach).to eq(true)
         end
 
         it "sets force_detach to false when 'attach: true' is provided" do
-          project = Tmuxinator::Cli.new.create_project(attach: true,
+          project = described_class.new.create_project(attach: true,
                                                        name: name)
           expect(project.force_detach).to eq(false)
         end
@@ -934,18 +935,18 @@ describe Tmuxinator::Cli do
 
       describe "attach" do
         it "sets force_attach to false when no attach argument is provided" do
-          project = Tmuxinator::Cli.new.create_project(name: name)
+          project = described_class.new.create_project(name: name)
           expect(project.force_attach).to eq(false)
         end
 
         it "sets force_attach to true when 'attach: true' is provided" do
-          project = Tmuxinator::Cli.new.create_project(attach: true,
+          project = described_class.new.create_project(attach: true,
                                                        name: name)
           expect(project.force_attach).to eq(true)
         end
 
         it "sets force_attach to false when 'attach: false' is provided" do
-          project = Tmuxinator::Cli.new.create_project(attach: false,
+          project = described_class.new.create_project(attach: false,
                                                        name: name)
           expect(project.force_attach).to eq(false)
         end

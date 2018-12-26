@@ -11,55 +11,50 @@ describe Tmuxinator::Config do
         allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
           and_return "expected"
         allow(File).to receive(:directory?).and_return true
-        expect(Tmuxinator::Config.directory).to eq "expected"
+        expect(described_class.directory).to eq "expected"
       end
     end
 
     context "only ~/.tmuxinator exists" do
       it "is ~/.tmuxinator" do
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.environment).and_return false
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.xdg).and_return false
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.home).and_return true
-        expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.home
+        allow(described_class).to receive(:environment?).and_return false
+        allow(described_class).to receive(:xdg?).and_return false
+        allow(described_class).to receive(:home?).and_return true
+
+        expect(described_class.directory).to eq described_class.home
       end
     end
 
     context "only $XDG_CONFIG_HOME/tmuxinator exists" do
       it "is #xdg" do
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.environment).and_return false
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.xdg).and_return true
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.home).and_return false
-        expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
+        allow(described_class).to receive(:environment?).and_return false
+        allow(described_class).to receive(:xdg?).and_return true
+        allow(described_class).to receive(:home?).and_return false
+
+        expect(described_class.directory).to eq described_class.xdg
       end
     end
 
     context "both $XDG_CONFIG_HOME/tmuxinator and ~/.tmuxinator exist" do
       it "is #xdg" do
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.environment).and_return false
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.xdg).and_return true
-        allow(File).to receive(:directory?).
-          with(Tmuxinator::Config.home).and_return true
-        expect(Tmuxinator::Config.directory).to eq Tmuxinator::Config.xdg
+        allow(described_class).to receive(:environment?).and_return false
+        allow(described_class).to receive(:xdg?).and_return true
+        allow(described_class).to receive(:home?).and_return true
+
+        expect(described_class.directory).to eq described_class.xdg
       end
     end
 
-    context "parent directory(s) do not exist" do
+    context "defaulting to xdg with parent directory(s) that do not exist" do
       it "creates parent directories if required" do
-        allow(File).to receive(:directory?).and_call_original
-        allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
-          and_return false
+        allow(described_class).to receive(:environment?).and_return false
+        allow(described_class).to receive(:xdg?).and_return false
+        allow(described_class).to receive(:home?).and_return false
+
         Dir.mktmpdir do |dir|
           config_parent = "#{dir}/non_existant_parent/s"
           allow(XDG).to receive(:[]).with("CONFIG").and_return config_parent
-          expect(Tmuxinator::Config.directory).
+          expect(described_class.directory).
             to eq "#{config_parent}/tmuxinator"
           expect(File.directory?("#{config_parent}/tmuxinator")).to be true
         end
@@ -74,7 +69,7 @@ describe Tmuxinator::Config do
           and_return "expected"
         # allow(XDG).to receive(:[]).with("CONFIG").and_return "expected"
         allow(File).to receive(:directory?).and_return true
-        expect(Tmuxinator::Config.environment).to eq "expected"
+        expect(described_class.environment).to eq "expected"
       end
     end
 
@@ -84,67 +79,79 @@ describe Tmuxinator::Config do
           and_return nil
         # allow(XDG).to receive(:[]).with("CONFIG").and_return nil
         allow(File).to receive(:directory?).and_return true
-        expect(Tmuxinator::Config.environment).to eq ""
+        expect(described_class.environment).to eq ""
       end
     end
 
     context "environment variable $TMUXINATOR_CONFIG is set and empty" do
       it "is an empty string" do
         allow(XDG).to receive(:[]).with("CONFIG").and_return ""
-        expect(Tmuxinator::Config.environment).to eq ""
+        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").and_return ""
+        expect(described_class.environment).to eq ""
       end
     end
   end
 
   describe "#directories" do
-    it "is empty if no configuration directories exist" do
-      allow(File).to receive(:directory?).and_return false
-      expect(Tmuxinator::Config.directories).to eq []
+    context "without TMUXINATOR_CONFIG environment" do
+      before do
+        allow(described_class).to receive(:environment?).and_return false
+      end
+
+      it "is empty if no configuration directories exist" do
+        allow(File).to receive(:directory?).and_return false
+        expect(described_class.directories).to eq []
+      end
+
+      it "contains #xdg before #home" do
+        allow(described_class).to receive(:xdg).and_return "XDG"
+        allow(described_class).to receive(:home).and_return "HOME"
+        allow(File).to receive(:directory?).and_return true
+
+        expect(described_class.directories).to eq \
+          ["XDG", "HOME"]
+      end
     end
 
-    it "is only [$TMUXINATOR_CONFIG] if set" do
-      allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
-        and_return "expected"
-      allow(File).to receive(:directory?).and_return true
-      expect(Tmuxinator::Config.directories).to eq ["expected"]
-    end
+    context "with TMUXINATOR_CONFIG environment" do
+      before do
+        allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
+          and_return "TMUXINATOR_CONFIG"
+      end
+      it "is only [$TMUXINATOR_CONFIG] if set" do
+        allow(File).to receive(:directory?).and_return true
 
-    it "contains #xdg before #home" do
-      allow(File).to receive(:directory?).with(Tmuxinator::Config.xdg).
-        and_return true
-      allow(File).to receive(:directory?).with(Tmuxinator::Config.home).
-        and_return true
-      expect(Tmuxinator::Config.directories).to eq \
-        [Tmuxinator::Config.xdg, Tmuxinator::Config.home]
+        expect(described_class.directories).to eq ["TMUXINATOR_CONFIG"]
+      end
     end
   end
 
   describe "#home" do
     it "is ~/.tmuxinator" do
-      expect(Tmuxinator::Config.home).to eq "#{ENV['HOME']}/.tmuxinator"
+      expect(described_class.home).to eq "#{ENV['HOME']}/.tmuxinator"
     end
   end
 
   describe "#xdg" do
     it "is $XDG_CONFIG_HOME/tmuxinator" do
-      expect(Tmuxinator::Config.xdg).to eq "#{XDG['CONFIG_HOME']}/tmuxinator"
+      expect(described_class.xdg).to eq "#{XDG['CONFIG_HOME']}/tmuxinator"
     end
   end
 
   describe "#sample" do
     it "gets the path of the sample project" do
-      expect(Tmuxinator::Config.sample).to include("sample.yml")
+      expect(described_class.sample).to include("sample.yml")
     end
   end
 
   describe "#default" do
     it "gets the path of the default config" do
-      expect(Tmuxinator::Config.default).to include("default.yml")
+      expect(described_class.default).to include("default.yml")
     end
   end
 
   describe "#version" do
-    subject { Tmuxinator::Config.version }
+    subject { described_class.version }
 
     before do
       expect(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
@@ -166,29 +173,29 @@ describe Tmuxinator::Config do
   describe "#default_path_option" do
     context ">= 1.8" do
       before do
-        allow(Tmuxinator::Config).to receive(:version).and_return(1.8)
+        allow(described_class).to receive(:version).and_return(1.8)
       end
 
       it "returns -c" do
-        expect(Tmuxinator::Config.default_path_option).to eq "-c"
+        expect(described_class.default_path_option).to eq "-c"
       end
     end
 
     context "< 1.8" do
       before do
-        allow(Tmuxinator::Config).to receive(:version).and_return(1.7)
+        allow(described_class).to receive(:version).and_return(1.7)
       end
 
       it "returns default-path" do
-        expect(Tmuxinator::Config.default_path_option).to eq "default-path"
+        expect(described_class.default_path_option).to eq "default-path"
       end
     end
   end
 
   describe "#default?" do
-    let(:directory) { Tmuxinator::Config.directory }
-    let(:local_default) { Tmuxinator::Config::LOCAL_DEFAULT }
-    let(:proj_default) { Tmuxinator::Config.default }
+    let(:directory) { described_class.directory }
+    let(:local_default) { described_class::LOCAL_DEFAULT }
+    let(:proj_default) { described_class.default }
 
     context "when the file exists" do
       before do
@@ -197,7 +204,7 @@ describe Tmuxinator::Config do
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.default?).to be_truthy
+        expect(described_class.default?).to be_truthy
       end
     end
 
@@ -208,54 +215,57 @@ describe Tmuxinator::Config do
       end
 
       it "returns true" do
-        expect(Tmuxinator::Config.default?).to be_falsey
+        expect(described_class.default?).to be_falsey
       end
     end
   end
 
   describe "#configs" do
     before do
-      allow(Tmuxinator::Config).to receive_messages(xdg: xdg_config_dir)
-      allow(Tmuxinator::Config).to receive_messages(home: home_config_dir)
+      allow(described_class).to receive_messages(xdg: xdg_config_dir)
+      allow(described_class).to receive_messages(home: home_config_dir)
     end
 
     it "gets a sorted list of all projects" do
-      expect(Tmuxinator::Config.configs).
+      allow(described_class).to receive(:environment?).and_return false
+
+      expect(described_class.configs).
         to eq ["both", "both", "dup/local-dup", "home", "local-dup", "xdg"]
     end
 
     it "lists only projects in $TMUXINATOR_CONFIG when set" do
       allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
         and_return "#{fixtures_dir}/TMUXINATOR_CONFIG"
-      expect(Tmuxinator::Config.configs).to eq ["TMUXINATOR_CONFIG"]
+      expect(described_class.configs).to eq ["TMUXINATOR_CONFIG"]
     end
   end
 
   describe "#exists?" do
     before do
       allow(File).to receive_messages(exist?: true)
-      allow(Tmuxinator::Config).to receive_messages(project: "")
+      allow(described_class).to receive_messages(project: "")
     end
 
     it "checks if the given project exists" do
-      expect(Tmuxinator::Config.exists?(name: "test")).to be_truthy
+      expect(described_class.exists?(name: "test")).to be_truthy
     end
   end
 
   describe "#global_project" do
-    let(:directory) { Tmuxinator::Config.directory }
+    let(:directory) { described_class.directory }
     let(:base) { "#{directory}/sample.yml" }
     let(:first_dup) { "#{home_config_dir}/dup/local-dup.yml" }
     let(:yaml) { "#{directory}/yaml.yaml" }
 
     before do
-      allow(Tmuxinator::Config).to receive_messages(xdg: fixtures_dir)
-      allow(Tmuxinator::Config).to receive_messages(home: fixtures_dir)
+      allow(described_class).to receive(:environment?).and_return false
+      allow(described_class).to receive(:xdg).and_return fixtures_dir
+      allow(described_class).to receive(:home).and_return fixtures_dir
     end
 
     context "with project yml" do
       it "gets the project as path to the yml file" do
-        expect(Tmuxinator::Config.global_project("sample")).to eq base
+        expect(described_class.global_project("sample")).to eq base
       end
     end
 
@@ -267,53 +277,53 @@ describe Tmuxinator::Config do
 
     context "without project yml" do
       it "gets the project as path to the yml file" do
-        expect(Tmuxinator::Config.global_project("new-project")).to be_nil
+        expect(described_class.global_project("new-project")).to be_nil
       end
     end
 
     context "with duplicate project files" do
       it "is the first .yml file found" do
-        expect(Tmuxinator::Config.global_project("local-dup")).to eq first_dup
+        expect(described_class.global_project("local-dup")).to eq first_dup
       end
     end
   end
 
   describe "#local?" do
     it "checks if the given project exists" do
-      path = Tmuxinator::Config::LOCAL_DEFAULT
+      path = described_class::LOCAL_DEFAULT
       expect(File).to receive(:exist?).with(path) { true }
-      expect(Tmuxinator::Config.local?).to be_truthy
+      expect(described_class.local?).to be_truthy
     end
   end
 
   describe "#local_project" do
-    let(:default) { Tmuxinator::Config::LOCAL_DEFAULT }
+    let(:default) { described_class::LOCAL_DEFAULT }
 
     context "with a project yml" do
       it "gets the project as path to the yml file" do
         expect(File).to receive(:exist?).with(default) { true }
-        expect(Tmuxinator::Config.local_project).to eq default
+        expect(described_class.local_project).to eq default
       end
     end
 
     context "without project yml" do
       it "gets the project as path to the yml file" do
-        expect(Tmuxinator::Config.local_project).to be_nil
+        expect(described_class.local_project).to be_nil
       end
     end
   end
 
   describe "#project" do
-    let(:directory) { Tmuxinator::Config.directory }
-    let(:default) { Tmuxinator::Config::LOCAL_DEFAULT }
+    let(:directory) { described_class.directory }
+    let(:default) { described_class::LOCAL_DEFAULT }
 
     context "with an non-local project yml" do
       before do
-        allow(Tmuxinator::Config).to receive_messages(directory: fixtures_dir)
+        allow(described_class).to receive_messages(directory: fixtures_dir)
       end
 
       it "gets the project as path to the yml file" do
-        expect(Tmuxinator::Config.project("sample")).
+        expect(described_class.project("sample")).
           to eq "#{directory}/sample.yml"
       end
     end
@@ -321,48 +331,48 @@ describe Tmuxinator::Config do
     context "with a local project, but no global project" do
       it "gets the project as path to the yml file" do
         expect(File).to receive(:exist?).with(default) { true }
-        expect(Tmuxinator::Config.project("sample")).to eq "./.tmuxinator.yml"
+        expect(described_class.project("sample")).to eq "./.tmuxinator.yml"
       end
     end
 
     context "without project yml" do
       let(:expected) { "#{directory}/new-project.yml" }
       it "gets the project as path to the yml file" do
-        expect(Tmuxinator::Config.project("new-project")).to eq expected
+        expect(described_class.project("new-project")).to eq expected
       end
     end
   end
 
   describe "#validate" do
-    let(:default) { Tmuxinator::Config::LOCAL_DEFAULT }
+    let(:default) { described_class::LOCAL_DEFAULT }
 
     context "when a project config file is provided" do
       it "should raise if the project config file can't be found" do
         project_config = "dont-exist.yml"
         regex = /Project config \(#{project_config}\) doesn't exist\./
         expect do
-          Tmuxinator::Config.validate(project_config: project_config)
+          described_class.validate(project_config: project_config)
         end.to raise_error RuntimeError, regex
       end
 
       it "should load and validate the project" do
         project_config = File.join(fixtures_dir, "sample.yml")
-        expect(Tmuxinator::Config.validate(project_config: project_config)).to \
+        expect(described_class.validate(project_config: project_config)).to \
           be_a Tmuxinator::Project
       end
 
       it "should take precedence over a named project" do
-        allow(Tmuxinator::Config).to receive_messages(directory: fixtures_dir)
+        allow(described_class).to receive_messages(directory: fixtures_dir)
         project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
-        project = Tmuxinator::Config.validate(name: "sample",
-                                              project_config: project_config)
+        project = described_class.validate(name: "sample",
+                                           project_config: project_config)
         expect(project.name).to eq("222")
       end
 
       it "should take precedence over a local project" do
-        expect(Tmuxinator::Config).not_to receive(:local?)
+        expect(described_class).not_to receive(:local?)
         project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
-        project = Tmuxinator::Config.validate(project_config: project_config)
+        project = described_class.validate(project_config: project_config)
         expect(project.name).to eq("222")
       end
     end
@@ -370,13 +380,13 @@ describe Tmuxinator::Config do
     context "when a project name is provided" do
       it "should raise if the project file can't be found" do
         expect do
-          Tmuxinator::Config.validate(name: "sample")
+          described_class.validate(name: "sample")
         end.to raise_error RuntimeError, %r{Project.+doesn't.exist}
       end
 
       it "should load and validate the project" do
-        expect(Tmuxinator::Config).to receive_messages(directory: fixtures_dir)
-        expect(Tmuxinator::Config.validate(name: "sample")).to \
+        expect(described_class).to receive_messages(directory: fixtures_dir)
+        expect(described_class.validate(name: "sample")).to \
           be_a Tmuxinator::Project
       end
     end
@@ -385,7 +395,7 @@ describe Tmuxinator::Config do
       it "should raise if the local project file doesn't exist" do
         expect(File).to receive(:exist?).with(default) { false }
         expect do
-          Tmuxinator::Config.validate
+          described_class.validate
         end.to raise_error RuntimeError, %r{Project.+doesn't.exist}
       end
 
@@ -395,18 +405,19 @@ describe Tmuxinator::Config do
         expect(File).to receive(:exist?).with(default).at_least(:once) { true }
         expect(File).to receive(:read).with(default).and_return(content)
 
-        expect(Tmuxinator::Config.validate).to be_a Tmuxinator::Project
+        expect(described_class.validate).to be_a Tmuxinator::Project
       end
     end
 
     context "when no project can be found" do
       it "should raise with NO_PROJECT_FOUND_MSG" do
-        config = Tmuxinator::Config
-        expect(config).to receive(:valid_project_config?).and_return(false)
-        expect(config).to receive(:valid_local_project?).and_return(false)
-        expect(config).to receive(:valid_standard_project?).and_return(false)
+        expect(described_class).to receive_messages(
+          valid_project_config?: false,
+          valid_local_project?: false,
+          valid_standard_project?: false
+        )
         expect do
-          Tmuxinator::Config.validate
+          described_class.validate
         end.to raise_error RuntimeError, %r{Project could not be found\.}
       end
     end
