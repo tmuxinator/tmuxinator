@@ -33,12 +33,12 @@ describe Tmuxinator::Window do
     }
   end
 
-  let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
-  let(:window_root) { Tmuxinator::Window.new(yaml_root, 0, project) }
+  let(:window) { described_class.new(yaml, 0, project) }
+  let(:window_root) { described_class.new(yaml_root, 0, project) }
 
   shared_context "window command context" do
     let(:project) { double(:project) }
-    let(:window) { Tmuxinator::Window.new(yaml, 0, project) }
+    let(:window) { described_class.new(yaml, 0, project) }
     let(:root?) { true }
     let(:root) { "/project/tmuxinator" }
 

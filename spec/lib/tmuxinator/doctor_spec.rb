@@ -8,7 +8,7 @@ describe Tmuxinator::Doctor do
       end
 
       it "returns true" do
-        expect(Tmuxinator::Doctor.installed?).to be_truthy
+        expect(described_class.installed?).to be_truthy
       end
     end
 
@@ -18,7 +18,7 @@ describe Tmuxinator::Doctor do
       end
 
       it "returns false" do
-        expect(Tmuxinator::Doctor.installed?).to be_falsey
+        expect(described_class.installed?).to be_falsey
       end
     end
   end
@@ -30,7 +30,7 @@ describe Tmuxinator::Doctor do
       end
 
       it "returns true" do
-        expect(Tmuxinator::Doctor.editor?).to be_truthy
+        expect(described_class.editor?).to be_truthy
       end
     end
 
@@ -40,7 +40,7 @@ describe Tmuxinator::Doctor do
       end
 
       it "returns false" do
-        expect(Tmuxinator::Doctor.editor?).to be_falsey
+        expect(described_class.editor?).to be_falsey
       end
     end
   end
@@ -52,7 +52,7 @@ describe Tmuxinator::Doctor do
       end
 
       it "returns true" do
-        expect(Tmuxinator::Doctor.shell?).to be_truthy
+        expect(described_class.shell?).to be_truthy
       end
     end
 
@@ -62,7 +62,7 @@ describe Tmuxinator::Doctor do
       end
 
       it "returns false" do
-        expect(Tmuxinator::Doctor.shell?).to be_falsey
+        expect(described_class.shell?).to be_falsey
       end
     end
   end
