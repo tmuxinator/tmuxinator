@@ -1,3 +1,7 @@
+## UNRELEASED
+### Misc
+- make pre/post deprecation warnings more descriptive
+
 ## 0.15.0
 ### Misc
 - add support for Ruby 2.6 to the TravisCI test matrix
