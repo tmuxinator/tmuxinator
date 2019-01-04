@@ -1,6 +1,8 @@
 ## UNRELEASED
 ### Misc
 - make pre/post deprecation warnings more descriptive
+- remove support for Ruby 2.2
+- upgrade bundler to >= 2.0
 
 ## 0.15.0
 ### Misc
