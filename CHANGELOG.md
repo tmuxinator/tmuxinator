@@ -1,6 +1,8 @@
 ## UNRELEASED
 ### Misc
 - make pre/post deprecation warnings more descriptive
+- remove pre/post from project configuration template
+- specify (pessimistic) bundler version in TravisCI config
 
 ## 0.15.0
 ### Misc
