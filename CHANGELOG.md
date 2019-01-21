@@ -2,7 +2,8 @@
 ### Misc
 - make pre/post deprecation warnings more descriptive
 - remove pre/post from project configuration template
-- specify (pessimistic) bundler version in TravisCI config
+- remove support for Ruby 2.2
+- bundler version constraint now supports bundler >= 2 (required by TravisCI)
 
 ## 0.15.0
 ### Misc
