@@ -99,7 +99,7 @@ root: ~/
 # Project hooks
 
 # Runs on project start, always
-#on_project_start: command
+# on_project_start: command
 
 # Run on project start, the first time
 # on_project_first_start: command
