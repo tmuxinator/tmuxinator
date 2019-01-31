@@ -31,7 +31,7 @@ module Tmuxinator
       implode: "Deletes all tmuxinator projects",
       version: "Display installed tmuxinator version",
       doctor: "Look for problems in your configuration",
-      list: "Lists all tmuxinator projects"
+      list: "Lists all tmuxinator projects",
     }.freeze
 
     # For future reference: due to how tmuxinator currently consumes
@@ -378,11 +378,17 @@ module Tmuxinator
     desc "list", COMMANDS[:list]
     map "l" => :list
     map "ls" => :list
+    method_option :newline, type: :boolean,
+                            aliases: ["-n"],
+                            desc: "Force output to be one entry per line."
 
     def list
       say "tmuxinator projects:"
-
-      print_in_columns Tmuxinator::Config.configs
+      if options[:newline]
+        say Tmuxinator::Config.configs.join("\n")
+      else
+        print_in_columns Tmuxinator::Config.configs
+      end
     end
 
     desc "version", COMMANDS[:version]
