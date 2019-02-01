@@ -31,7 +31,7 @@ module Tmuxinator
       implode: "Deletes all tmuxinator projects",
       version: "Display installed tmuxinator version",
       doctor: "Look for problems in your configuration",
-      list: "Lists all tmuxinator projects",
+      list: "Lists all tmuxinator projects"
     }.freeze
 
     # For future reference: due to how tmuxinator currently consumes
