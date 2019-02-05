@@ -19,3 +19,6 @@ vendor/
 tags
 .env*
 .env
+Makefile
+.vagrant
+.ruby-version

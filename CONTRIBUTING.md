@@ -14,6 +14,86 @@
     like OS version, gem versions, rbenv or rvm versions etc...
   * Even better, provide a failing test case for it.
 
+## Development
+
+Their are 2 ways of testing it's quite flexible due vagrant and docker. 
+
+### Ruby version
+
+You need to set the ruby version in 2 places, by changing these values it 
+will set the version for next builds. It's currently set to the minimum
+ruby version.
+
+You only have to build the environment 1 time per ruby version per distribution.
+
+1. Dockerfile
+```docker
+RUN ./init.sh "2.3.6" 
+```
+
+2. Vagrantfile
+```vagrant
+RUBY_V = "2.3.6"
+```
+
+## Docker
+
+To use the docker image first build it.
+
+```bash
+docker build -t tmuxinator .
+```
+
+This will setup the environment for you. It was quite slow on my mac.
+
+This creates an image named `tmuxinator`, you can see it with the
+`docker ls` command.
+
+The Dockerfile will copy your current directory to `/opt/tmuxinator`, this is currently required for setting up rbenv.
+For running tests in another source directory you can always overwrite it with the -v flag.
+
+```bash
+docker exec -tiv /opt/someotherdir:/opt/tmuxinator /bin/bash
+$ > rake spec
+```
+
+## Vagrant
+
+You can now emulate completely different operating systems.
+
+Currently it builds on, ubuntu and centos. You can add systems by changing the
+distros hash. So you are able to solve bugs for other systems on
+the fly!
+
+
+### Required step
+
+You need the virtualbox guest tools installed to use mounts.
+
+```bash
+vagrant plugin install vagrant-vbguest
+```
+
+#### How to use
+
+First you have to build the virtual machine, you can see what machines are
+available with ``vagrant status``
+
+```bash
+vagrant up <name>
+# or withouth specifying the machine, it will do all.
+vagrant up
+```
+
+This will setup the environment for you, it will take quite
+a while! 
+
+Afterwards you are able to run your tests with a command like such.
+
+```bash
+vagrant ssh centos_7 -c "cd /opt/tmuxinator; rake spec"
+```
+
 ## Pull Requests
 
 If you've gone the extra mile and have a patch that fixes the issue, you
