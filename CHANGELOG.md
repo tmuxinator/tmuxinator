@@ -1,4 +1,6 @@
 ## UNRELEASED
+- Add `-n, [--newline], [--no-newline]` flag for list command
+    Force output to be one entry per line 
 ### Misc
 - make pre/post deprecation warnings more descriptive
 - remove pre/post from project configuration template
