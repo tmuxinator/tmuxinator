@@ -1,4 +1,7 @@
 ## UNRELEASED
+- drop support for ruby 2.3
+- bump required_ruby_version
+- bump test matrix patch versions
 - Add `-n, [--newline], [--no-newline]` flag for list command
     Force output to be one entry per line 
 ### Misc
