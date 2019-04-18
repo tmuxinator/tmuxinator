@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   }
 
   s.required_rubygems_version = ">= 1.8.23"
-  s.required_ruby_version = ">= 2.2.7"
+  s.required_ruby_version = ">= 2.4.6"
 
   s.add_dependency "erubis", "~> 2.6"
   s.add_dependency "thor", "~> 0.19", ">= 0.15.0"
@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "activesupport", "< 5.0.0" # Please see issue #432
   s.add_development_dependency "awesome_print", "~> 1.2"
-  s.add_development_dependency "bundler", "~> 1.3"
+  s.add_development_dependency "bundler", ">= 1.3"
   s.add_development_dependency "coveralls", "~> 0.8"
   s.add_development_dependency "factory_bot", "~> 4.8"
   s.add_development_dependency "pry", "~> 0.10"

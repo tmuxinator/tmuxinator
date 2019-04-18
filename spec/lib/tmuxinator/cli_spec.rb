@@ -783,12 +783,23 @@ describe Tmuxinator::Cli do
 
   describe "#list" do
     before do
-      ARGV.replace(["list"])
       allow(Dir).to receive_messages(:[] => ["/path/to/project.yml"])
     end
 
-    it "lists all projects" do
-      expect { capture_io { cli.start } }.to_not raise_error
+    context "set --newline flag " do
+      ARGV.replace(["list --newline"])
+
+      it "force output to be one entry per line" do
+        expect { capture_io { cli.start } }.to_not raise_error
+      end
+    end
+
+    context "no arguments are given" do
+      ARGV.replace(["list"])
+
+      it "lists all projects " do
+        expect { capture_io { cli.start } }.to_not raise_error
+      end
     end
   end
 

@@ -99,7 +99,7 @@ root: ~/
 # Project hooks
 
 # Runs on project start, always
-#on_project_start: command
+# on_project_start: command
 
 # Run on project start, the first time
 # on_project_first_start: command
@@ -362,4 +362,4 @@ To contribute, please read the [contributing guide](https://github.com/tmuxinato
 
 ## Copyright
 
-Copyright (c) 2010-2018 Allen Bargi, Christopher Chow. See LICENSE for further details.
+Copyright (c) 2010-2019 Allen Bargi, Christopher Chow. See LICENSE for further details.
