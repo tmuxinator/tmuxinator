@@ -1,10 +1,12 @@
-## UNRELEASED
+## 0.16.0
+### Bugfixes
+- fix wemux class_eval error (#590)
+### Misc
 - drop support for ruby 2.3
 - bump required_ruby_version
 - bump test matrix patch versions
 - Add `-n, [--newline], [--no-newline]` flag for list command
-    Force output to be one entry per line 
-### Misc
+    Force output to be one entry per line
 - make pre/post deprecation warnings more descriptive
 - remove pre/post from project configuration template
 - remove support for Ruby 2.2
