@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- add support for tmux 2.9
+
 ## 0.16.0
 ### Bugfixes
 - fix wemux class_eval error (#590)

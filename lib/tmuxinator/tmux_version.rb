@@ -14,7 +14,8 @@ module Tmuxinator
       2.5,
       2.6,
       2.7,
-      2.8
+      2.8,
+      2.9
     ].freeze
     UNSUPPORTED_VERSION_MSG = <<-MSG.freeze
     WARNING: You are running tmuxinator with an unsupported version of tmux.
