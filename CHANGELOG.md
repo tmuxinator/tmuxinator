@@ -1,4 +1,4 @@
-## Unreleased
+## 0.17.0 
 ### Misc
 - add support for tmux 2.9
 
