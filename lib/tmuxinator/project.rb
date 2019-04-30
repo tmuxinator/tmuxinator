@@ -41,19 +41,12 @@ module Tmuxinator
 
     def self.load(path, options = {})
       yaml = begin
-        # Remove for yaml parsing
-        # raw_content = File.read(path)
-
-        # args = options[:args] || []
-        # @settings = parse_settings(args)
-        # @args = args
-
+        config_file_type = options[:type] || 'default'
+        # now must pass in type
+        # I temporarily hard coded it for getting 'procfile' type up and running
         yml = Parser.new('/Users/jgandt/hcs/repos/Procfile', options, 'procfile').build_yaml
-        binding.pry
-        # content = Erubis::Eruby.new(raw_content).result(binding)
-        # YAML.safe_load(content, [], [], true)
-      # rescue SyntaxError, StandardError => error
-      #   raise "Failed to parse config file: #{error.message}"
+      rescue SyntaxError, StandardError => error
+        raise "Failed to parse config file: #{error.message}"
       end
 
       new(yaml, options)

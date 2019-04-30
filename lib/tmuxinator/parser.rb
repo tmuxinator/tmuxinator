@@ -4,14 +4,16 @@
 module Tmuxinator
   class Parser < SimpleDelegator
     def initialize(config_file, options = {}, type=nil)
-      parser = case type
+      parser_klass = case type
       when 'procfile'
-        Parsers::Procfile
+        Tmuxinator::Parsers::Procfile
+      when 'default'
+        Tmuxinator::Parsers::Default
       else
-        Parsers::Default
+        raise "Invalid Parser Type"
       end
 
-      parser = klass.new(config_file, options)
+      parser = parser_klass.new(config_file, options)
       super(parser)
     end
   end
