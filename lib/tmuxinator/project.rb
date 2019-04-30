@@ -41,31 +41,22 @@ module Tmuxinator
 
     def self.load(path, options = {})
       yaml = begin
-        raw_content = File.read(path)
+        # Remove for yaml parsing
+        # raw_content = File.read(path)
 
-        args = options[:args] || []
-        @settings = parse_settings(args)
-        @args = args
+        # args = options[:args] || []
+        # @settings = parse_settings(args)
+        # @args = args
 
-        content = Erubis::Eruby.new(raw_content).result(binding)
-        YAML.safe_load(content, [], [], true)
-      rescue SyntaxError, StandardError => error
-        raise "Failed to parse config file: #{error.message}"
+        yml = Parser.new('/Users/jgandt/hcs/repos/Procfile', options, 'procfile').build_yaml
+        binding.pry
+        # content = Erubis::Eruby.new(raw_content).result(binding)
+        # YAML.safe_load(content, [], [], true)
+      # rescue SyntaxError, StandardError => error
+      #   raise "Failed to parse config file: #{error.message}"
       end
 
       new(yaml, options)
-    end
-
-    def self.parse_settings(args)
-      settings = args.select { |x| x.match(/.*=.*/) }
-      args.reject! { |x| x.match(/.*=.*/) }
-
-      settings.map! do |setting|
-        parts = setting.split("=")
-        [parts[0], parts[1]]
-      end
-
-      Hash[settings]
     end
 
     def validate!
