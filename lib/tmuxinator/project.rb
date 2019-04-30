@@ -44,7 +44,7 @@ module Tmuxinator
         config_file_type = options[:type] || 'default'
         # now must pass in type
         # I temporarily hard coded it for getting 'procfile' type up and running
-        yml = Parser.new('/Users/jgandt/hcs/repos/Procfile', options, 'procfile').build_yaml
+        yml = Parser.new(path, options, 'procfile').build_yaml
       rescue SyntaxError, StandardError => error
         raise "Failed to parse config file: #{error.message}"
       end
