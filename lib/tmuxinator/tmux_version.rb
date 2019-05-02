@@ -1,21 +1,22 @@
 module Tmuxinator
   module TmuxVersion
     SUPPORTED_TMUX_VERSIONS = [
-      1.5,
-      1.6,
-      1.7,
-      1.8,
-      1.9,
-      2.0,
-      2.1,
-      2.2,
-      2.3,
-      2.4,
-      2.5,
-      2.6,
-      2.7,
+      "2.9a",
+      2.9,
       2.8,
-      2.9
+      2.7,
+      2.6,
+      2.5,
+      2.4,
+      2.3,
+      2.2,
+      2.1,
+      2.0,
+      1.9,
+      1.8,
+      1.7,
+      1.6,
+      1.5,
     ].freeze
     UNSUPPORTED_VERSION_MSG = <<-MSG.freeze
     WARNING: You are running tmuxinator with an unsupported version of tmux.
