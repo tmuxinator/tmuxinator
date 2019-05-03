@@ -1,3 +1,9 @@
+## Unreleased
+
+### Misc
+Small refactor to move Config.version to TmuxVersion.version
+
+
 ## 0.16.0
 ### Bugfixes
 - fix wemux class_eval error (#590)
