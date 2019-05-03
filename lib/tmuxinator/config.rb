@@ -47,10 +47,6 @@ module Tmuxinator
         File.directory?(environment)
       end
 
-      def sample
-        asset_path "sample.yml"
-      end
-
       def default
         "#{directory}/default.yml"
       end
@@ -91,18 +87,6 @@ module Tmuxinator
       # Pathname of the given project
       def project(name)
         global_project(name) || local_project || default_project(name)
-      end
-
-      def template
-        asset_path "template.erb"
-      end
-
-      def stop_template
-        asset_path "template-stop.erb"
-      end
-
-      def wemux_template
-        asset_path "wemux_template.erb"
       end
 
       # Sorted list of all .yml files, including duplicates
@@ -171,10 +155,6 @@ module Tmuxinator
       alias :project_in_local :local_project
 
       private
-
-      def asset_path(asset)
-        "#{File.dirname(__FILE__)}/assets/#{asset}"
-      end
 
       # The first pathname of the project named 'name' found while
       # recursively searching 'directory'

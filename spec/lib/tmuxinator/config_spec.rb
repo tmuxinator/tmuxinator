@@ -138,12 +138,6 @@ describe Tmuxinator::Config do
     end
   end
 
-  describe "#sample" do
-    it "gets the path of the sample project" do
-      expect(described_class.sample).to include("sample.yml")
-    end
-  end
-
   describe "#default" do
     it "gets the path of the default config" do
       expect(described_class.default).to include("default.yml")

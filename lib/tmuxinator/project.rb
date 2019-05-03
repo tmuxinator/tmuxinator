@@ -94,11 +94,11 @@ module Tmuxinator
     end
 
     def render
-      self.class.render_template(Tmuxinator::Config.template, binding)
+      self.class.render_template(Tmuxinator::AssetPath.template, binding)
     end
 
     def kill
-      self.class.render_template(Tmuxinator::Config.stop_template, binding)
+      self.class.render_template(Tmuxinator::AssetPath.stop_template, binding)
     end
 
     def self.render_template(template, bndg)

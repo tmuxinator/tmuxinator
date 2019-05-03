@@ -2,6 +2,7 @@
 
 ### Misc
 Small refactor to move Config.version to TmuxVersion.version
+Small refactor to move asset_path methods out of Config and into their own AssetPath class
 
 
 ## 0.16.0

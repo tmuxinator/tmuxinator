@@ -2,7 +2,7 @@ module Tmuxinator
   module WemuxSupport
     def render
       Tmuxinator::Project.render_template(
-        Tmuxinator::Config.wemux_template,
+        Tmuxinator::AssetPath.wemux_template,
         binding
       )
     end

@@ -12,6 +12,7 @@ end
 require "tmuxinator/tmux_version"
 require "tmuxinator/util"
 require "tmuxinator/deprecations"
+require "tmuxinator/asset_path"
 require "tmuxinator/wemux_support"
 require "tmuxinator/cli"
 require "tmuxinator/config"

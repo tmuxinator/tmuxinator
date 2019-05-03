@@ -167,9 +167,13 @@ module Tmuxinator
       end
 
       def generate_project_file(name, path)
-        template = Tmuxinator::Config.default? ? :default : :sample
-        content = File.read(Tmuxinator::Config.send(template.to_sym))
-        erb = Erubis::Eruby.new(content).result(binding)
+        template_path = if Tmuxinator::Config.default?
+                          Tmuxinator::Config.default
+                        else
+                          Tmuxinator::AssetPath.sample
+                        end
+        template_content = File.read(template_path)
+        erb = Erubis::Eruby.new(template_content).result(binding)
         File.open(path, "w") { |f| f.write(erb) }
         path
       end
