@@ -1,5 +1,7 @@
 module Tmuxinator
   module TmuxVersion
+    TMUX_MASTER_VERSION = Float::INFINITY
+
     SUPPORTED_TMUX_VERSIONS = [
       1.5,
       1.6,
@@ -22,8 +24,20 @@ module Tmuxinator
     (#{SUPPORTED_TMUX_VERSIONS.join(', ')})
     MSG
 
-    def self.supported?(version = Tmuxinator::Config.version)
+    def self.supported?(version = Tmuxinator::TmuxVersion.version)
       SUPPORTED_TMUX_VERSIONS.include?(version)
+    end
+
+    def self.version
+      if Tmuxinator::Doctor.installed?
+        tmux_version = `tmux -V`.split(" ")[1]
+
+        if tmux_version == "master"
+          TMUX_MASTER_VERSION
+        else
+          tmux_version.to_f
+        end
+      end
     end
   end
 end

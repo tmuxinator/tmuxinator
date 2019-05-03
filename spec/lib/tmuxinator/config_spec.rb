@@ -150,30 +150,10 @@ describe Tmuxinator::Config do
     end
   end
 
-  describe "#version" do
-    subject { described_class.version }
-
-    before do
-      expect(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
-      allow_any_instance_of(Kernel).to receive(:`).with(/tmux\s\-V/).
-        and_return("tmux #{version}")
-    end
-
-    context "master" do
-      let(:version) { "master" }
-      it { is_expected.to eq Float::INFINITY }
-    end
-
-    context "installed" do
-      let(:version) { "2.4" }
-      it { is_expected.to eq version.to_f }
-    end
-  end
-
   describe "#default_path_option" do
     context ">= 1.8" do
       before do
-        allow(described_class).to receive(:version).and_return(1.8)
+        allow(Tmuxinator::TmuxVersion).to receive(:version).and_return(1.8)
       end
 
       it "returns -c" do
@@ -183,7 +163,7 @@ describe Tmuxinator::Config do
 
     context "< 1.8" do
       before do
-        allow(described_class).to receive(:version).and_return(1.7)
+        allow(Tmuxinator::TmuxVersion).to receive(:version).and_return(1.7)
       end
 
       it "returns default-path" do

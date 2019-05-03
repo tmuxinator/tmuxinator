@@ -96,7 +96,7 @@ module Tmuxinator
       end
 
       def new_project_with_session(name, session)
-        if Tmuxinator::Config.version < 1.6
+        if Tmuxinator::TmuxVersion.version < 1.6
           raise "Creating projects from sessions is unsupported\
             for tmux version 1.5 or lower."
         end

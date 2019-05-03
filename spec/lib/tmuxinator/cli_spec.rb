@@ -252,8 +252,8 @@ describe Tmuxinator::Cli do
   describe "#start" do
     before do
       ARGV.replace(["start", "foo"])
+      stub_tmux_version(1.9)
       allow(Tmuxinator::Config).to receive_messages(validate: project)
-      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
@@ -304,8 +304,8 @@ describe Tmuxinator::Cli do
   describe "#stop" do
     before do
       ARGV.replace(["stop", "foo"])
+      stub_tmux_version(1.9)
       allow(Tmuxinator::Config).to receive_messages(validate: project)
-      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
@@ -323,8 +323,8 @@ describe Tmuxinator::Cli do
 
   describe "#local" do
     before do
+      stub_tmux_version(1.9)
       allow(Tmuxinator::Config).to receive_messages(validate: project)
-      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
@@ -357,8 +357,8 @@ describe Tmuxinator::Cli do
   describe "#start(custom_name)" do
     before do
       ARGV.replace(["start", "foo", "bar"])
+      stub_tmux_version(1.9)
       allow(Tmuxinator::Config).to receive_messages(validate: project)
-      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
@@ -372,8 +372,8 @@ describe Tmuxinator::Cli do
 
   describe "#start(with project config file)" do
     before do
+      stub_tmux_version(1.9)
       allow(Tmuxinator::Config).to receive(:validate).and_call_original
-      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
@@ -515,7 +515,7 @@ describe Tmuxinator::Cli do
 
     # this command variant only works for tmux version 1.6 and up.
     context "from a session" do
-      context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
+      context "with tmux >= 1.6", if: Tmuxinator::TmuxVersion.version >= 1.6 do
         before do
           # Necessary to make `Doctor.installed?` work in specs
           allow(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
@@ -560,7 +560,7 @@ describe Tmuxinator::Cli do
       context "with tmux < 1.6" do
         before do
           ARGV.replace ["new", name, "sessionname"]
-          allow(Tmuxinator::Config).to receive(:version).and_return(1.5)
+          stub_tmux_version(1.5)
         end
 
         it "is unsupported" do
@@ -640,7 +640,7 @@ describe Tmuxinator::Cli do
 
     context "project config file" do
       before do
-        allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+        stub_tmux_version(1.9)
         expect(Tmuxinator::Config).to receive(:validate).and_call_original
       end
 

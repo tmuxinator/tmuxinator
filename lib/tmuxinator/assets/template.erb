@@ -26,7 +26,7 @@ cd <%= root || "." %>
   <%= windows.first.tmux_window_command_prefix %> <%= "cd #{windows.first.root}".shellescape %> C-m
   <% end %>
 
-  <% if Tmuxinator::Config.version < 1.7 %>
+  <% if Tmuxinator::TmuxVersion.version < 1.7 %>
   # Set the default path for versions prior to 1.7
     <% if root? %>
   <%= tmux %> set-option -t <%= name %> <%= Tmuxinator::Config.default_path_option %> <%= root -%> 1>/dev/null

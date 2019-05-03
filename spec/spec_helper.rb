@@ -20,8 +20,12 @@ FactoryBot.find_definitions
 # Custom Matchers
 require_relative "matchers/pane_matcher"
 
+# Helpers
+require_relative "support/tmux_version_helpers"
+
 RSpec.configure do |config|
   config.order = "random"
+  config.include TmuxVersionHelpers
 end
 
 # Copied from minitest.
