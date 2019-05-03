@@ -10,7 +10,7 @@ module Tmuxinator
       end
 
       def build_yaml
-        content = Erubis::Eruby.new(raw_content).result(binding)
+        content = Erubis::Eruby.new(@raw_content).result(binding)
         YAML.safe_load(content, [], [], true)
       end
 

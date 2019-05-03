@@ -4,6 +4,7 @@ module Tmuxinator
       def initialize(config_file, _options)
         @config_file = config_file
         @root = File.dirname(File.expand_path(config_file))
+        @name = File.basename(@root)
       end
 
       def build_yaml

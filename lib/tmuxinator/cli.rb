@@ -239,6 +239,8 @@ module Tmuxinator
                                     desc: "Path to project config file"
     method_option "suppress-tmux-version-warning",
                   desc: "Don't show a warning for unsupported tmux versions"
+    method_option "config-type", aliases: "-t",
+                  desc: "Choose the type of configuration file you would like to use to start your tmux session (default - tmuxinator config, Procfile)"
 
     def start(name = nil, *args)
       # project-config takes precedence over a named project in the case that
@@ -253,7 +255,8 @@ module Tmuxinator
         attach: options[:attach],
         custom_name: options[:name],
         name: name,
-        project_config: options["project-config"]
+        project_config: options["project-config"],
+        config_type: options["config-type"]
       }
 
       show_version_warning if version_warning?(
