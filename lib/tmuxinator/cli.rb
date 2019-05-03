@@ -197,7 +197,8 @@ module Tmuxinator
         }
 
         begin
-          Tmuxinator::Config.validate(options)
+          project_file_path = Tmuxinator::Config.validate(options)
+          Tmuxinator::Project.load(project_file_path, options).validate!
         rescue => e
           exit! e.message
         end

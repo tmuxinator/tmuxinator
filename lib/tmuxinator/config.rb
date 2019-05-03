@@ -131,10 +131,8 @@ module Tmuxinator
 
       def validate(options = {})
         name = options[:name]
-        options[:force_attach] ||= false
-        options[:force_detach] ||= false
         project_config = options.fetch(:project_config) { false }
-        project_file = if valid_project_config?(project_config)
+        project_file_path = if valid_project_config?(project_config)
                          project_config
                        elsif valid_local_project?(name)
                          local_project
@@ -145,8 +143,7 @@ module Tmuxinator
                          # but just in case ...
                          raise NO_PROJECT_FOUND_MSG
                        end
-
-        Tmuxinator::Project.load(project_file, options).validate!
+        project_file_path
       end
 
       # Deprecated methods: ignore the 1st, use the 2nd

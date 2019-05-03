@@ -40,6 +40,10 @@ module Tmuxinator
     attr_reader :custom_name
 
     def self.load(path, options = {})
+      # I'm refactoring some things so I'm just sticking this here for now
+      options[:force_attach] ||= false
+      options[:force_detach] ||= false
+
       yaml = begin
         raw_content = File.read(path)
 

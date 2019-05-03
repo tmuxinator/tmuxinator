@@ -329,25 +329,25 @@ describe Tmuxinator::Config do
         end.to raise_error RuntimeError, regex
       end
 
-      it "should load and validate the project" do
+      it "should locate the project config file" do
         project_config = File.join(fixtures_dir, "sample.yml")
         expect(described_class.validate(project_config: project_config)).to \
-          be_a Tmuxinator::Project
+          be_a String
       end
 
       it "should take precedence over a named project" do
         allow(described_class).to receive_messages(directory: fixtures_dir)
         project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
-        project = described_class.validate(name: "sample",
+        project_file_path = described_class.validate(name: "sample",
                                            project_config: project_config)
-        expect(project.name).to eq("222")
+        expect(project_file_path).to match /spec\/fixtures\/sample_number_as_name.yml$/
       end
 
       it "should take precedence over a local project" do
         expect(described_class).not_to receive(:local?)
         project_config = File.join(fixtures_dir, "sample_number_as_name.yml")
-        project = described_class.validate(project_config: project_config)
-        expect(project.name).to eq("222")
+        project_file_path = described_class.validate(project_config: project_config)
+        expect(project_file_path).to match /spec\/fixtures\/sample_number_as_name.yml$/
       end
     end
 
@@ -358,10 +358,10 @@ describe Tmuxinator::Config do
         end.to raise_error RuntimeError, %r{Project.+doesn't.exist}
       end
 
-      it "should load and validate the project" do
+      it "should validate the project" do
         expect(described_class).to receive_messages(directory: fixtures_dir)
         expect(described_class.validate(name: "sample")).to \
-          be_a Tmuxinator::Project
+          be_a String
       end
     end
 
@@ -377,9 +377,8 @@ describe Tmuxinator::Config do
         content = File.read(File.join(fixtures_dir, "sample.yml"))
 
         expect(File).to receive(:exist?).with(default).at_least(:once) { true }
-        expect(File).to receive(:read).with(default).and_return(content)
 
-        expect(described_class.validate).to be_a Tmuxinator::Project
+        expect(described_class.validate).to be_a String
       end
     end
 

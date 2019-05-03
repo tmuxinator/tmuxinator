@@ -605,6 +605,10 @@ describe Tmuxinator::Project do
     it "should return an instance of the class if the file loads" do
       expect(described_class.load(path, options)).to be_a Tmuxinator::Project
     end
+
+    it "should populate the Project#name" do
+      expect(described_class.load(path, options).name).to eq "sample"
+    end
   end
 
   describe "::parse_settings" do
