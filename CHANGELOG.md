@@ -1,3 +1,6 @@
+## Unreleased
+- increase min XDG version in gemspec in order to exclude broken release (#708)
+
 ## 1.1.0
 ### Misc
 - add support for tmux 2.9a
