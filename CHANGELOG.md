@@ -1,3 +1,6 @@
+## Unreleased
+- add support for tmux 3.0-rc in preparation for the 3.0 release
+
 ## 1.1.1
 ### Bugfixes
 - increase min XDG version in gemspec in order to exclude broken release (#708)
