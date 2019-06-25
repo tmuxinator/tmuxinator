@@ -102,6 +102,22 @@ describe Tmuxinator::Cli do
             expect(instance).to receive(:start).with(*args, [])
             subject
           end
+
+          context "and the append option is passed" do
+            before do
+              options = Hash.new
+              options["append"] = true
+              allow(Tmuxinator::Config).to receive(:options).and_return options
+            end
+
+            it "should call #append" do
+              puts Tmuxinator::Config.options
+              instance = instance_double(cli)
+              expect(cli).to receive(:new).and_return(instance)
+              expect(instance).to receive(:append).with(*args, [])
+              subject
+            end
+          end
         end
 
         context "a thor command" do
