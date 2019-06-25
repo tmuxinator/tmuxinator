@@ -104,17 +104,12 @@ describe Tmuxinator::Cli do
           end
 
           context "and the append option is passed" do
-            before do
-              options = Hash.new
-              options["append"] = true
-              allow(Tmuxinator::Config).to receive(:options).and_return options
-            end
+            let(:args) { ["sample", "--append"] }
 
-            it "should call #append" do
-              puts Tmuxinator::Config.options
+            it "should call #start" do
               instance = instance_double(cli)
               expect(cli).to receive(:new).and_return(instance)
-              expect(instance).to receive(:append).with(*args, [])
+              expect(instance).to receive(:start).with("sample", ["--append"])
               subject
             end
           end
@@ -211,7 +206,6 @@ describe Tmuxinator::Cli do
                     edit
                     open
                     start
-                    append
                     stop
                     local
                     debug

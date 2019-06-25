@@ -339,7 +339,7 @@ tmuxinator version
 
 Append a project's windows to the current session (instead of creating a new session)
 ```
-tmuxinator append [project]
+tmuxinator start [project] --append
 ```
 
 ## Project Configuration Location

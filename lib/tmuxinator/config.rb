@@ -61,10 +61,12 @@ module Tmuxinator
       end
 
       def options
-        unless File.file?(options_file)
-          return
+        yaml = begin
+          YAML.safe_load(File.read(options_file), [], [], true)
+        rescue
+          return {}
         end
-        YAML.safe_load(File.read(options_file), [], [], true)
+        yaml ? yaml : {}
       end
 
       def default?
