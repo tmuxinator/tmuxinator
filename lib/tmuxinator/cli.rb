@@ -227,6 +227,18 @@ module Tmuxinator
       def kill_project(project)
         Kernel.exec(project.kill)
       end
+
+      def append_in_session(options, name = nil)
+        has_tmux_session = nil
+        if options[:append] == true ||
+           (options[:append] != false && Tmuxinator::Config.options[:append])
+          has_tmux_session = ENV["TMUX"] ? true : false
+          if !has_tmux_session
+            say "Creating session '#{name}'"
+          end
+        end
+        has_tmux_session
+      end
     end
 
     desc "start [PROJECT] [ARGS]", COMMANDS[:start]
@@ -251,22 +263,13 @@ module Tmuxinator
         name = nil
       end
 
-      has_tmux_session = nil
-      if options[:append] == true ||
-         (options[:append] != false && Tmuxinator::Config.options[:append])
-        has_tmux_session = ENV["TMUX"] ? true : false
-        if !has_tmux_session
-          say "Creating session '#{name}'"
-        end
-      end
-
       params = {
         args: args,
         attach: options[:attach],
         custom_name: options[:name],
         name: name,
         project_config: options["project-config"],
-        current_session: has_tmux_session
+        current_session: append_in_session(options, name)
       }
 
       show_version_warning if version_warning?(

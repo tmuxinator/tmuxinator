@@ -63,7 +63,7 @@ module Tmuxinator
       def options
         yaml = begin
           YAML.safe_load(File.read(options_file), [], [], true)
-        rescue
+        rescue SyntaxError, StandardError
           return {}
         end
         yaml ? yaml : {}
