@@ -23,6 +23,9 @@ describe Tmuxinator::Project do
   let(:project_with_force_detach) do
     FactoryBot.build(:project_with_force_detach)
   end
+  let(:append_in_current_session) do
+    FactoryBot.build(:append_in_current_session)
+  end
 
   let(:wemux_project) { FactoryBot.build(:wemux_project) }
   let(:noname_project) { FactoryBot.build(:noname_project) }
@@ -185,6 +188,13 @@ describe Tmuxinator::Project do
         rendered = project_with_emoji_as_name
         # needs to allow for \\ present in shellescape'd project name
         expect(rendered.name).to match(/^\\*🍩/)
+      end
+    end
+
+    context "in current session" do
+      it "will render an empty name" do
+        rendered = append_in_current_session
+        expect(rendered.name).to eq ""
       end
     end
 
@@ -363,6 +373,20 @@ describe Tmuxinator::Project do
 
       it "defaults to 0" do
         expect(project.base_index).to eq 0
+      end
+    end
+
+    context "in current session" do
+      before do
+        allow(append_in_current_session).
+          to receive_messages(get_base_index: "0")
+        allow_any_instance_of(Kernel).to receive(:`).
+          with(Regexp.new("tmux list-windows | awk '{print $1}'")).
+          and_return("2:\n")
+      end
+
+      it "should return the offseted index" do
+        expect(append_in_current_session.base_index).to eq 3
       end
     end
   end

@@ -1,0 +1,5 @@
+# ~/.tmuxinator/sample-in-current-session.yml
+name: sample_in_current_session
+current_session: true
+windows:
+  - editor: echo sample-in-current-session
