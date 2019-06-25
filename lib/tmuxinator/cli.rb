@@ -228,11 +228,19 @@ module Tmuxinator
         Kernel.exec(project.kill)
       end
 
+      def tmux_session_exists
+        ENV["TMUX"] ? true : false
+      end
+
+      def should_append?(options)
+        options[:append] == true ||
+          (options[:append] != false && Tmuxinator::Config.options[:append])
+      end
+
       def append_in_session(options, name = nil)
         has_tmux_session = nil
-        if options[:append] == true ||
-           (options[:append] != false && Tmuxinator::Config.options[:append])
-          has_tmux_session = ENV["TMUX"] ? true : false
+        if should_append?(options)
+          has_tmux_session = tmux_session_exists
           if !has_tmux_session
             say "Creating session '#{name}'"
           end
