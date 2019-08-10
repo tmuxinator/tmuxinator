@@ -9,7 +9,7 @@ _tmuxinator() {
       'projects:: _describe -t projects "tmuxinator projects" projects'
   elif (( CURRENT == 3)); then
     case $words[2] in
-      copy|debug|delete|open|start)
+      copy|cp|c|debug|delete|rm|open|o|start|s|edit|e)
         _arguments '*:projects:($projects)'
       ;;
     esac
