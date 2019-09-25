@@ -170,7 +170,7 @@ module Tmuxinator
       # to server: Connection refused" error message and non-zero exit status
       # if no tmux sessions exist.
       # Please see issues #402 and #414.
-      sessions = `#{tmux_command}#{socket} ls 2> /dev/null`
+      sessions = `#{tmux} ls 2> /dev/null`
 
       # Remove any escape sequences added by `shellescape` in Project#name.
       # Escapes can result in: "ArgumentError: invalid multibyte character"

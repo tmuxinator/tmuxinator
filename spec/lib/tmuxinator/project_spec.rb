@@ -79,7 +79,8 @@ describe Tmuxinator::Project do
   describe "#tmux_has_session?" do
     context "no active sessions" do
       before do
-        cmd = "#{project.tmux_command} ls 2> /dev/null"
+        tmux = project.tmux_command
+        cmd = "#{tmux} -f ~/.tmux.mac.conf -L foo ls 2> /dev/null"
         resp = ""
         call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
 
@@ -93,7 +94,7 @@ describe Tmuxinator::Project do
 
     context "active sessions" do
       before do
-        cmd = "#{project.tmux_command} ls 2> /dev/null"
+        cmd = "#{project.tmux} ls 2> /dev/null"
         resp = ""\
           "foo: 1 window (created Sun May 25 10:12:00 1986) [0x0] (detached)\n"\
           "bar: 1 window (created Sat Sept 01 00:00:00 1990) [0x0] (detached)"
