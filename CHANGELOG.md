@@ -1,6 +1,6 @@
 ## Unreleased
-### Misc
 - add zshell completions for command aliases
+- add note to README which covers temporary workaround for layout issues (#651)
 
 ## 1.1.1
 ### Bugfixes
