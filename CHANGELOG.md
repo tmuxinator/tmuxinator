@@ -1,3 +1,6 @@
+## UNRELEASED
+- add note to README which covers temporary workaround for layout issues (#651)
+
 ## 1.1.1
 ### Bugfixes
 - increase min XDG version in gemspec in order to exclude broken release (#708)
