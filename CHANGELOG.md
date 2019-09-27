@@ -1,6 +1,7 @@
 ## UNRELEASED
 - prevent commands from being re-run when re-attaching to session using custom
 socket (#719)
+- add note to README which covers temporary workaround for layout issues (#651)
 
 ## 1.1.1
 ### Bugfixes
