@@ -1,5 +1,7 @@
 ## Unreleased
 - add zshell completions for command aliases
+- prevent commands from being re-run when re-attaching to session using custom
+socket (#719)
 - add note to README which covers temporary workaround for layout issues (#651)
 
 ## 1.1.1
@@ -37,8 +39,8 @@
 ## 0.14.0
 ### Misc
 - Add `--suppress-tmux-version-warning` flag to prevent tmux version warning (#583)
-  - Separate version warning from deprecation messages
-  - Add unsupported version warnings for `stop` and `local` as well
+- Separate version warning from deprecation messages
+- Add unsupported version warnings for `stop` and `local` as well
 - quiet deprecation warnings in test output (#619)
 - reword "Project Configuration Location" section of README to reflect current
 behavior (#621)
