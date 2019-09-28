@@ -1,4 +1,5 @@
-## UNRELEASED
+## Unreleased
+- add zshell completions for command aliases
 - prevent commands from being re-run when re-attaching to session using custom
 socket (#719)
 - add note to README which covers temporary workaround for layout issues (#651)
