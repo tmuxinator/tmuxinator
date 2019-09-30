@@ -1,7 +1,10 @@
-## Unreleased
-- add zshell completions for command aliases
+## 1.1.2
+### Bugfixes
 - prevent commands from being re-run when re-attaching to session using custom
 socket (#719)
+
+### Misc
+- add zshell completions for command aliases
 - add note to README which covers temporary workaround for layout issues (#651)
 
 ## 1.1.1
