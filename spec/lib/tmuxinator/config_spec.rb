@@ -159,14 +159,33 @@ describe Tmuxinator::Config do
         and_return("tmux #{version}")
     end
 
-    context "master" do
-      let(:version) { "master" }
-      it { is_expected.to eq Float::INFINITY }
-    end
+    version_mapping = {
+      "0.8"      => 0.8,
+      "1.0"      => 1.0,
+      "1.9"      => 1.9,
+      "1.9a"     => 1.9,
+      "2.4"      => 2.4,
+      "2.9a"     => 2.9,
+      "3.0-rc5"  => 3.0,
+      "next-3.1" => 3.1,
+      "master"   => Float::INFINITY,
+      # Failsafes
+      "foobar"   => 0.0,
+      "-123-"    => 123.0,
+      "5935"     => 5935.0,
+      ""         => 0.0,
+      "!@#^%"    => 0.0,
+      "2.9ä"     => 2.9,
+      "v3.5"     => 3.5,
+      "v3.12.0"  => 3.12,
+      "v3.12.5"  => 3.12
+    }.freeze
 
-    context "installed" do
-      let(:version) { "2.4" }
-      it { is_expected.to eq version.to_f }
+    version_mapping.each do |string_version, parsed_numeric_version|
+      context "when reported version is '#{string_version}'" do
+        let(:version) { string_version }
+        it { is_expected.to eq parsed_numeric_version }
+      end
     end
   end
 
