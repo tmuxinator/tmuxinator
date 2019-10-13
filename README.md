@@ -16,8 +16,16 @@ Create and manage tmux sessions easily.
 
 ## Installation
 
+### Ruby gems
+
 ```
 gem install tmuxinator
+```
+
+### Homebrew
+
+```
+brew install tmuxinator
 ```
 
 ## Editor and Shell
