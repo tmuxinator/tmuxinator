@@ -67,7 +67,7 @@ module Tmuxinator
           if tmux_version == "master"
             TMUX_MASTER_VERSION
           else
-            tmux_version.to_f
+            tmux_version.to_s[/\d+(?:\.\d+)?/, 0].to_f
           end
         end
       end
