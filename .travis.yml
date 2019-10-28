@@ -3,7 +3,7 @@ rvm:
   - "2.4.6"
   - "2.5.5"
   - "2.6.2"
-  - "2.7.0-preview1"
+  - "2.7.0-preview2"
 env:
   - TMUX_VERSION=2.9a
   - TMUX_VERSION=2.9
