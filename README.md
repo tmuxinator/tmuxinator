@@ -86,6 +86,14 @@ Create or edit your projects with:
 tmuxinator new [project]
 ```
 
+Create or edit a local project where the config file will be stored in the 
+current working directory (in `.tmuxinator.yml`) instead of the default 
+project configuration file location (e.g. `~/.config/tmuxinator`):
+
+```
+tmuxinator new --local [project]
+```
+
 For editing you can also use `tmuxinator open [project]`. `new` is aliased to
 `n`,`open` to `o`, and `edit` to `e`. Please note that dots can't be used in project
 names as tmux uses them internally to delimit between windows and panes.
