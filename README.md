@@ -86,8 +86,9 @@ Create or edit your projects with:
 tmuxinator new [project]
 ```
 
-Create or edit a local project where the project yml file will be stored at
-`./.tmuxinator.yml` instead of inside the `~/.tmuxinator` folder:
+Create or edit a local project where the config file will be stored in the 
+current working directory (in `.tmuxinator.yml`) instead of the default 
+project configuration file location (e.g. `~/.config/tmuxinator`):
 
 ```
 tmuxinator new --local [project]
