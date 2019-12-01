@@ -3,6 +3,9 @@
 ### Bugfixes
 - correct edge tmux version detection (#728)
 
+### Misc
+- document local project creation (#439)
+
 ## 1.1.2
 ### Bugfixes
 - prevent commands from being re-run when re-attaching to session using custom
