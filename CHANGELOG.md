@@ -5,6 +5,7 @@
 
 ### Misc
 - document local project creation (#439)
+- add support for tmux 3.0 and 3.0a (#734)
 
 ## 1.1.2
 ### Bugfixes
