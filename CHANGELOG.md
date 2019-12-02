@@ -1,5 +1,4 @@
-## Unreleased
-
+## 1.1.3
 ### Bugfixes
 - correct edge tmux version detection (#728)
 
