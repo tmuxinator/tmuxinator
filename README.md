@@ -51,27 +51,24 @@ earlier versions. Refer to the FAQ for any odd behaviour.
 
 ## Completion
 
-Download the appropriate completion file from the repo and `source` the file.
-The following are example where the completion file has been downloaded into
-`~/.bin`.
+Your distribution's package manager may install the completion files in the
+appropriate location for the completion to load automatically on startup. But,
+if you installed tmuxinator via Ruby's `gem`, you'll need to run the following
+commands to put the completion files where they'll be loaded by your shell.
 
 ### bash
 
-Add the following to your `~/.bashrc`:
-
-    source ~/.bin/tmuxinator.bash
+    # wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.bash -O /etc/bash_completion.d/tmuxinator.bash
 
 ### zsh
 
-Add the following to your `~/.zshrc`:
+    # wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh -O /usr/local/share/zsh/site-functions/_tmuxinator
 
-    source ~/.bin/tmuxinator.zsh
+Note: ZSH's completion files can be put in other locations in your `$fpath`. Please refer to the [manual](http://zsh.sourceforge.net/Doc/Release/Functions.html) for more details.
 
 ### fish
 
-Move `tmuxinator.fish` to your `completions` folder:
-
-    cp ~/.bin/tmuxinator.fish ~/.config/fish/completions/
+    $ wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.fish ~/.config/fish/completions/
 
 ## Usage
 
