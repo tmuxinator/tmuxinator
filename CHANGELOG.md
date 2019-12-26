@@ -1,4 +1,6 @@
 ## Unreleased
+### Misc
+- add Ruby 2.7.0 to Travis test matrix
 - specify max thor version (#739)
 
 ## 1.1.3
