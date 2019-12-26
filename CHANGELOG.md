@@ -1,5 +1,6 @@
 ## Unreleased
-- upgrade thor version to ~> 1.0 (#739)
+- bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
+(#739)
 
 ## 1.1.3
 ### Bugfixes
