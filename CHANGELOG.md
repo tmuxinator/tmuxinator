@@ -1,5 +1,5 @@
 ## Unreleased
-- specify max thor version (#739)
+- upgrade thor version to ~> 1.0 (#739)
 
 ## 1.1.3
 ### Bugfixes
