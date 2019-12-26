@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- add Ruby 2.7.0 to Travis test matrix
+
 ## 1.1.3
 ### Bugfixes
 - correct edge tmux version detection (#728)
