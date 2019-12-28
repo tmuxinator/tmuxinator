@@ -1,7 +1,8 @@
 ## Unreleased
 ### Misc
+- bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
+(#739)
 - add Ruby 2.7.0 to Travis test matrix
-- specify max thor version (#739)
 
 ## 1.1.3
 ### Bugfixes
