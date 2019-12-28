@@ -1,8 +1,11 @@
-## Unreleased
+## 1.1.4
 ### Misc
 - bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
 (#739)
 - add Ruby 2.7.0 to Travis test matrix
+
+### Bugfixes
+- fix various completion script issues (#705/#737)
 
 ## 1.1.3
 ### Bugfixes
