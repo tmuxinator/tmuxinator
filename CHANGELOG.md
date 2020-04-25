@@ -1,11 +1,11 @@
 ## Unreleased
 - remove support for Ruby 2.4
 - bump patch versions of supported Rubies in gemspec and Travis config
+- bump XDG dependency to 3.0.1, which is the most up-to-date version aligned
+with tmuxinator's list of currently supported Rubies (#753)
 
 ## 1.1.5
 ### Misc
-- bump XDG dependency to 3.0.1, which is the most up-to-date version aligned
-with tmuxinator's list of currently supported Rubies (#753)
 - add support for tmux 3.1 (#754)
 - bump copyright year in README
 
