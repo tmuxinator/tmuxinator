@@ -1,7 +1,9 @@
+## Unreleased
+- remove support for Ruby 2.4
+- bump patch versions of supported Rubies in Travis test matrix
+
 ## 1.1.5
 ### Misc
-- remove Ruby 2.4 from Travis test matrix
-- bump patch versions of supported Rubies in Travis test matrix
 - add support for tmux 3.1 (#754)
 - bump copyright year in README
 
