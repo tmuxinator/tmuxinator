@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- bump copyright year in README
+
 ## 1.1.4
 ### Misc
 - bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
