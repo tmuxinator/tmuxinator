@@ -1,3 +1,8 @@
+## Unreleased
+### Misc
+- remove Ruby 2.4 from Travis test matrix
+- bump patch versions of supported Rubies in Travis test matrix
+
 ## 1.1.4
 ### Misc
 - bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
