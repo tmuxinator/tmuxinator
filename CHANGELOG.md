@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- add support for tmux 3.1 (#754)
+
 ## 1.1.4
 ### Misc
 - bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
