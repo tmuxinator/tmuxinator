@@ -1,4 +1,4 @@
-## Unreleased
+## 1.1.5
 ### Misc
 - remove Ruby 2.4 from Travis test matrix
 - bump patch versions of supported Rubies in Travis test matrix
