@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   }
 
   s.required_rubygems_version = ">= 1.8.23"
-  s.required_ruby_version = ">= 2.4.6"
+  s.required_ruby_version = ">= 2.5.8"
 
   s.add_dependency "erubis", "~> 2.6"
   s.add_dependency "thor", "~> 1.0"
