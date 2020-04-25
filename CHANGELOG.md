@@ -1,3 +1,7 @@
+## Unreleased
+### Security
+- bump rake development dependency version to address CVE-2020-8130
+
 ## 1.1.4
 ### Misc
 - bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
