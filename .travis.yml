@@ -1,9 +1,8 @@
 language: ruby
 rvm:
-  - "2.4.6"
-  - "2.5.5"
-  - "2.6.2"
-  - "2.7.0"
+  - "2.5.8"
+  - "2.6.6"
+  - "2.7.1"
 env:
   - TMUX_VERSION=3.0a
   - TMUX_VERSION=3.0
