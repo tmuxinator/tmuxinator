@@ -1,3 +1,8 @@
+## Unreleased
+### Misc
+- Bump XDG dependency to 3.0.1, which is the most up-to-date version aligned
+with tmuxinator's list of currently supported Rubies (#753)
+
 ## 1.1.4
 ### Misc
 - bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
