@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "erubis", "~> 2.6"
   s.add_dependency "thor", "~> 1.0"
-  s.add_dependency "xdg", "~> 2.2", ">= 2.2.5"
+  s.add_dependency "xdg", "~> 3.0.1"
 
   s.add_development_dependency "activesupport", "< 5.0.0" # Please see issue #432
   s.add_development_dependency "awesome_print", "~> 1.2"

@@ -29,7 +29,7 @@ module Tmuxinator
       # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
       # return value will be ~/my-config/tmuxinator)
       def xdg
-        XDG["CONFIG"].to_s + "/tmuxinator"
+        XDG::Config.new.home.to_s + "/tmuxinator"
       end
 
       def xdg?

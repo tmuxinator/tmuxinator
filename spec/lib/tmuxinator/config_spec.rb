@@ -53,7 +53,8 @@ describe Tmuxinator::Config do
 
         Dir.mktmpdir do |dir|
           config_parent = "#{dir}/non_existant_parent/s"
-          allow(XDG).to receive(:[]).with("CONFIG").and_return config_parent
+          allow(XDG::Config).to receive_message_chain(:new, :home, :to_s).
+            and_return config_parent
           expect(described_class.directory).
             to eq "#{config_parent}/tmuxinator"
           expect(File.directory?("#{config_parent}/tmuxinator")).to be true
@@ -134,7 +135,8 @@ describe Tmuxinator::Config do
 
   describe "#xdg" do
     it "is $XDG_CONFIG_HOME/tmuxinator" do
-      expect(described_class.xdg).to eq "#{XDG['CONFIG_HOME']}/tmuxinator"
+      config_home = XDG::Config.new.home.to_s
+      expect(described_class.xdg).to eq "#{config_home}/tmuxinator"
     end
   end
 
