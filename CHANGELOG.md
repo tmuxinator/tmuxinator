@@ -1,7 +1,9 @@
 ## Unreleased
 ### Misc
-- Bump XDG dependency to 3.0.1, which is the most up-to-date version aligned
+- bump XDG dependency to 3.0.1, which is the most up-to-date version aligned
 with tmuxinator's list of currently supported Rubies (#753)
+- add support for tmux 3.1 (#754)
+- bump copyright year in README
 
 ## 1.1.4
 ### Misc
