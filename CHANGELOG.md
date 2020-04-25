@@ -1,3 +1,7 @@
+## Unreleased
+- remove support for Ruby 2.4
+- bump patch versions of supported Rubies in gemspec and Travis config
+
 ## 1.1.5
 ### Misc
 - add support for tmux 3.1 (#754)
