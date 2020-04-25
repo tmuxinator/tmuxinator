@@ -1,5 +1,6 @@
 ## Unreleased
 ### Misc
+- add support for tmux 3.1 (#754)
 - bump copyright year in README
 
 ## 1.1.4
