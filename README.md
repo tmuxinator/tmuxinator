@@ -380,4 +380,4 @@ To contribute, please read the [contributing guide](https://github.com/tmuxinato
 
 ## Copyright
 
-Copyright (c) 2010-2019 Allen Bargi, Christopher Chow. See LICENSE for further details.
+Copyright (c) 2010-2020 Allen Bargi, Christopher Chow. See LICENSE for further details.

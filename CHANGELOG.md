@@ -2,6 +2,7 @@
 ### Misc
 - remove Ruby 2.4 from Travis test matrix
 - bump patch versions of supported Rubies in Travis test matrix
+- bump copyright year in README
 
 ## 1.1.4
 ### Misc
