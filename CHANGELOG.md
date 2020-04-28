@@ -3,6 +3,7 @@
 - bump rake development dependency version to address CVE-2020-8130
 ### Misc
 - document removal of Zsh mux alias\; suggest users migrate to RC based aliases
+- synchronize project configs in README and sample.yml
 - remove support for Ruby 2.4
 - bump patch versions of supported Rubies in gemspec and Travis config
 
