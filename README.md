@@ -307,11 +307,13 @@ You can provide tmuxinator with a project config file using the optional `[proje
 
 ## Shorthand
 
-The [shell completion files](#completion) also include a shorthand alias for tmuxinator that can be used in place of the full name.
+The [shell completion files](#completion) also include a shorthand alias for tmuxinator that can be used in place of the full name*.
 
 ```
 mux [command]
 ```
+
+*The `mux` alias has been removed from the Zsh completion script because it was resulting in unexpected behavior in some setups. Including aliases in completion scripts is not standard practice and the Bash and Fish aliases may be removed in a future release. Going forward, users should create their own aliases in their shell's RC file (e.g. `alias mux=tmuxinator`).
 
 ## Other Commands
 
