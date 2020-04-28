@@ -103,7 +103,7 @@ If this is a new project you will see this default config:
 name: sample
 root: ~/
 
-# Optional. tmux socket
+# Optional tmux socket
 # socket_name: foo
 
 # Note that the pre and post options have been deprecated and will be replaced by
@@ -136,11 +136,20 @@ root: ~/
 # tmux_command: byobu
 
 # Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
-# startup_window: logs
+# startup_window: editor
+
+# Specifies (by index) which pane of the specified window will be selected on project startup. If not set, the first pane is used.
+# startup_pane: 1
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
 
 windows:
   - editor:
       layout: main-vertical
+      # Synchronize all panes of this window, can be enabled before or after the pane commands run.
+      # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
+      # synchronize: after
       panes:
         - vim
         - guard
