@@ -1,6 +1,6 @@
-## Unreleased
+## 2.0.1
 ### Misc
-- add support for 3.1b
+- add support for tmux 3.1b
 
 ## 2.0.0
 ### Security
