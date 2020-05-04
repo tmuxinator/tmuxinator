@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- add support for 3.1b
+
 ## 2.0.0
 ### Security
 - bump rake development dependency version to address CVE-2020-8130
