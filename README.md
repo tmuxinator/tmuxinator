@@ -16,17 +16,18 @@ Create and manage tmux sessions easily.
 
 ## Installation
 
-### Ruby gems
-
+### RubyGems
 ```
 gem install tmuxinator
 ```
 
 ### Homebrew
-
 ```
 brew install tmuxinator
 ```
+tmuxinator aims to be compatible with [the currently maintained versions of Ruby](https://www.ruby-lang.org/en/downloads/).
+
+Some operating systems may provide an unsupported version of Ruby as their "system ruby". In these cases, users should use [RVM](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv) to install a supported Ruby version and use that version's `gem` binary to install tmuxinator.
 
 ## Editor and Shell
 
