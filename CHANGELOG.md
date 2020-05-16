@@ -1,6 +1,7 @@
 ## Unreleased
 ### Misc
 - add Ruby support link and RVM/rbenv links to README (#707)
+- document support for unnamed windows in README (#773)
 
 ## 2.0.1
 ### Misc
