@@ -160,8 +160,9 @@ windows:
 
 ## Windows
 
-The windows option allows the specification of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name
-and command to be run.
+The windows option allows the specification of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name* and command to be run.
+
+*Users may optionally provide a null YAML value (e.g. `null` or `~`) in place of a named window key, which will cause the window to use its default name (usually the name of their shell).
 
 ```yaml
 windows:
