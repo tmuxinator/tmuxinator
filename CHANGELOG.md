@@ -2,6 +2,7 @@
 ### Misc
 - add Ruby support link and RVM/rbenv links to README (#707)
 - add support for tmux 3.2
+- add tmux 3.1b to travis test matrix
 - document support for unnamed windows in README (#773)
 
 ## 2.0.1
