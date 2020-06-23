@@ -1,6 +1,7 @@
 ## Unreleased
 ### Misc
 - add Ruby support link and RVM/rbenv links to README (#707)
+- add support for tmux 3.2
 
 ## 2.0.1
 ### Misc
