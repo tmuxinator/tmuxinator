@@ -247,6 +247,24 @@ module Tmuxinator
         end
         has_tmux_session
       end
+
+      def get_params(name = nil, *args)
+        # project-config takes precedence over a named project in the case that
+        # both are provided.
+        if options["project-config"]
+          args.unshift name if name
+          name = nil
+        end
+
+        {
+          args: args,
+          attach: options[:attach],
+          custom_name: options[:name],
+          name: name,
+          project_config: options["project-config"],
+          current_session: append_in_session(options, name)
+        }
+      end
     end
 
     desc "start [PROJECT] [ARGS]", COMMANDS[:start]
@@ -264,21 +282,7 @@ module Tmuxinator
                            desc: "Appends the project windows and panes in \
                             the current session"
     def start(name = nil, *args)
-      # project-config takes precedence over a named project in the case that
-      # both are provided.
-      if options["project-config"]
-        args.unshift name if name
-        name = nil
-      end
-
-      params = {
-        args: args,
-        attach: options[:attach],
-        custom_name: options[:name],
-        name: name,
-        project_config: options["project-config"],
-        current_session: append_in_session(options, name)
-      }
+      params = get_params(name, *args)
 
       show_version_warning if version_warning?(
         options["suppress-tmux-version-warning"]
