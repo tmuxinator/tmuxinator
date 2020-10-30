@@ -1,5 +1,6 @@
 ## Unreleased
 ### Misc
+- add tmux 3.1c to travis test matrix
 - add Ruby support link and RVM/rbenv links to README (#707)
 - add tmux 3.1b to travis test matrix
 - document support for unnamed windows in README (#773)
