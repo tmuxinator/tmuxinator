@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.2
 ### Misc
 - add tmux 3.1c to Travis CI test matrix
 - add Ruby support link and RVM/rbenv links to README (#707)
