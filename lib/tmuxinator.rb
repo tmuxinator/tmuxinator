@@ -1,4 +1,4 @@
-require "erubis"
+require "erubi"
 require "fileutils"
 require "shellwords"
 require "thor"
