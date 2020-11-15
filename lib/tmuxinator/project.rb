@@ -47,7 +47,7 @@ module Tmuxinator
         @settings = parse_settings(args)
         @args = args
 
-        content = Erubis::Eruby.new(raw_content).result(binding)
+        content = eval(Erubi::Engine.new(raw_content).src, binding)
         YAML.safe_load(content, aliases: true)
       rescue SyntaxError, StandardError => error
         raise "Failed to parse config file: #{error.message}"
@@ -103,7 +103,7 @@ module Tmuxinator
 
     def self.render_template(template, bndg)
       content = File.read(template)
-      Erubis::Eruby.new(content).result(bndg)
+      eval(Erubi::Engine.new(content).src, bndg)
     end
 
     def windows

@@ -169,7 +169,7 @@ module Tmuxinator
       def generate_project_file(name, path)
         template = Tmuxinator::Config.default? ? :default : :sample
         content = File.read(Tmuxinator::Config.send(template.to_sym))
-        erb = Erubis::Eruby.new(content).result(binding)
+        erb = eval(Erubi::Engine.new(content).src, binding)
         File.open(path, "w") { |f| f.write(erb) }
         path
       end
