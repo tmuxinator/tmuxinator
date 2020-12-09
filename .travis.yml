@@ -1,5 +1,6 @@
 language: ruby
 rvm:
+  - "3.0.0preview2"
   - "2.5.8"
   - "2.6.6"
   - "2.7.1"

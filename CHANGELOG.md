@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- add Ruby 3 to the Travis test matrix
+
 ## 2.0.2
 ### Misc
 - add tmux 3.1c to Travis CI test matrix
