@@ -1,6 +1,6 @@
 ## Unreleased
 ### Misc
-- add Ruby 3 to the Travis test matrix
+- Add Ruby 3 to the Travis test matrix
 
 ## 2.0.2
 ### Misc
