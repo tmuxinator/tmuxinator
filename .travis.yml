@@ -1,3 +1,7 @@
+os: linux
+arch:
+ - amd64
+ - ppc64le
 language: ruby
 rvm:
   - "2.5.8"
