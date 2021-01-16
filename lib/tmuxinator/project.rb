@@ -103,7 +103,7 @@ module Tmuxinator
 
     def self.render_template(template, bndg)
       content = File.read(template)
-      eval(Erubi::Engine.new(content).src, bndg)
+      bndg.eval(Erubi::Engine.new(content).src)
     end
 
     def windows
