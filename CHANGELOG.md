@@ -1,5 +1,6 @@
 ## Unreleased
 ### Misc
+- Add Ruby 3 to the Travis test matrix
 - add support for tmux 3.2
 
 ## 2.0.2
