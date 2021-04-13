@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- add support for tmux 3.2
+
 ## 2.0.2
 ### Misc
 - add tmux 3.1c to Travis CI test matrix
