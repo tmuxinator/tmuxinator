@@ -1,3 +1,6 @@
+## Unreleased
+- Fix config file parsing error: wrong number of arguments (given 4, expected 1) (#819)
+
 ## 2.0.3
 ### Misc
 - Add Ruby 3 to the Travis test matrix
