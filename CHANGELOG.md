@@ -1,4 +1,5 @@
 ## Unreleased
+- Deprecate Ruby 2.5; bump min Ruby version in gemspec; bump Ruby versions in Travis test matrix
 - Fix config file parsing error: wrong number of arguments (given 4, expected 1) (#819)
 
 ## 2.0.3
