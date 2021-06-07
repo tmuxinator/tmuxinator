@@ -220,7 +220,7 @@ module Tmuxinator
       base = 0
       if in_current_session
         # Get the last window index + 1
-        base = 1 + `tmux list-windows | awk '{print $1}'`.split.last.to_i
+        base = 1 + `tmux list-windows -F '#I'`.split.last.to_i
       end
       base + get_base_index.to_i
     end
