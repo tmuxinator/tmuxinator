@@ -238,14 +238,10 @@ module Tmuxinator
       end
 
       def append_in_session(options, name = nil)
-        has_tmux_session = nil
-        if should_append?(options)
-          has_tmux_session = tmux_session_exists
-          if !has_tmux_session
-            say "Creating session '#{name}'"
-          end
+        if should_append?(options) && !tmux_session_exists
+          say "Creating session '#{name}'"
+          true
         end
-        has_tmux_session
       end
 
       def get_params(name = nil, *args)
