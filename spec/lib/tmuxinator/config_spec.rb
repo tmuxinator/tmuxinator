@@ -213,12 +213,14 @@ describe Tmuxinator::Config do
 
   describe "#default?" do
     let(:directory) { described_class.directory }
-    let(:local_default) { described_class::LOCAL_DEFAULT }
+    let(:local_yml_default) { described_class::LOCAL_DEFAULTS[0] }
+    let(:local_yaml_default) { described_class::LOCAL_DEFAULTS[1] }
     let(:proj_default) { described_class.default }
 
     context "when the file exists" do
       before do
-        allow(File).to receive(:exist?).with(local_default) { false }
+        allow(File).to receive(:exist?).with(local_yml_default) { false }
+        allow(File).to receive(:exist?).with(local_yaml_default) { false }
         allow(File).to receive(:exist?).with(proj_default) { true }
       end
 
@@ -229,7 +231,8 @@ describe Tmuxinator::Config do
 
     context "when the file doesn't exist" do
       before do
-        allow(File).to receive(:exist?).with(local_default) { false }
+        allow(File).to receive(:exist?).with(local_yml_default) { false }
+        allow(File).to receive(:exist?).with(local_yaml_default) { false }
         allow(File).to receive(:exist?).with(proj_default) { false }
       end
 
@@ -309,14 +312,14 @@ describe Tmuxinator::Config do
 
   describe "#local?" do
     it "checks if the given project exists" do
-      path = described_class::LOCAL_DEFAULT
+      path = described_class::LOCAL_DEFAULTS[0]
       expect(File).to receive(:exist?).with(path) { true }
       expect(described_class.local?).to be_truthy
     end
   end
 
   describe "#local_project" do
-    let(:default) { described_class::LOCAL_DEFAULT }
+    let(:default) { described_class::LOCAL_DEFAULTS[0] }
 
     context "with a project yml" do
       it "gets the project as path to the yml file" do
@@ -334,7 +337,7 @@ describe Tmuxinator::Config do
 
   describe "#project" do
     let(:directory) { described_class.directory }
-    let(:default) { described_class::LOCAL_DEFAULT }
+    let(:default) { described_class::LOCAL_DEFAULTS[0] }
 
     context "with an non-local project yml" do
       before do
@@ -363,7 +366,8 @@ describe Tmuxinator::Config do
   end
 
   describe "#validate" do
-    let(:default) { described_class::LOCAL_DEFAULT }
+    let(:local_yml_default) { described_class::LOCAL_DEFAULTS[0] }
+    let(:local_yaml_default) { described_class::LOCAL_DEFAULTS[1] }
 
     context "when a project config file is provided" do
       it "should raise if the project config file can't be found" do
@@ -412,19 +416,42 @@ describe Tmuxinator::Config do
 
     context "when no project name is provided" do
       it "should raise if the local project file doesn't exist" do
-        expect(File).to receive(:exist?).with(default) { false }
+        expect(File).to receive(:exist?).with(local_yml_default) { false }
+        expect(File).to receive(:exist?).with(local_yaml_default) { false }
         expect do
           described_class.validate
         end.to raise_error RuntimeError, %r{Project.+doesn't.exist}
       end
 
-      it "should load and validate the project" do
-        content = File.read(File.join(fixtures_dir, "sample.yml"))
+      context "and tmuxinator.yml exists" do
+        it "should load and validate the local project" do
+          content = File.read(File.join(fixtures_dir, "sample.yml"))
 
-        expect(File).to receive(:exist?).with(default).at_least(:once) { true }
-        expect(File).to receive(:read).with(default).and_return(content)
+          expect(File).to receive(:exist?).
+            with(local_yml_default).
+            at_least(:once) { true }
+          expect(File).to receive(:read).
+            with(local_yml_default).
+            and_return(content)
+          expect(described_class.validate).to be_a Tmuxinator::Project
+        end
+      end
 
-        expect(described_class.validate).to be_a Tmuxinator::Project
+      context "and tmuxinator.yaml exists" do
+        it "should load and validate the local project" do
+          content = File.read(File.join(fixtures_dir, "sample.yml"))
+
+          expect(File).to receive(:exist?).
+            with(local_yml_default).
+            at_least(:once) { false }
+          expect(File).to receive(:exist?).
+            with(local_yaml_default).
+            at_least(:once) { true }
+          expect(File).to receive(:read).
+            with(local_yaml_default).
+            and_return(content)
+          expect(described_class.validate).to be_a Tmuxinator::Project
+        end
       end
     end
 

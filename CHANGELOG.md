@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- add support for local project configs using the .yaml extension
+
 ## 3.0.0
 ### Misc
 - Deprecate Ruby 2.5; bump min Ruby version in gemspec; bump Ruby versions in Travis test matrix
