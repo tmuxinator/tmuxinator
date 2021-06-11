@@ -1,3 +1,7 @@
+## Unreleased
+### tmux
+- add tmux 3.2a to Travis test matrix; add 3.2a to supported tmux versions list
+
 ## 3.0.0
 ### Misc
 - Deprecate Ruby 2.5; bump min Ruby version in gemspec; bump Ruby versions in Travis test matrix
