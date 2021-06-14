@@ -1,6 +1,8 @@
 ## Unreleased
 ### tmux
 - add tmux 3.2a to Travis test matrix; add 3.2a to supported tmux versions list
+### Misc
+- add support for local project configs using the .yaml extension
 
 ## 3.0.0
 ### Misc

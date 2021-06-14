@@ -501,7 +501,7 @@ describe Tmuxinator::Cli do
       end
 
       context "file exists" do
-        let(:path) { Tmuxinator::Config::LOCAL_DEFAULT }
+        let(:path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
         before do
           expect(File).to receive(:exist?).with(path) { true }
         end

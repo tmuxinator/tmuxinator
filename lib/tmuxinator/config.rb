@@ -1,6 +1,6 @@
 module Tmuxinator
   class Config
-    LOCAL_DEFAULT = "./.tmuxinator.yml".freeze
+    LOCAL_DEFAULTS = ["./.tmuxinator.yml", "./.tmuxinator.yaml"].freeze
     NO_LOCAL_FILE_MSG =
       "Project file at ./.tmuxinator.yml doesn't exist.".freeze
     NO_PROJECT_FOUND_MSG = "Project could not be found.".freeze
@@ -94,7 +94,7 @@ module Tmuxinator
       end
 
       def local_project
-        [LOCAL_DEFAULT].detect { |f| File.exist?(f) }
+        LOCAL_DEFAULTS.detect { |f| File.exist?(f) }
       end
 
       def default_project(name)
