@@ -21,7 +21,11 @@ cd <%= root || "." %>
 
   # Create the session and the first window. Manually switch to root
   # directory if required to support tmux < 1.9
+  <% if !in_current_session %>
   TMUX= <%= tmux_new_session_command %>
+  <% else %>
+    <%= windows.first.tmux_new_window_command %>
+  <% end %>
   <% if windows.first.root? %>
   <%= windows.first.tmux_window_command_prefix %> <%= "cd #{windows.first.root}".shellescape %> C-m
   <% end %>
@@ -85,7 +89,7 @@ cd <%= root || "." %>
   <%= hook_on_project_restart %>
 <%- end -%>
 
-<%- if attach? -%>
+<%- if attach? && !in_current_session -%>
   if [ -z "$TMUX" ]; then
     <%= tmux %> -u attach-session -t <%= name %>
   else

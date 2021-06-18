@@ -108,7 +108,8 @@ module Tmuxinator
     end
 
     def tmux_window_name_option
-      name ? "-n #{name}" : ""
+      project_name = project.in_current_session ? "#{project.full_name}:" : ""
+      name ? "-n #{project_name}#{name}" : ""
     end
 
     def tmux_new_window_command
