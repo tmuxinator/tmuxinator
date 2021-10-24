@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 _tmuxinator() {
     COMPREPLY=()
     local word
