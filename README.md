@@ -87,8 +87,8 @@ Create or edit your projects with:
 tmuxinator new [project]
 ```
 
-Create or edit a local project where the config file will be stored in the 
-current working directory (in `.tmuxinator.yml`) instead of the default 
+Create or edit a local project where the config file will be stored in the
+current working directory (in `.tmuxinator.yml`) instead of the default
 project configuration file location (e.g. `~/.config/tmuxinator`):
 
 ```
@@ -136,7 +136,7 @@ root: ~/
 # Pass command line options to tmux. Useful for specifying a different tmux.conf.
 # tmux_options: -f ~/.tmux.mac.conf
 
-# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# Change the command to call tmux. This can be used by derivatives/wrappers like byobu.
 # tmux_command: byobu
 
 # Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
@@ -373,11 +373,11 @@ tmuxinator version
 
 ## Project Configuration Location
 
-Using environment variables, it's possible to define which directory 
-tmuxinator will use when creating or searching for project config 
+Using environment variables, it's possible to define which directory
+tmuxinator will use when creating or searching for project config
 files. (See [PR #511](https://github.com/tmuxinator/tmuxinator/pull/511).)
 
-Tmuxinator will attempt to use the following locations (in this order) when 
+Tmuxinator will attempt to use the following locations (in this order) when
 creating or searching for existing project configuration files:
 
 - `$TMUXINATOR_CONFIG`
