@@ -25,6 +25,9 @@ gem install tmuxinator
 ```
 brew install tmuxinator
 ```
+
+Some users have [reported issues](https://github.com/tmuxinator/tmuxinator/issues/841) when installing via Homebrew, so the RubyGems installation is preferred until these are resolved.
+
 tmuxinator aims to be compatible with [the currently maintained versions of Ruby](https://www.ruby-lang.org/en/downloads/).
 
 Some operating systems may provide an unsupported version of Ruby as their "system ruby". In these cases, users should use [RVM](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv) to install a supported Ruby version and use that version's `gem` binary to install tmuxinator.
