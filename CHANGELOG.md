@@ -1,9 +1,9 @@
-## Unreleased
+## 3.0.2
 ### Third-party Dependencies
 - Bump Thor version to handle DidYouMean deprecation warning
 
 
-## 3.1.0
+## 3.0.1
 ### tmux
 - add tmux 3.2a to Travis test matrix; add 3.2a to supported tmux versions list
 ### Misc
