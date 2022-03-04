@@ -77,7 +77,7 @@ Note: ZSH's completion files can be put in other locations in your `$fpath`. Ple
 ## Usage
 
 A working knowledge of tmux is assumed. You should understand what windows and
-panes are in tmux. If not please consult the [man pages](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) for tmux.
+panes are in tmux. If not please consult the [man pages](https://manpages.ubuntu.com/manpages/jammy/en/man1/tmux.1.html) for tmux.
 
 ### Create a project
 
