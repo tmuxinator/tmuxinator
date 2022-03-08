@@ -77,7 +77,7 @@ Note: ZSH's completion files can be put in other locations in your `$fpath`. Ple
 ## Usage
 
 A working knowledge of tmux is assumed. You should understand what windows and
-panes are in tmux. If not please consult the [man pages](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6) for tmux.
+panes are in tmux. If not please consult the [man pages](https://web.archive.org/web/20220308205829/https://man.openbsd.org/OpenBSD-current/man1/tmux.1) for tmux.
 
 ### Create a project
 
@@ -207,7 +207,7 @@ windows:
 ```
 
 The layout setting gets handed down to tmux directly, so you can choose from
-one of [the five standard layouts](http://manpages.ubuntu.com/manpages/precise/en/man1/tmux.1.html#contenttoc6)
+one of [the five standard layouts](https://web.archive.org/web/20220308205829/https://man.openbsd.org/OpenBSD-current/man1/tmux.1#even-horizontal)
 or [specify your own](http://stackoverflow.com/a/9976282/183537).
 
 **Please note the indentation here is deliberate. YAML's indentation rules can be confusing, so if your config isn't working as expected, please check the indentation.** For a more detailed explanation of _why_ YAML behaves this way, see [this](https://stackoverflow.com/questions/50594758/why-isnt-two-spaced-yaml-parsed-like-four-spaced-yaml/50600253#50600253) Stack Overflow question.
