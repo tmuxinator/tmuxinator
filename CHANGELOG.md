@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- use stable tmux links in README.md
+
 ## 3.0.2
 ### Third-party Dependencies
 - Bump Thor version to handle DidYouMean deprecation warning
