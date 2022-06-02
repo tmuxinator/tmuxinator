@@ -1,5 +1,6 @@
 ## Unreleased
 ### Misc
+- add tmux 3.3 to (currently defunct) Travis test matrix; add 3.3 to supported tmux versions list
 - use stable tmux links in README.md
 
 ## 3.0.2
