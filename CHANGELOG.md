@@ -1,4 +1,4 @@
-## UNRELEASED
+## 3.0.4
 ### tmux
 - fix tmux 3.3 version detection
 
