@@ -1,3 +1,7 @@
+## UNRELEASED
+### tmux
+- fix tmux 3.3 version detection
+
 ## 3.0.3
 ### Misc
 - use stable tmux links in README.md
