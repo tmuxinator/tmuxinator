@@ -4,6 +4,7 @@ rvm:
   - "2.7.3"
   - "3.0.1"
 env:
+  - TMUX_VERSION=3.3a
   - TMUX_VERSION=3.3
   - TMUX_VERSION=3.2a
   - TMUX_VERSION=3.2
