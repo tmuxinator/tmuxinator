@@ -1,3 +1,7 @@
+## Unreleased
+### tmux
+- add tmux 3.3a to (currently defunct) Travis test matrix; add 3.3a to supported tmux versions list
+
 ## 3.0.4
 ### tmux
 - fix tmux 3.3 version detection
