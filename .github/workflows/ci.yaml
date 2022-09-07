@@ -56,7 +56,7 @@ jobs:
         sudo apt-get install -y -qq pkg-config build-essential autoconf automake bison git
         sudo apt-get install -y libevent-dev libncurses-dev
 
-        # build and instal tmux
+        # build and install tmux
         git clone https://github.com/tmux/tmux.git tmux
         cd tmux
         git checkout ${{ matrix.tmux_version }}
