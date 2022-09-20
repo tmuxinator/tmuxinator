@@ -1,6 +1,8 @@
 ## Unreleased
 ### tmux
 - add tmux 3.3a to (currently defunct) Travis test matrix; add 3.3a to supported tmux versions list
+### CI
+- replace Travis CI config with GH Actions
 
 ## 3.0.4
 ### tmux
