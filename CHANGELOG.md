@@ -6,6 +6,8 @@
 ### Fixes
 - Shell escape pane titles to fix multi word and special character titles
 - Replace exists? with exist? for Ruby >= 3.2
+### Misc
+- Remove `mux` alias from Fish and Bash completions
 
 ## 3.1.2
 ### Fixes
