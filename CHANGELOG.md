@@ -1,6 +1,7 @@
 ## Unreleased
 ### Misc
 - Fix typos and remove extra whitespace
+- Remove `mux` alias from Fish and Bash completions
 
 ## 3.1.0
 - add a FAQ entry about how long commands may be lost/corrupted by TTY typeahead
