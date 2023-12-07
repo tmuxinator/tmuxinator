@@ -390,6 +390,12 @@ creating or searching for existing project configuration files:
 
 Add `export DISABLE_AUTO_TITLE=true` to your `.zshrc` or `.bashrc`
 
+### Commands being lost or corrupted
+
+If a lot of commands or long commands are sent to a pane, and commands or characters seem to be lost or corrupted, it could be that the TTY typeahead buffer is full and losing new characters. This may happen when an earlier command takes a long time to complete. This seems to affect macOS with zsh more than other platforms.
+
+When this occurs, try putting your commands in a separate script and calling that from your tmuxinator configuration using e.g.: `source`.
+
 ## Contributing
 
 To contribute, please read the [contributing guide](https://github.com/tmuxinator/tmuxinator/blob/master/CONTRIBUTING.md).
