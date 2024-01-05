@@ -1,4 +1,4 @@
-## Unreleased
+## 3.0.5
 ### tmux
 - add tmux 3.3a to (currently defunct) Travis test matrix; add 3.3a to supported tmux versions list
 ### CI
