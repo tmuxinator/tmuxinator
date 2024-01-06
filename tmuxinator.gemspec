@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.6.7"
 
   s.add_dependency "erubis", "~> 2.6"
-  s.add_dependency "thor", ">= 1.2.1"
+  s.add_dependency "thor", "~>1.3.0"
   s.add_dependency "xdg", "~> 2.2", ">= 2.2.5"
 
   s.add_development_dependency "activesupport", "< 5.0.0" # Please see issue #432
