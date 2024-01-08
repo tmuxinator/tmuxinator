@@ -1,18 +1,7 @@
 ## Unreleased
-### tmux
-- add tmux 3.3a to (currently defunct) Travis test matrix; add 3.3a to supported tmux versions list
-### CI
-- replace Travis CI config with GH Actions
-
-## 3.0.4
-### tmux
-- fix tmux 3.3 version detection
-
-## 3.0.3
 ### Misc
 - use stable tmux links in README.md
-### tmux
-- add tmux 3.3 to (currently defunct) Travis test matrix; add 3.3 to supported tmux versions list
+- increment thor minor version in tmuxinator.gemspec
 
 ## 3.0.2
 ### Third-party Dependencies
