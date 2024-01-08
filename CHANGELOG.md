@@ -1,5 +1,6 @@
 ## Unreleased
 - add a FAQ entry about how long commands may be lost/corrupted by TTY typeahead
+- increment thor minor version in tmuxinator.gemspec
 
 ## 3.0.5
 ### tmux
