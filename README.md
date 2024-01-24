@@ -72,7 +72,7 @@ Note: ZSH's completion files can be put in other locations in your `$fpath`. Ple
 
 ### fish
 
-    $ wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.fish ~/.config/fish/completions/
+    wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.fish -O ~/.config/fish/completions/tmuxinator.fish
 
 ## Usage
 
