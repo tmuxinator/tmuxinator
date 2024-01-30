@@ -1,3 +1,7 @@
+## Unreleased
+- add support for stop command without project name
+- add support for optional `--project-config` flag to `tmuxinator stop` command
+
 ## 3.1.0
 - add a FAQ entry about how long commands may be lost/corrupted by TTY typeahead
 - increment thor minor version in tmuxinator.gemspec
