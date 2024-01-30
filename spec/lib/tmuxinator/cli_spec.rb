@@ -15,7 +15,7 @@ describe Tmuxinator::Cli do
       File.new(local_project_path, "w").tap do |f|
         f.write content
       end.close
-      expect(File.exists?(local_project_path)).to be_truthy
+      expect(File.exist?(local_project_path)).to be_truthy
       expect(File.read(local_project_path)).to eq content
     end
 
@@ -93,7 +93,7 @@ describe Tmuxinator::Cli do
         context "a tmuxinator project name" do
           before do
             expect(Tmuxinator::Config).to \
-              receive(:exists?).with(name: arg1) { true }
+              receive(:exist?).with(name: arg1) { true }
           end
 
           it "should call #start" do
@@ -127,7 +127,7 @@ describe Tmuxinator::Cli do
         context "something else" do
           before do
             expect(Tmuxinator::Config).to \
-              receive(:exists?).with(name: arg1) { false }
+              receive(:exist?).with(name: arg1) { false }
           end
 
           it "should call ::start" do
@@ -622,7 +622,7 @@ describe Tmuxinator::Cli do
   describe "#copy" do
     before do
       ARGV.replace(["copy", "foo", "bar"])
-      allow(Tmuxinator::Config).to receive(:exists?) { true }
+      allow(Tmuxinator::Config).to receive(:exist?) { true }
     end
 
     context "new project already exists" do
@@ -638,7 +638,7 @@ describe Tmuxinator::Cli do
 
     context "existing project doesn't exist" do
       before do
-        allow(Tmuxinator::Config).to receive(:exists?) { false }
+        allow(Tmuxinator::Config).to receive(:exist?) { false }
       end
 
       it "exit with error code" do
@@ -714,7 +714,7 @@ describe Tmuxinator::Cli do
 
       context "project exists" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?) { true }
+          allow(Tmuxinator::Config).to receive(:exist?) { true }
         end
 
         it "deletes the project" do
@@ -725,7 +725,7 @@ describe Tmuxinator::Cli do
 
       context "local project exists" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?) { true }
+          allow(Tmuxinator::Config).to receive(:exist?) { true }
           expect(Tmuxinator::Config).to receive(:project) { "local" }
         end
 
@@ -737,7 +737,7 @@ describe Tmuxinator::Cli do
 
       context "project doesn't exist" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?) { false }
+          allow(Tmuxinator::Config).to receive(:exist?) { false }
         end
 
         it "outputs an error message" do
@@ -754,7 +754,7 @@ describe Tmuxinator::Cli do
 
       context "all projects exist" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?).and_return(true)
+          allow(Tmuxinator::Config).to receive(:exist?).and_return(true)
         end
 
         it "deletes the projects" do
@@ -765,10 +765,10 @@ describe Tmuxinator::Cli do
 
       context "only one project exists" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?).with(name: "foo") {
+          allow(Tmuxinator::Config).to receive(:exist?).with(name: "foo") {
             true
           }
-          allow(Tmuxinator::Config).to receive(:exists?).with(name: "bar") {
+          allow(Tmuxinator::Config).to receive(:exist?).with(name: "bar") {
             false
           }
         end
@@ -785,7 +785,7 @@ describe Tmuxinator::Cli do
 
       context "all projects do not exist" do
         before do
-          allow(Tmuxinator::Config).to receive(:exists?).and_return(false)
+          allow(Tmuxinator::Config).to receive(:exist?).and_return(false)
         end
 
         it "outputs multiple error messages" do

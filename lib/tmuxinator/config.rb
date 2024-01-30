@@ -57,7 +57,7 @@ module Tmuxinator
       end
 
       def default?
-        exists?(name: "default")
+        exist?(name: "default")
       end
 
       def version
@@ -76,7 +76,7 @@ module Tmuxinator
         version && version < 1.8 ? "default-path" : "-c"
       end
 
-      def exists?(name: nil, path: nil)
+      def exist?(name: nil, path: nil)
         return File.exist?(path) if path
         return File.exist?(project(name)) if name
         false
@@ -140,7 +140,7 @@ module Tmuxinator
 
       def valid_project_config?(project_config)
         return false unless project_config
-        unless exists?(path: project_config)
+        unless exist?(path: project_config)
           raise "Project config (#{project_config}) doesn't exist."
         end
         true
@@ -154,7 +154,7 @@ module Tmuxinator
 
       def valid_standard_project?(name)
         return false unless name
-        raise "Project #{name} doesn't exist." unless exists?(name: name)
+        raise "Project #{name} doesn't exist." unless exist?(name: name)
         true
       end
 
