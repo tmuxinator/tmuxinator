@@ -53,6 +53,9 @@ cd <%= root || "." %>
       <% end %>
     <% else %>
       <% window.panes.each do |pane| %>
+        <% unless pane.title.nil? %>
+  <%= pane.tmux_set_title %>
+        <% end %>
         <% if pane.project.pre_window %>
   <%= pane.tmux_pre_window_command %>
         <% end %>
