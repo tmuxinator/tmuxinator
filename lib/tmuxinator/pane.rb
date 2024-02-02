@@ -70,7 +70,8 @@ module Tmuxinator
     end
 
     def _set_title(title)
-      "#{project.tmux} select-pane -t #{tmux_window_and_pane_target} -T #{title}"
+      target = tmux_window_and_pane_target
+      "#{project.tmux} select-pane -t #{target} -T #{title}"
     end
   end
 end
