@@ -53,7 +53,7 @@ cd <%= root || "." %>
       <% end %>
     <% else %>
       <% window.panes.each do |pane| %>
-        <% unless pane.title.nil? %>
+        <% unless Tmuxinator::Config.version < 2.6 %>
   <%= pane.tmux_set_title %>
         <% end %>
         <% if pane.project.pre_window %>
