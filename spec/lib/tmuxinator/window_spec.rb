@@ -127,6 +127,26 @@ describe Tmuxinator::Window do
       end
     end
 
+    context "titled panes" do
+      let(:panes) do
+        [
+          { "editor" => ["vim"] },
+          { "run" => ["cmd1", "cmd2"] },
+          "top"
+        ]
+      end
+
+      it "creates panes with titles" do
+        expect(window.panes).to match(
+          [
+            a_pane.with(index: 0, title: "editor").and_commands("vim"),
+            a_pane.with(index: 1, title: "run").and_commands("cmd1", "cmd2"),
+            a_pane.with(index: 2, title: nil).and_commands("top")
+          ]
+        )
+      end
+    end
+
     context "nested collections" do
       let(:command1) { "cd /tmp/" }
       let(:command2) { "ls" }
