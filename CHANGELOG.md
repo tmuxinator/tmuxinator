@@ -1,4 +1,4 @@
-## 3.2.0
+## Unreleased
 - Set pane title if provided in config file
 
 ## 3.1.0
