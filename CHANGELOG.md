@@ -1,3 +1,7 @@
+## Unreleased
+### Misc
+- Fix typos and remove extra whitespace
+
 ## 3.1.0
 - add a FAQ entry about how long commands may be lost/corrupted by TTY typeahead
 - increment thor minor version in tmuxinator.gemspec
