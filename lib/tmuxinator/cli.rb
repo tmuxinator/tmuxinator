@@ -167,9 +167,8 @@ module Tmuxinator
       end
 
       def generate_project_file(name, path)
-        content = File.read(Tmuxinator::Config.default_or_sample)
-        erubi_content = Erubi::Engine.new(content).src
-        erb = binding.instance_eval(erubi_content)
+        config = Tmuxinator::Config.default_or_sample
+        erb = Tmuxinator::Project.render_template(config, binding)
         File.open(path, "w") { |f| f.write(erb) }
         path
       end

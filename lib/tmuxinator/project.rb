@@ -41,14 +41,11 @@ module Tmuxinator
 
     def self.load(path, options = {})
       yaml = begin
-        raw_content = File.read(path)
-
         args = options[:args] || []
         @settings = parse_settings(args)
         @args = args
 
-        erubi_content = Erubi::Engine.new(raw_content).src
-        content = binding.instance_eval(erubi_content)
+        content = render_template(path, binding)
         YAML.safe_load(content, aliases: true)
       rescue SyntaxError, StandardError => error
         raise "Failed to parse config file: #{error.message}"
