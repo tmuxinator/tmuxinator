@@ -303,14 +303,24 @@ describe Tmuxinator::Cli do
 
   describe "#stop" do
     before do
-      ARGV.replace(["stop", "foo"])
       allow(Tmuxinator::Config).to receive_messages(validate: project)
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
       allow(Kernel).to receive(:exec)
     end
 
     context "with project name" do
-      it "stop the project" do
+      it "stops the project" do
+        ARGV.replace(["stop", "foo"])
+        expect(Kernel).to receive(:exec)
+        out, err = capture_io { cli.start }
+        expect(err).to eq ""
+        expect(out).to eq ""
+      end
+    end
+
+    context "without project name" do
+      it "stops the project using .tmuxinator.yml" do
+        ARGV.replace(["stop"])
         expect(Kernel).to receive(:exec)
         out, err = capture_io { cli.start }
         expect(err).to eq ""
@@ -319,6 +329,45 @@ describe Tmuxinator::Cli do
     end
 
     include_examples :unsupported_version_message, :stop, :foo
+  end
+
+  describe "#stop(with project config file)" do
+    before do
+      allow(Tmuxinator::Config).to receive(:validate).and_call_original
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
+    end
+
+    it "stops the project" do
+      ARGV.replace(["stop", "--project-config=#{project_config}"])
+      expect(Tmuxinator::Config).to receive_messages(validate: project)
+      expect(Kernel).to receive(:exec)
+      out, err = capture_io { cli.start }
+      expect(err).to eq ""
+      expect(out).to eq ""
+    end
+
+    it "does not stop the project if given a bogus project config file" do
+      ARGV.replace(["stop", "--project-config=bogus.yml"])
+      expect(Kernel).not_to receive(:exec)
+      expect { capture_io { cli.start } }.to raise_error(SystemExit)
+    end
+
+    it "does not set the project name" do
+      ARGV.replace(["stop", "--project-config=#{project_config}"])
+      expect(Tmuxinator::Config).
+        to(receive(:validate).
+           with(hash_including(name: nil)))
+      capture_io { cli.start }
+    end
+
+    it "does not set the project name even when set" do
+      ARGV.replace(["stop", "bar", "--project-config=#{project_config}"])
+      expect(Tmuxinator::Config).
+        to(receive(:validate).
+           with(hash_including(name: nil)))
+      capture_io { cli.start }
+    end
   end
 
   describe "#local" do
@@ -650,7 +699,7 @@ describe Tmuxinator::Cli do
       end
 
       it "does not render the project if given a bogus project config file" do
-        ARGV.replace(["start", "--project-config=bogus.yml"])
+        ARGV.replace(["debug", "--project-config=bogus.yml"])
         expect { capture_io { cli.start } }.to raise_error(SystemExit)
       end
     end

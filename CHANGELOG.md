@@ -1,4 +1,7 @@
 ## Unreleased
+### Enhancements
+- add support for stop command without project name
+- add support for optional `--project-config` flag to `tmuxinator stop` command
 ### Misc
 - Fix typos and remove extra whitespace
 
