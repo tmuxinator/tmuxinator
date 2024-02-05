@@ -52,7 +52,7 @@ describe Tmuxinator::Config do
         allow(described_class).to receive(:home?).and_return false
 
         Dir.mktmpdir do |dir|
-          config_parent = "#{dir}/non_existant_parent/s"
+          config_parent = "#{dir}/non_existent_parent/s"
           allow(XDG).to receive(:[]).with("CONFIG").and_return config_parent
           expect(described_class.directory).
             to eq "#{config_parent}/tmuxinator"
@@ -62,7 +62,7 @@ describe Tmuxinator::Config do
     end
   end
 
-  describe "#enviroment" do
+  describe "#environment" do
     context "environment variable $TMUXINATOR_CONFIG is not empty" do
       it "is $TMUXINATOR_CONFIG" do
         allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").

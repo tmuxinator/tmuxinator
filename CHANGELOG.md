@@ -1,4 +1,6 @@
 ## Unreleased
+### Misc
+- Fix typos and remove extra whitespace
 - Set pane title if provided in config file
 
 ## 3.1.0

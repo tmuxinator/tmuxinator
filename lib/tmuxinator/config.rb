@@ -12,7 +12,7 @@ module Tmuxinator
         return environment if environment?
         return xdg if xdg?
         return home if home?
-        # No project directory specified or existant, default to XDG:
+        # No project directory specified or existent, default to XDG:
         FileUtils::mkdir_p(xdg)
         xdg
       end
@@ -127,7 +127,7 @@ module Tmuxinator
         end.flatten.sort
       end
 
-      # Existant directories which may contain project files
+      # Existent directories which may contain project files
       # Listed in search order
       # Used by `implode` and `list` commands
       def directories
