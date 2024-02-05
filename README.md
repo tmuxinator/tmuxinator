@@ -219,7 +219,7 @@ for a workaround.
 
 ### Pane titles
 
-It is also possible to give a title to panes.
+It is also possible (starting with tmux v2.6) to give a title to panes.
 
 ```yaml
 windows:
