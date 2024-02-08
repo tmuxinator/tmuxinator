@@ -400,9 +400,9 @@ module Tmuxinator
 
     def tmux_set_pane_title_format
       if pane_title_format?
-        x = "#{tmux} set pane-border-format \"#{yaml['pane_title_format']}\""
+        "#{tmux} set pane-border-format \"#{yaml['pane_title_format']}\""
       else
-        x = "#{tmux} set pane-border-format " + '"#{pane_index}: #{pane_title}"'
+        "#{tmux} set pane-border-format " + '"#{pane_index}: #{pane_title}"'
       end
     end
 
@@ -414,8 +414,9 @@ module Tmuxinator
       yellow = '\033[1;33m'
       no_color = '\033[0m'
       msg = "WARNING: You have enabled pane titles in your configuration, " +
-      "but the feature is not supported by your version of tmux.\nPlease " +
-      "consider upgrading to a version that supports it (tmux >=2.6).\n"
+            "but the feature is not supported by your version of tmux.\n" +
+            "Please consider upgrading to a version that supports it " +
+            "(tmux >=2.6).\n"
       "printf \"#{yellow}#{msg}#{no_color}\""
     end
   end
