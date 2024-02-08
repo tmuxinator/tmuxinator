@@ -381,5 +381,42 @@ module Tmuxinator
     def wemux?
       yaml["tmux_command"] == "wemux"
     end
+
+    def enable_pane_titles?
+      yaml["enable_pane_titles"]
+    end
+
+    def tmux_set_pane_title_position
+      if pane_title_position?
+        "#{tmux} set pane-border-status #{yaml['pane_title_position']}"
+      else
+        "#{tmux} set pane-border-status top"
+      end
+    end
+
+    def pane_title_position?
+      yaml["pane_title_position"]
+    end
+
+    def tmux_set_pane_title_format
+      if pane_title_format?
+        x = "#{tmux} set pane-border-format \"#{yaml['pane_title_format']}\""
+      else
+        x = "#{tmux} set pane-border-format " + '"#{pane_index}: #{pane_title}"'
+      end
+    end
+
+    def pane_title_format?
+      yaml["pane_title_format"]
+    end
+
+    def pane_titles_not_supported_warning
+      yellow = '\033[1;33m'
+      no_color = '\033[0m'
+      msg = "WARNING: You have enabled pane titles in your configuration, " +
+      "but the feature is not supported by your version of tmux.\nPlease " +
+      "consider upgrading to a version that supports it (tmux >=2.6).\n"
+      "printf \"#{yellow}#{msg}#{no_color}\""
+    end
   end
 end
