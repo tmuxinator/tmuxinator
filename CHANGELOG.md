@@ -1,6 +1,7 @@
 ## Unreleased
 ### Fixes
 - Shell escape pane titles to fix multi word and special character titles
+- Add configuration options for pane titles
 
 ## 3.1.2
 ### Fixes
