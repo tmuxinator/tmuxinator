@@ -217,6 +217,27 @@ be due [#651](https://github.com/tmuxinator/tmuxinator/issues/651). See [this
 comment](https://github.com/tmuxinator/tmuxinator/issues/651#issuecomment-497780424)
 for a workaround.
 
+### Pane titles
+
+It is also possible (starting with tmux v2.6) to give a title to panes.
+
+```yaml
+windows:
+  - editor:
+      layout: main-vertical
+      panes:
+        - editor:
+          - vim
+        - guard
+```
+
+**Note:** For the titles to display you will need to modify your .tmux.conf with the following entries.
+
+```
+set -g pane-border-format "#{pane_index} #{pane_title}"
+set -g pane-border-status bottom
+```
+
 ## Interpreter Managers & Environment Variables
 
 To use tmuxinator with rbenv, RVM, NVM etc, use the `pre_window` option.
