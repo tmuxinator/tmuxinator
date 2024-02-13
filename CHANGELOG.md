@@ -9,6 +9,7 @@
 - Replace exists? with exist? for Ruby >= 3.2
 ### Misc
 - Remove `mux` alias from Fish and Bash completions
+- Add Ruby 3.2, 3.1 to the test matrix; rm ruby < 3>
 
 ## 3.1.2
 ### Fixes
