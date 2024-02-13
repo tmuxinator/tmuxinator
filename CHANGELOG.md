@@ -5,6 +5,9 @@
 ### Misc
 - Fix typos and remove extra whitespace
 - Set pane title if provided in config file
+### tmux
+- Add tmux 3.4 to test matrix
+- Add tmux 3.4 to supported tmux versions list
 
 ## 3.1.0
 - add a FAQ entry about how long commands may be lost/corrupted by TTY typeahead
