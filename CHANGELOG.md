@@ -1,3 +1,9 @@
+## Unreleased
+
+## 3.1.2
+### Fixes
+- Fix tmux 3.4 version in the supported versions list
+
 ## 3.1.1
 ### Enhancements
 - add support for stop command without project name
