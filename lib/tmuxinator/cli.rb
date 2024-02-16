@@ -264,14 +264,23 @@ module Tmuxinator
       render_project(project)
     end
 
-    desc "stop [PROJECT]", COMMANDS[:stop]
+    desc "stop [PROJECT] [ARGS]", COMMANDS[:stop]
     map "st" => :stop
+    method_option "project-config", aliases: "-p",
+                                    desc: "Path to project config file"
     method_option "suppress-tmux-version-warning",
                   desc: "Don't show a warning for unsupported tmux versions"
 
-    def stop(name)
+    def stop(name = nil)
+      # project-config takes precedence over a named project in the case that
+      # both are provided.
+      if options["project-config"]
+        name = nil
+      end
+
       params = {
-        name: name
+        name: name,
+        project_config: options["project-config"]
       }
       show_version_warning if version_warning?(
         options["suppress-tmux-version-warning"]

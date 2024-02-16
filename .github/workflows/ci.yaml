@@ -15,6 +15,7 @@ jobs:
           - '2.7.3'
           - '2.6.7'
         tmux_version:
+          - '3.4'
           - '3.3a'
           - '3.3'
           - '3.2a'
@@ -65,7 +66,7 @@ jobs:
         cd ..
         tmux -V
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: "Test ruby ${{ matrix.ruby_version }} tmux ${{ matrix.tmux_version }}"
       run: |
         bundle install

@@ -50,16 +50,16 @@ module Tmuxinator
       return if panes_yml.nil?
 
       Array(panes_yml).map.with_index do |pane_yml, index|
-        commands =  case pane_yml
-                    when Hash
-                      pane_yml.values.first
-                    when Array
-                      pane_yml
-                    else
-                      pane_yml
-                    end
+        commands, title = case pane_yml
+                          when Hash
+                            [pane_yml.values.first, pane_yml.keys.first]
+                          when Array
+                            [pane_yml, nil]
+                          else
+                            [pane_yml, nil]
+                          end
 
-        Tmuxinator::Pane.new(index, project, self, *commands)
+        Tmuxinator::Pane.new(index, project, self, *commands, title: title)
       end.flatten
     end
 

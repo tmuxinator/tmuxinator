@@ -1,7 +1,14 @@
-## Unreleased
+## 3.1.1
+### Enhancements
+- add support for stop command without project name
+- add support for optional `--project-config` flag to `tmuxinator stop` command
 ### Misc
 - Fix typos and remove extra whitespace
+- Set pane title if provided in config file
 - Remove `mux` alias from Fish and Bash completions
+### tmux
+- Add tmux 3.4 to test matrix
+- Add tmux 3.4 to supported tmux versions list
 
 ## 3.1.0
 - add a FAQ entry about how long commands may be lost/corrupted by TTY typeahead
