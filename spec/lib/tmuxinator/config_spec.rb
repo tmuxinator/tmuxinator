@@ -273,6 +273,42 @@ describe Tmuxinator::Config do
     end
   end
 
+  describe "#options" do
+    let(:not_found) { "#{fixtures_dir}/does_not_exist.yml" }
+    let(:empty) { "#{fixtures_dir}/empty.yml" }
+    let(:conf_append) { "#{fixtures_dir}/config_append.yml" }
+
+    context "with unknown file" do
+      before do
+        allow(described_class).to receive(:options_file).and_return not_found
+      end
+
+      it "loads the options" do
+        expect(described_class.options).not_to be_nil
+      end
+    end
+
+    context "with empty yml" do
+      before do
+        allow(described_class).to receive(:options_file).and_return empty
+      end
+
+      it "loads the options" do
+        expect(described_class.options).not_to be_nil
+      end
+    end
+
+    context "with append config" do
+      before do
+        allow(described_class).to receive(:options_file).and_return conf_append
+      end
+
+      it "loads the options" do
+        expect(described_class.options["append"]).to eq true
+      end
+    end
+  end
+
   describe "#global_project" do
     let(:directory) { described_class.directory }
     let(:base) { "#{directory}/sample.yml" }
