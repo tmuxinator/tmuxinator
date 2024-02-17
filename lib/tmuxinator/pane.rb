@@ -7,7 +7,7 @@ module Tmuxinator
       @index = index
       @project = project
       @tab = tab
-      @title = title
+      @title = title.to_s.shellescape unless title.nil?
     end
 
     def tmux_window_and_pane_target
