@@ -37,6 +37,9 @@ cd <%= root || "." %>
     <% if Tmuxinator::Config.version < 2.6 %>
   <%= pane_titles_not_supported_warning %>
     <%- else -%>
+      <% if pane_title_position? && !pane_title_position_valid? %>
+  <%= pane_title_position_not_valid_warning %>
+      <% end %>
   <%= tmux_set_pane_title_position %>
   <%= tmux_set_pane_title_format %>
     <% end %>

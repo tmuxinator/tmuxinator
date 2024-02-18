@@ -151,10 +151,11 @@ root: ~/
 # Enables the display of pane titles. For example "editor" below. Defaults to false.
 # enable_pane_titles: true
 
-# Configures pane title position. Either, bottom or top. Defaults to top.
+# Configures pane title position. Can be: bottom, top, or off. Defaults to top.
 # pane_title_position: bottom
 
 # Configures pane title format. Defaults to "#{pane_index}: #{pane_title}".
+# Please see the tmux manpage for details, on valid formats.
 # pane_title_format: " [ #T ] "
 
 windows:

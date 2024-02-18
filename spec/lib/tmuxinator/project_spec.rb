@@ -635,4 +635,71 @@ describe Tmuxinator::Project do
       end.to raise_error RuntimeError, %r{didn't.specify.a.'project_name'}
     end
   end
+
+  describe "#pane_titles" do
+    before do
+      allow(project).to receive(:tmux).and_return "tmux"
+    end
+
+    context "pane_titles not enabled" do
+      before { project.yaml["enable_pane_titles"] = false }
+
+      it "returns false" do
+        expect(project.enable_pane_titles?).to eq(false)
+      end
+    end
+
+    context "pane_titles enabled" do
+      before { project.yaml["enable_pane_titles"] = true }
+
+      it "returns true" do
+        expect(project.enable_pane_titles?).to eq(true)
+      end
+    end
+
+    context "pane_title_position not configured" do
+      before { project.yaml["pane_title_position"] = nil }
+
+      it "configures a default position of top" do
+        expect(project.tmux_set_pane_title_position).to eq(
+          "tmux set pane-border-status top")
+      end
+    end
+
+    context "pane_title_position configured" do
+      before { project.yaml["pane_title_position"] = "bottom" }
+
+      it "configures a position of bottom" do
+        expect(project.tmux_set_pane_title_position).to eq(
+          "tmux set pane-border-status bottom")
+      end
+    end
+
+    context "pane_title_position invalid" do
+      before { project.yaml["pane_title_position"] = "other" }
+
+      it "configures the default position" do
+        expect(project.tmux_set_pane_title_position).to eq(
+          "tmux set pane-border-status top")
+      end
+    end
+
+    context "pane_title_format not configured" do
+      before { project.yaml["pane_title_format"] = nil }
+
+      it "configures a default format" do
+        expect(project.tmux_set_pane_title_format).to eq(
+          'tmux set pane-border-format "#{pane_index}: #{pane_title}"')
+      end
+    end
+
+    context "pane_title_format configured" do
+      before { project.yaml["pane_title_format"] = " [ #T ] " }
+
+      it "configures the provided format" do
+        expect(project.tmux_set_pane_title_format).to eq(
+          'tmux set pane-border-format " [ #T ] "')
+      end
+    end
+  end
 end
