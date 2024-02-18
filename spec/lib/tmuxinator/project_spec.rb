@@ -662,7 +662,8 @@ describe Tmuxinator::Project do
 
       it "configures a default position of top" do
         expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status top")
+          "tmux set pane-border-status top"
+        )
       end
     end
 
@@ -671,7 +672,8 @@ describe Tmuxinator::Project do
 
       it "configures a position of bottom" do
         expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status bottom")
+          "tmux set pane-border-status bottom"
+        )
       end
     end
 
@@ -680,7 +682,8 @@ describe Tmuxinator::Project do
 
       it "configures the default position" do
         expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status top")
+          "tmux set pane-border-status top"
+        )
       end
     end
 
@@ -689,7 +692,8 @@ describe Tmuxinator::Project do
 
       it "configures a default format" do
         expect(project.tmux_set_pane_title_format).to eq(
-          'tmux set pane-border-format "#{pane_index}: #{pane_title}"')
+          'tmux set pane-border-format "#{pane_index}: #{pane_title}"'
+        )
       end
     end
 
@@ -698,7 +702,8 @@ describe Tmuxinator::Project do
 
       it "configures the provided format" do
         expect(project.tmux_set_pane_title_format).to eq(
-          'tmux set pane-border-format " [ #T ] "')
+          'tmux set pane-border-format " [ #T ] "'
+        )
       end
     end
   end
