@@ -148,6 +148,15 @@ root: ~/
 # Controls whether the tmux session should be attached to automatically. Defaults to true.
 # attach: false
 
+# Enables the display of pane titles. For example "editor" below. Defaults to false.
+# enable_pane_titles: true
+
+# Configures pane title position. Either, bottom or top. Defaults to top.
+# pane_title_position: bottom
+
+# Configures pane title format. Defaults to "#{pane_index}: #{pane_title}".
+# pane_title_format: " [ #T ] "
+
 windows:
   - editor:
       layout: main-vertical
@@ -155,7 +164,8 @@ windows:
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
       # synchronize: after
       panes:
-        - vim
+        - editor:
+          - vim
         - guard
   - server: bundle exec rails s
   - logs: tail -f log/development.log
@@ -222,6 +232,8 @@ for a workaround.
 It is also possible (starting with tmux v2.6) to give a title to panes.
 
 ```yaml
+enable_pane_titles: true
+
 windows:
   - editor:
       layout: main-vertical
@@ -229,13 +241,6 @@ windows:
         - editor:
           - vim
         - guard
-```
-
-**Note:** For the titles to display you will need to modify your .tmux.conf with the following entries.
-
-```
-set -g pane-border-format "#{pane_index} #{pane_title}"
-set -g pane-border-status bottom
 ```
 
 ## Interpreter Managers & Environment Variables
