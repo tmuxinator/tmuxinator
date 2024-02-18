@@ -645,7 +645,7 @@ describe Tmuxinator::Project do
       before { project.yaml["enable_pane_titles"] = false }
 
       it "returns false" do
-        expect(project.enable_pane_titles?).to eq(false)
+        expect(project.enable_pane_titles?).to be false
       end
     end
 
@@ -653,7 +653,7 @@ describe Tmuxinator::Project do
       before { project.yaml["enable_pane_titles"] = true }
 
       it "returns true" do
-        expect(project.enable_pane_titles?).to eq(true)
+        expect(project.enable_pane_titles?).to be true
       end
     end
 
