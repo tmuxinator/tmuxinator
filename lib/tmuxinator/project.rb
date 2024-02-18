@@ -352,7 +352,7 @@ module Tmuxinator
       if pane_title_format?
         "#{tmux} set pane-border-format \"#{yaml['pane_title_format']}\""
       else
-        "#{tmux} set pane-border-format " + %q("#{pane_index}: #{pane_title}")
+        "#{tmux} set pane-border-format \"\#{pane_index}: \#{pane_title}\""
       end
     end
 
