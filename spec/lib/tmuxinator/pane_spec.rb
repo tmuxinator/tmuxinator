@@ -10,7 +10,7 @@ describe Tmuxinator::Pane do
   let(:project) { double }
   let(:window) { double }
   let(:commands) { ["vim", "bash"] }
-  let(:title) { "test" }
+  let(:title) { "test (a test)" }
 
   before do
     allow(project).to receive(:name).and_return "foo"
@@ -39,7 +39,7 @@ describe Tmuxinator::Pane do
 
     it "sets pane title" do
       expect(subject.tmux_set_title).to eql(
-        "tmux select-pane -t foo:0.1 -T test"
+        "tmux select-pane -t foo:0.1 -T test\\ \\(a\\ test\\)"
       )
     end
   end
