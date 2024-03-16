@@ -262,14 +262,14 @@ describe Tmuxinator::Config do
     end
   end
 
-  describe "#exists?" do
+  describe "#exist?" do
     before do
       allow(File).to receive_messages(exist?: true)
       allow(described_class).to receive_messages(project: "")
     end
 
     it "checks if the given project exists" do
-      expect(described_class.exists?(name: "test")).to be_truthy
+      expect(described_class.exist?(name: "test")).to be_truthy
     end
   end
 

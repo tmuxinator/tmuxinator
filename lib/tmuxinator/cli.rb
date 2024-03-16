@@ -341,12 +341,12 @@ module Tmuxinator
       new_config_path = Tmuxinator::Config.project(new)
 
       exit!("Project #{existing} doesn't exist!") \
-        unless Tmuxinator::Config.exists?(name: existing)
+        unless Tmuxinator::Config.exist?(name: existing)
 
-      new_exists = Tmuxinator::Config.exists?(name: new)
+      new_exists = Tmuxinator::Config.exist?(name: new)
       question = "#{new} already exists, would you like to overwrite it?"
       if !new_exists || yes?(question, :red)
-        say "Overwriting #{new}" if Tmuxinator::Config.exists?(name: new)
+        say "Overwriting #{new}" if Tmuxinator::Config.exist?(name: new)
         FileUtils.copy_file(existing_config_path, new_config_path)
       end
 
@@ -359,7 +359,7 @@ module Tmuxinator
 
     def delete(*projects)
       projects.each do |project|
-        if Tmuxinator::Config.exists?(name: project)
+        if Tmuxinator::Config.exist?(name: project)
           config = Tmuxinator::Config.project(project)
 
           if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
@@ -433,7 +433,7 @@ module Tmuxinator
       if args.empty? && Tmuxinator::Config.local?
         Tmuxinator::Cli.new.local
       elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
-            Tmuxinator::Config.exists?(name: name)
+            Tmuxinator::Config.exist?(name: name)
         Tmuxinator::Cli.new.start(name, *args.drop(1))
       else
         Tmuxinator::Cli.start(args)
