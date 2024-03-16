@@ -151,7 +151,7 @@ root: ~/
 # Enables the display of pane titles. For example "editor" below. Defaults to false.
 # enable_pane_titles: true
 
-# Configures pane title position. Can be: bottom, top, or off. Defaults to top.
+# Configures pane title position. Can be: bottom, top, or "off". Note: "off" must be provided in quotes to avoid being interpreted as a boolean false. Defaults to top.
 # pane_title_position: bottom
 
 # Configures pane title format. Defaults to "#{pane_index}: #{pane_title}".
