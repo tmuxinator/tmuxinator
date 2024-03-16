@@ -1,4 +1,6 @@
 ## Unreleased
+### Enhancements
+- Add configuration options for pane titles
 ### Fixes
 - Shell escape pane titles to fix multi word and special character titles
 - Replace exists? with exist? for Ruby >= 3.2
