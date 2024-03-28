@@ -48,6 +48,10 @@ module Tmuxinator
         File.directory?(environment)
       end
 
+      def default_or_sample
+        default? ? default : sample
+      end
+
       def sample
         asset_path "sample.yml"
       end

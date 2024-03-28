@@ -150,6 +150,30 @@ describe Tmuxinator::Config do
     end
   end
 
+  describe "#default_or_sample" do
+    context "with default? true" do
+      before do
+        allow(described_class).to receive(:default?).and_return true
+        allow(described_class).to receive(:default).and_return("default_path")
+      end
+
+      it "gets the default config when it exists" do
+        expect(described_class.default_or_sample).to eq "default_path"
+      end
+    end
+
+    context "with default? false" do
+      before do
+        allow(described_class).to receive(:default?)
+        allow(described_class).to receive(:sample).and_return("sample_path")
+      end
+
+      it "falls back to the sample config when the default is missing" do
+        expect(described_class.default_or_sample).to eq "sample_path"
+      end
+    end
+  end
+
   describe "#version" do
     subject { described_class.version }
 

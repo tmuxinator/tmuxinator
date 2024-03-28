@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.8.23"
   s.required_ruby_version = ">= 2.6.7"
 
-  s.add_dependency "erubis", "~> 2.6"
+  s.add_dependency "erubi", "~> 1.7"
   s.add_dependency "thor", "~> 1.3.0"
   s.add_dependency "xdg", "~> 2.2", ">= 2.2.5"
 
