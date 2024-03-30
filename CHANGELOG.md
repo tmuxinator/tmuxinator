@@ -1,4 +1,6 @@
 ## Unreleased
+### Third-party Dependencies
+- Replace erubis with erubi
 ### Enhancements
 - Add configuration options for pane titles
 ### Fixes
