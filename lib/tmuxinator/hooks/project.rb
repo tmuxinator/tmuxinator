@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tmuxinator
   module Hooks
     module Project
@@ -37,6 +39,6 @@ module Tmuxinator
         # this method can only be used from inside Tmuxinator::Project
         Tmuxinator::Hooks.commands_from self, "on_project_stop"
       end
-    end # End Project
-  end # End Hooks
-end # End Tmuxinator
+    end
+  end
+end

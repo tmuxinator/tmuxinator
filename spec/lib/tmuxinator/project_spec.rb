@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Tmuxinator::Project do
@@ -589,7 +591,7 @@ describe Tmuxinator::Project do
   end
 
   describe "::load" do
-    let(:path) { File.expand_path("../../../fixtures/sample.yml", __FILE__) }
+    let(:path) { File.expand_path("../../fixtures/sample.yml", __dir__) }
     let(:options) { {} }
 
     it "should raise if the project file doesn't parse" do
@@ -691,9 +693,11 @@ describe Tmuxinator::Project do
       before { project.yaml["pane_title_format"] = nil }
 
       it "configures a default format" do
+        # rubocop:disable Lint/InterpolationCheck
         expect(project.tmux_set_pane_title_format).to eq(
           'tmux set pane-border-format "#{pane_index}: #{pane_title}"'
         )
+        # rubocop:enable Lint/InterpolationCheck
       end
     end
 

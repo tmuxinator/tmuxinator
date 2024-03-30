@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Tmuxinator
   class Config
     LOCAL_DEFAULTS = ["./.tmuxinator.yml", "./.tmuxinator.yaml"].freeze
     NO_LOCAL_FILE_MSG =
-      "Project file at ./.tmuxinator.yml doesn't exist.".freeze
-    NO_PROJECT_FOUND_MSG = "Project could not be found.".freeze
+      "Project file at ./.tmuxinator.yml doesn't exist."
+    NO_PROJECT_FOUND_MSG = "Project could not be found."
     TMUX_MASTER_VERSION = Float::INFINITY
 
     class << self
@@ -12,6 +14,7 @@ module Tmuxinator
         return environment if environment?
         return xdg if xdg?
         return home if home?
+
         # No project directory specified or existent, default to XDG:
         FileUtils::mkdir_p(xdg)
         xdg
@@ -40,6 +43,7 @@ module Tmuxinator
       def environment
         environment = ENV["TMUXINATOR_CONFIG"]
         return "" if environment.to_s.empty? # variable is unset (nil) or blank
+
         FileUtils::mkdir_p(environment) unless File.directory?(environment)
         environment
       end
@@ -83,6 +87,7 @@ module Tmuxinator
       def exist?(name: nil, path: nil)
         return File.exist?(path) if path
         return File.exist?(project(name)) if name
+
         false
       end
 
@@ -147,18 +152,21 @@ module Tmuxinator
         unless exist?(path: project_config)
           raise "Project config (#{project_config}) doesn't exist."
         end
+
         true
       end
 
       def valid_local_project?(name)
         return false if name
         raise NO_LOCAL_FILE_MSG unless local?
+
         true
       end
 
       def valid_standard_project?(name)
         return false unless name
         raise "Project #{name} doesn't exist." unless exist?(name: name)
+
         true
       end
 
@@ -197,6 +205,7 @@ module Tmuxinator
       # recursively searching 'directory'
       def project_in(directory, name)
         return nil if String(directory).empty?
+
         projects = Dir.glob("#{directory}/**/*.{yml,yaml}").sort
         projects.detect { |project| File.basename(project, ".*") == name }
       end
