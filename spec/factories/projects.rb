@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def yaml_load(file)
   YAML.safe_load(File.read(File.expand_path(file)))
 end

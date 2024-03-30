@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tmuxinator
   class Pane
     attr_reader :commands, :project, :index, :tab, :title
@@ -61,12 +63,12 @@ module Tmuxinator
 
     private
 
-    def _send_target(e)
-      _send_keys(tmux_window_and_pane_target, e)
+    def _send_target(keys)
+      _send_keys(tmux_window_and_pane_target, keys)
     end
 
-    def _send_keys(t, e)
-      "#{project.tmux} send-keys -t #{t} #{e} C-m"
+    def _send_keys(target, keys)
+      "#{project.tmux} send-keys -t #{target} #{keys} C-m"
     end
 
     def _set_title(title)

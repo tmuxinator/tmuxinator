@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Tmuxinator::Cli do
@@ -26,7 +28,7 @@ describe Tmuxinator::Cli do
 
   subject(:cli) { described_class }
 
-  let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
+  let(:fixtures_dir) { File.expand_path("../../fixtures", __dir__) }
   let(:project) { FactoryBot.build(:project) }
   let(:project_config) do
     File.join(fixtures_dir, "sample_with_project_config.yml")
@@ -952,7 +954,7 @@ describe Tmuxinator::Cli do
     let(:name) { "sample" }
     let(:custom_name) { nil }
     let(:cli_options) { {} }
-    let(:path) { File.expand_path("../../../fixtures", __FILE__) }
+    let(:path) { File.expand_path("../../fixtures", __dir__) }
 
     shared_examples_for :a_proper_project do
       it "should create a valid project" do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.alias_matcher :be_a_pane, :a_pane
 RSpec::Matchers.define :a_pane do
   attr_reader :commands
