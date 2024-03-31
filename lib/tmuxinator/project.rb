@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tmuxinator
   class Project
     include Tmuxinator::Util
@@ -47,8 +49,8 @@ module Tmuxinator
 
         content = render_template(path, binding)
         YAML.safe_load(content, aliases: true)
-      rescue SyntaxError, StandardError => error
-        raise "Failed to parse config file: #{error.message}"
+             rescue SyntaxError, StandardError => error
+               raise "Failed to parse config file: #{error.message}"
       end
 
       new(yaml, options)
@@ -71,6 +73,7 @@ module Tmuxinator
         unless windows?
       raise "Your project file didn't specify a 'project_name'" \
         unless name?
+
       self
     end
 
@@ -237,8 +240,8 @@ module Tmuxinator
       !name.nil?
     end
 
-    def window(i)
-      "#{name}:#{i}"
+    def window(index)
+      "#{name}:#{index}"
     end
 
     def send_pane_command(cmd, window_index, _pane_index)
@@ -383,9 +386,10 @@ module Tmuxinator
     def extract_tmux_config
       options_hash = {}
 
-      options_string = `#{show_tmux_options}`
-      options_string.encode!("UTF-8", invalid: :replace)
-      options_string.split("\n").map do |entry|
+      `#{show_tmux_options}`.
+        encode("UTF-8", invalid: :replace).
+        split("\n").
+        map do |entry|
         key, value = entry.split("\s")
         options_hash[key] = value
         options_hash

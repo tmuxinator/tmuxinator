@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "open3"
 
 module Tmuxinator
@@ -193,7 +195,7 @@ module Tmuxinator
 
         begin
           Tmuxinator::Config.validate(options)
-        rescue => e
+        rescue StandardError => e
           exit! e.message
         end
       end

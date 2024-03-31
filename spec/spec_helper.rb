@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "coveralls"
 require "pry"
 require "simplecov"
@@ -39,7 +41,7 @@ def capture_io
 
   yield
 
-  return captured_stdout.string, captured_stderr.string
+  [captured_stdout.string, captured_stderr.string]
 ensure
   $stdout = orig_stdout
   $stderr = orig_stderr

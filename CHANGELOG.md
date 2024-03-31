@@ -1,6 +1,7 @@
 ## Unreleased
 ### Third-party Dependencies
 - Replace erubis with erubi
+- Upgrade rubocop to 0.61 for Ruby > 3.0 support
 ### Enhancements
 - Add configuration options for pane titles
 ### Fixes

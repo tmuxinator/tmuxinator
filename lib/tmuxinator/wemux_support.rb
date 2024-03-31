@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tmuxinator
   module WemuxSupport
     def render

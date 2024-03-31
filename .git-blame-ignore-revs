@@ -1,0 +1,7 @@
+# Run this command to always ignore formatting commits in `git blame`
+# git config -g blame.ignoreRevsFile .git-blame-ignore-revs
+
+# chore: Fix rubocop failures
+# Author: Andrew Kofink <ajkofink@gmail.com>
+# Date:   Sat Mar 30 12:13:30 2024 -0400
+960085a50a57518c53de98e71753ae3328fc0a6a
