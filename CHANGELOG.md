@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.2.0
 ### Third-party Dependencies
 - Replace erubis with erubi
 - Upgrade rubocop to 0.61 for Ruby > 3.0 support
