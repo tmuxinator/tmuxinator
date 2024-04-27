@@ -341,19 +341,21 @@ module Tmuxinator
       yaml["enable_pane_titles"]
     end
 
-    def tmux_set_pane_title_position
+    def tmux_set_pane_title_position(tmux_window_target)
+      command = set_window_option(tmux_window_target)
       if pane_title_position? && pane_title_position_valid?
-        "#{tmux} set pane-border-status #{yaml['pane_title_position']}"
+        "#{command} pane-border-status #{yaml['pane_title_position']}"
       else
-        "#{tmux} set pane-border-status top"
+        "#{command} pane-border-status top"
       end
     end
 
-    def tmux_set_pane_title_format
+    def tmux_set_pane_title_format(tmux_window_target)
+      command = set_window_option(tmux_window_target)
       if pane_title_format?
-        "#{tmux} set pane-border-format \"#{yaml['pane_title_format']}\""
+        "#{command} pane-border-format \"#{yaml['pane_title_format']}\""
       else
-        "#{tmux} set pane-border-format \"\#{pane_index}: \#{pane_title}\""
+        "#{command} pane-border-format \"\#{pane_index}: \#{pane_title}\""
       end
     end
 
@@ -437,6 +439,10 @@ module Tmuxinator
       no_color = '\033[0m'
       msg = "WARNING: #{message}\n"
       "printf \"#{yellow}#{msg}#{no_color}\""
+    end
+
+    def set_window_option(tmux_window_target)
+      "#{tmux} set-window-option -t #{tmux_window_target}"
     end
   end
 end

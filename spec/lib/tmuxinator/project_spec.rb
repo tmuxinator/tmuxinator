@@ -663,8 +663,8 @@ describe Tmuxinator::Project do
       before { project.yaml["pane_title_position"] = nil }
 
       it "configures a default position of top" do
-        expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status top"
+        expect(project.tmux_set_pane_title_position("x")).to eq(
+          "tmux set-window-option -t x pane-border-status top"
         )
       end
     end
@@ -673,8 +673,8 @@ describe Tmuxinator::Project do
       before { project.yaml["pane_title_position"] = "bottom" }
 
       it "configures a position of bottom" do
-        expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status bottom"
+        expect(project.tmux_set_pane_title_position("x")).to eq(
+          "tmux set-window-option -t x pane-border-status bottom"
         )
       end
     end
@@ -683,8 +683,8 @@ describe Tmuxinator::Project do
       before { project.yaml["pane_title_position"] = "other" }
 
       it "configures the default position" do
-        expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status top"
+        expect(project.tmux_set_pane_title_position("x")).to eq(
+          "tmux set-window-option -t x pane-border-status top"
         )
       end
     end
@@ -693,9 +693,10 @@ describe Tmuxinator::Project do
       before { project.yaml["pane_title_format"] = nil }
 
       it "configures a default format" do
-        expect(project.tmux_set_pane_title_format).to eq(
-          "tmux set pane-border-format \"\#{pane_index}: \#{pane_title}\""
-        )
+        resp = ""\
+          "tmux set-window-option -t x pane-border-format"\
+          " \"\#{pane_index}: \#{pane_title}\""
+        expect(project.tmux_set_pane_title_format("x")).to eq(resp)
       end
     end
 
@@ -703,8 +704,8 @@ describe Tmuxinator::Project do
       before { project.yaml["pane_title_format"] = " [ #T ] " }
 
       it "configures the provided format" do
-        expect(project.tmux_set_pane_title_format).to eq(
-          'tmux set pane-border-format " [ #T ] "'
+        expect(project.tmux_set_pane_title_format("x")).to eq(
+          'tmux set-window-option -t x pane-border-format " [ #T ] "'
         )
       end
     end

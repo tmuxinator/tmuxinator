@@ -1,4 +1,5 @@
 ## Unreleased
+- Fix pane title configuration options only applying to first window
 
 ## 3.2.0
 ### Third-party Dependencies
