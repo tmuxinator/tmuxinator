@@ -21,9 +21,15 @@ cd <%= root || "." %>
 
   # Create the session and the first window. Manually switch to root
   # directory if required to support tmux < 1.9
-  TMUX= <%= tmux_new_session_command %>
   <% if windows.first.root? %>
+    <% if Tmuxinator::Config.version < 1.9 %>
+  TMUX= <%= tmux_new_session_command %>
   <%= windows.first.tmux_window_command_prefix %> <%= "cd #{windows.first.root}".shellescape %> C-m
+    <%- else -%>
+  TMUX= <%= tmux_new_session_command %> -c <%= windows.first.root.shellescape %>
+    <% end %>
+  <%- else -%>
+  TMUX= <%= tmux_new_session_command %>
   <% end %>
 
   <% if Tmuxinator::Config.version < 1.7 %>
