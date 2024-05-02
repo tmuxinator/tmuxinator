@@ -42,12 +42,9 @@ cd <%= root || "." %>
   <% if enable_pane_titles? %>
     <% if Tmuxinator::Config.version < 2.6 %>
   <%= pane_titles_not_supported_warning %>
-    <%- else -%>
-      <% if pane_title_position? && !pane_title_position_valid? %>
+    <% end %>
+    <% if pane_title_position? && !pane_title_position_valid? %>
   <%= pane_title_position_not_valid_warning %>
-      <% end %>
-  <%= tmux_set_pane_title_position %>
-  <%= tmux_set_pane_title_format %>
     <% end %>
   <% end %>
 
@@ -62,6 +59,12 @@ cd <%= root || "." %>
     <% if window.synchronize_before? %>
   <%= window.tmux_synchronize_panes %>
     <% end %>
+
+    <% if enable_pane_titles? && Tmuxinator::Config.version >= 2.6 %>
+  <%= tmux_set_pane_title_position(window.tmux_window_target) %>
+  <%= tmux_set_pane_title_format(window.tmux_window_target) %>
+    <% end %>
+
     <% unless window.panes? %>
       <% if window.project.pre_window %>
   <%= window.tmux_pre_window_command %>
