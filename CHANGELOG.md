@@ -1,6 +1,10 @@
 ## Unreleased
-- Fix pane title configuration options only applying to first window
+
+## 3.2.1
+### Enhancements
 - Use `tmux -c` if available to reduce spam
+### Fixes
+- Fix pane title configuration options only applying to first window
 
 ## 3.2.0
 ### Third-party Dependencies
