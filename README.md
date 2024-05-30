@@ -398,6 +398,11 @@ Shows tmuxinator's version.
 tmuxinator version
 ```
 
+Append a project's windows to the current session (instead of creating a new session)
+```
+tmuxinator start [project] --append
+```
+
 ## Project Configuration Location
 
 Using environment variables, it's possible to define which directory

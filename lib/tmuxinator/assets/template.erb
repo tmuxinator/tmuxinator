@@ -23,13 +23,13 @@ cd <%= root || "." %>
   # directory if required to support tmux < 1.9
   <% if windows.first.root? %>
     <% if Tmuxinator::Config.version < 1.9 %>
-  TMUX= <%= tmux_new_session_command %>
+  TMUX= <%= tmux_new_or_append_to_existing_session_command %>
   <%= windows.first.tmux_window_command_prefix %> <%= "cd #{windows.first.root}".shellescape %> C-m
     <%- else -%>
-  TMUX= <%= tmux_new_session_command %> -c <%= windows.first.root.shellescape %>
+  TMUX= <%= tmux_new_or_append_to_existing_session_command %> -c <%= windows.first.root.shellescape %>
     <% end %>
   <%- else -%>
-  TMUX= <%= tmux_new_session_command %>
+  TMUX= <%= tmux_new_or_append_to_existing_session_command %>
   <% end %>
 
   <% if Tmuxinator::Config.version < 1.7 %>
@@ -109,7 +109,7 @@ cd <%= root || "." %>
   <%= hook_on_project_restart %>
 <%- end -%>
 
-<%- if attach? -%>
+<%- if attach? && !in_current_session -%>
   if [ -z "$TMUX" ]; then
     <%= tmux %> -u attach-session -t <%= name %>
   else
