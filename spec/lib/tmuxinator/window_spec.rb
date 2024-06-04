@@ -354,7 +354,7 @@ describe Tmuxinator::Window do
 
     let(:window_part) { "new-window" }
     let(:name_part) { window.tmux_window_name_option }
-    let(:target_part) { "-t #{window.tmux_window_target}" }
+    let(:target_part) { "-k -t #{window.tmux_window_target}" }
     let(:path_part) { "#{path_option} #{project.root}" }
 
     let(:path_option) { "-c" }

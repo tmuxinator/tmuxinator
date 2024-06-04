@@ -115,7 +115,7 @@ module Tmuxinator
 
     def tmux_new_window_command
       path = root? ? "#{Tmuxinator::Config.default_path_option} #{root}" : nil
-      "#{project.tmux} new-window #{path} -t #{tmux_window_target} #{tmux_window_name_option}"
+      "#{project.tmux} new-window #{path} -k -t #{tmux_window_target} #{tmux_window_name_option}"
     end
 
     def tmux_tiled_layout_command
