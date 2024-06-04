@@ -19,18 +19,7 @@ cd <%= root || "." %>
   # Run on_project_first_start command.
   <%= hook_on_project_first_start %>
 
-  # Create the session and the first window. Manually switch to root
-  # directory if required to support tmux < 1.9
-  <% if windows.first.root? %>
-    <% if Tmuxinator::Config.version < 1.9 %>
   TMUX= <%= tmux_new_session_command %>
-  <%= windows.first.tmux_window_command_prefix %> <%= "cd #{windows.first.root}".shellescape %> C-m
-    <%- else -%>
-  TMUX= <%= tmux_new_session_command %> -c <%= windows.first.root.shellescape %>
-    <% end %>
-  <%- else -%>
-  TMUX= <%= tmux_new_session_command %>
-  <% end %>
 
   <% if Tmuxinator::Config.version < 1.7 %>
   # Set the default path for versions prior to 1.7
@@ -48,8 +37,8 @@ cd <%= root || "." %>
     <% end %>
   <% end %>
 
-  # Create other windows.
-  <% windows.drop(1).each do |window| %>
+  # Create windows.
+  <% windows.each do |window| %>
   <%= window.tmux_new_window_command %>
   <% end %>
 

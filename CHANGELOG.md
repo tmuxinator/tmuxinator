@@ -1,4 +1,6 @@
 ## Unreleased
+### Fixes
+- Session path is project root, not first window root
 
 ## 3.2.1
 ### Enhancements
