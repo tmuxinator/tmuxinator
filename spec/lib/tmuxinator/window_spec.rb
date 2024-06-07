@@ -7,6 +7,8 @@ describe Tmuxinator::Window do
   let(:panes) { ["vim", nil, "top"] }
   let(:window_name) { "editor" }
   let(:synchronize) { false }
+  let(:root) {}
+  let(:root?) { root }
   let(:yaml) do
     {
       window_name => {
@@ -16,27 +18,14 @@ describe Tmuxinator::Window do
         ],
         "synchronize" => synchronize,
         "layout" => "main-vertical",
-        "panes" => panes
-      }
-    }
-  end
-  let(:yaml_root) do
-    {
-      "editor" => {
-        "root" => "/project/override",
-        "root?" => true,
-        "pre" => [
-          "echo 'I get run in each pane.  Before each pane command!'",
-          nil
-        ],
-        "layout" => "main-vertical",
-        "panes" => panes
+        "panes" => panes,
+        "root" => root,
+        "root?" => root?,
       }
     }
   end
 
   let(:window) { described_class.new(yaml, 0, project) }
-  let(:window_root) { described_class.new(yaml_root, 0, project) }
 
   shared_context "window command context" do
     let(:project) { double(:project) }
@@ -81,9 +70,19 @@ describe Tmuxinator::Window do
       end
     end
 
-    context "with window root" do
+    context "with absolute window root" do
+      let(:root) { "/project/override" }
+
       it "gets the window root" do
-        expect(window_root.root).to include("/project/override")
+        expect(window.root).to include("/project/override")
+      end
+    end
+
+    context "with relative window root" do
+      let(:root) { "relative" }
+
+      it "joins the project root" do
+        expect(window.root).to include("/project/tmuxinator/relative")
       end
     end
   end

@@ -1,4 +1,6 @@
 ## Unreleased
+### Enhancements
+- Detect relative window root, join with project root
 ### Fixes
 - Session path is project root, not first window root
 ### Misc
