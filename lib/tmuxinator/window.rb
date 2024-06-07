@@ -36,12 +36,16 @@ module Tmuxinator
       yaml["synchronize"] || false
     end
 
+    # The expanded, joined window root path
+    # Relative paths are joined to the project root
     def root
-      _yaml_root || _project_root
+      return _project_root unless _yaml_root
+
+      File.expand_path(_yaml_root, _project_root).shellescape
     end
 
     def _yaml_root
-      File.expand_path(yaml["root"]).shellescape if yaml["root"]
+      yaml["root"]
     end
 
     def _project_root
