@@ -1,6 +1,8 @@
 ## Unreleased
 ### Fixes
 - Session path is project root, not first window root
+### Misc
+- Unpin activesupport as a development depenedency
 
 ## 3.2.1
 ### Enhancements
