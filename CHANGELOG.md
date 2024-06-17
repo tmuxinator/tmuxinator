@@ -1,4 +1,6 @@
 ## Unreleased
+### Misc
+- Update Ruby 3.1, 3.2, 3.3 in the test matrix; rm ruby 3.0
 
 ## 3.3.0
 ### Enhancements
