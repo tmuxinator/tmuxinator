@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.3.0
 ### Enhancements
 - Detect relative window root, join with project root
 ### Fixes
