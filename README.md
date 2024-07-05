@@ -44,7 +44,7 @@ echo $EDITOR
 For me that produces "vim". If you want to change your default editor simply
 put a line in ~/.bashrc that changes it. Mine looks like this:
 
-```
+```bash
 export EDITOR='vim'
 ```
 
@@ -61,19 +61,19 @@ if you installed tmuxinator via Ruby's `gem`, you'll need to run the following
 commands to put the completion files where they'll be loaded by your shell.
 
 ### bash
-
-    # wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.bash -O /etc/bash_completion.d/tmuxinator.bash
-
+```bash
+wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.bash -O /etc/bash_completion.d/tmuxinator.bash
+```
 ### zsh
-
-    # wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh -O /usr/local/share/zsh/site-functions/_tmuxinator
-
+```bash
+wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh -O /usr/local/share/zsh/site-functions/_tmuxinator
+```
 Note: ZSH's completion files can be put in other locations in your `$fpath`. Please refer to the [manual](http://zsh.sourceforge.net/Doc/Release/Functions.html) for more details.
 
 ### fish
-
-    $ wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.fish -O ~/.config/fish/completions/tmuxinator.fish
-
+```bash
+wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.fish -O ~/.config/fish/completions/tmuxinator.fish
+```
 ## Usage
 
 A working knowledge of tmux is assumed. You should understand what windows and
