@@ -4,6 +4,8 @@
 ### tmux
 - Add tmux 3.5 to test matrix
 - Add tmux 3.5 to supported tmux versions list
+### Fixes
+- Don't unset TMUX env variable for new-session
 
 ## 3.3.0
 ### Enhancements
