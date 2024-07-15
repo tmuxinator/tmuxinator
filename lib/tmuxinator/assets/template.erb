@@ -19,7 +19,7 @@ cd <%= root || "." %>
   # Run on_project_first_start command.
   <%= hook_on_project_first_start %>
 
-  TMUX= <%= tmux_new_session_command %>
+  <%= tmux_new_session_command %>
 
   <% if Tmuxinator::Config.version < 1.7 %>
   # Set the default path for versions prior to 1.7
