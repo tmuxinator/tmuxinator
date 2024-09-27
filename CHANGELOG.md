@@ -1,6 +1,9 @@
 ## Unreleased
 ### Misc
 - Update Ruby 3.1, 3.2, 3.3 in the test matrix; rm ruby 3.0
+### tmux
+- Add tmux 3.5 to test matrix
+- Add tmux 3.5 to supported tmux versions list
 
 ## 3.3.0
 ### Enhancements
