@@ -126,13 +126,33 @@ module Tmuxinator
         asset_path "wemux_template.erb"
       end
 
-      # Sorted list of all .yml files, including duplicates
-      def configs
-        directories.map do |directory|
+      # List of all active tmux sessions
+      def active_sessions
+        `tmux list-sessions -F "#S"`.split("\n")
+      end
+
+      # Sorted list of all project .yml file basenames, including duplicates
+      #
+      # @param active filter configs by active project sessions
+      # @return [Array<String>] list of project names
+      def configs(active: nil)
+        configs = config_file_basenames
+
+        if active == true
+          configs &= active_sessions
+        elsif active == false
+          configs -= active_sessions
+        end
+
+        configs
+      end
+
+      def config_file_basenames
+        directories.flat_map do |directory|
           Dir["#{directory}/**/*.yml"].map do |path|
             path.gsub("#{directory}/", "").gsub(".yml", "")
           end
-        end.flatten.sort
+        end.sort
       end
 
       # Existent directories which may contain project files

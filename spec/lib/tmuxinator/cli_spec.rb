@@ -845,6 +845,14 @@ describe Tmuxinator::Cli do
       end
     end
 
+    context "set --active flag " do
+      ARGV.replace(["list", "--active"])
+
+      it "is a valid option" do
+        expect { capture_io { cli.start } }.to_not raise_error
+      end
+    end
+
     context "no arguments are given" do
       ARGV.replace(["list"])
 

@@ -281,6 +281,26 @@ describe Tmuxinator::Config do
         to eq ["both", "both", "dup/local-dup", "home", "local-dup", "xdg"]
     end
 
+    it "gets a sorted list of all active projects" do
+      allow(described_class).to receive(:environment?).and_return false
+      allow(described_class).
+        to receive(:active_sessions).
+        and_return ["both", "home"]
+
+      expect(described_class.configs(active: true)).
+        to eq ["both", "home"]
+    end
+
+    it "gets a sorted list excluding active projects" do
+      allow(described_class).to receive(:environment?).and_return false
+      allow(described_class).
+        to receive(:active_sessions).
+        and_return ["both", "home"]
+
+      expect(described_class.configs(active: false)).
+        to eq ["dup/local-dup", "local-dup", "xdg"]
+    end
+
     it "lists only projects in $TMUXINATOR_CONFIG when set" do
       allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
         and_return "#{fixtures_dir}/TMUXINATOR_CONFIG"
