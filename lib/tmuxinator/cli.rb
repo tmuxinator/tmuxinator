@@ -391,13 +391,17 @@ module Tmuxinator
     method_option :newline, type: :boolean,
                             aliases: ["-n"],
                             desc: "Force output to be one entry per line."
+    method_option :active, type: :boolean,
+                           aliases: ["-a"],
+                           desc: "Filter output by active project sessions."
 
     def list
       say "tmuxinator projects:"
+      configs = Tmuxinator::Config.configs(active: options[:active])
       if options[:newline]
-        say Tmuxinator::Config.configs.join("\n")
+        say configs.join("\n")
       else
-        print_in_columns Tmuxinator::Config.configs
+        print_in_columns configs
       end
     end
 
