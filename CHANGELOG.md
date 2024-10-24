@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.3.2
 ### Misc
 - Bump patch versions of Ruby 3.1, 3.2, 3.3 in the test matrix
 ### tmux
