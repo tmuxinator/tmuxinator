@@ -40,6 +40,7 @@ module Tmuxinator
     attr_reader :force_attach
     attr_reader :force_detach
     attr_reader :custom_name
+    attr_reader :no_pre_window
 
     def self.load(path, options = {})
       yaml = begin
@@ -83,15 +84,19 @@ module Tmuxinator
 
       @yaml = yaml
 
-      @custom_name = options[:custom_name]
-
-      @force_attach = options[:force_attach]
-      @force_detach = options[:force_detach]
-      @append = options[:append]
+      set_instance_variables_from_options(options)
 
       validate_options
 
       extend Tmuxinator::WemuxSupport if wemux?
+    end
+
+    def set_instance_variables_from_options(options)
+      @custom_name = options[:custom_name]
+      @force_attach = options[:force_attach]
+      @force_detach = options[:force_detach]
+      @append = options[:append]
+      @no_pre_window = options[:no_pre_window]
     end
 
     def validate_options
@@ -165,6 +170,8 @@ module Tmuxinator
     end
 
     def pre_window
+      return if no_pre_window
+
       params = if rbenv?
                  "rbenv shell #{yaml['rbenv']}"
                elsif rvm?

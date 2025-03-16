@@ -177,29 +177,22 @@ module Tmuxinator
       end
 
       def create_project(project_options = {})
-        # Strings provided to --attach are coerced into booleans by Thor.
-        # "f" and "false" will result in `:attach` being `false` and any other
-        # string or the empty flag will result in `:attach` being `true`.
-        # If the flag is not present, `:attach` will be `nil`.
-        attach = detach = false
-        attach = true if project_options[:attach] == true
-        detach = true if project_options[:attach] == false
+        Tmuxinator::Config.validate(project_create_options(project_options))
+      rescue StandardError => e
+        exit! e.message
+      end
 
-        options = {
+      def project_create_options(project_options)
+        {
           args: project_options[:args],
           custom_name: project_options[:custom_name],
-          force_attach: attach,
-          force_detach: detach,
+          force_attach: project_options[:attach] == true,
+          force_detach: project_options[:attach] == false,
           name: project_options[:name],
           project_config: project_options[:project_config],
-          append: project_options[:append]
+          append: project_options[:append],
+          no_pre_window: project_options[:no_pre_window],
         }
-
-        begin
-          Tmuxinator::Config.validate(options)
-        rescue StandardError => e
-          exit! e.message
-        end
       end
 
       def render_project(project)
@@ -245,6 +238,7 @@ module Tmuxinator
           name: name,
           project_config: options["project-config"],
           append: options["append"],
+          no_pre_window: options["no-pre-window"],
         }
       end
     end
@@ -263,6 +257,8 @@ module Tmuxinator
     method_option :append, type: :boolean,
                            desc: "Appends the project windows and panes in " \
                                  "the current session"
+    method_option "no-pre-window", type: :boolean, default: false,
+                                   desc: "Skip pre_window commands"
     def start(name = nil, *args)
       params = start_params(name, *args)
 
@@ -343,7 +339,8 @@ module Tmuxinator
     method_option :append, type: :boolean,
                            desc: "Appends the project windows and panes in " \
                                  "the current session"
-
+    method_option "no-pre-window", type: :boolean, default: false,
+                                   desc: "Skip pre_window commands"
     def debug(name = nil, *args)
       params = start_params(name, *args)
 
