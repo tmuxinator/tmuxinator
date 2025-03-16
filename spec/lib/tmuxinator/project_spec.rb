@@ -281,6 +281,16 @@ describe Tmuxinator::Project do
         end
       end
     end
+
+    context "no_pre_window option is true" do
+      before do
+        allow(project).to receive_messages(no_pre_window: true)
+      end
+
+      it "returns nil" do
+        expect(pre_window).to be_nil
+      end
+    end
   end
 
   describe "#socket" do

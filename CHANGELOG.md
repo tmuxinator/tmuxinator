@@ -1,6 +1,7 @@
 ## Unreleased
 ### Features
 - Add support for tmuxinator start --append
+- Add support for tmuxinator start --no-pre-window
 ### Fixes
 - Properly pass additional arguments to the start command when no command is given
 
