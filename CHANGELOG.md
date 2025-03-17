@@ -1,6 +1,8 @@
 ## Unreleased
 ### Features
 - Add support for tmuxinator start --append
+### Fixes
+- Properly pass additional arguments to the start command when no command is given
 
 ## 3.3.3
 ### Features

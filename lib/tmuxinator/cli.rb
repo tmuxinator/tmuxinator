@@ -438,7 +438,7 @@ module Tmuxinator
         Tmuxinator::Cli.new.local
       elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
             Tmuxinator::Config.exist?(name: name)
-        Tmuxinator::Cli.new.start(name, *args.drop(1))
+        Tmuxinator::Cli.start([:start, *args])
       else
         Tmuxinator::Cli.start(args)
       end
