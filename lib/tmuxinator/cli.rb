@@ -304,7 +304,7 @@ module Tmuxinator
     def stop_all
       # We only need to stop active projects
       configs = Tmuxinator::Config.configs(active: true)
-      
+
       say "Stop all active projects:\n\n", :yellow
       say configs.join("\n")
       say "\n"
@@ -313,12 +313,11 @@ module Tmuxinator
 
       # Sort the current session to the end. We kill it last
       # so that the stop_all command doesn't terminate prematurely.
-      projects = configs.map { |config| { name: config} }
-        .map { |params| create_project(params) }
-        .sort { |project| project.current_session_name == project.name ? 1 : 0 }
-        .each { |project| Kernel.system(project.kill) }
+      configs.map { |config| { name: config } }.
+        map { |params| create_project(params) }.
+        sort { |project| project.current_session_name == project.name ? 1 : 0 }.
+        each { |project| Kernel.system(project.kill) }
     end
-
 
     desc "local", COMMANDS[:local]
     map "." => :local

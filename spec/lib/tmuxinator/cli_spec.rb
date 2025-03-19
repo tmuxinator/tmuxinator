@@ -389,13 +389,13 @@ describe Tmuxinator::Cli do
       allow(Kernel).to receive(:exec)
     end
 
-      it "stops all projects" do
-        ARGV.replace(["stop", "foo"])
-        expect(Kernel).to receive(:exec)
-        out, err = capture_io { cli.start }
-        expect(err).to eq ""
-        expect(out).to eq ""
-      end
+    it "stops all projects" do
+      ARGV.replace(["stop", "foo"])
+      expect(Kernel).to receive(:exec)
+      out, err = capture_io { cli.start }
+      expect(err).to eq ""
+      expect(out).to eq ""
+    end
   end
 
   describe "#local" do

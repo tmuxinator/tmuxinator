@@ -151,7 +151,7 @@ module Tmuxinator
       #
       # If sub-folders are used, those are part of the name too.
       #
-      # Example: 
+      # Example:
       #   $CONFIG_DIR/project.yml -> project
       #   $CONFIG_DIR/sub/project.yml -> sub/project
       #   $HOME_CONFIG_DIR/project.yml -> project
