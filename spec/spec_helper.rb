@@ -1,16 +1,21 @@
 # frozen_string_literal: true
 
-require "coveralls"
 require "pry"
 require "simplecov"
 require "xdg"
 
-formatters = [
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start do
+  if ENV["CI"]
+    formatter SimpleCov::Formatter::SimpleFormatter
+  else
+    formatter SimpleCov::Formatter::MultiFormatter.new(
+      [
+        SimpleCov::Formatter::HTMLFormatter,
+        SimpleCov::Formatter::SimpleFormatter,
+      ]
+    )
+  end
+
   add_filter "vendor/cache"
 end
 
