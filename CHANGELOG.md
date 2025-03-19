@@ -4,6 +4,8 @@
 - Add support for tmuxinator start --no-pre-window
 ### Fixes
 - Properly pass additional arguments to the start command when no command is given
+### Misc
+- Fix code coverage reporting via coveralls, now with GitHub Actions
 
 ## 3.3.3
 ### Features
