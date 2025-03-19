@@ -73,3 +73,18 @@ jobs:
       run: |
         bundle install
         bundle exec rake test
+    - name: Coveralls
+      uses: coverallsapp/github-action@v2
+      with:
+        flag-name: run-${{ join(matrix.*, '-') }}
+        parallel: true
+  finish:
+    needs: test
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
+        carryforward: "run-3.3.5-1.5,run-3.3.5-2.6,run-3.3.5-3.5a"

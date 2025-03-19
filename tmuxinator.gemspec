@@ -46,7 +46,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "awesome_print", "~> 1.2"
   s.add_development_dependency "bundler", ">= 1.3"
-  s.add_development_dependency "coveralls", "~> 0.8"
   s.add_development_dependency "factory_bot", "~> 4.8"
   s.add_development_dependency "pry", "~> 0.10"
   s.add_development_dependency "rake", "~> 12.3.3"
