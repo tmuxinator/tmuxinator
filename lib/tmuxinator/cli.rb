@@ -300,13 +300,19 @@ module Tmuxinator
       kill_project(project)
     end
 
-    desc "stop_all [ARGS]", COMMANDS[:stop_all]
-    def stop_all(name = nil)
+    desc "stop_all", COMMANDS[:stop_all]
+    def stop_all
       # We only need to stop active projects
       configs = Tmuxinator::Config.configs(active: true)
+      
+      say "Stop all active projects:\n\n", :yellow
+      say configs.join("\n")
+      say "\n"
+
+      return unless yes?("Are you sure? (y/n)")
 
       configs.each do |config| 
-        params = { project_config: config } 
+        params = { name: config } 
         project = create_project(params)
         kill_project(project)
       end
