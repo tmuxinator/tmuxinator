@@ -311,11 +311,12 @@ module Tmuxinator
 
       return unless yes?("Are you sure? (y/n)")
 
-      configs.each do |config| 
-        params = { name: config } 
-        project = create_project(params)
-        kill_project(project)
-      end
+      # Sort the current session to the end. We kill it last
+      # so that the stop_all command doesn't terminate prematurely.
+      projects = configs.map { |config| { name: config} }
+        .map { |params| create_project(params) }
+        .sort { |project| project.current_session_name == project.name ? 1 : 0 }
+        .each { |project| Kernel.system(project.kill) }
     end
 
 
