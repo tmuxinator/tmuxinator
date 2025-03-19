@@ -205,6 +205,7 @@ describe Tmuxinator::Cli do
                     open
                     start
                     stop
+                    stop_all
                     local
                     debug
                     copy
@@ -377,6 +378,22 @@ describe Tmuxinator::Cli do
            with(hash_including(name: nil)))
       capture_io { cli.start }
     end
+  end
+
+  describe "#stop_all" do
+    before do
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
+    end
+
+      it "stops all projects" do
+        ARGV.replace(["stop", "foo"])
+        expect(Kernel).to receive(:exec)
+        out, err = capture_io { cli.start }
+        expect(err).to eq ""
+        expect(out).to eq ""
+      end
   end
 
   describe "#local" do
