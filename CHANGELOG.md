@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.3.4
 ### Features
 - Add support for tmuxinator start --append
 - Add support for tmuxinator start --no-pre-window
