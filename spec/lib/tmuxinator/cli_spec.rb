@@ -390,8 +390,7 @@ describe Tmuxinator::Cli do
     end
 
     it "stops all projects" do
-      ARGV.replace(["stop", "foo"])
-      expect(Kernel).to receive(:exec)
+      ARGV.replace(["stop-all", "--noconfirm"])
       out, err = capture_io { cli.start }
       expect(err).to eq ""
       expect(out).to eq ""

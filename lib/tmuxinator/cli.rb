@@ -296,16 +296,22 @@ module Tmuxinator
       kill_project(project)
     end
 
-    desc "stop_all", COMMANDS[:stop_all]
+    desc "stop-all", COMMANDS[:stop_all]
+    method_option :noconfirm, type: :boolean,
+                           default: false,
+                           aliases: "-nc",
+                           desc: "Skip confirmation"
     def stop_all
       # We only need to stop active projects
       configs = Tmuxinator::Config.configs(active: true)
 
-      say "Stop all active projects:\n\n", :yellow
-      say configs.join("\n")
-      say "\n"
+      unless options[:noconfirm]
+        say "Stop all active projects:\n\n", :yellow
+        say configs.join("\n")
+        say "\n"
 
-      return unless yes?("Are you sure? (y/n)")
+        return unless yes?("Are you sure? (n/y)")
+      end
 
       # Sort the current session to the end. We kill it last
       # so that the stop_all command doesn't terminate prematurely.
