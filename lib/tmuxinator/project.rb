@@ -42,31 +42,45 @@ module Tmuxinator
     attr_reader :custom_name
     attr_reader :no_pre_window
 
-    def self.load(path, options = {})
-      yaml = begin
-        args = options[:args] || []
-        @settings = parse_settings(args)
-        @args = args
+    class << self
+      def load(path, options = {})
+        yaml = begin
+          args = options[:args] || []
+          @settings = parse_settings(args)
+          @args = args
 
-        content = render_template(path, binding)
-        YAML.safe_load(content, aliases: true)
-             rescue SyntaxError, StandardError => error
-               raise "Failed to parse config file: #{error.message}"
+          content = render_template(path, binding)
+          YAML.safe_load(content, aliases: true)
+               rescue SyntaxError, StandardError => error
+                 raise "Failed to parse config file: #{error.message}"
+        end
+
+        new(yaml, options)
       end
 
-      new(yaml, options)
-    end
+      def parse_settings(args)
+        settings = args.select { |x| x.match(/.*=.*/) }
+        args.reject! { |x| x.match(/.*=.*/) }
 
-    def self.parse_settings(args)
-      settings = args.select { |x| x.match(/.*=.*/) }
-      args.reject! { |x| x.match(/.*=.*/) }
+        settings.map! do |setting|
+          parts = setting.split("=")
+          [parts[0], parts[1]]
+        end
 
-      settings.map! do |setting|
-        parts = setting.split("=")
-        [parts[0], parts[1]]
+        Hash[settings]
       end
 
-      Hash[settings]
+      def stop_all
+        comparator = ->(project) {
+          project.current_session_name == project.name ? 1 : 0
+        }
+        # Sort the current session to the end. We kill it last
+        # so that the stop_all command doesn't terminate prematurely.
+        Tmuxinator::Config.configs(active: true).
+          map { |config| Config.validate(name: config) }.
+          sort { |project| comparator.run(project) }.
+          each { |project| Kernel.system(project.kill) }
+      end
     end
 
     def validate!
