@@ -368,6 +368,16 @@ List all the projects you have configured. Aliased to `l` and `ls`
 tmuxinator list
 ```
 
+Stop a project.
+```
+tmuxinator stop [project]
+```
+
+Stop all active projects.
+```
+tmuxinator stop-all
+```
+
 Remove a project. Aliased to `rm`
 ```
 tmuxinator delete [project]
