@@ -67,7 +67,9 @@ module Tmuxinator
           [parts[0], parts[1]]
         end
 
-        Hash[settings]
+      settings.map! do |setting|
+        parts = setting.split("=", 2)
+        [parts[0], parts[1]]
       end
 
       def stop_all

@@ -1,4 +1,9 @@
 ## Unreleased
+## Misc
+- Add Ruby 3.4 to the test matrix
+- Document new from session feature in the README
+## Fixes
+- Properly pass args with equals (=) in their values
 
 ### Features
 - Add support for tmuxinator stop-all
