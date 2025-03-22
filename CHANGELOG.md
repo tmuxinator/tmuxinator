@@ -1,4 +1,6 @@
 ## Unreleased
+## Misc
+- Add Ruby 3.4 to the test matrix
 
 ## 3.3.4
 ### Features
