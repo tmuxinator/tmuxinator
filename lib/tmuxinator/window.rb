@@ -126,6 +126,10 @@ module Tmuxinator
       "#{project.tmux} select-layout -t #{tmux_window_target} tiled"
     end
 
+    def tmux_focus_pane_command
+      "#{project.tmux} select-pane -t #{focused_pane}"
+    end
+
     def tmux_synchronize_panes
       "#{project.tmux} set-window-option -t #{tmux_window_target} synchronize-panes on"
     end
@@ -134,16 +138,50 @@ module Tmuxinator
       "#{project.tmux} select-layout -t #{tmux_window_target} #{layout}"
     end
 
-    def tmux_select_first_pane
-      "#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.pane_base_index}"
-    end
-
     def synchronize_before?
       synchronize == true || synchronize == "before"
     end
 
     def synchronize_after?
       synchronize == "after"
+    end
+
+    private
+
+    def focused_pane
+      "#{tmux_window_target}.#{pane_index}"
+    end
+
+    def pane_index
+      focused_pane = yaml['focus_pane']
+      # Select the first pane if the user hasn't set focused_pane
+      return first_pane unless focused_pane
+
+      # The user may provide the focused pane index.
+      return focused_pane if integer?(focused_pane)
+
+      # The user may provide a pane name. If a name was provided we need
+      # to get the index of the pane from the name.
+      list_panes_command = <<~BASH
+        tmux list-panes \
+          -t #{tmux_window_target} \
+          -F '\#{pane_title} \#{pane_index}'
+      BASH
+
+      name_index = `#{list_panes_command}`.
+        split("\n").
+        map(&:split).
+        each_with_object({}) { |(name, index), object| object[key]=value }
+      puts "#{name_index}"
+      name_index[focused_pane]
+    end
+
+    def first_pane
+      panes.first.index + project.pane_base_index
+    end
+
+    def integer?(str)
+      !!Integer(str) rescue false
     end
   end
 end

@@ -252,6 +252,8 @@ module Tmuxinator
       "#{name}:#{yaml['startup_window'] || base_index}"
     end
 
+    # Select the pane to focus in the startup window
+    # @deprecated Use window.focused_pane instead
     def startup_pane
       "#{startup_window}.#{yaml['startup_pane'] || pane_base_index}"
     end
