@@ -3,6 +3,9 @@
 - Add Ruby 3.4 to the test matrix
 - Document new from session feature in the README
 
+### Features
+- Add support for tmuxinator stop-all
+
 ## 3.3.4
 ### Features
 - Add support for tmuxinator start --append

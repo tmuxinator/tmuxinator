@@ -18,3 +18,7 @@ vendor/
 tags
 .env*
 .env
+
+# ASDF VM
+.tool-versions
+
