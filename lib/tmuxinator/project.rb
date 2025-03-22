@@ -62,7 +62,7 @@ module Tmuxinator
       args.reject! { |x| x.match(/.*=.*/) }
 
       settings.map! do |setting|
-        parts = setting.split("=")
+        parts = setting.split("=", 2)
         [parts[0], parts[1]]
       end
 
