@@ -78,7 +78,7 @@ module Tmuxinator
         # so that the stop_all command doesn't terminate prematurely.
         Tmuxinator::Config.configs(active: true).
           map { |config| Config.validate(name: config) }.
-          sort { |project| comparator.run(project) }.
+          sort { |project| comparator.call(project) }.
           each { |project| Kernel.system(project.kill) }
       end
     end
