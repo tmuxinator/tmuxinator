@@ -198,21 +198,24 @@ describe Tmuxinator::Cli do
 
     it "lists the commands" do
       out, _err = capture_io { cli.start }
-      expected = %w(commands
-                    completions
-                    new
-                    edit
-                    open
-                    start
-                    stop
-                    local
-                    debug
-                    copy
-                    delete
-                    implode
-                    version
-                    doctor
-                    list)
+      expected = %w(
+        commands
+        completions
+        copy
+        debug
+        delete
+        doctor
+        edit
+        implode
+        local
+        list
+        new
+        open
+        start
+        stop
+        stop_all
+        version
+      )
       expect(out).to eq "#{expected.join("\n")}\n"
     end
   end
@@ -376,6 +379,20 @@ describe Tmuxinator::Cli do
         to(receive(:validate).
            with(hash_including(name: nil)))
       capture_io { cli.start }
+    end
+  end
+
+  describe "#stop_all" do
+    before do
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+    end
+
+    it "stops all projects" do
+      ARGV.replace(["stop-all", "--noconfirm"])
+      out, err = capture_io { cli.start }
+      expect(err).to eq ""
+      expect(out).to eq ""
     end
   end
 
