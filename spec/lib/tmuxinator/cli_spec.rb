@@ -386,11 +386,17 @@ describe Tmuxinator::Cli do
     before do
       allow(Tmuxinator::Config).to receive_messages(validate: project)
       allow(Tmuxinator::Config).to receive_messages(version: 1.9)
-      allow(Kernel).to receive(:exec)
     end
 
     it "stops all projects" do
       ARGV.replace(["stop-all", "--noconfirm"])
+      out, err = capture_io { cli.start }
+      expect(err).to eq ""
+      expect(out).to eq ""
+    end
+
+    it "stops all projects with alias" do
+      ARGV.replace(["stop-all", "-y"])
       out, err = capture_io { cli.start }
       expect(err).to eq ""
       expect(out).to eq ""
