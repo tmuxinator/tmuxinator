@@ -66,6 +66,8 @@ module Tmuxinator
           parts = setting.split("=", 2)
           [parts[0], parts[1]]
         end
+
+        Hash[settings]
       end
 
       def stop_all
