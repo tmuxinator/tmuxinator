@@ -299,6 +299,7 @@ module Tmuxinator
     desc "stop-all", COMMANDS[:stop_all]
     method_option :noconfirm, type: :boolean,
                               default: false,
+                              aliases: "-y",
                               desc: "Skip confirmation"
     def stop_all
       # We only need to stop active projects
