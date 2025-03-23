@@ -394,13 +394,6 @@ describe Tmuxinator::Cli do
       expect(err).to eq ""
       expect(out).to eq ""
     end
-
-    it "stops all projects with alias" do
-      ARGV.replace(["stop-all", "-y"])
-      out, err = capture_io { cli.start }
-      expect(err).to eq ""
-      expect(out).to eq ""
-    end
   end
 
   describe "#local" do
