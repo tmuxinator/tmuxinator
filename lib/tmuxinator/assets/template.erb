@@ -95,7 +95,7 @@ cd <%= root || "." %>
   <% end %>
 
   <%= tmux %> select-window -t <%= startup_window %>
-  <%= tmux %> select-pane -t <%= startup_pane %>
+  <%= tmux_startup_pane_command %>
 <%- else -%>
   # Run on_project_restart command.
   <%= hook_on_project_restart %>

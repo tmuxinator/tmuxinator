@@ -190,6 +190,12 @@ module Tmuxinator
       yaml["tmux_command"] || "tmux"
     end
 
+    def tmux_startup_pane_command
+      return "" unless yaml["startup_pane"]
+
+      "#{tmux} select-pane -t #{startup_pane}"
+    end
+
     def tmux_has_session?(name)
       return false unless name
 
@@ -250,12 +256,6 @@ module Tmuxinator
 
     def startup_window
       "#{name}:#{yaml['startup_window'] || base_index}"
-    end
-
-    # Select the pane to focus in the startup window
-    # @deprecated Use window.focused_pane instead
-    def startup_pane
-      "#{startup_window}.#{yaml['startup_pane'] || pane_base_index}"
     end
 
     def tmux_options?
@@ -479,6 +479,10 @@ module Tmuxinator
 
     def set_window_option(tmux_window_target)
       "#{tmux} set-window-option -t #{tmux_window_target}"
+    end
+
+    def startup_pane
+      "#{startup_window}.#{yaml['startup_pane']}"
     end
   end
 end
