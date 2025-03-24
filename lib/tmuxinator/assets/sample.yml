@@ -44,13 +44,15 @@ root: ~/
 windows:
   - editor:
       layout: main-vertical
+      panes:
+        - editor: vim
+        - guard
+      # Focus a pane by name or index. Indices are based off zero and automatically adjusted to your pane-base-index.
+      # focused_pane: editor
+
       # Synchronize all panes of this window, can be enabled before or after the pane commands run.
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
+      #
       # synchronize: after
-      panes:
-        - vim
-        - guard
-      # Specifies which pane will be selected on project startup. If not set, the first pane is used.
-      # focus_pane: 2
   - server: bundle exec rails s
   - logs: tail -f log/development.log

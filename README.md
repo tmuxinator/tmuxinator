@@ -142,9 +142,6 @@ root: ~/
 # Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
 # startup_window: editor
 
-# Specifies (by index) which pane of the specified window will be selected on project startup. If not set, the first pane is used.
-# startup_pane: 1
-
 # Controls whether the tmux session should be attached to automatically. Defaults to true.
 # attach: false
 
@@ -161,13 +158,13 @@ root: ~/
 windows:
   - editor:
       layout: main-vertical
-      # Synchronize all panes of this window, can be enabled before or after the pane commands run.
-      # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
-      # synchronize: after
       panes:
-        - editor:
-          - vim
+        - editor: vim
         - guard
+      # Focus a pane by name or index. Indices are based off zero and automatically adjusted to your pane-base-index.
+      focused_pane: editor
+      # Synchronize all panes of this window, can be enabled before or after the pane commands run.
+      # synchronize: after
   - server: bundle exec rails s
   - logs: tail -f log/development.log
 ```
@@ -221,16 +218,10 @@ The layout setting gets handed down to tmux directly, so you can choose from
 one of [the five standard layouts](https://web.archive.org/web/20220308205829/https://man.openbsd.org/OpenBSD-current/man1/tmux.1#even-horizontal)
 or [specify your own](http://stackoverflow.com/a/9976282/183537).
 
-**Please note the indentation here is deliberate. YAML's indentation rules can be confusing, so if your config isn't working as expected, please check the indentation.** For a more detailed explanation of _why_ YAML behaves this way, see [this](https://stackoverflow.com/questions/50594758/why-isnt-two-spaced-yaml-parsed-like-four-spaced-yaml/50600253#50600253) Stack Overflow question.
 
-**Note:** If you're noticing inconsistencies when using a custom layout it may
-be due [#651](https://github.com/tmuxinator/tmuxinator/issues/651). See [this
-comment](https://github.com/tmuxinator/tmuxinator/issues/651#issuecomment-497780424)
-for a workaround.
+### Pane Titles
 
-### Pane titles
-
-It is also possible (starting with tmux v2.6) to give a title to panes.
+Starting with Tmux v2.6 it is possible to give a title to panes. Pane titles will be shown only when `enable_pane_titles: true` is set.
 
 ```yaml
 enable_pane_titles: true
@@ -239,9 +230,35 @@ windows:
   - editor:
       layout: main-vertical
       panes:
-        - editor:
-          - vim
+        - editor: vim
+        - guard: guard
+```
+
+### Focus Pane
+
+Focus panes on project startup by specifying `focused_pane`. Focused panes can be specified by their index. Indices start with zero.
+
+```yaml
+windows:
+  - editor:
+      layout: main-vertical
+      panes:
+        - vim
         - guard
+        - devlog
+      focused_pane: 2 # Focus the last pane
+```
+
+When using named panes, you may specify a pane by it's name.
+
+```yaml
+windows:
+  - editor:
+      layout: main-vertical
+      panes:
+        - editor: vim
+        - guard: guard
+      focused_pane: guard
 ```
 
 ## Interpreter Managers & Environment Variables
