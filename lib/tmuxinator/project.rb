@@ -197,6 +197,7 @@ module Tmuxinator
       yaml["tmux_command"] || "tmux"
     end
 
+    # @deprecated. Use `focused_pane` instead!
     def tmux_startup_pane_command
       return "" unless yaml["startup_pane"]
 
