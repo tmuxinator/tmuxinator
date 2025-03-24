@@ -281,6 +281,16 @@ describe Tmuxinator::Project do
         end
       end
     end
+
+    context "no_pre_window option is true" do
+      before do
+        allow(project).to receive_messages(no_pre_window: true)
+      end
+
+      it "returns nil" do
+        expect(pre_window).to be_nil
+      end
+    end
   end
 
   describe "#socket" do
@@ -656,7 +666,7 @@ describe Tmuxinator::Project do
   end
 
   describe "::parse_settings" do
-    let(:args) { ["one", "two=three"] }
+    let(:args) { ["one", "two=three", "four=five=six"] }
 
     it "returns settings in a hash" do
       expect(described_class.parse_settings(args)["two"]).to eq("three")
@@ -665,6 +675,10 @@ describe Tmuxinator::Project do
     it "removes settings from args" do
       described_class.parse_settings(args)
       expect(args).to eq(["one"])
+    end
+
+    it "handles equals signs in values" do
+      expect(described_class.parse_settings(args)["four"]).to eq("five=six")
     end
   end
 

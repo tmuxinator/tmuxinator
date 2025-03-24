@@ -11,8 +11,9 @@ jobs:
       fail-fast: false
       matrix:
         ruby_version:
-          - '3.3.5'
-          - '3.2.5'
+          - '3.4.2'
+          - '3.3.7'
+          - '3.2.7'
           - '3.1.6'
         tmux_version:
           - '3.5a'
@@ -73,3 +74,18 @@ jobs:
       run: |
         bundle install
         bundle exec rake test
+    - name: Coveralls
+      uses: coverallsapp/github-action@v2
+      with:
+        flag-name: run-${{ join(matrix.*, '-') }}
+        parallel: true
+  finish:
+    needs: test
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
+        carryforward: "run-3.3.5-1.5,run-3.3.5-2.6,run-3.3.5-3.5a"

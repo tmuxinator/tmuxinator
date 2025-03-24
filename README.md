@@ -169,6 +169,17 @@ windows:
   - logs: tail -f log/development.log
 ```
 
+It's also possible to create a new tmuxinator project from an existing tmux
+session. This can be done by running the following command:
+
+```bash
+tmuxinator new [project] [session]
+```
+
+This will record the windows, along with their specified layout, panes,
+tmux session options, and project root based on the tmux
+default-path of the specified tmux session in the new tmuxinator project.
+
 ## Windows
 
 The windows option allows the specification of any number of tmux windows. Each window is denoted by a YAML array entry, followed by a name* and command to be run.

@@ -99,9 +99,7 @@ describe Tmuxinator::Cli do
           end
 
           it "should call #start" do
-            instance = instance_double(cli)
-            expect(cli).to receive(:new).and_return(instance)
-            expect(instance).to receive(:start).with(*args)
+            expect(cli).to receive(:start).with([:start, *args])
             subject
           end
 
@@ -109,9 +107,7 @@ describe Tmuxinator::Cli do
             let(:args) { ["sample", "--append"] }
 
             it "should call #start" do
-              instance = instance_double(cli)
-              expect(cli).to receive(:new).and_return(instance)
-              expect(instance).to receive(:start).with("sample", "--append")
+              expect(cli).to receive(:start).with([:start, *args])
               subject
             end
           end
