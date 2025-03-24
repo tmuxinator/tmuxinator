@@ -1,4 +1,7 @@
 ## Unreleased
+### Features
+
+- Add ability to focus panes via `focused_pane`
 
 ## 3.3.8
 ### Features
