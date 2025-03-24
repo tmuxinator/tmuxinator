@@ -173,13 +173,22 @@ describe Tmuxinator::Window do
         end
       end
 
+      context "with invalid name" do
+        let(:focused_pane) { "invalid" }
+        it "falls back to first" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.0")
+        end
+      end
+
       context "with nil" do
         let(:focused_pane) { nil }
         it "focuses first " do
           expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.0")
         end
+      end
 
-        it "focuses first " do
+      context "with pane base index" do
+        it "adjusts for base index" do
           allow(project).to receive_messages(pane_base_index: 3)
           expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.3")
         end
