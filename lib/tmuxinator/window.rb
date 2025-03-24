@@ -17,7 +17,7 @@ module Tmuxinator
     end
 
     def panes
-      build_panes(yaml["panes"]) || []
+      @panes ||= build_panes(yaml["panes"]) || []
     end
 
     def _hashed?
@@ -149,39 +149,30 @@ module Tmuxinator
     private
 
     def focused_pane
-      "#{tmux_window_target}.#{pane_index}"
+      "#{tmux_window_target}.#{tmux_pane_index}"
+    end
+
+    def tmux_pane_index
+      # Adjust for tmux pane base index
+      pane_index + project.pane_base_index
     end
 
     def pane_index
-      focused_pane = yaml['focus_pane']
+      focused_pane = yaml["focused_pane"]
       # Select the first pane if the user hasn't set focused_pane
-      return first_pane unless focused_pane
+      return 0 unless focused_pane
 
       # The user may provide the focused pane index.
       return focused_pane if integer?(focused_pane)
 
-      # The user may provide a pane name. If a name was provided we need
-      # to get the index of the pane from the name.
-      list_panes_command = <<~BASH
-        tmux list-panes \
-          -t #{tmux_window_target} \
-          -F '\#{pane_title} \#{pane_index}'
-      BASH
-
-      name_index = `#{list_panes_command}`.
-        split("\n").
-        map(&:split).
-        each_with_object({}) { |(name, index), object| object[key]=value }
-      puts "#{name_index}"
-      name_index[focused_pane]
-    end
-
-    def first_pane
-      panes.first.index + project.pane_base_index
+      # If no pane iwth the given name is found fall back to the first pane
+      panes.index { |pane| pane.title == focused_pane } || 0
     end
 
     def integer?(str)
-      !!Integer(str) rescue false
+      !!Integer(str)
+    rescue StandardError
+      false
     end
   end
 end
