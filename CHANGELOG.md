@@ -1,4 +1,8 @@
 ## Unreleased
+### Features
+
+- Add ability to focus panes via `focused_pane`
+
 ## Misc
 - Add Ruby 3.4 to the test matrix
 - Document new from session feature in the README
