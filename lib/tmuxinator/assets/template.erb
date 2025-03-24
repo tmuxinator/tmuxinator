@@ -1,5 +1,6 @@
 #!<%= ENV["SHELL"] || "/bin/bash" %>
 
+
 <%- if !append? -%>
   # Clear rbenv variables before starting tmux
   unset RBENV_VERSION
@@ -85,7 +86,7 @@ cd <%= root || "." %>
       <% end %>
 
   <%= window.tmux_layout_command %>
-  <%= window.tmux_select_first_pane %>
+  <%= window.tmux_focus_pane_command %>
     <% end %>
 
     <% if window.synchronize_after? %>
@@ -94,7 +95,7 @@ cd <%= root || "." %>
   <% end %>
 
   <%= tmux %> select-window -t <%= startup_window %>
-  <%= tmux %> select-pane -t <%= startup_pane %>
+  <%= tmux_startup_pane_command %>
 <%- else -%>
   # Run on_project_restart command.
   <%= hook_on_project_restart %>
