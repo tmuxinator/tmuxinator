@@ -2,6 +2,7 @@
 ## Misc
 - Add Ruby 3.4 to the test matrix
 - Document new from session feature in the README
+- Re-implement edit command so it shows up in help 
 ## Fixes
 - Properly pass args with equals (=) in their values
 

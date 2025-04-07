@@ -16,8 +16,8 @@ module Tmuxinator
       commands: "Lists commands available in tmuxinator",
       completions: "Used for shell completion",
       new: "Create a new project file and open it in your editor",
-      edit: "Alias of new",
-      open: "Alias of new",
+      edit: "Edit an existing project file in your editor",
+      open: "Open and edit an existing project file in your editor",
       start: %w{
         Start a tmux session using a project's name (with an optional [ALIAS]
         for project reuse) or a path to a project config file (via the -p flag)
@@ -73,22 +73,231 @@ module Tmuxinator
       end
     end
 
-    desc "new [PROJECT] [SESSION]", COMMANDS[:new]
-    map "open" => :new
-    map "edit" => :new
-    map "o" => :new
-    map "e" => :new
-    map "n" => :new
-    method_option :local, type: :boolean,
-                          aliases: ["-l"],
-                          desc: "Create local project file at ./.tmuxinator.yml"
+    def self.append_option
+      method_option :append,
+                    type: :boolean,
+                    desc: "Appends the project windows" \
+                          "and panes in the current session"
+    end
 
+    def self.attach_option
+      method_option :attach, type: :boolean,
+                             aliases: "-a",
+                             desc: "Attach to tmux session after creation."
+    end
+
+    def self.local_option
+      method_option :local,
+                    type: :boolean,
+                    aliases: ["-l"],
+                    desc: "Use a local project file at '.tmuxinator.yml'."
+    end
+
+    def self.name_option
+      method_option :name,
+                    aliases: "-n",
+                    desc: "Give the session a different name"
+    end
+
+    def self.project_config_option
+      method_option "project-config",
+                    aliases: "-p",
+                    desc: "Path to project config file"
+    end
+
+    def self.suppress_option
+      method_option "suppress-tmux-version-warning",
+                    desc: "Don't show a warning for unsupported tmux versions"
+    end
+
+    def self.no_pre_window_option
+      method_option "no-pre-window",
+                    type: :boolean,
+                    default: false,
+                    desc: "Skip pre_window commands"
+    end
+
+    desc "new [PROJECT] [SESSION]", COMMANDS[:new]
+    map "n" => :new
+    local_option
     def new(name, session = nil)
       if session
         new_project_with_session(name, session)
       else
         new_project(name)
       end
+    end
+
+    desc "edit [PROJECT]", COMMANDS[:edit]
+    map "open" => :edit
+    map "o" => :edit
+    local_option
+    def edit(name)
+      path = config_path(name, options[:local])
+      if File.exist?(path)
+        Kernel.system("$EDITOR #{path}")
+      else
+        exit! "Project '#{name}' does not exist."
+      end
+    end
+
+    desc "start [PROJECT] [ARGS]", COMMANDS[:start]
+    map "s" => :start
+    append_option
+    attach_option
+    name_option
+    no_pre_window_option
+    project_config_option
+    suppress_option
+    def start(name = nil, *args)
+      params = start_params(name, *args)
+
+      show_version_warning if version_warning?(
+        options["suppress-tmux-version-warning"]
+      )
+
+      project = create_project(params)
+      render_project(project)
+    end
+
+    desc "stop [PROJECT] [ARGS]", COMMANDS[:stop]
+    map "st" => :stop
+    project_config_option
+    suppress_option
+    def stop(name = nil)
+      # project-config takes precedence over a named project in the case that
+      # both are provided.
+      if options["project-config"]
+        name = nil
+      end
+
+      params = {
+        name: name,
+        project_config: options["project-config"]
+      }
+      show_version_warning if version_warning?(
+        options["suppress-tmux-version-warning"]
+      )
+
+      project = create_project(params)
+      kill_project(project)
+    end
+
+    desc "local", COMMANDS[:local]
+    map "." => :local
+    suppress_option
+    def local
+      show_version_warning if version_warning?(
+        options["suppress-tmux-version-warning"]
+      )
+
+      render_project(create_project(attach: options[:attach]))
+    end
+
+    desc "debug [PROJECT] [ARGS]", COMMANDS[:debug]
+    append_option
+    attach_option
+    name_option
+    no_pre_window_option
+    project_config_option
+    def debug(name = nil, *args)
+      params = start_params(name, *args)
+
+      project = create_project(params)
+
+      say project.render
+    end
+
+    desc "copy [EXISTING] [NEW]", COMMANDS[:copy]
+    map "c" => :copy
+    map "cp" => :copy
+
+    def copy(existing, new)
+      existing_config_path = Tmuxinator::Config.project(existing)
+      new_config_path = Tmuxinator::Config.project(new)
+
+      exit!("Project #{existing} doesn't exist!") \
+        unless Tmuxinator::Config.exist?(name: existing)
+
+      new_exists = Tmuxinator::Config.exist?(name: new)
+      question = "#{new} already exists, would you like to overwrite it?"
+      if !new_exists || yes?(question, :red)
+        say "Overwriting #{new}" if Tmuxinator::Config.exist?(name: new)
+        FileUtils.copy_file(existing_config_path, new_config_path)
+      end
+
+      Kernel.system("$EDITOR #{new_config_path}")
+    end
+
+    desc "delete [PROJECT1] [PROJECT2] ...", COMMANDS[:delete]
+    map "d" => :delete
+    map "rm" => :delete
+
+    def delete(*projects)
+      projects.each do |project|
+        if Tmuxinator::Config.exist?(name: project)
+          config = Tmuxinator::Config.project(project)
+
+          if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
+            FileUtils.rm(config)
+            say "Deleted #{project}"
+          end
+        else
+          say "#{project} does not exist!"
+        end
+      end
+    end
+
+    desc "implode", COMMANDS[:implode]
+    map "i" => :implode
+
+    def implode
+      if yes?("Are you sure you want to delete all tmuxinator configs?", :red)
+        Tmuxinator::Config.directories.each do |directory|
+          FileUtils.remove_dir(directory)
+        end
+        say "Deleted all tmuxinator projects."
+      end
+    end
+
+    desc "list", COMMANDS[:list]
+    map "l" => :list
+    map "ls" => :list
+    method_option :newline, type: :boolean,
+                            aliases: ["-n"],
+                            desc: "Force output to be one entry per line."
+    method_option :active, type: :boolean,
+                           aliases: ["-a"],
+                           desc: "Filter output by active project sessions."
+
+    def list
+      say "tmuxinator projects:"
+      configs = Tmuxinator::Config.configs(active: options[:active])
+      if options[:newline]
+        say configs.join("\n")
+      else
+        print_in_columns configs
+      end
+    end
+
+    desc "version", COMMANDS[:version]
+    map "-v" => :version
+
+    def version
+      say "tmuxinator #{Tmuxinator::VERSION}"
+    end
+
+    desc "doctor", COMMANDS[:doctor]
+
+    def doctor
+      say "Checking if tmux is installed ==> "
+      yes_no Tmuxinator::Doctor.installed?
+
+      say "Checking if $EDITOR is set ==> "
+      yes_no Tmuxinator::Doctor.editor?
+
+      say "Checking if $SHELL is set ==> "
+      yes_no Tmuxinator::Doctor.shell?
     end
 
     no_commands do
@@ -240,185 +449,6 @@ module Tmuxinator
           no_pre_window: options["no-pre-window"],
         }
       end
-    end
-
-    desc "start [PROJECT] [ARGS]", COMMANDS[:start]
-    map "s" => :start
-    method_option :attach, type: :boolean,
-                           aliases: "-a",
-                           desc: "Attach to tmux session after creation."
-    method_option :name, aliases: "-n",
-                         desc: "Give the session a different name"
-    method_option "project-config", aliases: "-p",
-                                    desc: "Path to project config file"
-    method_option "suppress-tmux-version-warning",
-                  desc: "Don't show a warning for unsupported tmux versions"
-    method_option :append, type: :boolean,
-                           desc: "Appends the project windows and panes in " \
-                                 "the current session"
-    method_option "no-pre-window", type: :boolean, default: false,
-                                   desc: "Skip pre_window commands"
-    def start(name = nil, *args)
-      params = start_params(name, *args)
-
-      show_version_warning if version_warning?(
-        options["suppress-tmux-version-warning"]
-      )
-
-      project = create_project(params)
-      render_project(project)
-    end
-
-    desc "stop [PROJECT] [ARGS]", COMMANDS[:stop]
-    map "st" => :stop
-    method_option "project-config", aliases: "-p",
-                                    desc: "Path to project config file"
-    method_option "suppress-tmux-version-warning",
-                  desc: "Don't show a warning for unsupported tmux versions"
-
-    def stop(name = nil)
-      # project-config takes precedence over a named project in the case that
-      # both are provided.
-      if options["project-config"]
-        name = nil
-      end
-
-      params = {
-        name: name,
-        project_config: options["project-config"]
-      }
-      show_version_warning if version_warning?(
-        options["suppress-tmux-version-warning"]
-      )
-
-      project = create_project(params)
-      kill_project(project)
-    end
-
-    desc "local", COMMANDS[:local]
-    map "." => :local
-    method_option "suppress-tmux-version-warning",
-                  desc: "Don't show a warning for unsupported tmux versions"
-
-    def local
-      show_version_warning if version_warning?(
-        options["suppress-tmux-version-warning"]
-      )
-
-      render_project(create_project(attach: options[:attach]))
-    end
-
-    desc "debug [PROJECT] [ARGS]", COMMANDS[:debug]
-    method_option :attach, type: :boolean,
-                           aliases: "-a",
-                           desc: "Attach to tmux session after creation."
-    method_option :name, aliases: "-n",
-                         desc: "Give the session a different name"
-    method_option "project-config", aliases: "-p",
-                                    desc: "Path to project config file"
-    method_option :append, type: :boolean,
-                           desc: "Appends the project windows and panes in " \
-                                 "the current session"
-    method_option "no-pre-window", type: :boolean, default: false,
-                                   desc: "Skip pre_window commands"
-    def debug(name = nil, *args)
-      params = start_params(name, *args)
-
-      project = create_project(params)
-
-      say project.render
-    end
-
-    desc "copy [EXISTING] [NEW]", COMMANDS[:copy]
-    map "c" => :copy
-    map "cp" => :copy
-
-    def copy(existing, new)
-      existing_config_path = Tmuxinator::Config.project(existing)
-      new_config_path = Tmuxinator::Config.project(new)
-
-      exit!("Project #{existing} doesn't exist!") \
-        unless Tmuxinator::Config.exist?(name: existing)
-
-      new_exists = Tmuxinator::Config.exist?(name: new)
-      question = "#{new} already exists, would you like to overwrite it?"
-      if !new_exists || yes?(question, :red)
-        say "Overwriting #{new}" if Tmuxinator::Config.exist?(name: new)
-        FileUtils.copy_file(existing_config_path, new_config_path)
-      end
-
-      Kernel.system("$EDITOR #{new_config_path}")
-    end
-
-    desc "delete [PROJECT1] [PROJECT2] ...", COMMANDS[:delete]
-    map "d" => :delete
-    map "rm" => :delete
-
-    def delete(*projects)
-      projects.each do |project|
-        if Tmuxinator::Config.exist?(name: project)
-          config = Tmuxinator::Config.project(project)
-
-          if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
-            FileUtils.rm(config)
-            say "Deleted #{project}"
-          end
-        else
-          say "#{project} does not exist!"
-        end
-      end
-    end
-
-    desc "implode", COMMANDS[:implode]
-    map "i" => :implode
-
-    def implode
-      if yes?("Are you sure you want to delete all tmuxinator configs?", :red)
-        Tmuxinator::Config.directories.each do |directory|
-          FileUtils.remove_dir(directory)
-        end
-        say "Deleted all tmuxinator projects."
-      end
-    end
-
-    desc "list", COMMANDS[:list]
-    map "l" => :list
-    map "ls" => :list
-    method_option :newline, type: :boolean,
-                            aliases: ["-n"],
-                            desc: "Force output to be one entry per line."
-    method_option :active, type: :boolean,
-                           aliases: ["-a"],
-                           desc: "Filter output by active project sessions."
-
-    def list
-      say "tmuxinator projects:"
-      configs = Tmuxinator::Config.configs(active: options[:active])
-      if options[:newline]
-        say configs.join("\n")
-      else
-        print_in_columns configs
-      end
-    end
-
-    desc "version", COMMANDS[:version]
-    map "-v" => :version
-
-    def version
-      say "tmuxinator #{Tmuxinator::VERSION}"
-    end
-
-    desc "doctor", COMMANDS[:doctor]
-
-    def doctor
-      say "Checking if tmux is installed ==> "
-      yes_no Tmuxinator::Doctor.installed?
-
-      say "Checking if $EDITOR is set ==> "
-      yes_no Tmuxinator::Doctor.editor?
-
-      say "Checking if $SHELL is set ==> "
-      yes_no Tmuxinator::Doctor.shell?
     end
 
     # This method was defined as something of a workaround...  Previously
