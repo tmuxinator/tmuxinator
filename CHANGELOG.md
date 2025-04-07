@@ -2,6 +2,9 @@
 ### Features
 
 - Add ability to focus panes via `focused_pane`
+### Misc
+
+- Re-implement edit command so it shows up in help
 
 ## 3.3.8
 ### Features
@@ -27,7 +30,7 @@
 ## Misc
 - Add Ruby 3.4 to the test matrix
 - Document new from session feature in the README
-- Update required Ruby version to >=2.7 
+- Update required Ruby version to >=2.7
 - Update runtime dependencies to up-to-date versions
 - Update development dependencies to up-to-date versions
 ## Fixes
