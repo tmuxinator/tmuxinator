@@ -119,8 +119,6 @@ module Tmuxinator
 
     desc "new [PROJECT] [SESSION]", COMMANDS[:new]
     map "n" => :new
-    map "open" => :edit
-    map "o" => :edit
     local_option
     def new(name, session = nil)
       if session
@@ -131,6 +129,8 @@ module Tmuxinator
     end
 
     desc "edit [PROJECT]", COMMANDS[:edit]
+    map "open" => :edit
+    map "o" => :edit
     local_option
     def edit(name)
       path = config_path(name, options[:local])
