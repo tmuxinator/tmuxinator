@@ -42,31 +42,46 @@ module Tmuxinator
     attr_reader :custom_name
     attr_reader :no_pre_window
 
-    def self.load(path, options = {})
-      yaml = begin
-        args = options[:args] || []
-        @settings = parse_settings(args)
-        @args = args
+    class << self
+      include Tmuxinator::Util
 
-        content = render_template(path, binding)
-        YAML.safe_load(content, aliases: true)
-             rescue SyntaxError, StandardError => error
-               raise "Failed to parse config file: #{error.message}"
+      def load(path, options = {})
+        yaml = begin
+          args = options[:args] || []
+          @settings = parse_settings(args)
+          @args = args
+
+          content = render_template(path, binding)
+          YAML.safe_load(content, aliases: true)
+               rescue SyntaxError, StandardError => error
+                 raise "Failed to parse config file: #{error.message}"
+        end
+
+        new(yaml, options)
       end
 
-      new(yaml, options)
-    end
+      def parse_settings(args)
+        settings = args.select { |x| x.match(/.*=.*/) }
+        args.reject! { |x| x.match(/.*=.*/) }
 
-    def self.parse_settings(args)
-      settings = args.select { |x| x.match(/.*=.*/) }
-      args.reject! { |x| x.match(/.*=.*/) }
+        settings.map! do |setting|
+          parts = setting.split("=", 2)
+          [parts[0], parts[1]]
+        end
 
-      settings.map! do |setting|
-        parts = setting.split("=", 2)
-        [parts[0], parts[1]]
+        Hash[settings]
       end
 
-      Hash[settings]
+      def active
+        Tmuxinator::Config.configs(active: true).
+          map { |config| Config.validate(name: config) }
+      end
+
+      def stop_all
+        active.
+          sort_by { |project| project.name == current_session_name ? 1 : 0 }.
+          each { |project| Kernel.system(project.kill) }
+      end
     end
 
     def validate!
@@ -133,10 +148,6 @@ module Tmuxinator
     def root
       root = yaml["project_root"] || yaml["root"]
       blank?(root) ? nil : File.expand_path(root).shellescape
-    end
-
-    def current_session_name
-      `[[ -n "${TMUX+set}" ]] && tmux display-message -p "#S"`.strip
     end
 
     def name

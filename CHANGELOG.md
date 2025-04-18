@@ -5,6 +5,9 @@
 ## Fixes
 - Properly pass args with equals (=) in their values
 
+### Features
+- Add support for tmuxinator stop-all
+
 ## 3.3.4
 ### Features
 - Add support for tmuxinator start --append
