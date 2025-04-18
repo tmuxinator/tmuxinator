@@ -43,6 +43,8 @@ module Tmuxinator
     attr_reader :no_pre_window
 
     class << self
+      include Tmuxinator::Util
+
       def load(path, options = {})
         yaml = begin
           args = options[:args] || []
@@ -70,15 +72,14 @@ module Tmuxinator
         Hash[settings]
       end
 
-      def stop_all
-        comparator = ->(project) {
-          project.current_session_name == project.name ? 1 : 0
-        }
-        # Sort the current session to the end. We kill it last
-        # so that the stop_all command doesn't terminate prematurely.
+      def active
         Tmuxinator::Config.configs(active: true).
-          map { |config| Config.validate(name: config) }.
-          sort { |project| comparator.call(project) }.
+          map { |config| Config.validate(name: config) }
+      end
+
+      def stop_all
+        active.
+          sort_by { |project| project.name == current_session_name ? 1 : 0 }.
           each { |project| Kernel.system(project.kill) }
       end
     end
@@ -147,10 +148,6 @@ module Tmuxinator
     def root
       root = yaml["project_root"] || yaml["root"]
       blank?(root) ? nil : File.expand_path(root).shellescape
-    end
-
-    def current_session_name
-      `[[ -n "${TMUX+set}" ]] && tmux display-message -p "#S"`.strip
     end
 
     def name
