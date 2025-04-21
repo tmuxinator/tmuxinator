@@ -428,20 +428,21 @@ describe Tmuxinator::Project do
     end
   end
 
-  describe "#startup_pane" do
-    context "startup pane specified" do
-      it "get the startup pane index from project config" do
+  describe "#tmux_startup_pane_command" do
+    context "with integer" do
+      it "returns command with index" do
         project.yaml["startup_pane"] = 1
 
-        expect(project.startup_pane).to eq("sample:0.1")
+        expect(project.tmux_startup_pane_command).
+          to match("select-pane -t sample:0.1")
       end
     end
 
-    context "startup pane not specified" do
-      it "returns the base pane instead" do
-        allow(project).to receive_messages(pane_base_index: 4)
+    context "with nil" do
+      it "returns empty" do
+        project.yaml["startup_pane"] = nil
 
-        expect(project.startup_pane).to eq("sample:0.4")
+        expect(project.tmux_startup_pane_command).to be_empty
       end
     end
   end
