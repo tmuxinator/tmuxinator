@@ -52,8 +52,7 @@ describe Tmuxinator::Project do
       end
 
       it "validates append outside a current session" do
-        allow_any_instance_of(Tmuxinator::Project).
-          to receive(:tmux_has_session?).and_return(false)
+        Tmuxinator::Project.any_instance.stub(tmux_has_session?: false)
         expect { project_with_append }.to(
           raise_error(
             RuntimeError,
@@ -63,8 +62,7 @@ describe Tmuxinator::Project do
       end
 
       it "validates append within a current session" do
-        allow_any_instance_of(Tmuxinator::Project).
-          to receive(:tmux_has_session?).and_return(true)
+        Tmuxinator::Project.any_instance.stub(tmux_has_session?: true)
         expect { project_with_append }.to_not raise_error
       end
     end
@@ -402,9 +400,8 @@ describe Tmuxinator::Project do
 
     context "with append set" do
       before do
-        allow_any_instance_of(Tmuxinator::Project).
-          to receive(:tmux_has_session?).and_return(true)
-        allow(project_with_append).to receive(:last_window_index).and_return(3)
+        Tmuxinator::Project.any_instance.stub(tmux_has_session?: true)
+        project_with_append.stub(last_window_index: 3)
       end
 
       it "defaults to the next window index" do
@@ -456,8 +453,7 @@ describe Tmuxinator::Project do
 
     context "with append set" do
       it "excludes the session name" do
-        allow_any_instance_of(Tmuxinator::Project).
-          to receive(:tmux_has_session?).and_return(true)
+        Tmuxinator::Project.any_instance.stub(tmux_has_session?: true)
         expect(project_with_append.window(1)).to eq ":1"
       end
     end
@@ -630,8 +626,7 @@ describe Tmuxinator::Project do
 
     context "with append set" do
       it "returns nothing" do
-        allow_any_instance_of(Tmuxinator::Project).
-          to receive(:tmux_has_session?).and_return(true)
+        Tmuxinator::Project.any_instance.stub(tmux_has_session?: true)
         expect(project_with_append.tmux_new_session_command).to be_nil
       end
     end

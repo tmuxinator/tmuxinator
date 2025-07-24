@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# frozen_string_literal: true
+
 module Tmuxinator
   class Config
     LOCAL_DEFAULTS = ["./.tmuxinator.yml", "./.tmuxinator.yaml"].freeze
@@ -20,7 +22,7 @@ module Tmuxinator
       end
 
       def home
-        "#{ENV['HOME']}/.tmuxinator"
+        ENV["HOME"] + "/.tmuxinator"
       end
 
       def home?
@@ -131,7 +133,7 @@ module Tmuxinator
         `tmux list-sessions -F "#S"`.split("\n")
       end
 
-      # Sorted list of all project .yml file basenames, including duplicates
+      # Sorted list of all project file basenames, including duplicates.
       #
       # @param active filter configs by active project sessions
       # @return [Array<String>] list of project names
@@ -147,6 +149,16 @@ module Tmuxinator
         configs
       end
 
+      # List the names of all config files relative to the config directory.
+      #
+      # If sub-folders are used, those are part of the name too.
+      #
+      # Example:
+      #   $CONFIG_DIR/project.yml -> project
+      #   $CONFIG_DIR/sub/project.yml -> sub/project
+      #   $HOME_CONFIG_DIR/project.yml -> project
+      #
+      # @return [Array<String] a list of config file names
       def config_file_basenames
         directories.flat_map do |directory|
           Dir["#{directory}/**/*.yml"].map do |path|
@@ -193,7 +205,7 @@ module Tmuxinator
         name = options[:name]
         options[:force_attach] ||= false
         options[:force_detach] ||= false
-        project_config = options.fetch(:project_config, false)
+        project_config = options.fetch(:project_config) { false }
         project_file = if valid_project_config?(project_config)
                          project_config
                        elsif valid_local_project?(name)
@@ -231,3 +243,4 @@ module Tmuxinator
     end
   end
 end
+

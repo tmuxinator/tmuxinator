@@ -36,34 +36,52 @@ module Tmuxinator
     `on_project_exit`) and will be removed in a future release.
     M
 
-    attr_reader :yaml, :force_attach, :force_detach, :custom_name,
-                :no_pre_window
+    attr_reader :yaml
+    attr_reader :force_attach
+    attr_reader :force_detach
+    attr_reader :custom_name
+    attr_reader :no_pre_window
 
-    def self.load(path, options = {})
-      yaml = begin
-        args = options[:args] || []
-        @settings = parse_settings(args)
-        @args = args
+    class << self
+      include Tmuxinator::Util
 
-        content = render_template(path, binding)
-        YAML.safe_load(content, aliases: true)
-      rescue SyntaxError, StandardError => e
-        raise "Failed to parse config file: #{e.message}"
+      def load(path, options = {})
+        yaml = begin
+          args = options[:args] || []
+          @settings = parse_settings(args)
+          @args = args
+
+          content = render_template(path, binding)
+          YAML.safe_load(content, aliases: true)
+               rescue SyntaxError, StandardError => error
+                 raise "Failed to parse config file: #{error.message}"
+        end
+
+        new(yaml, options)
       end
 
-      new(yaml, options)
-    end
+      def parse_settings(args)
+        settings = args.select { |x| x.match(/.*=.*/) }
+        args.reject! { |x| x.match(/.*=.*/) }
 
-    def self.parse_settings(args)
-      settings = args.select { |x| x.match(/.*=.*/) }
-      args.reject! { |x| x.match(/.*=.*/) }
+        settings.map! do |setting|
+          parts = setting.split("=", 2)
+          [parts[0], parts[1]]
+        end
 
-      settings.map! do |setting|
-        parts = setting.split("=", 2)
-        [parts[0], parts[1]]
+        Hash[settings]
       end
 
-      Hash[settings]
+      def active
+        Tmuxinator::Config.configs(active: true).
+          map { |config| Config.validate(name: config) }
+      end
+
+      def stop_all
+        active.
+          sort_by { |project| project.name == current_session_name ? 1 : 0 }.
+          each { |project| Kernel.system(project.kill) }
+      end
     end
 
     def validate!
@@ -132,10 +150,6 @@ module Tmuxinator
       blank?(root) ? nil : File.expand_path(root).shellescape
     end
 
-    def current_session_name
-      `[[ -n "${TMUX+set}" ]] && tmux display-message -p "#S"`.strip
-    end
-
     def name
       name =
         if append?
@@ -157,8 +171,13 @@ module Tmuxinator
     end
 
     def attach?
-      yaml_attach = yaml["attach"].nil? || yaml["attach"]
-      force_attach || !force_detach && yaml_attach
+      yaml_attach = if yaml["attach"].nil?
+                      true
+                    else
+                      yaml["attach"]
+                    end
+      attach = force_attach || !force_detach && yaml_attach
+      attach
     end
 
     def pre_window
@@ -394,16 +413,17 @@ module Tmuxinator
 
     def pane_title_position_not_valid_warning
       print_warning(
-        "The specified pane title position '#{yaml['pane_title_position']}' " \
-        "is not valid. Please choose one of: top, bottom, or off."
+        "The specified pane title position " +
+        "\"#{yaml['pane_title_position']}\" is not valid. " +
+        "Please choose one of: top, bottom, or off."
       )
     end
 
     def pane_titles_not_supported_warning
       print_warning(
-        "You have enabled pane titles in your configuration, but the feature " \
-        "is not supported by your version of tmux.\nPlease consider " \
-        "upgrading to a version that supports it (tmux >=2.6)."
+        "You have enabled pane titles in your configuration, " +
+        "but the feature is not supported by your version of tmux.\n" +
+        "Please consider upgrading to a version that supports it (tmux >=2.6)."
       )
     end
 
@@ -478,3 +498,4 @@ module Tmuxinator
     end
   end
 end
+
