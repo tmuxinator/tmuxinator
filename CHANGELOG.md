@@ -4,6 +4,10 @@
 - Document new from session feature in the README
 ## Fixes
 - Properly pass args with equals (=) in their values
+- Fix `fish-shell` completion
+
+### Features
+- Add support for tmuxinator stop-all
 
 ## 3.3.4
 ### Features
