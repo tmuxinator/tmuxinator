@@ -2,6 +2,9 @@
 ## Misc
 - Add Ruby 3.4 to the test matrix
 - Document new from session feature in the README
+- Update required Ruby version to >=2.7 
+- Update runtime dependencies to up-to-date versions
+- Update development dependencies to up-to-date versions
 ## Fixes
 - Properly pass args with equals (=) in their values
 - Fix `fish-shell` completion
