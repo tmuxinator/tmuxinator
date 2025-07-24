@@ -94,7 +94,7 @@ module Tmuxinator
 
     no_commands do
       def new_project(name)
-        project_file = find_project_file(name, options[:local])
+        project_file = find_project_file(name, local: options[:local])
         Kernel.system("$EDITOR #{project_file}") || doctor
       end
 
@@ -146,14 +146,14 @@ module Tmuxinator
           end
         }
 
-        path = config_path(name, options[:local])
+        path = config_path(name, local: options[:local])
         File.open(path, "w") do |f|
           f.write(YAML.dump(yaml))
         end
       end
 
-      def find_project_file(name, local = false)
-        path = config_path(name, local)
+      def find_project_file(name, local: false)
+        path = config_path(name, local: local)
         if File.exist?(path)
           path
         else
@@ -161,7 +161,7 @@ module Tmuxinator
         end
       end
 
-      def config_path(name, local = false)
+      def config_path(name, local: false)
         if local
           Tmuxinator::Config::LOCAL_DEFAULTS[0]
         else
@@ -216,7 +216,7 @@ module Tmuxinator
       def show_continuation_prompt
         say
         print "Press ENTER to continue."
-        STDIN.getc
+        $stdin.getc
       end
 
       def kill_project(project)
@@ -463,4 +463,3 @@ module Tmuxinator
     end
   end
 end
-

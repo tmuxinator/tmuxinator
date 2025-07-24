@@ -22,7 +22,7 @@ module Tmuxinator
       end
 
       def home
-        ENV["HOME"] + "/.tmuxinator"
+        "#{ENV['HOME']}/.tmuxinator"
       end
 
       def home?
@@ -205,7 +205,7 @@ module Tmuxinator
         name = options[:name]
         options[:force_attach] ||= false
         options[:force_detach] ||= false
-        project_config = options.fetch(:project_config) { false }
+        project_config = options.fetch(:project_config, false)
         project_file = if valid_project_config?(project_config)
                          project_config
                        elsif valid_local_project?(name)
@@ -243,4 +243,3 @@ module Tmuxinator
     end
   end
 end
-
