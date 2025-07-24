@@ -20,7 +20,7 @@ module Tmuxinator
       end
 
       def home
-        ENV["HOME"] + "/.tmuxinator"
+        "#{ENV['HOME']}/.tmuxinator"
       end
 
       def home?
@@ -31,7 +31,7 @@ module Tmuxinator
       # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
       # return value will be ~/my-config/tmuxinator)
       def xdg
-        XDG["CONFIG"].to_s + "/tmuxinator"
+        XDG.new.config_home.join("tmuxinator").to_s
       end
 
       def xdg?
@@ -193,7 +193,7 @@ module Tmuxinator
         name = options[:name]
         options[:force_attach] ||= false
         options[:force_detach] ||= false
-        project_config = options.fetch(:project_config) { false }
+        project_config = options.fetch(:project_config, false)
         project_file = if valid_project_config?(project_config)
                          project_config
                        elsif valid_local_project?(name)
