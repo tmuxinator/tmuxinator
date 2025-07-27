@@ -31,6 +31,9 @@ module Tmuxinator
       # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
       # return value will be ~/my-config/tmuxinator)
       def xdg
+        # XDG has breaking API changes in 7.0. Earlier versions are pinned to
+        # Ruby 3.1 and lower, as long as those versions are supported we need
+        # keep this conditional active.
         if Gem::Version.new(XDG::Version) >= Gem::Version.new("7.0.0")
           XDG.new.config_home.join("tmuxinator").to_s
         else
