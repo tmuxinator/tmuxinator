@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
     __________________________________________________________
   }
 
-  s.required_rubygems_version = ">= 2.7"
+  s.required_rubygems_version = Gem::Requirement.new(">= 2.7")
   s.required_ruby_version = ">= 2.7"
 
   s.add_dependency "erubi", "~> 1.13"
