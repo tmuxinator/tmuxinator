@@ -31,18 +31,9 @@ module Tmuxinator
       # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
       # return value will be ~/my-config/tmuxinator)
       def xdg
-        # XDG has breaking API changes in 7.0. Earlier versions are pinned to
-        # Ruby 3.1 and lower, as long as those versions are supported we need
-        # keep this conditional active.
-        #
-        # XDG also doesn't include a VERSION, so we need to get it from the
-        # gemspec ¯\_(-.-)_/¯
-        xdg_spec = Gem::Specification.find_by_name("xdg")
-        if Gem::Version.new(xdg_spec.version) >= Gem::Version.new("7.0.0")
-          XDG.new.config_home.join("tmuxinator").to_s
-        else
-          "#{XDG['CONFIG']}/tmuxinator"
-        end
+        xdg_config_directory = ENV.fetch("XDG_CONFIG_HOME", "~/.config")
+        config_home = File.expand_path(xdg_config_directory)
+        File.join(config_home, "tmuxinator")
       end
 
       def xdg?

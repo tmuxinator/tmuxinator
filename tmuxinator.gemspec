@@ -42,7 +42,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "erubi", "~> 1.13"
   s.add_dependency "thor", "~> 1.4.0"
-  s.add_dependency "xdg", ">= 4"
 
   s.add_development_dependency "amazing_print", "~> 1.8"
   s.add_development_dependency "bundler", ">= 1.3"

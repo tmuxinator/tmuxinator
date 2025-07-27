@@ -2,7 +2,6 @@
 
 require "pry"
 require "simplecov"
-require "xdg"
 
 SimpleCov.start do
   if ENV["CI"]

@@ -5,7 +5,6 @@ require "fileutils"
 require "shellwords"
 require "thor"
 require "thor/version"
-require "xdg"
 require "yaml"
 
 module Tmuxinator
