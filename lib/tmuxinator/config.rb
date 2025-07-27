@@ -34,7 +34,11 @@ module Tmuxinator
         # XDG has breaking API changes in 7.0. Earlier versions are pinned to
         # Ruby 3.1 and lower, as long as those versions are supported we need
         # keep this conditional active.
-        if Gem::Version.new(XDG::Version) >= Gem::Version.new("7.0.0")
+        #
+        # XDG also doesn't include a VERSION, so we need to get it from the
+        # gemspec ¯\_(-.-)_/¯
+        xdg_spec = Gem::Specification.find_by_name("xdg")
+        if Gem::Version.new(xdg_spec.version) >= Gem::Version.new("7.0.0")
           XDG.new.config_home.join("tmuxinator").to_s
         else
           "#{XDG['CONFIG']}/tmuxinator"
