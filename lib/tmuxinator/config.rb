@@ -31,7 +31,11 @@ module Tmuxinator
       # a custom value. (e.g. if $XDG_CONFIG_HOME is set to ~/my-config, the
       # return value will be ~/my-config/tmuxinator)
       def xdg
-        XDG.new.config_home.join("tmuxinator").to_s
+        if Gem::Version.new(XDG::Version) >= Gem::Version.new("7.0.0")
+          XDG.new.config_home.join("tmuxinator").to_s
+        else
+          "#{XDG['CONFIG']}/tmuxinator"
+        end
       end
 
       def xdg?
