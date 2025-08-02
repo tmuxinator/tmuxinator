@@ -1,4 +1,6 @@
 ## Unreleased
+## Misc
+- Update CI ruby versions to latest, remove Ruby 3.1
 
 ## 3.3.5
 ## Misc
