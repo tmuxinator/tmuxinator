@@ -55,7 +55,8 @@ describe Tmuxinator::Config do
 
         Dir.mktmpdir do |dir|
           config_parent = "#{dir}/non_existent_parent/s"
-          allow(XDG).to receive(:[]).with("CONFIG").and_return config_parent
+          allow(ENV).to receive(:fetch).with("XDG_CONFIG_HOME", "~/.config").
+            and_return config_parent
           expect(described_class.directory).
             to eq "#{config_parent}/tmuxinator"
           expect(File.directory?("#{config_parent}/tmuxinator")).to be true
@@ -69,7 +70,6 @@ describe Tmuxinator::Config do
       it "is $TMUXINATOR_CONFIG" do
         allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").
           and_return "expected"
-        # allow(XDG).to receive(:[]).with("CONFIG").and_return "expected"
         allow(File).to receive(:directory?).and_return true
         expect(described_class.environment).to eq "expected"
       end
@@ -87,7 +87,6 @@ describe Tmuxinator::Config do
 
     context "environment variable $TMUXINATOR_CONFIG is set and empty" do
       it "is an empty string" do
-        allow(XDG).to receive(:[]).with("CONFIG").and_return ""
         allow(ENV).to receive(:[]).with("TMUXINATOR_CONFIG").and_return ""
         expect(described_class.environment).to eq ""
       end
@@ -136,7 +135,7 @@ describe Tmuxinator::Config do
 
   describe "#xdg" do
     it "is $XDG_CONFIG_HOME/tmuxinator" do
-      expect(described_class.xdg).to eq "#{XDG['CONFIG_HOME']}/tmuxinator"
+      expect(described_class.xdg).to eq File.expand_path("~/.config/tmuxinator")
     end
   end
 
@@ -181,7 +180,8 @@ describe Tmuxinator::Config do
 
     before do
       expect(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
-      allow_any_instance_of(Kernel).to receive(:`).with(/tmux\s\-V/).
+      allow_any_instance_of(Kernel).to receive(:`).
+        with(/tmux\s-V/).
         and_return("tmux #{version}")
     end
 

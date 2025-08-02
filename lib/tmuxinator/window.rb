@@ -29,7 +29,7 @@ module Tmuxinator
     end
 
     def layout
-      yaml["layout"] ? yaml["layout"].shellescape : nil
+      yaml["layout"]&.shellescape
     end
 
     def synchronize
@@ -139,7 +139,7 @@ module Tmuxinator
     end
 
     def synchronize_before?
-      synchronize == true || synchronize == "before"
+      [true, "before"].include?(synchronize)
     end
 
     def synchronize_after?

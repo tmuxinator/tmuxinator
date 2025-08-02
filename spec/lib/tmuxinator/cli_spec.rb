@@ -924,7 +924,7 @@ describe Tmuxinator::Cli do
       end
 
       it "should generate a project file" do
-        new_path = described_class.new.find_project_file(name, false)
+        new_path = described_class.new.find_project_file(name, local: false)
         expect(new_path).to eq path
         expect(File).to exist new_path
       end
@@ -946,7 +946,7 @@ describe Tmuxinator::Cli do
       end
 
       it "should _not_ generate a new project file" do
-        new_path = described_class.new.find_project_file(name, false)
+        new_path = described_class.new.find_project_file(name, local: false)
         expect(new_path).to eq path
         expect(File).to exist new_path
         expect(File.read(new_path)).to match %r{#{extra}}

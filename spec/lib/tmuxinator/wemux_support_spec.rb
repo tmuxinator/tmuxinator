@@ -12,7 +12,7 @@ describe Tmuxinator::WemuxSupport do
     it "renders the template" do
       expect(File).to receive(:read).at_least(:once) { "wemux ls 2>/dev/null" }
 
-      expect(instance.render).to match %r{wemux.ls.2>\/dev\/null}
+      expect(instance.render).to match %r{wemux.ls.2>/dev/null}
     end
   end
 

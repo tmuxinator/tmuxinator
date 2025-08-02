@@ -2,7 +2,6 @@
 
 require "pry"
 require "simplecov"
-require "xdg"
 
 SimpleCov.start do
   if ENV["CI"]
@@ -59,11 +58,11 @@ def tmux_config(options = {})
     "bell-on-alert off",
   ]
 
-  if base_index = options.fetch(:base_index) { 1 }
+  if base_index = options.fetch(:base_index, 1)
     standard_options << "base-index #{base_index}"
   end
 
-  if pane_base_index = options.fetch(:pane_base_index) { 1 }
+  if pane_base_index = options.fetch(:pane_base_index, 1)
     standard_options << "pane-base-index #{pane_base_index}"
   end
 

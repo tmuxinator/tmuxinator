@@ -36,11 +36,8 @@ module Tmuxinator
     `on_project_exit`) and will be removed in a future release.
     M
 
-    attr_reader :yaml
-    attr_reader :force_attach
-    attr_reader :force_detach
-    attr_reader :custom_name
-    attr_reader :no_pre_window
+    attr_reader :yaml, :force_attach, :force_detach, :custom_name,
+                :no_pre_window
 
     class << self
       include Tmuxinator::Util
@@ -53,8 +50,8 @@ module Tmuxinator
 
           content = render_template(path, binding)
           YAML.safe_load(content, aliases: true)
-               rescue SyntaxError, StandardError => error
-                 raise "Failed to parse config file: #{error.message}"
+        rescue SyntaxError, StandardError => e
+          raise "Failed to parse config file: #{e.message}"
         end
 
         new(yaml, options)
@@ -171,13 +168,8 @@ module Tmuxinator
     end
 
     def attach?
-      yaml_attach = if yaml["attach"].nil?
-                      true
-                    else
-                      yaml["attach"]
-                    end
-      attach = force_attach || !force_detach && yaml_attach
-      attach
+      yaml_attach = yaml["attach"].nil? || yaml["attach"]
+      force_attach || !force_detach && yaml_attach
     end
 
     def pre_window
@@ -413,17 +405,16 @@ module Tmuxinator
 
     def pane_title_position_not_valid_warning
       print_warning(
-        "The specified pane title position " +
-        "\"#{yaml['pane_title_position']}\" is not valid. " +
-        "Please choose one of: top, bottom, or off."
+        "The specified pane title position '#{yaml['pane_title_position']}' " \
+        "is not valid. Please choose one of: top, bottom, or off."
       )
     end
 
     def pane_titles_not_supported_warning
       print_warning(
-        "You have enabled pane titles in your configuration, " +
-        "but the feature is not supported by your version of tmux.\n" +
-        "Please consider upgrading to a version that supports it (tmux >=2.6)."
+        "You have enabled pane titles in your configuration, but the " \
+        "feature is not supported by your version of tmux.\nPlease consider " \
+        "upgrading to a version that supports it (tmux >=2.6)."
       )
     end
 
