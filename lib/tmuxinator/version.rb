@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Tmuxinator
-  VERSION = "3.3.4"
+  VERSION = "3.3.5"
 end
