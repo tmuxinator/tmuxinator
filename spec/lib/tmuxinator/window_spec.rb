@@ -5,6 +5,7 @@ require "spec_helper"
 describe Tmuxinator::Window do
   let(:project) { double }
   let(:panes) { ["vim", nil, "top"] }
+  let(:focused_pane) { nil }
   let(:window_name) { "editor" }
   let(:synchronize) { false }
   let(:root) {}
@@ -19,6 +20,7 @@ describe Tmuxinator::Window do
         "synchronize" => synchronize,
         "layout" => "main-vertical",
         "panes" => panes,
+        "focused_pane" => focused_pane,
         "root" => root,
         "root?" => root?,
       }
@@ -145,6 +147,51 @@ describe Tmuxinator::Window do
             a_pane.with(index: 2, title: nil).and_commands("top")
           ]
         )
+      end
+    end
+
+    context "focused pane" do
+      let(:panes) do
+        [
+          { "editor" => ["vim"] },
+          { "run" => ["cmd1"] },
+          "top"
+        ]
+      end
+
+      context "with index" do
+        let(:focused_pane) { 1 }
+        it "focuses pane by index" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.1")
+        end
+      end
+
+      context "with name" do
+        let(:focused_pane) { "run" }
+        it "focuses pane by name" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.1")
+        end
+      end
+
+      context "with invalid name" do
+        let(:focused_pane) { "invalid" }
+        it "falls back to first" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.0")
+        end
+      end
+
+      context "with nil" do
+        let(:focused_pane) { nil }
+        it "focuses first " do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.0")
+        end
+      end
+
+      context "with pane base index" do
+        it "adjusts for base index" do
+          allow(project).to receive_messages(pane_base_index: 3)
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.3")
+        end
       end
     end
 
@@ -389,12 +436,6 @@ describe Tmuxinator::Window do
       it "does not set name option" do
         expect(window.tmux_new_window_command).to eq full_command
       end
-    end
-  end
-
-  describe "#tmux_select_first_pane" do
-    it "targets the pane based on the configured pane_base_index" do
-      expect(window.tmux_select_first_pane).to eq("tmux select-pane -t test:1.0")
     end
   end
 end
