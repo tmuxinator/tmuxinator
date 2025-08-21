@@ -45,7 +45,7 @@ if [ "$?" -eq 127 ]; then
   <%= window.tmux_layout_command %>
     <%- end -%>
 
-  <%= window.tmux_select_first_pane %>
+  <%= window.tmux_focus_pane_command %>
     <%- end -%>
 
     <%- if window.synchronize_after? -%>
@@ -54,7 +54,7 @@ if [ "$?" -eq 127 ]; then
   <%- end -%>
 
   <%= tmux %> select-window -t <%= startup_window %>
-  <%= tmux %> select-pane -t <%= startup_pane %>
+  <%= tmux_startup_pane_command %>
 fi
 
 wemux attach
