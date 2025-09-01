@@ -68,7 +68,7 @@ jobs:
         cd ..
         tmux -V
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: "Test ruby ${{ matrix.ruby_version }} tmux ${{ matrix.tmux_version }}"
       run: |
         bundle install
