@@ -1,4 +1,8 @@
 ## Unreleased
+### Features
+
+- Add ability to focus panes via `focused_pane`
+
 ## Misc
 - Update CI ruby versions to latest, remove Ruby 3.1
 
