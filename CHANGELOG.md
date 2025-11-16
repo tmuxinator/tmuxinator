@@ -1,4 +1,7 @@
 ## Unreleased
+### Features
+- Add `help` to the list of commands output by `tmuxinator commands`
+- Add `--help`/`-h` flag support to subcommands (start, stop, new, debug, copy, delete, list) for easier access to command-specific help
 ## Misc
 - Update CI ruby versions to latest, remove Ruby 3.1
 

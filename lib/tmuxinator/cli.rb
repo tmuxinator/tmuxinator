@@ -23,6 +23,7 @@ module Tmuxinator
       delete: "Deletes given project",
       doctor: "Look for problems in your configuration",
       edit: "Alias of new",
+      help: "Shows help for a specific command",
       implode: "Deletes all tmuxinator projects",
       local: "Start a tmux session using ./.tmuxinator.y[a]ml",
       list: "Lists all tmuxinator projects",
@@ -83,8 +84,16 @@ module Tmuxinator
     method_option :local, type: :boolean,
                           aliases: ["-l"],
                           desc: "Create local project file at ./.tmuxinator.yml"
+    method_option :help, type: :boolean,
+                         aliases: ["-h"],
+                         desc: "Display usage information"
 
-    def new(name, session = nil)
+    def new(name = nil, session = nil)
+      if options[:help] || name.nil?
+        invoke :help, ["new"]
+        return
+      end
+
       if session
         new_project_with_session(name, session)
       else
@@ -259,7 +268,15 @@ module Tmuxinator
                                  "the current session"
     method_option "no-pre-window", type: :boolean, default: false,
                                    desc: "Skip pre_window commands"
+    method_option :help, type: :boolean,
+                         aliases: "-h",
+                         desc: "Display usage information"
     def start(name = nil, *args)
+      if options[:help]
+        invoke :help, ["start"]
+        return
+      end
+
       params = start_params(name, *args)
 
       show_version_warning if version_warning?(
@@ -276,8 +293,16 @@ module Tmuxinator
                                     desc: "Path to project config file"
     method_option "suppress-tmux-version-warning",
                   desc: "Don't show a warning for unsupported tmux versions"
+    method_option :help, type: :boolean,
+                         aliases: "-h",
+                         desc: "Display usage information"
 
     def stop(name = nil)
+      if options[:help]
+        invoke :help, ["stop"]
+        return
+      end
+
       # project-config takes precedence over a named project in the case that
       # both are provided.
       if options["project-config"]
@@ -342,7 +367,15 @@ module Tmuxinator
                                  "the current session"
     method_option "no-pre-window", type: :boolean, default: false,
                                    desc: "Skip pre_window commands"
+    method_option :help, type: :boolean,
+                         aliases: "-h",
+                         desc: "Display usage information"
     def debug(name = nil, *args)
+      if options[:help]
+        invoke :help, ["debug"]
+        return
+      end
+
       params = start_params(name, *args)
 
       project = create_project(params)
@@ -353,8 +386,16 @@ module Tmuxinator
     desc "copy [EXISTING] [NEW]", COMMANDS[:copy]
     map "c" => :copy
     map "cp" => :copy
+    method_option :help, type: :boolean,
+                         aliases: "-h",
+                         desc: "Display usage information"
 
-    def copy(existing, new)
+    def copy(existing = nil, new = nil)
+      if options[:help] || existing.nil? || new.nil?
+        invoke :help, ["copy"]
+        return
+      end
+
       existing_config_path = Tmuxinator::Config.project(existing)
       new_config_path = Tmuxinator::Config.project(new)
 
@@ -374,18 +415,32 @@ module Tmuxinator
     desc "delete [PROJECT1] [PROJECT2] ...", COMMANDS[:delete]
     map "d" => :delete
     map "rm" => :delete
+    method_option :help, type: :boolean,
+                         aliases: "-h",
+                         desc: "Display usage information"
 
     def delete(*projects)
-      projects.each do |project|
-        if Tmuxinator::Config.exist?(name: project)
-          config = Tmuxinator::Config.project(project)
+      if options[:help] || projects.empty?
+        invoke :help, ["delete"]
+        return
+      end
 
-          if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
-            FileUtils.rm(config)
-            say "Deleted #{project}"
+      delete_projects(*projects)
+    end
+
+    no_commands do
+      def delete_projects(*projects)
+        projects.each do |project|
+          if Tmuxinator::Config.exist?(name: project)
+            config = Tmuxinator::Config.project(project)
+
+            if yes?("Are you sure you want to delete #{project}?(y/n)", :red)
+              FileUtils.rm(config)
+              say "Deleted #{project}"
+            end
+          else
+            say "#{project} does not exist!"
           end
-        else
-          say "#{project} does not exist!"
         end
       end
     end
@@ -411,8 +466,16 @@ module Tmuxinator
     method_option :active, type: :boolean,
                            aliases: ["-a"],
                            desc: "Filter output by active project sessions."
+    method_option :help, type: :boolean,
+                         aliases: ["-h"],
+                         desc: "Display usage information"
 
     def list
+      if options[:help]
+        invoke :help, ["list"]
+        return
+      end
+
       say "tmuxinator projects:"
       configs = Tmuxinator::Config.configs(active: options[:active])
       if options[:newline]
