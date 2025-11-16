@@ -206,6 +206,7 @@ describe Tmuxinator::Cli do
         delete
         doctor
         edit
+        help
         implode
         local
         list
@@ -297,6 +298,24 @@ describe Tmuxinator::Cli do
       end
     end
 
+    context "with --help flag" do
+      it "shows help instead of starting project" do
+        ARGV.replace(["start", "--help"])
+        expect(Kernel).not_to receive(:exec)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("start [PROJECT] [ARGS]")
+        expect(out).to include("Options:")
+      end
+
+      it "shows help with -h flag" do
+        ARGV.replace(["start", "-h"])
+        expect(Kernel).not_to receive(:exec)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("start [PROJECT] [ARGS]")
+        expect(out).to include("Options:")
+      end
+    end
+
     context "deprecations" do
       before do
         allow($stdin).to receive_messages(getc: "y")
@@ -337,6 +356,16 @@ describe Tmuxinator::Cli do
         out, err = capture_io { cli.start }
         expect(err).to eq ""
         expect(out).to eq ""
+      end
+    end
+
+    context "with --help flag" do
+      it "shows help instead of stopping project" do
+        ARGV.replace(["stop", "--help"])
+        expect(Kernel).not_to receive(:exec)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("stop [PROJECT]")
+        expect(out).to include("Options:")
       end
     end
 
@@ -526,6 +555,15 @@ describe Tmuxinator::Cli do
       allow(File).to receive(:open) { |&block| block.yield file }
     end
 
+    context "with --help flag" do
+      it "shows help instead of creating project" do
+        ARGV.replace(["new", "--help"])
+        out, _err = capture_io { cli.start }
+        expect(out).to include("new [PROJECT]")
+        expect(out).to include("Options:")
+      end
+    end
+
     context "without the --local option" do
       before do
         ARGV.replace(["new", name])
@@ -651,6 +689,31 @@ describe Tmuxinator::Cli do
       allow(Tmuxinator::Config).to receive(:exist?) { true }
     end
 
+    context "with --help flag" do
+      it "shows help instead of copying project" do
+        ARGV.replace(["copy", "--help"])
+        expect(FileUtils).not_to receive(:copy_file)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("copy [EXISTING] [NEW]")
+        expect(out).to include("Options:")
+      end
+
+      it "shows help with -h flag" do
+        ARGV.replace(["copy", "-h"])
+        expect(FileUtils).not_to receive(:copy_file)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("copy [EXISTING] [NEW]")
+        expect(out).to include("Options:")
+      end
+
+      it "shows help when only one argument provided" do
+        ARGV.replace(["copy", "foo"])
+        expect(FileUtils).not_to receive(:copy_file)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("copy [EXISTING] [NEW]")
+      end
+    end
+
     context "new project already exists" do
       before do
         allow(Thor::LineEditor).to receive_messages(readline: "y")
@@ -732,6 +795,31 @@ describe Tmuxinator::Cli do
   end
 
   describe "#delete" do
+    context "with --help flag" do
+      it "shows help instead of deleting project" do
+        ARGV.replace(["delete", "--help"])
+        expect(FileUtils).not_to receive(:rm)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("delete [PROJECT1] [PROJECT2]")
+        expect(out).to include("Options:")
+      end
+
+      it "shows help with -h flag" do
+        ARGV.replace(["delete", "-h"])
+        expect(FileUtils).not_to receive(:rm)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("delete [PROJECT1] [PROJECT2]")
+        expect(out).to include("Options:")
+      end
+
+      it "shows help when no arguments provided" do
+        ARGV.replace(["delete"])
+        expect(FileUtils).not_to receive(:rm)
+        out, _err = capture_io { cli.start }
+        expect(out).to include("delete [PROJECT1] [PROJECT2]")
+      end
+    end
+
     context "with a single argument" do
       before do
         ARGV.replace(["delete", "foo"])
