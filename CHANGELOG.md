@@ -4,6 +4,8 @@
 - Add `--help`/`-h` flag support to subcommands (start, stop, new, debug, copy, delete, list) for easier access to command-specific help
 ## Misc
 - Update CI ruby versions to latest, remove Ruby 3.1
+- Update CI tmux versions to include 3.6
+- Include tmux 3.6 in supported versions list
 
 ## 3.3.5
 ## Misc
