@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.3.7
 ## Misc
 - Update CI tmux versions to include 3.6a
 - Include tmux 3.6a in supported versions list
