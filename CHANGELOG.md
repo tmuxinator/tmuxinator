@@ -1,4 +1,6 @@
 ## Unreleased
+### Features
+- Add completion support for 'stop' command in tmuxinator
 
 ## 3.3.7
 ## Misc
