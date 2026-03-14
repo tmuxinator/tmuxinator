@@ -1,6 +1,8 @@
 ## Unreleased
 ### Features
 - Add completion support for 'stop' command in tmuxinator
+### Misc
+- Revert gemspec required ruby version to >= 2.6
 
 ## 3.3.7
 ## Misc

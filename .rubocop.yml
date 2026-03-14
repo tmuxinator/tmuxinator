@@ -4,7 +4,7 @@ AllCops:
   - "db/schema.rb"
   DisplayCopNames: true
   StyleGuideCopsOnly: false
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 2.6
 Layout/AccessModifierIndentation:
   Description: Check indentation of private/protected visibility modifiers.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#indent-public-private-protected

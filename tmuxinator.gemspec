@@ -38,7 +38,8 @@ Gem::Specification.new do |s|
   }
 
   s.required_rubygems_version = Gem::Requirement.new(">= 2.7")
-  s.required_ruby_version = ">= 2.7"
+  # Keep installation working on system macOS Ruby even though development targets newer Ruby.
+  s.required_ruby_version = ">= 2.6"
 
   s.add_dependency "erubi", "~> 1.13"
   s.add_dependency "thor", "~> 1.4.0"
