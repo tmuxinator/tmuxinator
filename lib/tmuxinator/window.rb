@@ -17,7 +17,7 @@ module Tmuxinator
     end
 
     def panes
-      build_panes(yaml["panes"]) || []
+      @panes ||= build_panes(yaml["panes"]) || []
     end
 
     def _hashed?
@@ -126,6 +126,10 @@ module Tmuxinator
       "#{project.tmux} select-layout -t #{tmux_window_target} tiled"
     end
 
+    def tmux_focus_pane_command
+      "#{project.tmux} select-pane -t #{focused_pane}"
+    end
+
     def tmux_synchronize_panes
       "#{project.tmux} set-window-option -t #{tmux_window_target} synchronize-panes on"
     end
@@ -134,16 +138,46 @@ module Tmuxinator
       "#{project.tmux} select-layout -t #{tmux_window_target} #{layout}"
     end
 
-    def tmux_select_first_pane
-      "#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.pane_base_index}"
-    end
-
     def synchronize_before?
       [true, "before"].include?(synchronize)
     end
 
     def synchronize_after?
       synchronize == "after"
+    end
+
+    private
+
+    def focused_pane
+      "#{tmux_window_target}.#{tmux_pane_index}"
+    end
+
+    def tmux_pane_index
+      # Adjust for tmux pane base index
+      pane_index + project.pane_base_index
+    end
+
+    def pane_index
+      focused_pane_config = yaml["focused_pane"]
+      # Select the first pane if the user hasn't set focused_pane
+      return 0 unless focused_pane_config
+
+      # The user may provide the focused pane index.
+      if integer?(focused_pane_config)
+        idx = Integer(focused_pane_config)
+        return idx if idx >= 0 && panes[idx]
+
+        return 0
+      end
+
+      # If no pane with the given name is found fall back to the first pane
+      panes.index { |pane| pane.title == focused_pane_config.to_s.shellescape } || 0
+    end
+
+    def integer?(str)
+      !!Integer(str)
+    rescue StandardError
+      false
     end
   end
 end

@@ -200,6 +200,10 @@ module Tmuxinator
       yaml["tmux_command"] || "tmux"
     end
 
+    def tmux_startup_pane_command
+      "#{tmux} select-pane -t #{startup_pane}"
+    end
+
     def tmux_has_session?(name)
       return false unless name
 
@@ -263,7 +267,14 @@ module Tmuxinator
     end
 
     def startup_pane
-      "#{startup_window}.#{yaml['startup_pane'] || pane_base_index}"
+      pane =
+        if blank?(yaml["startup_pane"])
+          pane_base_index
+        else
+          yaml["startup_pane"]
+        end
+
+      "#{startup_window}.#{pane}"
     end
 
     def tmux_options?

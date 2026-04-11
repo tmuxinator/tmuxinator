@@ -73,9 +73,39 @@ describe Tmuxinator::Project do
       expect(project.render).to_not be_empty
     end
 
+    it "renders focused pane selection for a window" do
+      project.yaml["windows"][0]["editor"]["focused_pane"] = 2
+
+      expect(project.render).to include("select-pane -t sample:0.2")
+    end
+
+    it "renders startup pane selection when configured" do
+      project.yaml["startup_pane"] = 3
+
+      expect(project.render).to include("select-pane -t sample:0.3")
+    end
+
+    it "preserves first-pane startup selection when startup_pane is omitted" do
+      project.yaml["startup_window"] = "editor"
+      project.yaml["windows"][0]["editor"]["focused_pane"] = "guard"
+      project.yaml["windows"][0]["editor"]["panes"] = [
+        { "editor" => "vim" },
+        { "guard" => "bundle exec guard" }
+      ]
+
+      expect(project.render).to include("select-pane -t sample:0.1")
+      expect(project.render).to include("select-pane -t sample:editor.0")
+    end
+
     context "wemux" do
       it "renders the wemux config" do
         expect(wemux_project.render).to_not be_empty
+      end
+
+      it "renders focused pane selection for a window" do
+        wemux_project.yaml["windows"][0]["editor"]["focused_pane"] = 2
+
+        expect(wemux_project.render).to include("select-pane -t wemux:0.2")
       end
     end
 
@@ -428,20 +458,57 @@ describe Tmuxinator::Project do
     end
   end
 
+  describe "#tmux_startup_pane_command" do
+    context "with integer" do
+      it "returns command with index" do
+        project.yaml["startup_pane"] = 1
+
+        expect(project.tmux_startup_pane_command).
+          to match("select-pane -t sample:0.1")
+      end
+    end
+
+    context "with nil" do
+      it "returns command for first pane in startup window" do
+        project.yaml["startup_pane"] = nil
+
+        expect(project.tmux_startup_pane_command).
+          to eq("tmux -f ~/.tmux.mac.conf -L foo select-pane -t sample:0.0")
+      end
+    end
+
+    context "with blank string" do
+      it "treats startup_pane as unset" do
+        project.yaml["startup_pane"] = ""
+
+        expect(project.tmux_startup_pane_command).
+          to eq("tmux -f ~/.tmux.mac.conf -L foo select-pane -t sample:0.0")
+      end
+    end
+  end
+
   describe "#startup_pane" do
-    context "startup pane specified" do
-      it "get the startup pane index from project config" do
+    context "with startup pane configured" do
+      it "returns the configured pane target" do
         project.yaml["startup_pane"] = 1
 
         expect(project.startup_pane).to eq("sample:0.1")
       end
     end
 
-    context "startup pane not specified" do
-      it "returns the base pane instead" do
-        allow(project).to receive_messages(pane_base_index: 4)
+    context "with startup pane unset" do
+      it "returns the first pane in the startup window" do
+        project.yaml["startup_pane"] = nil
 
-        expect(project.startup_pane).to eq("sample:0.4")
+        expect(project.startup_pane).to eq("sample:0.0")
+      end
+    end
+
+    context "with startup pane blank" do
+      it "treats the pane as unset" do
+        project.yaml["startup_pane"] = ""
+
+        expect(project.startup_pane).to eq("sample:0.0")
       end
     end
   end
