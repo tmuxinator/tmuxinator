@@ -489,7 +489,13 @@ module Tmuxinator
     end
 
     def startup_pane
-      pane = blank?(yaml["startup_pane"]) ? pane_base_index : yaml["startup_pane"]
+      pane =
+        if blank?(yaml["startup_pane"])
+          pane_base_index
+        else
+          yaml["startup_pane"]
+        end
+
       "#{startup_window}.#{pane}"
     end
   end
