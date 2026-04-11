@@ -164,8 +164,8 @@ module Tmuxinator
 
       # The user may provide the focused pane index.
       if integer?(focused_pane_config)
-        pane_index = Integer(focused_pane_config)
-        return pane_index if panes[pane_index]
+        idx = Integer(focused_pane_config)
+        return idx if idx >= 0 && panes[idx]
 
         return 0
       end

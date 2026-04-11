@@ -142,7 +142,7 @@ root: ~/
 # Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
 # startup_window: editor
 
-# Specifies (by index) which pane of the startup window will be selected on project startup.
+# Specifies (by index) which pane of the startup window will be selected on project startup. If not set, the first pane is used.
 # startup_pane: 1
 
 # Controls whether the tmux session should be attached to automatically. Defaults to true.

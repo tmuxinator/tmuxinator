@@ -190,6 +190,22 @@ describe Tmuxinator::Window do
         end
       end
 
+      context "with negative index" do
+        let(:focused_pane) { -1 }
+
+        it "falls back to first" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.0")
+        end
+      end
+
+      context "with negative quoted index" do
+        let(:focused_pane) { "-1" }
+
+        it "falls back to first" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.0")
+        end
+      end
+
       context "with name" do
         let(:focused_pane) { "run" }
         it "focuses pane by name" do
