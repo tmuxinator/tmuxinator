@@ -151,7 +151,7 @@ module Tmuxinator
         return
       end
 
-      path = config_path(name, options[:local])
+      path = config_path(name, local: options[:local])
       if File.exist?(path)
         Kernel.system("$EDITOR #{path}")
       else

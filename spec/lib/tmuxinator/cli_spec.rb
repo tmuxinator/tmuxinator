@@ -545,6 +545,22 @@ describe Tmuxinator::Cli do
         expect(File.read(path)).to match %r{#{extra}}
       end
     end
+
+    context "when the project file exists" do
+      let(:project_path) { Tmuxinator::Config.project(name).to_s }
+
+      before do
+        ARGV.replace(["edit", name])
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "opens the named project config" do
+        expect(File).to receive(:exist?).with(project_path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{project_path}})
+
+        capture_io { cli.start }
+      end
+    end
   end
 
   describe "#new" do
@@ -624,9 +640,9 @@ describe Tmuxinator::Cli do
           capture_io { cli.start }
         end
       end
-    end
+  end
 
-    # this command variant only works for tmux version 1.6 and up.
+  # this command variant only works for tmux version 1.6 and up.
     context "from a session" do
       context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
         before do
