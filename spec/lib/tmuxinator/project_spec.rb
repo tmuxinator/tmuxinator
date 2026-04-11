@@ -85,6 +85,18 @@ describe Tmuxinator::Project do
       expect(project.render).to include("select-pane -t sample:0.3")
     end
 
+    it "preserves first-pane startup selection when startup_pane is omitted" do
+      project.yaml["startup_window"] = "editor"
+      project.yaml["windows"][0]["editor"]["focused_pane"] = "guard"
+      project.yaml["windows"][0]["editor"]["panes"] = [
+        { "editor" => "vim" },
+        { "guard" => "bundle exec guard" }
+      ]
+
+      expect(project.render).to include("select-pane -t sample:0.1")
+      expect(project.render).to include("select-pane -t sample:editor.0")
+    end
+
     context "wemux" do
       it "renders the wemux config" do
         expect(wemux_project.render).to_not be_empty
@@ -457,10 +469,11 @@ describe Tmuxinator::Project do
     end
 
     context "with nil" do
-      it "returns empty" do
+      it "returns command for first pane in startup window" do
         project.yaml["startup_pane"] = nil
 
-        expect(project.tmux_startup_pane_command).to be_empty
+        expect(project.tmux_startup_pane_command).
+          to eq("tmux -f ~/.tmux.mac.conf -L foo select-pane -t sample:0.0")
       end
     end
   end
