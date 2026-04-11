@@ -202,7 +202,9 @@ module Tmuxinator
 
     # @deprecated. Use `focused_pane` instead!
     def tmux_startup_pane_command
-      return "#{tmux} select-pane -t #{startup_window}.#{pane_base_index}" if blank?(yaml["startup_pane"])
+      if blank?(yaml["startup_pane"])
+        return "#{tmux} select-pane -t #{startup_window}.#{pane_base_index}"
+      end
 
       "#{tmux} select-pane -t #{startup_pane}"
     end

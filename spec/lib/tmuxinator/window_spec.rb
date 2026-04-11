@@ -205,7 +205,7 @@ describe Tmuxinator::Window do
 
       context "with nil" do
         let(:focused_pane) { nil }
-        it "focuses first " do
+        it "focuses first pane" do
           expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.0")
         end
       end

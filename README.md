@@ -235,7 +235,7 @@ or [specify your own](http://stackoverflow.com/a/9976282/183537).
 
 ### Pane Titles
 
-Starting with Tmux v2.6 it is possible to give a title to panes. Pane titles will be shown only when `enable_pane_titles: true` is set.
+Starting with tmux v2.6 it is possible to give a title to panes. Pane titles will be shown only when `enable_pane_titles: true` is set.
 
 ```yaml
 enable_pane_titles: true
