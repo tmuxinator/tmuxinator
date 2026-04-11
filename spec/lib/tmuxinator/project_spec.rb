@@ -79,7 +79,7 @@ describe Tmuxinator::Project do
       expect(project.render).to include("select-pane -t sample:0.2")
     end
 
-    it "renders deprecated startup pane selection when configured" do
+    it "renders startup pane selection when configured" do
       project.yaml["startup_pane"] = 3
 
       expect(project.render).to include("select-pane -t sample:0.3")
@@ -483,6 +483,32 @@ describe Tmuxinator::Project do
 
         expect(project.tmux_startup_pane_command).
           to eq("tmux -f ~/.tmux.mac.conf -L foo select-pane -t sample:0.0")
+      end
+    end
+  end
+
+  describe "#startup_pane" do
+    context "with startup pane configured" do
+      it "returns the configured pane target" do
+        project.yaml["startup_pane"] = 1
+
+        expect(project.send(:startup_pane)).to eq("sample:0.1")
+      end
+    end
+
+    context "with startup pane unset" do
+      it "returns the first pane in the startup window" do
+        project.yaml["startup_pane"] = nil
+
+        expect(project.send(:startup_pane)).to eq("sample:0.0")
+      end
+    end
+
+    context "with startup pane blank" do
+      it "treats the pane as unset" do
+        project.yaml["startup_pane"] = ""
+
+        expect(project.send(:startup_pane)).to eq("sample:0.0")
       end
     end
   end

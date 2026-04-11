@@ -200,12 +200,7 @@ module Tmuxinator
       yaml["tmux_command"] || "tmux"
     end
 
-    # @deprecated. Use `focused_pane` instead!
     def tmux_startup_pane_command
-      if blank?(yaml["startup_pane"])
-        return "#{tmux} select-pane -t #{startup_window}.#{pane_base_index}"
-      end
-
       "#{tmux} select-pane -t #{startup_pane}"
     end
 
@@ -494,7 +489,8 @@ module Tmuxinator
     end
 
     def startup_pane
-      "#{startup_window}.#{yaml['startup_pane']}"
+      pane = blank?(yaml["startup_pane"]) ? pane_base_index : yaml["startup_pane"]
+      "#{startup_window}.#{pane}"
     end
   end
 end
