@@ -163,7 +163,12 @@ module Tmuxinator
       return 0 unless focused_pane_config
 
       # The user may provide the focused pane index.
-      return Integer(focused_pane_config) if integer?(focused_pane_config)
+      if integer?(focused_pane_config)
+        pane_index = Integer(focused_pane_config)
+        return pane_index if panes[pane_index]
+
+        return 0
+      end
 
       # If no pane with the given name is found fall back to the first pane
       panes.index { |pane| pane.title == focused_pane_config.to_s.shellescape } || 0
