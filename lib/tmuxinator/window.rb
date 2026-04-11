@@ -163,7 +163,7 @@ module Tmuxinator
       return 0 unless focused_pane
 
       # The user may provide the focused pane index.
-      return focused_pane if integer?(focused_pane)
+      return Integer(focused_pane) if integer?(focused_pane)
 
       # If no pane iwth the given name is found fall back to the first pane
       panes.index { |pane| pane.title == focused_pane } || 0

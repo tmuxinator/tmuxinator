@@ -166,6 +166,14 @@ describe Tmuxinator::Window do
         end
       end
 
+      context "with quoted index" do
+        let(:focused_pane) { "1" }
+
+        it "focuses pane by index" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.1")
+        end
+      end
+
       context "with name" do
         let(:focused_pane) { "run" }
         it "focuses pane by name" do
