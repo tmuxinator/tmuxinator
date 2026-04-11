@@ -166,7 +166,7 @@ module Tmuxinator
       return Integer(focused_pane) if integer?(focused_pane)
 
       # If no pane iwth the given name is found fall back to the first pane
-      panes.index { |pane| pane.title == focused_pane } || 0
+      panes.index { |pane| pane.title == focused_pane.to_s.shellescape } || 0
     end
 
     def integer?(str)

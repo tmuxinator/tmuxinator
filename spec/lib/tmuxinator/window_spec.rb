@@ -181,6 +181,21 @@ describe Tmuxinator::Window do
         end
       end
 
+      context "with shell-sensitive name" do
+        let(:panes) do
+          [
+            { "editor" => ["vim"] },
+            { "dev log" => ["tail -f log/development.log"] },
+            "top"
+          ]
+        end
+        let(:focused_pane) { "dev log" }
+
+        it "focuses pane by name" do
+          expect(window.tmux_focus_pane_command).to eq("tmux select-pane -t test:1.1")
+        end
+      end
+
       context "with invalid name" do
         let(:focused_pane) { "invalid" }
         it "falls back to first" do
