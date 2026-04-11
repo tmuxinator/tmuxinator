@@ -73,9 +73,27 @@ describe Tmuxinator::Project do
       expect(project.render).to_not be_empty
     end
 
+    it "renders focused pane selection for a window" do
+      project.yaml["windows"][0]["editor"]["focused_pane"] = 2
+
+      expect(project.render).to include("select-pane -t sample:0.2")
+    end
+
+    it "renders deprecated startup pane selection when configured" do
+      project.yaml["startup_pane"] = 3
+
+      expect(project.render).to include("select-pane -t sample:0.3")
+    end
+
     context "wemux" do
       it "renders the wemux config" do
         expect(wemux_project.render).to_not be_empty
+      end
+
+      it "renders focused pane selection for a window" do
+        wemux_project.yaml["windows"][0]["editor"]["focused_pane"] = 2
+
+        expect(wemux_project.render).to include("select-pane -t wemux:0.2")
       end
     end
 
