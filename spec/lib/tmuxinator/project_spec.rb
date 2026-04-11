@@ -492,7 +492,7 @@ describe Tmuxinator::Project do
       it "returns the configured pane target" do
         project.yaml["startup_pane"] = 1
 
-        expect(project.send(:startup_pane)).to eq("sample:0.1")
+        expect(project.startup_pane).to eq("sample:0.1")
       end
     end
 
@@ -500,7 +500,7 @@ describe Tmuxinator::Project do
       it "returns the first pane in the startup window" do
         project.yaml["startup_pane"] = nil
 
-        expect(project.send(:startup_pane)).to eq("sample:0.0")
+        expect(project.startup_pane).to eq("sample:0.0")
       end
     end
 
@@ -508,7 +508,7 @@ describe Tmuxinator::Project do
       it "treats the pane as unset" do
         project.yaml["startup_pane"] = ""
 
-        expect(project.send(:startup_pane)).to eq("sample:0.0")
+        expect(project.startup_pane).to eq("sample:0.0")
       end
     end
   end

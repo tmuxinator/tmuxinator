@@ -266,6 +266,17 @@ module Tmuxinator
       "#{name}:#{yaml['startup_window'] || base_index}"
     end
 
+    def startup_pane
+      pane =
+        if blank?(yaml["startup_pane"])
+          pane_base_index
+        else
+          yaml["startup_pane"]
+        end
+
+      "#{startup_window}.#{pane}"
+    end
+
     def tmux_options?
       yaml["tmux_options"]
     end
@@ -486,17 +497,6 @@ module Tmuxinator
 
     def set_window_option(tmux_window_target)
       "#{tmux} set-window-option -t #{tmux_window_target}"
-    end
-
-    def startup_pane
-      pane =
-        if blank?(yaml["startup_pane"])
-          pane_base_index
-        else
-          yaml["startup_pane"]
-        end
-
-      "#{startup_window}.#{pane}"
     end
   end
 end
