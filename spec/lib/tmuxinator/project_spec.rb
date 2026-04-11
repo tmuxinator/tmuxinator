@@ -476,6 +476,15 @@ describe Tmuxinator::Project do
           to eq("tmux -f ~/.tmux.mac.conf -L foo select-pane -t sample:0.0")
       end
     end
+
+    context "with blank string" do
+      it "treats startup_pane as unset" do
+        project.yaml["startup_pane"] = ""
+
+        expect(project.tmux_startup_pane_command).
+          to eq("tmux -f ~/.tmux.mac.conf -L foo select-pane -t sample:0.0")
+      end
+    end
   end
 
   describe "#window" do
