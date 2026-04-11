@@ -142,6 +142,9 @@ root: ~/
 # Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
 # startup_window: editor
 
+# Specifies (by index) which pane of the startup window will be selected on project startup.
+# startup_pane: 1
+
 # Controls whether the tmux session should be attached to automatically. Defaults to true.
 # attach: false
 
@@ -247,7 +250,7 @@ windows:
 
 ### Focus Pane
 
-Focus panes on project startup by specifying `focused_pane`. Focused panes can be specified by their index. Indices start with zero.
+Focus a pane within a specific window by specifying `focused_pane` on that window. Focused panes can be specified by their index. Indices start with zero and are automatically adjusted to your tmux `pane-base-index`.
 
 ```yaml
 windows:
@@ -260,7 +263,7 @@ windows:
       focused_pane: 2 # Focus the last pane
 ```
 
-When using named panes, you may specify a pane by it's name.
+When using named panes, you may specify a pane by its name.
 
 ```yaml
 windows:
@@ -271,6 +274,8 @@ windows:
         - guard: guard
       focused_pane: guard
 ```
+
+`focused_pane` selects the active pane within that window when the window is configured. The top-level `startup_window` and `startup_pane` options still control which window and pane are finally selected when tmuxinator finishes starting the project.
 
 ## Interpreter Managers & Environment Variables
 
