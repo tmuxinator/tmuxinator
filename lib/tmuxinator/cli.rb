@@ -146,7 +146,7 @@ module Tmuxinator
                          aliases: ["-h"],
                          desc: "Display usage information"
     def edit(name = nil)
-      if options[:help] || name.nil?
+      if options[:help] || (name.nil? && !options[:local])
         invoke :help, ["edit"]
         return
       end
@@ -155,7 +155,12 @@ module Tmuxinator
       if File.exist?(path)
         Kernel.system("$EDITOR #{path}")
       else
-        exit! "Project '#{name}' does not exist."
+        message = if options[:local]
+                    "Local config does not exist."
+                  else
+                    "Project '#{name}' does not exist."
+                  end
+        exit! message
       end
     end
 

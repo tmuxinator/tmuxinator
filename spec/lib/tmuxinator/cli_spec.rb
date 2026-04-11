@@ -561,6 +561,21 @@ describe Tmuxinator::Cli do
         capture_io { cli.start }
       end
     end
+
+    context "with the --local option and no project name" do
+      let(:path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
+
+      before do
+        ARGV.replace(["edit", "--local"])
+      end
+
+      it "opens the local config" do
+        expect(File).to receive(:exist?).with(path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{path}})
+
+        capture_io { cli.start }
+      end
+    end
   end
 
   describe "#new" do
