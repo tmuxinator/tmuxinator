@@ -401,10 +401,14 @@ module Tmuxinator
             Tmuxinator::Config::LOCAL_DEFAULTS[0]
           end
         elsif existing
-          Tmuxinator::Config.project(name)
+          existing_named_project_path(name)
         else
           Tmuxinator::Config.default_project(name)
         end
+      end
+
+      def existing_named_project_path(name)
+        Tmuxinator::Config.global_project(name) || Tmuxinator::Config.default_project(name)
       end
 
       def generate_project_file(name, path)
