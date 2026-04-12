@@ -121,6 +121,8 @@ jobs:
           - '1.5'
 
     steps:
+    - uses: actions/checkout@v6
+
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby_version }}
@@ -140,8 +142,6 @@ jobs:
 
     - name: Add tmux to PATH
       run: echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-    - uses: actions/checkout@v6
 
     - name: "Test ruby ${{ matrix.ruby_version }} tmux ${{ matrix.tmux_version }}"
       run: |
