@@ -5,7 +5,8 @@
 
 ### Misc
 
-- Re-implement edit command so it shows up in help
+- Re-implement `edit` as an explicit command for existing project files
+- Add `open` as an explicit help-listed command while preserving its create-or-open behavior
 
 ## 3.3.8
 ### Features

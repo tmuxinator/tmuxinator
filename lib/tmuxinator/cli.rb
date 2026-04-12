@@ -28,7 +28,7 @@ module Tmuxinator
       local: "Start a tmux session using ./.tmuxinator.y[a]ml",
       list: "Lists all tmuxinator projects",
       new: "Create a new project file and open it in your editor",
-      open: "Open and edit an existing project file in your editor",
+      open: "Create or open a project file in your editor",
       start: %w{
         Start a tmux session using a project's name (with an optional [ALIAS]
         for project reuse) or a path to a project config file (via the -p flag)
@@ -78,8 +78,8 @@ module Tmuxinator
     def self.append_option
       method_option :append,
                     type: :boolean,
-                    desc: "Appends the project windows " \
-                          "and panes in the current session"
+                    desc: "Appends the project windows and " \
+                          "panes in the current session"
     end
 
     def self.attach_option
@@ -165,7 +165,7 @@ module Tmuxinator
         return
       end
 
-      open_project(name)
+      new_project(name)
     end
 
     desc "local", COMMANDS[:local]
@@ -337,10 +337,10 @@ module Tmuxinator
       end
 
       def new_project_with_session(name, session)
-        write_project_from_session(name, session, editing: false)
+        write_project_from_session(name, session)
       end
 
-      def write_project_from_session(name, session, editing:)
+      def write_project_from_session(name, session)
         if Tmuxinator::Config.version < 1.6
           raise "Creating projects from sessions is unsupported\
             for tmux version 1.5 or lower."
@@ -391,7 +391,7 @@ module Tmuxinator
         path = target_project_path(
           name,
           local: options[:local],
-          editing: editing
+          editing: false
         )
         File.open(path, "w") do |f|
           f.write(YAML.dump(yaml))

@@ -548,6 +548,10 @@ describe Tmuxinator::Cli do
         ARGV.replace ["edit", name]
       end
 
+      after do
+        FileUtils.remove_file(path) if File.exist?(path)
+      end
+
       it "should _not_ generate a new project file" do
         expect(Kernel).to receive(:system).with(%r{#{path}})
         capture_io { cli.start }
@@ -692,6 +696,7 @@ describe Tmuxinator::Cli do
   end
 
   describe "#open" do
+    let(:file) { StringIO.new }
     let(:name) { "test" }
     let(:project_path) { File.join(Dir.tmpdir, "#{name}-open.yml") }
 
@@ -719,6 +724,25 @@ describe Tmuxinator::Cli do
         expect(Kernel).to receive(:system).with(%r{#{project_path}})
 
         capture_io { cli.start }
+      end
+    end
+
+    context "when the project file does not already exist" do
+      before do
+        ARGV.replace(["open", name])
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
+        allow(File).to receive(:open) { |&block| block.yield file }
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "creates and opens the named project config" do
+        expect(Kernel).to receive(:system).with(%r{#{project_path}})
+
+        capture_io { cli.start }
+
+        expect(file.string).to include("name: #{name}")
       end
     end
 
@@ -1271,6 +1295,29 @@ describe Tmuxinator::Cli do
           editing: true
         )
         expect(new_path).to eq existing_path
+      end
+    end
+
+    context "when looking up a missing named project for editing" do
+      before do
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        allow(File).to receive(:exist?).with(anything).and_call_original
+        allow(File).to receive(:exist?).with(path).and_return(false)
+      end
+
+      it "exits instead of generating a project file" do
+        instance = described_class.new
+        expect(instance).not_to receive(:generate_project_file)
+        expect do
+          instance.find_project_file(
+            name,
+            local: false,
+            editing: true
+          )
+        end.to raise_error(SystemExit)
       end
     end
 
