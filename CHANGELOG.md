@@ -2,6 +2,7 @@
 ### Features
 
 - Add ability to focus panes via `focused_pane`
+
 ### Misc
 
 - Re-implement edit command so it shows up in help

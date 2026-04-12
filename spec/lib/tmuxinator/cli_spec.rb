@@ -552,10 +552,14 @@ describe Tmuxinator::Cli do
     end
 
     context "when the project file exists" do
-      let(:project_path) { Tmuxinator::Config.project(name).to_s }
+      let(:project_path) { File.join(Dir.tmpdir, "#{name}-existing.yml") }
 
       before do
         ARGV.replace(["edit", name])
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
         allow(File).to receive(:exist?).with(anything).and_return(false)
       end
 
@@ -596,10 +600,14 @@ describe Tmuxinator::Cli do
     end
 
     context "when opening the named project config fails" do
-      let(:project_path) { Tmuxinator::Config.default_project(name).to_s }
+      let(:project_path) { File.join(Dir.tmpdir, "#{name}-failing.yml") }
 
       before do
         ARGV.replace(["edit", name])
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
         allow(File).to receive(:exist?).with(anything).and_return(false)
         allow(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
         allow(Tmuxinator::Doctor).to receive(:editor?).and_return(false)
@@ -657,10 +665,14 @@ describe Tmuxinator::Cli do
     end
 
     context "when invoked through the e alias" do
-      let(:project_path) { Tmuxinator::Config.project(name).to_s }
+      let(:project_path) { File.join(Dir.tmpdir, "#{name}-alias.yml") }
 
       before do
         ARGV.replace(["e", name])
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
         allow(File).to receive(:exist?).with(anything).and_return(false)
       end
 
@@ -1230,7 +1242,7 @@ describe Tmuxinator::Cli do
         new_path = described_class.new.find_project_file(
           name,
           local: false,
-          existing: false
+          editing: false
         )
         expect(new_path).to eq path
         expect(File).to exist new_path
@@ -1259,7 +1271,7 @@ describe Tmuxinator::Cli do
         new_path = described_class.new.find_project_file(
           name,
           local: false,
-          existing: false
+          editing: false
         )
         expect(new_path).to eq path
         expect(File).to exist new_path
@@ -1285,7 +1297,7 @@ describe Tmuxinator::Cli do
         new_path = described_class.new.find_project_file(
           name,
           local: false,
-          existing: true
+          editing: true
         )
         expect(new_path).to eq existing_path
       end
@@ -1312,7 +1324,7 @@ describe Tmuxinator::Cli do
         new_path = described_class.new.find_project_file(
           name,
           local: false,
-          existing: true
+          editing: true
         )
         expect(new_path).to eq path
       end

@@ -78,7 +78,7 @@ module Tmuxinator
     def self.append_option
       method_option :append,
                     type: :boolean,
-                    desc: "Appends the project windows" \
+                    desc: "Appends the project windows " \
                           "and panes in the current session"
     end
 
@@ -313,7 +313,7 @@ module Tmuxinator
         project_file = find_project_file(
           name,
           local: options[:local],
-          existing: false
+          editing: false
         )
         Kernel.system("$EDITOR #{project_file}") || doctor
       end
@@ -322,21 +322,21 @@ module Tmuxinator
         project_file = find_project_file(
           name,
           local: options[:local],
-          existing: true
+          editing: true
         )
         Kernel.system("$EDITOR #{project_file}") || doctor
       end
 
       def new_project_with_session(name, session)
-        write_project_from_session(name, session, existing: false)
+        write_project_from_session(name, session, editing: false)
       end
 
       def open_project_with_session(name, session)
-        path = write_project_from_session(name, session, existing: true)
+        path = write_project_from_session(name, session, editing: true)
         Kernel.system("$EDITOR #{path}") || doctor
       end
 
-      def write_project_from_session(name, session, existing:)
+      def write_project_from_session(name, session, editing:)
         if Tmuxinator::Config.version < 1.6
           raise "Creating projects from sessions is unsupported\
             for tmux version 1.5 or lower."
@@ -387,7 +387,7 @@ module Tmuxinator
         path = target_project_path(
           name,
           local: options[:local],
-          existing: existing
+          editing: editing
         )
         File.open(path, "w") do |f|
           f.write(YAML.dump(yaml))
@@ -396,11 +396,11 @@ module Tmuxinator
         path
       end
 
-      def find_project_file(name, local: false, existing: false)
+      def find_project_file(name, local: false, editing: false)
         path = target_project_path(
           name,
           local: local,
-          existing: existing
+          editing: editing
         )
         if File.exist?(path)
           path
@@ -409,21 +409,21 @@ module Tmuxinator
         end
       end
 
-      def target_project_path(name, local: false, existing: false)
+      def target_project_path(name, local: false, editing: false)
         if local
-          if existing
+          if editing
             Tmuxinator::Config.local_project || Tmuxinator::Config::LOCAL_DEFAULTS[0]
           else
             Tmuxinator::Config::LOCAL_DEFAULTS[0]
           end
-        elsif existing
-          existing_named_project_path(name)
+        elsif editing
+          editable_named_project_path(name)
         else
           Tmuxinator::Config.default_project(name)
         end
       end
 
-      def existing_named_project_path(name)
+      def editable_named_project_path(name)
         Tmuxinator::Config.global_project(name) || Tmuxinator::Config.default_project(name)
       end
 
