@@ -3,6 +3,11 @@
 
 - Add ability to focus panes via `focused_pane`
 
+### Misc
+
+- Re-implement `edit` as an explicit command for existing project files
+- Add `open` as an explicit help-listed command while preserving its create-or-open behavior
+
 ## 3.3.8
 ### Features
 - Add completion support for 'stop' command in tmuxinator
@@ -27,7 +32,7 @@
 ## Misc
 - Add Ruby 3.4 to the test matrix
 - Document new from session feature in the README
-- Update required Ruby version to >=2.7 
+- Update required Ruby version to >=2.7
 - Update runtime dependencies to up-to-date versions
 - Update development dependencies to up-to-date versions
 ## Fixes

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "tmpdir"
 
 describe Tmuxinator::Cli do
   shared_context :local_project_setup do
@@ -519,8 +520,15 @@ describe Tmuxinator::Cli do
 
     context "when the project file _does_ already exist" do
       let(:extra) { "  - extra: echo 'foobar'" }
+      let(:path) { File.join(Dir.tmpdir, "#{name}-edit.yml") }
 
       before do
+        allow(Tmuxinator::Config).to receive(:global_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
         # make sure that no project file exists initially
         FileUtils.remove_file(path) if File.exist?(path)
         expect(File).not_to exist(path)
@@ -540,9 +548,220 @@ describe Tmuxinator::Cli do
         ARGV.replace ["edit", name]
       end
 
+      after do
+        FileUtils.remove_file(path) if File.exist?(path)
+      end
+
       it "should _not_ generate a new project file" do
+        expect(Kernel).to receive(:system).with(%r{#{path}})
         capture_io { cli.start }
         expect(File.read(path)).to match %r{#{extra}}
+      end
+    end
+
+    context "when the project file exists" do
+      let(:project_path) { File.join(Dir.tmpdir, "#{name}-existing.yml") }
+
+      before do
+        ARGV.replace(["edit", name])
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "opens the named project config" do
+        expect(File).to receive(:exist?).with(project_path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{project_path}})
+
+        capture_io { cli.start }
+      end
+    end
+
+    context "when the project file does not already exist" do
+      let(:project_path) { File.join(Dir.tmpdir, "#{name}-new.yml") }
+
+      before do
+        allow(Tmuxinator::Config).to receive(:global_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
+        FileUtils.remove_file(project_path) if File.exist?(project_path)
+        ARGV.replace(["edit", name])
+      end
+
+      after do
+        FileUtils.remove_file(project_path) if File.exist?(project_path)
+      end
+
+      it "exits with an error" do
+        expect { capture_io { cli.start } }.to raise_error(SystemExit)
+        expect(File).not_to exist(project_path)
+      end
+    end
+
+    context "when opening the named project config fails" do
+      let(:project_path) { File.join(Dir.tmpdir, "#{name}-failing.yml") }
+
+      before do
+        ARGV.replace(["edit", name])
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+        allow(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
+        allow(Tmuxinator::Doctor).to receive(:editor?).and_return(false)
+        allow(Tmuxinator::Doctor).to receive(:shell?).and_return(true)
+      end
+
+      it "falls back to doctor" do
+        expect(File).to receive(:exist?).with(project_path).and_return(true)
+        expect(Kernel).to receive(:system).
+          with(%r{#{project_path}}).and_return(false)
+
+        out, = capture_io { cli.start }
+        expect(out).to include("Checking if $EDITOR is set")
+      end
+    end
+
+    context "when invoked through the e alias" do
+      let(:project_path) { File.join(Dir.tmpdir, "#{name}-alias.yml") }
+
+      before do
+        ARGV.replace(["e", name])
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "opens the named project config" do
+        expect(File).to receive(:exist?).with(project_path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{project_path}})
+
+        capture_io { cli.start }
+      end
+    end
+
+    context "with the --local option and no project name" do
+      let(:path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
+
+      before do
+        ARGV.replace(["edit", "--local"])
+      end
+
+      it "opens the local config" do
+        allow(File).to receive(:exist?).with(path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{path}})
+
+        capture_io { cli.start }
+      end
+
+      it "creates and opens the local config when it is missing" do
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+        allow(File).to receive(:open) { |&block| block.yield file }
+        expect(Kernel).to receive(:system).with(%r{#{path}}).and_return(true)
+
+        capture_io { cli.start }
+
+        expect(file.string).to include("name: tmuxinator")
+      end
+    end
+
+    context "when an existing project resolves outside the default path" do
+      let(:existing_project_path) { "/tmp/existing-project.yml" }
+
+      before do
+        ARGV.replace(["edit", name])
+        allow(Tmuxinator::Config).to receive(:global_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(existing_project_path)
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "opens the resolved project config" do
+        expect(File).to receive(:exist?).
+          with(existing_project_path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{existing_project_path}})
+
+        capture_io { cli.start }
+      end
+    end
+  end
+
+  describe "#open" do
+    let(:file) { StringIO.new }
+    let(:name) { "test" }
+    let(:project_path) { File.join(Dir.tmpdir, "#{name}-open.yml") }
+
+    context "with --help flag" do
+      it "shows help for the open command" do
+        ARGV.replace(["open", "--help"])
+        out, _err = capture_io { cli.start }
+        expect(out).to include("open [PROJECT]")
+        expect(out).to include("Options:")
+      end
+    end
+
+    context "when the project file exists" do
+      before do
+        ARGV.replace(["open", name])
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "opens the named project config" do
+        expect(File).to receive(:exist?).with(project_path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{project_path}})
+
+        capture_io { cli.start }
+      end
+    end
+
+    context "when the project file does not already exist" do
+      before do
+        ARGV.replace(["open", name])
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
+        allow(File).to receive(:open) { |&block| block.yield file }
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "creates and opens the named project config" do
+        expect(Kernel).to receive(:system).with(%r{#{project_path}})
+
+        capture_io { cli.start }
+
+        expect(file.string).to include("name: #{name}")
+      end
+    end
+
+    context "with the --local option and no project name" do
+      let(:path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
+      let(:file) { StringIO.new }
+
+      before do
+        ARGV.replace(["open", "--local"])
+      end
+
+      it "creates and opens a valid local config when it is missing" do
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+        allow(File).to receive(:open) { |&block| block.yield file }
+        expect(Kernel).to receive(:system).with(%r{#{path}}).and_return(true)
+
+        capture_io { cli.start }
+
+        expect(file.string).to include("name: tmuxinator")
       end
     end
   end
@@ -999,8 +1218,8 @@ describe Tmuxinator::Cli do
   end
 
   describe "#find_project_file" do
-    let(:name) { "foobar" }
-    let(:path) { Tmuxinator::Config.default_project(name) }
+    let(:name) { "foobar-#{Process.pid}-#{rand(1_000_000)}" }
+    let(:path) { File.join(Dir.tmpdir, "#{name}.yml") }
 
     after(:each) do
       FileUtils.remove_file(path) if File.exist?(path)
@@ -1008,11 +1227,18 @@ describe Tmuxinator::Cli do
 
     context "when the project file does not already exist" do
       before do
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
         expect(File).not_to exist(path), "expected file at #{path} not to exist"
       end
 
       it "should generate a project file" do
-        new_path = described_class.new.find_project_file(name, local: false)
+        new_path = described_class.new.find_project_file(
+          name,
+          local: false,
+          editing: false
+        )
         expect(new_path).to eq path
         expect(File).to exist new_path
       end
@@ -1022,6 +1248,9 @@ describe Tmuxinator::Cli do
       let(:extra) { "  - extra: echo 'foobar'" }
 
       before do
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
         expect(File).not_to exist(path), "expected file at #{path} not to exist"
         expect(described_class.new.generate_project_file(name, path)).to eq path
         expect(File).to exist path
@@ -1034,10 +1263,89 @@ describe Tmuxinator::Cli do
       end
 
       it "should _not_ generate a new project file" do
-        new_path = described_class.new.find_project_file(name, local: false)
+        new_path = described_class.new.find_project_file(
+          name,
+          local: false,
+          editing: false
+        )
         expect(new_path).to eq path
         expect(File).to exist new_path
         expect(File.read(new_path)).to match %r{#{extra}}
+      end
+    end
+
+    context "when looking up an existing project file" do
+      let(:existing_path) { "/tmp/existing-project.yml" }
+
+      before do
+        allow(Tmuxinator::Config).to receive(:global_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(existing_path)
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        allow(File).to receive(:exist?).with(anything).and_call_original
+        allow(File).to receive(:exist?).with(existing_path).and_return(true)
+      end
+
+      it "uses the existing named project path" do
+        new_path = described_class.new.find_project_file(
+          name,
+          local: false,
+          editing: true
+        )
+        expect(new_path).to eq existing_path
+      end
+    end
+
+    context "when looking up a missing named project for editing" do
+      before do
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        allow(File).to receive(:exist?).with(anything).and_call_original
+        allow(File).to receive(:exist?).with(path).and_return(false)
+      end
+
+      it "exits instead of generating a project file" do
+        instance = described_class.new
+        expect(instance).not_to receive(:generate_project_file)
+        expect do
+          instance.find_project_file(
+            name,
+            local: false,
+            editing: true
+          )
+        end.to raise_error(SystemExit)
+      end
+    end
+
+    context \
+      "when looking up an existing named project with a local config present" do
+      let(:local_path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
+
+      before do
+        allow(Tmuxinator::Config).to receive(:global_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        allow(Tmuxinator::Config).to receive(:local_project).
+          and_return(local_path)
+        allow(File).to receive(:exist?).with(anything).and_call_original
+        allow(File).to receive(:exist?).with(path).and_return(false)
+      end
+
+      it "ignores the local config fallback and uses the named default path" do
+        expect do
+          described_class.new.find_project_file(
+            name,
+            local: false,
+            editing: true
+          )
+        end.to raise_error(SystemExit)
       end
     end
   end
@@ -1062,6 +1370,19 @@ describe Tmuxinator::Cli do
         path = "#{dir}/#{name}.yml"
         _ = described_class.new.generate_project_file(name, path)
         expect(file.string).to match %r{\A# #{path}$}
+      end
+    end
+
+    it "uses the current directory name when no project name is provided" do
+      file = StringIO.new
+      allow(File).to receive(:open) { |&block| block.yield file }
+
+      Dir.mktmpdir("tmuxinator-cli") do |dir|
+        Dir.chdir(dir) do
+          path = "#{dir}/.tmuxinator.yml"
+          _ = described_class.new.generate_project_file(nil, path)
+          expect(file.string).to include("name: #{File.basename(dir)}")
+        end
       end
     end
   end
