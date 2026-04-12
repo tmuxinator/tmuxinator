@@ -138,25 +138,34 @@ module Tmuxinator
       end
     end
 
-    desc "edit [PROJECT] [SESSION]", COMMANDS[:edit]
-    map "open" => :edit
-    map "o" => :edit
+    desc "edit [PROJECT]", COMMANDS[:edit]
     map "e" => :edit
     local_option
     method_option :help, type: :boolean,
                          aliases: ["-h"],
                          desc: "Display usage information"
-    def edit(name = nil, session = nil)
+    def edit(name = nil)
       if options[:help] || (name.nil? && !options[:local])
         invoke :help, ["edit"]
         return
       end
 
-      if session
-        open_project_with_session(name, session)
-      else
-        open_project(name)
+      open_project(name)
+    end
+
+    desc "open [PROJECT]", COMMANDS[:open]
+    map "o" => :open
+    local_option
+    method_option :help, type: :boolean,
+                         aliases: ["-h"],
+                         desc: "Display usage information"
+    def open(name = nil)
+      if options[:help] || (name.nil? && !options[:local])
+        invoke :help, ["open"]
+        return
       end
+
+      open_project(name)
     end
 
     desc "local", COMMANDS[:local]
@@ -331,11 +340,6 @@ module Tmuxinator
         write_project_from_session(name, session, editing: false)
       end
 
-      def open_project_with_session(name, session)
-        path = write_project_from_session(name, session, editing: true)
-        Kernel.system("$EDITOR #{path}") || doctor
-      end
-
       def write_project_from_session(name, session, editing:)
         if Tmuxinator::Config.version < 1.6
           raise "Creating projects from sessions is unsupported\
@@ -404,6 +408,8 @@ module Tmuxinator
         )
         if File.exist?(path)
           path
+        elsif editing && !local
+          exit!("Project #{name} doesn't exist!")
         else
           generate_project_file(name, path)
         end
