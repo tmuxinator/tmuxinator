@@ -152,16 +152,13 @@ module Tmuxinator
         return
       end
 
-      path = config_path(name, local: options[:local])
-      if File.exist?(path)
-        Kernel.system("$EDITOR #{path}")
+      if options[:local]
+        path = config_path(name, local: true)
+        exit! "Local config does not exist." unless File.exist?(path)
+
+        Kernel.system("$EDITOR #{path}") || doctor
       else
-        message = if options[:local]
-                    "Local config does not exist."
-                  else
-                    "Project '#{name}' does not exist."
-                  end
-        exit! message
+        new_project(name)
       end
     end
 

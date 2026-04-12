@@ -562,6 +562,47 @@ describe Tmuxinator::Cli do
       end
     end
 
+    context "when the project file does not already exist" do
+      let(:project_path) { Tmuxinator::Config.default_project(name).to_s }
+
+      before do
+        FileUtils.remove_file(project_path) if File.exist?(project_path)
+        ARGV.replace(["edit", name])
+      end
+
+      after do
+        FileUtils.remove_file(project_path) if File.exist?(project_path)
+      end
+
+      it "creates and opens the named project config" do
+        expect(Kernel).to receive(:system).with(%r{#{project_path}}).and_return(true)
+
+        capture_io { cli.start }
+
+        expect(File).to exist(project_path)
+      end
+    end
+
+    context "when opening the named project config fails" do
+      let(:project_path) { Tmuxinator::Config.default_project(name).to_s }
+
+      before do
+        ARGV.replace(["edit", name])
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+        allow(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
+        allow(Tmuxinator::Doctor).to receive(:editor?).and_return(false)
+        allow(Tmuxinator::Doctor).to receive(:shell?).and_return(true)
+      end
+
+      it "falls back to doctor" do
+        expect(File).to receive(:exist?).with(project_path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{project_path}}).and_return(false)
+
+        out, = capture_io { cli.start }
+        expect(out).to include("Checking if $EDITOR is set")
+      end
+    end
+
     context "when invoked through the e alias" do
       let(:project_path) { Tmuxinator::Config.project(name).to_s }
 
