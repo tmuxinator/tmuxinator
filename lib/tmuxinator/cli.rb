@@ -138,7 +138,7 @@ module Tmuxinator
       end
     end
 
-    desc "edit [PROJECT]", COMMANDS[:edit]
+    desc "edit [PROJECT] [SESSION]", COMMANDS[:edit]
     map "open" => :edit
     map "o" => :edit
     map "e" => :edit
@@ -146,17 +146,14 @@ module Tmuxinator
     method_option :help, type: :boolean,
                          aliases: ["-h"],
                          desc: "Display usage information"
-    def edit(name = nil)
+    def edit(name = nil, session = nil)
       if options[:help] || (name.nil? && !options[:local])
         invoke :help, ["edit"]
         return
       end
 
-      if options[:local]
-        path = config_path(name, local: true)
-        exit! "Local config does not exist." unless File.exist?(path)
-
-        Kernel.system("$EDITOR #{path}") || doctor
+      if session
+        new_project_with_session(name, session)
       else
         new_project(name)
       end

@@ -603,6 +603,18 @@ describe Tmuxinator::Cli do
       end
     end
 
+    context "when invoked with a session name" do
+      before do
+        ARGV.replace(["edit", name, "sessionname"])
+        expect_any_instance_of(described_class).
+          to(receive(:new_project_with_session).with(name, "sessionname"))
+      end
+
+      it "creates the project from the session" do
+        capture_io { cli.start }
+      end
+    end
+
     context "when invoked through the e alias" do
       let(:project_path) { Tmuxinator::Config.project(name).to_s }
 
@@ -615,6 +627,18 @@ describe Tmuxinator::Cli do
         expect(File).to receive(:exist?).with(project_path).and_return(true)
         expect(Kernel).to receive(:system).with(%r{#{project_path}})
 
+        capture_io { cli.start }
+      end
+    end
+
+    context "when invoked through the open alias with a session name" do
+      before do
+        ARGV.replace(["open", name, "sessionname"])
+        expect_any_instance_of(described_class).
+          to(receive(:new_project_with_session).with(name, "sessionname"))
+      end
+
+      it "creates the project from the session" do
         capture_io { cli.start }
       end
     end
