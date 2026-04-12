@@ -656,6 +656,16 @@ describe Tmuxinator::Cli do
 
         capture_io { cli.start }
       end
+
+      it "creates and opens the local config when it is missing" do
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+        allow(File).to receive(:open) { |&block| block.yield file }
+        expect(Kernel).to receive(:system).with(%r{#{path}}).and_return(true)
+
+        capture_io { cli.start }
+
+        expect(file.string).to_not be_empty
+      end
     end
   end
 
