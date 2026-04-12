@@ -524,7 +524,8 @@ describe Tmuxinator::Cli do
 
       before do
         allow(Tmuxinator::Config).to receive(:project).and_call_original
-        allow(Tmuxinator::Config).to receive(:project).with(name).and_return(path)
+        allow(Tmuxinator::Config).to receive(:project).
+          with(name).and_return(path)
         # make sure that no project file exists initially
         FileUtils.remove_file(path) if File.exist?(path)
         expect(File).not_to exist(path)
@@ -571,9 +572,11 @@ describe Tmuxinator::Cli do
 
       before do
         allow(Tmuxinator::Config).to receive(:global_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:global_project).with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:default_project).with(name).and_return(project_path)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(project_path)
         FileUtils.remove_file(project_path) if File.exist?(project_path)
         ARGV.replace(["edit", name])
       end
@@ -583,7 +586,8 @@ describe Tmuxinator::Cli do
       end
 
       it "creates and opens the named project config" do
-        expect(Kernel).to receive(:system).with(%r{#{project_path}}).and_return(true)
+        expect(Kernel).to receive(:system).
+          with(%r{#{project_path}}).and_return(true)
 
         capture_io { cli.start }
 
@@ -604,7 +608,8 @@ describe Tmuxinator::Cli do
 
       it "falls back to doctor" do
         expect(File).to receive(:exist?).with(project_path).and_return(true)
-        expect(Kernel).to receive(:system).with(%r{#{project_path}}).and_return(false)
+        expect(Kernel).to receive(:system).
+          with(%r{#{project_path}}).and_return(false)
 
         out, = capture_io { cli.start }
         expect(out).to include("Checking if $EDITOR is set")
@@ -618,18 +623,32 @@ describe Tmuxinator::Cli do
         ARGV.replace(["edit", name, "sessionname"])
         allow(Tmuxinator::Config).to receive(:version).and_return(1.6)
         allow(Tmuxinator::Config).to receive(:global_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:global_project).with(name).and_return(project_path)
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(project_path)
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
         allow(Open3).to receive(:capture3).and_return(
-          ["editor even-horizontal 1 /tmp/project\n", "", instance_double(Process::Status, success?: true)],
-          ["editor /tmp/project\n", "", instance_double(Process::Status, success?: true)],
-          ["default-path \"/tmp/project\"\n", "", instance_double(Process::Status, success?: true)]
+          [
+            "editor even-horizontal 1 /tmp/project\n",
+            "",
+            instance_double(Process::Status, success?: true)
+          ],
+          [
+            "editor /tmp/project\n",
+            "",
+            instance_double(Process::Status, success?: true)
+          ],
+          [
+            "default-path \"/tmp/project\"\n",
+            "",
+            instance_double(Process::Status, success?: true)
+          ]
         )
         allow(File).to receive(:open) { |&block| block.yield file }
       end
 
       it "creates and opens the project from the session" do
-        expect(Kernel).to receive(:system).with(%r{#{project_path}}).and_return(true)
+        expect(Kernel).to receive(:system).
+          with(%r{#{project_path}}).and_return(true)
 
         capture_io { cli.start }
 
@@ -660,18 +679,32 @@ describe Tmuxinator::Cli do
         ARGV.replace(["open", name, "sessionname"])
         allow(Tmuxinator::Config).to receive(:version).and_return(1.6)
         allow(Tmuxinator::Config).to receive(:global_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:global_project).with(name).and_return(project_path)
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(project_path)
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
         allow(Open3).to receive(:capture3).and_return(
-          ["editor even-horizontal 1 /tmp/project\n", "", instance_double(Process::Status, success?: true)],
-          ["editor /tmp/project\n", "", instance_double(Process::Status, success?: true)],
-          ["default-path \"/tmp/project\"\n", "", instance_double(Process::Status, success?: true)]
+          [
+            "editor even-horizontal 1 /tmp/project\n",
+            "",
+            instance_double(Process::Status, success?: true)
+          ],
+          [
+            "editor /tmp/project\n",
+            "",
+            instance_double(Process::Status, success?: true)
+          ],
+          [
+            "default-path \"/tmp/project\"\n",
+            "",
+            instance_double(Process::Status, success?: true)
+          ]
         )
         allow(File).to receive(:open) { |&block| block.yield file }
       end
 
       it "creates and opens the project from the session" do
-        expect(Kernel).to receive(:system).with(%r{#{project_path}}).and_return(true)
+        expect(Kernel).to receive(:system).
+          with(%r{#{project_path}}).and_return(true)
 
         capture_io { cli.start }
 
@@ -710,13 +743,15 @@ describe Tmuxinator::Cli do
       before do
         ARGV.replace(["edit", name])
         allow(Tmuxinator::Config).to receive(:global_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:global_project).with(name).and_return(existing_project_path)
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(existing_project_path)
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
         allow(File).to receive(:exist?).with(anything).and_return(false)
       end
 
       it "opens the resolved project config" do
-        expect(File).to receive(:exist?).with(existing_project_path).and_return(true)
+        expect(File).to receive(:exist?).
+          with(existing_project_path).and_return(true)
         expect(Kernel).to receive(:system).with(%r{#{existing_project_path}})
 
         capture_io { cli.start }
@@ -801,9 +836,9 @@ describe Tmuxinator::Cli do
           capture_io { cli.start }
         end
       end
-  end
+    end
 
-  # this command variant only works for tmux version 1.6 and up.
+    # this command variant only works for tmux version 1.6 and up.
     context "from a session" do
       context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
         before do
@@ -1186,12 +1221,17 @@ describe Tmuxinator::Cli do
     context "when the project file does not already exist" do
       before do
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:default_project).with(name).and_return(path)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
         expect(File).not_to exist(path), "expected file at #{path} not to exist"
       end
 
       it "should generate a project file" do
-        new_path = described_class.new.find_project_file(name, local: false, existing: false)
+        new_path = described_class.new.find_project_file(
+          name,
+          local: false,
+          existing: false
+        )
         expect(new_path).to eq path
         expect(File).to exist new_path
       end
@@ -1202,7 +1242,8 @@ describe Tmuxinator::Cli do
 
       before do
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:default_project).with(name).and_return(path)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
         expect(File).not_to exist(path), "expected file at #{path} not to exist"
         expect(described_class.new.generate_project_file(name, path)).to eq path
         expect(File).to exist path
@@ -1215,7 +1256,11 @@ describe Tmuxinator::Cli do
       end
 
       it "should _not_ generate a new project file" do
-        new_path = described_class.new.find_project_file(name, local: false, existing: false)
+        new_path = described_class.new.find_project_file(
+          name,
+          local: false,
+          existing: false
+        )
         expect(new_path).to eq path
         expect(File).to exist new_path
         expect(File.read(new_path)).to match %r{#{extra}}
@@ -1227,34 +1272,48 @@ describe Tmuxinator::Cli do
 
       before do
         allow(Tmuxinator::Config).to receive(:global_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:global_project).with(name).and_return(existing_path)
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(existing_path)
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:default_project).with(name).and_return(path)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
         allow(File).to receive(:exist?).with(anything).and_call_original
         allow(File).to receive(:exist?).with(existing_path).and_return(true)
       end
 
       it "uses the existing named project path" do
-        new_path = described_class.new.find_project_file(name, local: false, existing: true)
+        new_path = described_class.new.find_project_file(
+          name,
+          local: false,
+          existing: true
+        )
         expect(new_path).to eq existing_path
       end
     end
 
-    context "when looking up an existing named project with a local config present" do
+    context \
+      "when looking up an existing named project with a local config present" do
       let(:local_path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
 
       before do
         allow(Tmuxinator::Config).to receive(:global_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:global_project).with(name).and_return(nil)
+        allow(Tmuxinator::Config).to receive(:global_project).
+          with(name).and_return(nil)
         allow(Tmuxinator::Config).to receive(:default_project).and_call_original
-        allow(Tmuxinator::Config).to receive(:default_project).with(name).and_return(path)
-        allow(Tmuxinator::Config).to receive(:local_project).and_return(local_path)
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        allow(Tmuxinator::Config).to receive(:local_project).
+          and_return(local_path)
         allow(File).to receive(:exist?).with(anything).and_call_original
         allow(File).to receive(:exist?).with(path).and_return(false)
       end
 
       it "ignores the local config fallback and uses the named default path" do
-        new_path = described_class.new.find_project_file(name, local: false, existing: true)
+        new_path = described_class.new.find_project_file(
+          name,
+          local: false,
+          existing: true
+        )
         expect(new_path).to eq path
       end
     end

@@ -310,12 +310,20 @@ module Tmuxinator
 
     no_commands do
       def new_project(name)
-        project_file = find_project_file(name, local: options[:local], existing: false)
+        project_file = find_project_file(
+          name,
+          local: options[:local],
+          existing: false
+        )
         Kernel.system("$EDITOR #{project_file}") || doctor
       end
 
       def open_project(name)
-        project_file = find_project_file(name, local: options[:local], existing: true)
+        project_file = find_project_file(
+          name,
+          local: options[:local],
+          existing: true
+        )
         Kernel.system("$EDITOR #{project_file}") || doctor
       end
 
@@ -376,7 +384,11 @@ module Tmuxinator
           end
         }
 
-        path = target_project_path(name, local: options[:local], existing: existing)
+        path = target_project_path(
+          name,
+          local: options[:local],
+          existing: existing
+        )
         File.open(path, "w") do |f|
           f.write(YAML.dump(yaml))
         end
@@ -385,7 +397,11 @@ module Tmuxinator
       end
 
       def find_project_file(name, local: false, existing: false)
-        path = target_project_path(name, local: local, existing: existing)
+        path = target_project_path(
+          name,
+          local: local,
+          existing: existing
+        )
         if File.exist?(path)
           path
         else
@@ -563,6 +579,7 @@ module Tmuxinator
 
       Project.stop_all
     end
+
     # This method was defined as something of a workaround...  Previously
     # the conditional contained within was in the executable (i.e.
     # bin/tmuxinator).  It has been moved here so as to be testable. A couple
