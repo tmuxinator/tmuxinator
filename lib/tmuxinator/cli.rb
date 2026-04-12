@@ -141,6 +141,7 @@ module Tmuxinator
     desc "edit [PROJECT]", COMMANDS[:edit]
     map "open" => :edit
     map "o" => :edit
+    map "e" => :edit
     local_option
     method_option :help, type: :boolean,
                          aliases: ["-h"],

@@ -562,6 +562,22 @@ describe Tmuxinator::Cli do
       end
     end
 
+    context "when invoked through the e alias" do
+      let(:project_path) { Tmuxinator::Config.project(name).to_s }
+
+      before do
+        ARGV.replace(["e", name])
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "opens the named project config" do
+        expect(File).to receive(:exist?).with(project_path).and_return(true)
+        expect(Kernel).to receive(:system).with(%r{#{project_path}})
+
+        capture_io { cli.start }
+      end
+    end
+
     context "with the --local option and no project name" do
       let(:path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
 
