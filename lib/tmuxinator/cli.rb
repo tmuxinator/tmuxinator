@@ -435,6 +435,7 @@ module Tmuxinator
 
       def generate_project_file(name, path)
         config = Tmuxinator::Config.default_or_sample
+        name = name || File.basename(Dir.pwd)
         erb = Tmuxinator::Project.render_template(config, binding)
         File.open(path, "w") { |f| f.write(erb) }
         path

@@ -665,7 +665,7 @@ describe Tmuxinator::Cli do
 
         capture_io { cli.start }
 
-        expect(file.string).to_not be_empty
+        expect(file.string).to include("name: tmuxinator")
       end
     end
 
@@ -719,6 +719,25 @@ describe Tmuxinator::Cli do
         expect(Kernel).to receive(:system).with(%r{#{project_path}})
 
         capture_io { cli.start }
+      end
+    end
+
+    context "with the --local option and no project name" do
+      let(:path) { Tmuxinator::Config::LOCAL_DEFAULTS[0] }
+      let(:file) { StringIO.new }
+
+      before do
+        ARGV.replace(["open", "--local"])
+      end
+
+      it "creates and opens a valid local config when it is missing" do
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+        allow(File).to receive(:open) { |&block| block.yield file }
+        expect(Kernel).to receive(:system).with(%r{#{path}}).and_return(true)
+
+        capture_io { cli.start }
+
+        expect(file.string).to include("name: tmuxinator")
       end
     end
   end
@@ -1304,6 +1323,19 @@ describe Tmuxinator::Cli do
         path = "#{dir}/#{name}.yml"
         _ = described_class.new.generate_project_file(name, path)
         expect(file.string).to match %r{\A# #{path}$}
+      end
+    end
+
+    it "uses the current directory name when no project name is provided" do
+      file = StringIO.new
+      allow(File).to receive(:open) { |&block| block.yield file }
+
+      Dir.mktmpdir("tmuxinator-cli") do |dir|
+        Dir.chdir(dir) do
+          path = "#{dir}/.tmuxinator.yml"
+          _ = described_class.new.generate_project_file(nil, path)
+          expect(file.string).to include("name: #{File.basename(dir)}")
+        end
       end
     end
   end
