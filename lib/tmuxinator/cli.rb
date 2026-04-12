@@ -155,7 +155,7 @@ module Tmuxinator
       if session
         new_project_with_session(name, session)
       else
-        new_project(name)
+        open_project(name)
       end
     end
 
@@ -310,7 +310,12 @@ module Tmuxinator
 
     no_commands do
       def new_project(name)
-        project_file = find_project_file(name, local: options[:local])
+        project_file = find_project_file(name, local: options[:local], existing: false)
+        Kernel.system("$EDITOR #{project_file}") || doctor
+      end
+
+      def open_project(name)
+        project_file = find_project_file(name, local: options[:local], existing: true)
         Kernel.system("$EDITOR #{project_file}") || doctor
       end
 
@@ -362,14 +367,14 @@ module Tmuxinator
           end
         }
 
-        path = config_path(name, local: options[:local])
+        path = target_project_path(name, local: options[:local], existing: false)
         File.open(path, "w") do |f|
           f.write(YAML.dump(yaml))
         end
       end
 
-      def find_project_file(name, local: false)
-        path = config_path(name, local: local)
+      def find_project_file(name, local: false, existing: false)
+        path = target_project_path(name, local: local, existing: existing)
         if File.exist?(path)
           path
         else
@@ -377,9 +382,15 @@ module Tmuxinator
         end
       end
 
-      def config_path(name, local: false)
+      def target_project_path(name, local: false, existing: false)
         if local
-          Tmuxinator::Config::LOCAL_DEFAULTS[0]
+          if existing
+            Tmuxinator::Config.local_project || Tmuxinator::Config::LOCAL_DEFAULTS[0]
+          else
+            Tmuxinator::Config::LOCAL_DEFAULTS[0]
+          end
+        elsif existing
+          Tmuxinator::Config.project(name)
         else
           Tmuxinator::Config.default_project(name)
         end
