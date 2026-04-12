@@ -153,7 +153,7 @@ module Tmuxinator
       end
 
       if session
-        new_project_with_session(name, session)
+        open_project_with_session(name, session)
       else
         open_project(name)
       end
@@ -320,6 +320,15 @@ module Tmuxinator
       end
 
       def new_project_with_session(name, session)
+        write_project_from_session(name, session, existing: false)
+      end
+
+      def open_project_with_session(name, session)
+        path = write_project_from_session(name, session, existing: true)
+        Kernel.system("$EDITOR #{path}") || doctor
+      end
+
+      def write_project_from_session(name, session, existing:)
         if Tmuxinator::Config.version < 1.6
           raise "Creating projects from sessions is unsupported\
             for tmux version 1.5 or lower."
@@ -367,10 +376,12 @@ module Tmuxinator
           end
         }
 
-        path = target_project_path(name, local: options[:local], existing: false)
+        path = target_project_path(name, local: options[:local], existing: existing)
         File.open(path, "w") do |f|
           f.write(YAML.dump(yaml))
         end
+
+        path
       end
 
       def find_project_file(name, local: false, existing: false)
