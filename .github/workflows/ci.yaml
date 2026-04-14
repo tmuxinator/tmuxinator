@@ -2,12 +2,13 @@
 
 name: Integration Tests
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
   build-tmux:
     runs-on: ubuntu-latest
-    permissions: {}
     strategy:
       fail-fast: false
       matrix:
