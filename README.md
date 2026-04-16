@@ -97,7 +97,7 @@ tmuxinator new --local [project]
 
 Use `tmuxinator open [project]` to create or open a config in your editor, or
 `tmuxinator edit [project]` to edit an existing config without creating a new
-one. `new` is aliased to `n`, `open` to `o`, and `edit` to `e`. Please note
+one. `new`, `open`, and `edit` are aliased to `n`, `o`, and `e`. Please note
 that dots can't be used in project names as tmux uses them internally to
 delimit between windows and panes. Your default editor (`$EDITOR`) is used to
 open the file.

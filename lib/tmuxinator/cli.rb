@@ -28,7 +28,7 @@ module Tmuxinator
       local: "Start a tmux session using ./.tmuxinator.y[a]ml",
       list: "Lists all tmuxinator projects",
       new: "Create a new project file and open it in your editor",
-      open: "Alias of new",
+      open: "Create or open a project file in your editor",
       start: %w{
         Start a tmux session using a project's name (with an optional [ALIAS]
         for project reuse) or a path to a project config file (via the -p flag)
@@ -76,8 +76,6 @@ module Tmuxinator
     end
 
     desc "new [PROJECT] [SESSION]", COMMANDS[:new]
-    map "open" => :new
-    map "o" => :new
     map "n" => :new
     method_option :local, type: :boolean,
                           aliases: ["-l"],
@@ -97,6 +95,24 @@ module Tmuxinator
       else
         new_project(name)
       end
+    end
+
+    desc "open [PROJECT]", COMMANDS[:open]
+    map "o" => :open
+    method_option :local, type: :boolean,
+                          aliases: ["-l"],
+                          desc: "Create local project file at ./.tmuxinator.yml"
+    method_option :help, type: :boolean,
+                         aliases: ["-h"],
+                         desc: "Display usage information"
+
+    def open(name = nil)
+      if options[:help] || name.nil?
+        invoke :help, ["open"]
+        return
+      end
+
+      new_project(name)
     end
 
     desc "edit [PROJECT]", COMMANDS[:edit]
