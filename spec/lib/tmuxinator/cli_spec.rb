@@ -517,6 +517,15 @@ describe Tmuxinator::Cli do
     let(:name) { "test" }
     let(:path) { Tmuxinator::Config.default_project(name) }
 
+    context "with --help flag" do
+      it "shows help instead of editing a project" do
+        ARGV.replace(["edit", "--help"])
+        out, _err = capture_io { cli.start }
+        expect(out).to include("edit [PROJECT]")
+        expect(out).to include("Options:")
+      end
+    end
+
     context "when the project file _does_ already exist" do
       let(:extra) { "  - extra: echo 'foobar'" }
 
@@ -543,6 +552,24 @@ describe Tmuxinator::Cli do
       it "should _not_ generate a new project file" do
         capture_io { cli.start }
         expect(File.read(path)).to match %r{#{extra}}
+      end
+    end
+
+    context "when the project file does not already exist" do
+      let(:path) { File.join(Dir.tmpdir, "#{name}.yml") }
+
+      before do
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        ARGV.replace(["edit", name])
+        allow(File).to receive(:exist?).with(anything).and_call_original
+        allow(File).to receive(:exist?).with(path).and_return(false)
+      end
+
+      it "exits instead of generating a project file" do
+        expect { cli.start }.to raise_error(SystemExit)
+        expect(File).not_to exist(path)
       end
     end
   end

@@ -81,24 +81,26 @@ panes are in tmux. If not please consult the [man pages](https://web.archive.org
 
 ### Create a project
 
-Create or edit your projects with:
+Create a project with:
 
 ```
 tmuxinator new [project]
 ```
 
-Create or edit a local project where the config file will be stored in the
-current working directory (in `.tmuxinator.yml`) instead of the default
-project configuration file location (e.g. `~/.config/tmuxinator`):
+Create a local project where the config file will be stored in the current
+working directory (in `.tmuxinator.yml`) instead of the default project
+configuration file location (e.g. `~/.config/tmuxinator`):
 
 ```
 tmuxinator new --local [project]
 ```
 
-For editing you can also use `tmuxinator open [project]`. `new` is aliased to
-`n`,`open` to `o`, and `edit` to `e`. Please note that dots can't be used in project
-names as tmux uses them internally to delimit between windows and panes.
-Your default editor (`$EDITOR`) is used to open the file.
+Use `tmuxinator open [project]` to create or open a config in your editor, or
+`tmuxinator edit [project]` to edit an existing config without creating a new
+one. `new` is aliased to `n`, `open` to `o`, and `edit` to `e`. Please note
+that dots can't be used in project names as tmux uses them internally to
+delimit between windows and panes. Your default editor (`$EDITOR`) is used to
+open the file.
 If this is a new project you will see this default config:
 
 ```yaml
