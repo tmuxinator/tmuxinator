@@ -79,7 +79,7 @@ module Tmuxinator
     map "n" => :new
     method_option :local, type: :boolean,
                           aliases: ["-l"],
-                          desc: "Create local project file at ./.tmuxinator.yml"
+                          desc: "Use local project file at ./.tmuxinator.yml"
     method_option :help, type: :boolean,
                          aliases: ["-h"],
                          desc: "Display usage information"
@@ -101,7 +101,7 @@ module Tmuxinator
     map "o" => :open
     method_option :local, type: :boolean,
                           aliases: ["-l"],
-                          desc: "Create local project file at ./.tmuxinator.yml"
+                          desc: "Use local project file at ./.tmuxinator.yml"
     method_option :help, type: :boolean,
                          aliases: ["-h"],
                          desc: "Display usage information"
@@ -119,7 +119,7 @@ module Tmuxinator
     map "e" => :edit
     method_option :local, type: :boolean,
                           aliases: ["-l"],
-                          desc: "Create local project file at ./.tmuxinator.yml"
+                          desc: "Use local project file at ./.tmuxinator.yml"
     method_option :help, type: :boolean,
                          aliases: ["-h"],
                          desc: "Display usage information"

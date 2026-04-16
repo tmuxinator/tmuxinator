@@ -522,6 +522,7 @@ describe Tmuxinator::Cli do
         ARGV.replace(["edit", "--help"])
         out, _err = capture_io { cli.start }
         expect(out).to include("edit [PROJECT]")
+        expect(out).to include("Use local project file at ./.tmuxinator.yml")
         expect(out).to include("Options:")
       end
     end
@@ -584,6 +585,7 @@ describe Tmuxinator::Cli do
         ARGV.replace(["open", "--help"])
         out, _err = capture_io { cli.start }
         expect(out).to include("open [PROJECT]")
+        expect(out).to include("Use local project file at ./.tmuxinator.yml")
         expect(out).to include("Options:")
       end
     end
@@ -646,6 +648,7 @@ describe Tmuxinator::Cli do
         ARGV.replace(["new", "--help"])
         out, _err = capture_io { cli.start }
         expect(out).to include("new [PROJECT]")
+        expect(out).to include("Use local project file at ./.tmuxinator.yml")
         expect(out).to include("Options:")
       end
     end
