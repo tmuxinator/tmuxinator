@@ -2,6 +2,10 @@
 ### Features
 
 - Add ability to focus panes via `focused_pane`
+### Fixes
+
+- Reintroduce `open` as an explicit create-or-open editor command
+- Reintroduce `edit` as an explicit existing-config editor command
 
 ## 3.3.8
 ### Features

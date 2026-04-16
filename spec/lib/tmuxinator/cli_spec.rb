@@ -517,6 +517,16 @@ describe Tmuxinator::Cli do
     let(:name) { "test" }
     let(:path) { Tmuxinator::Config.default_project(name) }
 
+    context "with --help flag" do
+      it "shows help instead of editing a project" do
+        ARGV.replace(["edit", "--help"])
+        out, _err = capture_io { cli.start }
+        expect(out).to include("edit [PROJECT]")
+        expect(out).to include("Use local project file at ./.tmuxinator.yml")
+        expect(out).to include("Options:")
+      end
+    end
+
     context "when the project file _does_ already exist" do
       let(:extra) { "  - extra: echo 'foobar'" }
 
@@ -545,6 +555,84 @@ describe Tmuxinator::Cli do
         expect(File.read(path)).to match %r{#{extra}}
       end
     end
+
+    context "when the project file does not already exist" do
+      let(:path) { File.join(Dir.tmpdir, "#{name}.yml") }
+
+      before do
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        ARGV.replace(["edit", name])
+        allow(File).to receive(:exist?).with(anything).and_call_original
+        allow(File).to receive(:exist?).with(path).and_return(false)
+      end
+
+      it "exits instead of generating a project file" do
+        expect { cli.start }.to raise_error(SystemExit)
+        expect(File).not_to exist(path)
+      end
+    end
+  end
+
+  describe "#open" do
+    let(:file) { StringIO.new }
+    let(:name) { "test" }
+    let(:path) { Tmuxinator::Config.default_project(name) }
+
+    context "with --help flag" do
+      it "shows help instead of opening a project" do
+        ARGV.replace(["open", "--help"])
+        out, _err = capture_io { cli.start }
+        expect(out).to include("open [PROJECT]")
+        expect(out).to include("Use local project file at ./.tmuxinator.yml")
+        expect(out).to include("Options:")
+      end
+    end
+
+    context "when the project file does not already exist" do
+      before do
+        ARGV.replace(["open", name])
+        allow(File).to receive(:open) { |&block| block.yield file }
+        allow(File).to receive(:exist?).with(anything).and_return(false)
+      end
+
+      it "creates and opens a tmuxinator project file" do
+        expect(Kernel).to receive(:system).with(%r{#{path}})
+
+        capture_io { cli.start }
+
+        expect(file.string).to_not be_empty
+      end
+    end
+
+    context "when the project file already exists" do
+      let(:extra) { "  - extra: echo 'foobar'" }
+      let(:path) { File.join(Dir.tmpdir, "#{name}.yml") }
+
+      before do
+        allow(Tmuxinator::Config).to receive(:default_project).and_call_original
+        allow(Tmuxinator::Config).to receive(:default_project).
+          with(name).and_return(path)
+        FileUtils.remove_file(path) if File.exist?(path)
+        expect(described_class.new.generate_project_file(name, path)).to eq path
+
+        File.open(path, "w") do |f|
+          f.write(extra)
+          f.flush
+        end
+
+        ARGV.replace(["open", name])
+      end
+
+      it "opens the existing project file without replacing it" do
+        expect(Kernel).to receive(:system).with(%r{#{path}})
+
+        capture_io { cli.start }
+
+        expect(File.read(path)).to match %r{#{extra}}
+      end
+    end
   end
 
   describe "#new" do
@@ -560,6 +648,7 @@ describe Tmuxinator::Cli do
         ARGV.replace(["new", "--help"])
         out, _err = capture_io { cli.start }
         expect(out).to include("new [PROJECT]")
+        expect(out).to include("Use local project file at ./.tmuxinator.yml")
         expect(out).to include("Options:")
       end
     end
