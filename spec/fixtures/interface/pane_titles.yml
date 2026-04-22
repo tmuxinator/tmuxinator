@@ -1,0 +1,11 @@
+name: pane-titles
+root: /workspace/pane-titles
+tmux_options: -L interface
+enable_pane_titles: true
+pane_title_position: bottom
+pane_title_format: "[ #T ]"
+windows:
+  - editor:
+      panes:
+        - editor: bundle exec vim
+        - logs: tail -f log/test.log

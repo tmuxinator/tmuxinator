@@ -1,0 +1,14 @@
+name: basic
+root: /workspace/basic
+tmux_options: -L interface
+pre_window: bundle exec ruby -v
+windows:
+  - editor:
+      root: app
+      panes:
+        - bundle exec vim
+        - bundle exec rake test
+  - shell:
+      root: .
+      panes:
+        - bin/setup

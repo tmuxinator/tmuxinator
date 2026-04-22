@@ -717,27 +717,34 @@ describe Tmuxinator::Cli do
 
     # this command variant only works for tmux version 1.6 and up.
     context "from a session" do
-      context "with tmux >= 1.6", if: Tmuxinator::Config.version >= 1.6 do
+      context "with tmux >= 1.6" do
+        let(:success_status) { instance_double(Process::Status, success?: true) }
+        let(:failure_status) { instance_double(Process::Status, success?: false) }
+
         before do
-          # Necessary to make `Doctor.installed?` work in specs
-          allow(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
+          allow(Tmuxinator::Config).to receive(:version).and_return(1.6)
         end
 
         context "session exists" do
-          before(:all) do
-            # Can't add variables through `let` in `before :all`.
-            @session = "for-testing-tmuxinator"
-            # Pass the -d option, so that the session is not attached.
-            Kernel.system "tmux new-session -d -s #{@session}"
-          end
-
           before do
-            ARGV.replace ["new", name, @session]
-          end
-
-          after(:all) do
-            puts @session
-            Kernel.system "tmux kill-session -t #{@session}"
+            ARGV.replace ["new", name, "existing-session"]
+            allow(Open3).to receive(:capture3).and_return(
+              [
+                "editor tiled 1 /workspace/app\n",
+                "",
+                success_status,
+              ],
+              [
+                "editor /workspace/app\n",
+                "",
+                success_status,
+              ],
+              [
+                "default-path \"/workspace/app\"\n",
+                "",
+                success_status,
+              ]
+            )
           end
 
           it "creates a project file" do
@@ -751,6 +758,11 @@ describe Tmuxinator::Cli do
         context "session doesn't exist" do
           before do
             ARGV.replace ["new", name, "sessiondoesnotexist"]
+            allow(Open3).to receive(:capture3).and_return(
+              ["", "", failure_status],
+              ["", "", failure_status],
+              ["", "", failure_status]
+            )
           end
 
           it "fails" do
