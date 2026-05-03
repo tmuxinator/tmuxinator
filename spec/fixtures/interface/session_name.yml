@@ -1,0 +1,5 @@
+name: home.arpa:lab
+windows:
+  - main:
+      panes:
+        - echo ok
