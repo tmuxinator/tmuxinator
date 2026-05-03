@@ -232,6 +232,22 @@ describe Tmuxinator::Project do
       end
     end
 
+    context "with dots" do
+      it "uses the session name tmux creates" do
+        project.yaml["project_name"] = "home.arpa"
+
+        expect(project.name).to eq "home_arpa"
+      end
+    end
+
+    context "with colons" do
+      it "uses the session name tmux creates" do
+        project.yaml["project_name"] = "home:arpa"
+
+        expect(project.name).to eq "home_arpa"
+      end
+    end
+
     context "as emoji" do
       it "will gracefully handle a name given as an emoji" do
         rendered = project_with_emoji_as_name

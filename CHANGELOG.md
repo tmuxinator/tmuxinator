@@ -6,6 +6,7 @@
 
 - Reintroduce `open` as an explicit create-or-open editor command
 - Reintroduce `edit` as an explicit existing-config editor command
+- Normalize project session names containing `.` or `:` to match tmux-created session names
 
 ## 3.3.8
 ### Features
