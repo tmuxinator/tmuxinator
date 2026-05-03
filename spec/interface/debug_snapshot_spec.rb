@@ -48,4 +48,18 @@ describe "tmuxinator debug snapshots" do
       end
     end
   end
+
+  it "normalizes tmux session targets for project names with separators" do
+    allow(Tmuxinator::Config).to receive(:version).and_return(2.6)
+
+    ARGV.replace([
+                   "debug",
+                   "--project-config=spec/fixtures/interface/session_name.yml"
+                 ])
+    output, _err = capture_io { cli.start }
+
+    snapshot_path = File.join(snapshot_root, "2.6", "session_name.sh")
+
+    expect(output).to eq("#{File.read(snapshot_path)}\n")
+  end
 end
