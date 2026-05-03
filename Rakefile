@@ -5,6 +5,16 @@ require "rubocop/rake_task"
 require "rspec/core/rake_task"
 
 RuboCop::RakeTask.new
-RSpec::Core::RakeTask.new
+RSpec::Core::RakeTask.new(:unit) do |task|
+  task.pattern = "spec/lib/**/*_spec.rb"
+end
 
-task test: ["spec", "rubocop"]
+RSpec::Core::RakeTask.new(:interface) do |task|
+  task.pattern = "spec/interface/**/*_spec.rb"
+end
+
+task lint: :rubocop
+
+task test: ["lint", "unit", "interface"]
+
+task default: :test

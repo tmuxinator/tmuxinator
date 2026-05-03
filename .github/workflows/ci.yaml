@@ -1,93 +1,82 @@
+---
 # continuous integration workflow based on old travis-ci configuration
 
-name: Integration Tests
-on:
-  - push
-  - pull_request
+name: CI
+
+"on":
+  push:
+    branches:
+      - master
+  pull_request:
+
 jobs:
-  test:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.1'
+          bundler-cache: true
+
+      - name: Lint
+        run: bundle exec rake lint
+
+  unit:
+    needs: lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.1'
+          bundler-cache: true
+
+      - name: Unit tests
+        run: bundle exec rake unit
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          flag-name: unit
+
+  interface:
+    needs: unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.1'
+          bundler-cache: true
+
+      - name: Interface snapshots
+        run: bundle exec rake interface
+
+  ruby-compatibility:
+    needs: interface
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        ruby_version:
-          - '4.0.1'
+        ruby-version:
           - '3.4.8'
           - '3.3.10'
           - '3.2.10'
-        tmux_version:
-          - '3.6a'
-          - '3.6'
-          - '3.5a'
-          - '3.5'
-          - '3.4'
-          - '3.3a'
-          - '3.3'
-          - '3.2a'
-          - '3.2'
-          - '3.1c'
-          - '3.1b'
-          - '3.1a'
-          - '3.1'
-          - '3.0a'
-          - '3.0'
-          - '2.9a'
-          - '2.9'
-          - '2.8'
-          - '2.7'
-          - '2.6'
-          - '2.5'
-          - '2.4'
-          - '2.3'
-          - '2.2'
-          - '2.1'
-          - '2.0'
-          - '1.9'
-          - '1.8'
-          - '1.7'
-          - '1.6'
-          - '1.5'
-
     steps:
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby_version }}
-        bundler-cache: true
+      - uses: actions/checkout@v6
 
-    - name: "Install tmux ${{ matrix.tmux_version }}"
-      run: |
-        # build dependencies
-        sudo apt-get update -qq
-        # note: pkg-config must be installed before dep libs or the build fails
-        sudo apt-get install -y -qq pkg-config build-essential autoconf automake bison git
-        sudo apt-get install -y libevent-dev libncurses-dev
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
 
-        # build and install tmux
-        git clone https://github.com/tmux/tmux.git tmux
-        cd tmux
-        git checkout ${{ matrix.tmux_version }}
-        bash autogen.sh
-        bash ./configure && make && sudo make install
-        cd ..
-        tmux -V
-
-    - uses: actions/checkout@v6
-    - name: "Test ruby ${{ matrix.ruby_version }} tmux ${{ matrix.tmux_version }}"
-      run: |
-        bundle install
-        bundle exec rake test
-    - name: Coveralls
-      uses: coverallsapp/github-action@v2
-      with:
-        flag-name: run-${{ join(matrix.*, '-') }}
-        parallel: true
-  finish:
-    needs: test
-    if: ${{ always() }}
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v2
-      with:
-        parallel-finished: true
-        carryforward: "run-3.3.5-1.5,run-3.3.5-2.6,run-3.3.5-3.5a"
+      - name: Compatibility tests
+        run: |
+          bundle exec rake unit
+          bundle exec rake interface
