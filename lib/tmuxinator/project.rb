@@ -155,7 +155,7 @@ module Tmuxinator
           custom_name || yaml["project_name"] || yaml["name"]
         end
 
-      blank?(name) ? nil : name.to_s.shellescape
+      blank?(name) ? nil : name.to_s.tr(".:", "__").shellescape
     end
 
     def append?
