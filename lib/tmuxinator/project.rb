@@ -429,6 +429,44 @@ module Tmuxinator
       )
     end
 
+    def dancing_cow_enabled?
+      yaml["dancing_cow"]
+    end
+
+    def dancing_cow_window_name
+      yaml["dancing_cow_window"] || "dancing_cow"
+    end
+
+    def dancing_cow_animation_speed
+      yaml["dancing_cow_speed"] || 1
+    end
+
+    def tmux_dancing_cow_window_command
+      return "" unless dancing_cow_enabled?
+
+      window_name = dancing_cow_window_name
+      "#{tmux} new-window -t #{name} -n #{window_name}"
+    end
+
+    def tmux_dancing_cow_command
+      return "" unless dancing_cow_enabled?
+
+      window_name = dancing_cow_window_name
+      pane_target = "#{name}:#{window_name}"
+      speed = dancing_cow_animation_speed
+
+      # Create a script that displays the dancing cow
+      script = "while true; do "
+      Tmuxinator::DancingCow.all_frames.each_with_index do |_frame, index|
+        script += "clear; "
+        script += Tmuxinator::DancingCow.display_command(pane_target, index)
+        script += "; sleep #{speed}; "
+      end
+      script += "done"
+
+      "#{tmux} send-keys -t #{pane_target} '#{script}' C-m"
+    end
+
     private
 
     def blank?(object)
