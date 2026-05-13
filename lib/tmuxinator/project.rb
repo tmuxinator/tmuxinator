@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+require 'pry-byebug'
+
+
 
 module Tmuxinator
   class Project
@@ -48,8 +51,16 @@ module Tmuxinator
           @settings = parse_settings(args)
           @args = args
 
-          content = render_template(path, binding)
-          YAML.safe_load(content, aliases: true)
+          project_content = render_template(path, binding)
+          project_yaml = YAML.safe_load(project_content, aliases: true)
+          partials = (project_yaml.fetch("partials", []) || [])
+          partial_yamls = partials.reduce({}) do |memo, partial|
+            partial_content = render_template(partial, binding)
+            partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
+            memo.merge(partial_yaml_)
+          end
+
+          partial_yamls.merge(project_yaml)
         rescue SyntaxError, StandardError => e
           raise "Failed to parse config file: #{e.message}"
         end
