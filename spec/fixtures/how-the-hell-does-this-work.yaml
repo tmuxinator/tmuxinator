@@ -1,0 +1,2 @@
+pre:
+  - echo "partial_is_working"

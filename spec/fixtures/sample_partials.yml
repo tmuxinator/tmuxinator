@@ -1,0 +1,18 @@
+# ~/.tmuxinator/sample.yml
+# you can make as many tabs as you wish...
+
+partials:
+  - spec/fixtures/how-the-hell-does-this-work.yaml
+name: sample_partials
+root: ~/test
+windows:
+  - editor:
+      layout: main-vertical
+      panes:
+        - vim
+        - #empty, will just run plain bash
+        - top
+        - pane_with_multiple_commands:
+            - ssh server
+            - echo "Hello"
+  - guard:
