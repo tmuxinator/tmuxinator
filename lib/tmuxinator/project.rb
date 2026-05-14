@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-require 'pry-byebug'
-
-
 
 module Tmuxinator
   class Project
@@ -53,8 +50,8 @@ module Tmuxinator
 
           project_content = render_template(path, binding)
           project_yaml = YAML.safe_load(project_content, aliases: true)
-          partials = (project_yaml.fetch("partials", []) || [])
-          partial_yamls = partials.reduce({}) do |memo, partial|
+          partials = project_yaml.fetch("partials") || []
+          partial_yamls = partials.inject({}) do |memo, partial|
             partial_content = render_template(partial, binding)
             partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
             memo.merge(partial_yaml_)
