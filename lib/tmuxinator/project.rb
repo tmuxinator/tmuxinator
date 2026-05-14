@@ -50,19 +50,28 @@ module Tmuxinator
 
           project_content = render_template(path, binding)
           project_yaml = YAML.safe_load(project_content, aliases: true)
-          partials = project_yaml.fetch("partials") || []
-          partial_yamls = partials.inject({}) do |memo, partial|
-            partial_content = render_template(partial, binding)
-            partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
-            memo.merge(partial_yaml_)
-          end
 
-          partial_yamls.merge(project_yaml)
+          # NOTE: It should be safe to always do the merge in load_partials
+          # and return whatever comes back but maybe it's better to be explicit
+          if (partial_yamls = load_partials(project_yaml))
+            partial_yamls.merge(project_yaml)
+          else
+            project_yaml
+          end
         rescue SyntaxError, StandardError => e
           raise "Failed to parse config file: #{e.message}"
         end
 
         new(yaml, options)
+      end
+
+      def load_partials(project_yaml)
+        partials = project_yaml.fetch("partials", []) || []
+        partials.inject({}) do |memo, partial|
+          partial_content = render_template(partial, binding)
+          partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
+          memo.merge(partial_yaml_)
+        end
       end
 
       def parse_settings(args)

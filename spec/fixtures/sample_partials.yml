@@ -2,7 +2,7 @@
 # you can make as many tabs as you wish...
 
 partials:
-  - spec/fixtures/how-the-hell-does-this-work.yaml
+  - spec/fixtures/sample_partial.yml
 name: sample_partials
 root: ~/test
 windows:
