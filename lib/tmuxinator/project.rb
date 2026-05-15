@@ -48,13 +48,43 @@ module Tmuxinator
           @settings = parse_settings(args)
           @args = args
 
-          content = render_template(path, binding)
-          YAML.safe_load(content, aliases: true)
+          project_content = render_template(path, binding)
+          project_yaml = YAML.safe_load(project_content, aliases: true)
+
+          load_and_merge_partials(project_yaml)
         rescue SyntaxError, StandardError => e
           raise "Failed to parse config file: #{e.message}"
         end
 
         new(yaml, options)
+      end
+
+      def load_partials(project_yaml)
+        partials = project_yaml.fetch("partials", []) || []
+        partials.inject({}) do |memo, partial|
+          partial_content = render_template(partial, binding)
+          partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
+          memo.merge(partial_yaml_)
+        end
+      end
+
+      def load_and_merge_partials(project_yaml)
+        partial_yamls = load_partials(project_yaml)
+        # partial_yamls should always be safe to merge against
+        # The merge block currently exists to ensure that windows arrays are
+        # composed instead of clobbered. This first version is naive and
+        # doesn't attempt to merge windows contents and accumulates them. The
+        # result is that you may wind up with multiple windows with the same
+        # name and, perhaps, the same content. This is better than clobbering
+        # windows as partials are processed but the ideal is probably to merge
+        # and dedupe like-windows. We'll see ...
+        partial_yamls.merge(project_yaml) do |_key, partial_val, project_val|
+          if partial_val.is_a?(Array) && project_val.is_a?(Array)
+            partial_val + project_val
+          else
+            project_val
+          end
+        end
       end
 
       def parse_settings(args)

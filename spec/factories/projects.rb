@@ -108,6 +108,14 @@ FactoryBot.define do
     initialize_with { Tmuxinator::Project.new(file) }
   end
 
+  factory :project_with_partials, class: Tmuxinator::Project do
+    transient do
+      file { "spec/fixtures/sample_partials.yml" }
+    end
+
+    initialize_with { Tmuxinator::Project.load(file) }
+  end
+
   factory :project_with_alias, class: Tmuxinator::Project do
     transient do
       file { "spec/fixtures/sample_alias.yml" }

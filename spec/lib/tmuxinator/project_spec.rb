@@ -33,6 +33,10 @@ describe Tmuxinator::Project do
     FactoryBot.build(:nameless_window_project)
   end
 
+  let(:project_with_partials) do
+    FactoryBot.build(:project_with_partials)
+  end
+
   let(:project_with_alias) do
     FactoryBot.build(:project_with_alias)
   end
@@ -115,6 +119,14 @@ describe Tmuxinator::Project do
         expect(rendered).to_not be_empty
         expect(rendered).to include("custom")
         expect(rendered).to_not include("sample")
+      end
+    end
+
+    context "with partials" do
+      it "renders the tmux config" do
+        rendered = project_with_partials.render
+        expect(rendered).to_not be_empty
+        expect(rendered).to include("partial_is_working")
       end
     end
 
