@@ -1,0 +1,7 @@
+name: array-panes
+root: /workspace/array-panes
+tmux_options: -L interface
+windows:
+  - shell:
+      panes:
+        - [["bundle exec rails console", "--sandbox"]]
