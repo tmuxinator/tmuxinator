@@ -26,7 +26,7 @@ module Tmuxinator
 
     def tmux_main_command(command)
       if command
-        _send_target(command.shellescape)
+        _send_target(shellescape(command))
       else
         ""
       end
@@ -62,6 +62,14 @@ module Tmuxinator
     end
 
     private
+
+    def shellescape(command)
+      if command.is_a?(Array)
+        Shellwords.shelljoin(command)
+      else
+        Shellwords.shellescape(command)
+      end
+    end
 
     def _send_target(keys)
       _send_keys(tmux_window_and_pane_target, keys)

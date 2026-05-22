@@ -36,6 +36,14 @@ describe Tmuxinator::Pane do
     expect(subject.tmux_set_title).to be_nil
   end
 
+  describe "#tmux_main_command" do
+    it "escapes array commands with Shellwords" do
+      expect(subject.tmux_main_command(["echo hello", "echo world"])).to eql(
+        "tmux send-keys -t foo:0.1 echo\\ hello echo\\ world C-m"
+      )
+    end
+  end
+
   context "when title is provided" do
     subject { instance_with_title }
 
