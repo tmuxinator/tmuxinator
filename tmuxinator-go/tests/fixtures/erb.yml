@@ -1,0 +1,10 @@
+# ERB template test - uses @args and @settings
+
+name: erbtest
+root: <%= @settings["root"] || "~/projects" %>
+
+windows:
+  - editor: <%= @args[0] || "vim" %>
+  - server: bundle exec rails s -p <%= @settings["port"] || "3000" %>
+  - shell: echo "Hello from <%= ENV["USER"] %>"
+

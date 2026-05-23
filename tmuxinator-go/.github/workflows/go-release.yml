@@ -1,0 +1,76 @@
+name: Go Release
+
+on:
+  push:
+    tags:
+      - 'go/v*'
+
+defaults:
+  run:
+    working-directory: tmuxinator-go
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/go/v}" >> $GITHUB_OUTPUT
+
+      - name: Build release binaries
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }} make release
+
+      - name: Create checksums
+        run: |
+          cd build
+          sha256sum tmuxinator-* > checksums.txt
+          cat checksums.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "tmuxinator Go v${{ steps.version.outputs.VERSION }}"
+          body: |
+            ## tmuxinator Go v${{ steps.version.outputs.VERSION }}
+
+            This is the Go rewrite of tmuxinator. See [MIGRATION.md](tmuxinator-go/MIGRATION.md) for upgrade instructions.
+
+            ### Downloads
+
+            | Platform | Architecture | File |
+            |----------|-------------|------|
+            | macOS | Intel (amd64) | `tmuxinator-darwin-amd64` |
+            | macOS | Apple Silicon (arm64) | `tmuxinator-darwin-arm64` |
+            | Linux | amd64 | `tmuxinator-linux-amd64` |
+            | Linux | arm64 | `tmuxinator-linux-arm64` |
+            | Windows | amd64 | `tmuxinator-windows-amd64.exe` |
+
+            ### Quick Install
+
+            ```bash
+            # macOS (Apple Silicon)
+            curl -L https://github.com/tmuxinator/tmuxinator/releases/download/go/v${{ steps.version.outputs.VERSION }}/tmuxinator-darwin-arm64 \
+              -o /usr/local/bin/tmuxinator && chmod +x /usr/local/bin/tmuxinator
+            ```
+          files: |
+            tmuxinator-go/build/tmuxinator-darwin-amd64
+            tmuxinator-go/build/tmuxinator-darwin-arm64
+            tmuxinator-go/build/tmuxinator-linux-amd64
+            tmuxinator-go/build/tmuxinator-linux-arm64
+            tmuxinator-go/build/tmuxinator-windows-amd64.exe
+            tmuxinator-go/build/checksums.txt
+          draft: false
+          prerelease: false
+

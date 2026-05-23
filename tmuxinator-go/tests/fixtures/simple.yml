@@ -1,0 +1,10 @@
+# Simple tmuxinator project for testing
+
+name: simple
+root: ~/projects/simple
+
+windows:
+  - editor: vim
+  - server: bundle exec rails s
+  - logs: tail -f log/development.log
+

@@ -1,0 +1,58 @@
+# Complex tmuxinator project for testing - exercises all features
+
+name: complex
+root: ~/projects/complex
+
+socket_name: myapp
+
+tmux_options: -f ~/.tmux.conf
+
+pre_window: rbenv shell 2.0.0-p247
+
+on_project_start: echo "Starting complex project"
+on_project_first_start: bundle install
+on_project_restart: echo "Restarting"
+on_project_exit: echo "Exiting"
+on_project_stop: echo "Stopping"
+
+startup_window: editor
+startup_pane: 1
+
+attach: false
+
+enable_pane_titles: true
+pane_title_position: top
+pane_title_format: "#{pane_index}: #{pane_title}"
+
+windows:
+  - editor:
+      layout: main-vertical
+      focused_pane: 0
+      panes:
+        - editor: vim
+        - guard: bundle exec guard
+        - top
+
+  - server:
+      layout: even-horizontal
+      panes:
+        - rails: bundle exec rails s
+        - sidekiq: bundle exec sidekiq
+
+  - database:
+      layout: tiled
+      synchronize: after
+      panes:
+        - psql
+        - redis-cli
+
+  - logs:
+      layout: even-vertical
+      panes:
+        - tail -f log/development.log
+        - tail -f log/test.log
+
+  - shell:
+    - git pull
+    - git status
+

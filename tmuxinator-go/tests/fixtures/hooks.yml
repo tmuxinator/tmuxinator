@@ -1,0 +1,22 @@
+# Hooks test fixture
+
+name: hooks
+root: ~/projects/hooks
+
+on_project_start:
+  - echo "hook: project start 1"
+  - echo "hook: project start 2"
+
+on_project_first_start: echo "hook: first start"
+
+on_project_restart: echo "hook: restart"
+
+on_project_exit: echo "hook: exit"
+
+on_project_stop:
+  - echo "hook: stop 1"
+  - echo "hook: stop 2"
+
+windows:
+  - main: echo "running"
+

@@ -1,0 +1,46 @@
+# Panes test fixture - exercises all pane features
+
+name: panes
+root: ~/projects/panes
+
+pre_window: echo "pre window"
+
+windows:
+  - main:
+      layout: main-vertical
+      focused_pane: editor
+      panes:
+        - editor: vim
+        - guard: bundle exec guard
+        - top
+
+  - split:
+      layout: even-horizontal
+      panes:
+        - left: echo "left"
+        - right: echo "right"
+
+  - tiled:
+      layout: tiled
+      panes:
+        - echo "pane 1"
+        - echo "pane 2"
+        - echo "pane 3"
+        - echo "pane 4"
+
+  - with_pre:
+      pre: echo "window pre"
+      layout: main-vertical
+      panes:
+        - vim
+        - bash
+
+  - titled:
+      layout: even-horizontal
+      panes:
+        - editor:
+            - vim
+            - echo "editor ready"
+        - terminal:
+            - bash
+
