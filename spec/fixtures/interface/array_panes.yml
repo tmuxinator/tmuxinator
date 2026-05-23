@@ -4,4 +4,6 @@ tmux_options: -L interface
 windows:
   - shell:
       panes:
-        - [["bundle exec rails console", "--sandbox"]]
+        - commands:
+            - echo hello
+            - echo world

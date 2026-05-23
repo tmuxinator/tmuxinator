@@ -32,7 +32,8 @@ cd /workspace/array-panes
   # Window "shell"
 
 
-  tmux -L interface send-keys -t array-panes:0.0 bundle\ exec\ rails\ console --sandbox C-m
+  tmux -L interface send-keys -t array-panes:0.0 echo\ hello C-m
+  tmux -L interface send-keys -t array-panes:0.0 echo\ world C-m
 
   tmux -L interface select-layout -t array-panes:0 tiled
 
