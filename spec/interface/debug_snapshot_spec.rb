@@ -6,6 +6,14 @@ describe "tmuxinator debug snapshots" do
   let(:cli) { Tmuxinator::Cli }
   let(:snapshot_root) { File.expand_path("../snapshots/debug", __dir__) }
 
+  def expect_snapshot(output, snapshot_path)
+    if ENV["UPDATE_SNAPSHOTS"]
+      File.write(snapshot_path, output.delete_suffix("\n"))
+    else
+      expect(output).to eq("#{File.read(snapshot_path)}\n")
+    end
+  end
+
   around do |example|
     original_argv = ARGV.dup
     example.run
@@ -44,7 +52,7 @@ describe "tmuxinator debug snapshots" do
           "#{fixture_name}.sh"
         )
 
-        expect(output).to eq("#{File.read(snapshot_path)}\n")
+        expect_snapshot(output, snapshot_path)
       end
     end
   end
@@ -60,6 +68,6 @@ describe "tmuxinator debug snapshots" do
 
     snapshot_path = File.join(snapshot_root, "2.6", "session_name.sh")
 
-    expect(output).to eq("#{File.read(snapshot_path)}\n")
+    expect_snapshot(output, snapshot_path)
   end
 end

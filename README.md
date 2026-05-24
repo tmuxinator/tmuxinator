@@ -483,6 +483,21 @@ When this occurs, try putting your commands in a separate script and calling tha
 
 To contribute, please read the [contributing guide](https://github.com/tmuxinator/tmuxinator/blob/master/CONTRIBUTING.md).
 
+### Interface snapshots
+
+Run the interface snapshot tests with:
+
+```bash
+bundle exec rake interface
+```
+
+When an intentional change affects the generated shell script output, regenerate
+the snapshots with:
+
+```bash
+UPDATE_SNAPSHOTS=1 bundle exec rake interface
+```
+
 ## Copyright
 
 Copyright (c) 2010-2025 Allen Bargi, Christopher Chow. See LICENSE for further details.

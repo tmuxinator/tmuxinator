@@ -1,5 +1,6 @@
 ## Unreleased
 ### Misc
+- Add `UPDATE_SNAPSHOTS` support for regenerating interface snapshots
 - Update Ruby versions tested in CI interface tests
 
 ## 3.4.0
