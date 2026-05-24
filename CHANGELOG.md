@@ -1,5 +1,6 @@
 ## Unreleased
-
+### Misc
+- Update Ruby versions tested in CI interface tests
 
 ## 3.4.0
 ### Features
