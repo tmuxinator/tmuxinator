@@ -11,4 +11,6 @@ windows:
   - shell:
       root: .
       panes:
-        - bin/setup
+        - commands:
+            - bin/setup
+            - bundle exec rake test

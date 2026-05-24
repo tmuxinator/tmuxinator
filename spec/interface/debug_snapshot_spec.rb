@@ -30,7 +30,6 @@ describe "tmuxinator debug snapshots" do
   }.each do |version_label, version|
     {
       "basic" => "spec/fixtures/interface/basic.yml",
-      "array_panes" => "spec/fixtures/interface/array_panes.yml",
       "pane_titles" => "spec/fixtures/interface/pane_titles.yml",
     }.each do |fixture_name, fixture_path|
       it "matches #{fixture_name} output for tmux #{version_label}" do

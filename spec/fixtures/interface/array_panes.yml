@@ -1,9 +1,0 @@
-name: array-panes
-root: /workspace/array-panes
-tmux_options: -L interface
-windows:
-  - shell:
-      panes:
-        - commands:
-            - echo hello
-            - echo world
