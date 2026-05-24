@@ -50,6 +50,7 @@ cd /workspace/basic
 
   tmux -L interface send-keys -t basic:1.0 bundle\ exec\ ruby\ -v C-m
   tmux -L interface send-keys -t basic:1.0 bin/setup C-m
+  tmux -L interface send-keys -t basic:1.0 bundle\ exec\ rake\ test C-m
 
   tmux -L interface select-layout -t basic:1 tiled
 

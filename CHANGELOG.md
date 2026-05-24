@@ -1,5 +1,6 @@
 ## Unreleased
 ### Misc
+- Update interface snapshots for the basic fixture commands pane
 - Add `UPDATE_SNAPSHOTS` support for regenerating interface snapshots
 - Update Ruby versions tested in CI interface tests
 
