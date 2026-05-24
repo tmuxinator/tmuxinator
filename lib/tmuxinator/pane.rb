@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "shellwords"
+
 module Tmuxinator
   class Pane
     attr_reader :commands, :project, :index, :tab, :title
