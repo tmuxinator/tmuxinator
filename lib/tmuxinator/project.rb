@@ -85,8 +85,8 @@ module Tmuxinator
         # name and, perhaps, the same content. This is better than clobbering
         # windows as partials are processed but the ideal is probably to merge
         # and dedupe like-windows. We'll see ...
-        partial_yamls.merge(project_yaml) do |_key, partial_val, project_val|
-          if partial_val.is_a?(Array) && project_val.is_a?(Array)
+        partial_yamls.merge(project_yaml) do |key, partial_val, project_val|
+          if  partial_val.is_a?(Array) && project_val.is_a?(Array) && key == "windows"
             partial_val + project_val
           else
             project_val
