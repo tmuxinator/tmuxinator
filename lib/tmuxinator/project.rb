@@ -65,7 +65,7 @@ module Tmuxinator
         partials_ = partials.inject({}) do |memo, partial|
           partial_content = render_template(partial, binding)
           partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
-          if partial_yaml_.has_key?("windows")
+          if partial_yaml_.key?("windows")
             windows__ = partial_yaml_.delete("windows")
             windows_ += windows__
           end
@@ -86,7 +86,9 @@ module Tmuxinator
         # windows as partials are processed but the ideal is probably to merge
         # and dedupe like-windows. We'll see ...
         partial_yamls.merge(project_yaml) do |key, partial_val, project_val|
-          if  partial_val.is_a?(Array) && project_val.is_a?(Array) && key == "windows"
+          if  key == "windows" &&
+              partial_val.is_a?(Array) &&
+              project_val.is_a?(Array)
             partial_val + project_val
           else
             project_val
