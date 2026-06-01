@@ -61,11 +61,18 @@ module Tmuxinator
 
       def load_partials(project_yaml)
         partials = project_yaml.fetch("partials", []) || []
-        partials.inject({}) do |memo, partial|
+        windows_ = []
+        partials_ = partials.inject({}) do |memo, partial|
           partial_content = render_template(partial, binding)
           partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
+          if partial_yaml_.has_key?("windows")
+            windows__ = partial_yaml_.delete("windows")
+            windows_ += windows__
+          end
           memo.merge(partial_yaml_)
         end
+        partials_["windows"] = windows_
+        partials_
       end
 
       def load_and_merge_partials(project_yaml)
