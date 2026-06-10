@@ -62,7 +62,14 @@ module Tmuxinator
       def load_partials(project_yaml)
         partials = project_yaml.fetch("partials", []) || []
         windows_ = []
-        partials_ = partials.inject({}) do |memo, partial|
+        partial_config_paths = partials.map do |p|
+          if FileTest.exist?(p)
+            p
+          else
+            Tmuxinator::Config.valid_project_config?(p) && Tmuxinator::Config.global_project(p)
+          end
+        end
+        partial_yamls = partial_config_paths.inject({}) do |memo, partial|
           partial_content = render_template(partial, binding)
           partial_yaml_ = YAML.safe_load(partial_content, aliases: true)
           if partial_yaml_.key?("windows")
@@ -71,8 +78,8 @@ module Tmuxinator
           end
           memo.merge(partial_yaml_)
         end
-        partials_["windows"] = windows_
-        partials_
+        partial_yamls["windows"] = windows_
+        partial_yamls
       end
 
       def load_and_merge_partials(project_yaml)
