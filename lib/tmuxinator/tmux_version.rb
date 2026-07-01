@@ -3,6 +3,7 @@
 module Tmuxinator
   module TmuxVersion
     SUPPORTED_TMUX_VERSIONS = [
+      3.7,
       "3.6b",
       "3.6a",
       3.6,
