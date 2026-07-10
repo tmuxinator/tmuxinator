@@ -14,7 +14,9 @@ module Tmuxinator
     end
 
     def current_session_name
-      `[[ -n "${TMUX+set}" ]] && tmux display-message -p "#S"`.strip
+      return "" unless ENV.key?("TMUX")
+
+      `tmux display-message -p "#S"`.strip
     end
   end
 end
