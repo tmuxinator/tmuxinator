@@ -209,6 +209,7 @@ describe Tmuxinator::Config do
       "v3.7" => 3.7,
       "v3.7a" => 3.7,
       "v3.7b" => 3.7,
+      "v3.7c" => 3.7,
       "v3.12.0" => 3.12,
       "v3.12.5" => 3.12
     }.freeze
