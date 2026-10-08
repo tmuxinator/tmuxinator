@@ -1,185 +1,285 @@
 ## Unreleased
+
 ### Fixes
+
 - Avoid bash-only `[[` when resolving the current session name so `stop_all` works under POSIX `/bin/sh` (e.g. dash on Debian)
+
 ### Misc
-- Include tmux 3.7c in supported versions list
+
+- Include tmux 3.7c, and 3.8 in supported versions list
 
 ## 3.4.1
+
 ### Misc
+
 - Update interface snapshots for the basic fixture commands pane
 - Add `UPDATE_SNAPSHOTS` support for regenerating interface snapshots
 - Update Ruby versions tested in CI interface tests
 - Include tmux 3.7, 3.7a, and 3.7b in supported versions list
 
 ## 3.4.0
+
 ### Features
+
 - Add ability to focus panes via `focused_pane`
+
 ### Fixes
+
 - Reintroduce `open` as an explicit create-or-open editor command
 - Reintroduce `edit` as an explicit existing-config editor command
 - Normalize project session names containing `.` or `:` to match tmux-created session names
+
 ### Misc
+
 - Include tmux 3.6b in supported versions list
 
 ## 3.3.8
+
 ### Features
+
 - Add completion support for 'stop' command in tmuxinator
+
 ### Misc
+
 - Revert gemspec required ruby version to >= 2.6
 
 ## 3.3.7
+
 ## Misc
+
 - Update CI tmux versions to include 3.6a
 - Include tmux 3.6a in supported versions list
 
 ## 3.3.6
+
 ### Features
+
 - Add `help` to the list of commands output by `tmuxinator commands`
 - Add `--help`/`-h` flag support to subcommands (start, stop, new, debug, copy, delete, list) for easier access to command-specific help
+
 ## Misc
+
 - Update CI ruby versions to latest, remove Ruby 3.1
 - Update CI tmux versions to include 3.6
 - Include tmux 3.6 in supported versions list
 
 ## 3.3.5
+
 ## Misc
+
 - Add Ruby 3.4 to the test matrix
 - Document new from session feature in the README
-- Update required Ruby version to >=2.7 
+- Update required Ruby version to >=2.7
 - Update runtime dependencies to up-to-date versions
 - Update development dependencies to up-to-date versions
+
 ## Fixes
+
 - Properly pass args with equals (=) in their values
 - Fix `fish-shell` completion
+
 ### Features
+
 - Add support for tmuxinator stop-all
 
 ## 3.3.4
+
 ### Features
+
 - Add support for tmuxinator start --append
 - Add support for tmuxinator start --no-pre-window
+
 ### Fixes
+
 - Properly pass additional arguments to the start command when no command is given
+
 ### Misc
+
 - Fix code coverage reporting via coveralls, now with GitHub Actions
 
 ## 3.3.3
+
 ### Features
+
 - Add active (-a) option to tmuxinator list
 
 ## 3.3.2
+
 ### Misc
+
 - Bump patch versions of Ruby 3.1, 3.2, 3.3 in the test matrix
+
 ### tmux
+
 - Add tmux 3.5a to test matrix
 
 ## 3.3.1
+
 ### Misc
+
 - Update Ruby 3.1, 3.2, 3.3 in the test matrix; rm ruby 3.0
+
 ### tmux
+
 - Add tmux 3.5 to test matrix
 - Add tmux 3.5 to supported tmux versions list
+
 ### Fixes
+
 - Don't unset TMUX env variable for new-session
 
 ## 3.3.0
+
 ### Enhancements
+
 - Detect relative window root, join with project root
+
 ### Fixes
+
 - Session path is project root, not first window root
+
 ### Misc
+
 - Unpin activesupport as a development depenedency
 
 ## 3.2.1
+
 ### Enhancements
+
 - Use `tmux -c` if available to reduce spam
+
 ### Fixes
+
 - Fix pane title configuration options only applying to first window
 
 ## 3.2.0
+
 ### Third-party Dependencies
+
 - Replace erubis with erubi
 - Upgrade rubocop to 0.61 for Ruby > 3.0 support
+
 ### Enhancements
+
 - Add configuration options for pane titles
+
 ### Fixes
+
 - Shell escape pane titles to fix multi word and special character titles
 - Replace exists? with exist? for Ruby >= 3.2
+
 ### Misc
+
 - Remove `mux` alias from Fish and Bash completions
 - Add Ruby 3.2, 3.1 to the test matrix; rm ruby < 3>
 
 ## 3.1.2
+
 ### Fixes
+
 - Fix tmux 3.4 version in the supported versions list
 
 ## 3.1.1
+
 ### Enhancements
+
 - add support for stop command without project name
 - add support for optional `--project-config` flag to `tmuxinator stop` command
+
 ### Misc
+
 - Fix typos and remove extra whitespace
 - Set pane title if provided in config file
+
 ### tmux
+
 - Add tmux 3.4 to test matrix
 - Add tmux 3.4 to supported tmux versions list
 
 ## 3.1.0
+
 - add a FAQ entry about how long commands may be lost/corrupted by TTY typeahead
 - increment thor minor version in tmuxinator.gemspec
 
 ## 3.0.5
+
 ### tmux
+
 - add tmux 3.3a to (currently defunct) Travis test matrix; add 3.3a to supported tmux versions list
+
 ### CI
+
 - replace Travis CI config with GH Actions
 
 ## 3.0.4
+
 ### tmux
+
 - fix tmux 3.3 version detection
 
 ## 3.0.3
+
 ### Misc
+
 - use stable tmux links in README.md
+
 ### tmux
+
 - add tmux 3.3 to (currently defunct) Travis test matrix; add 3.3 to supported tmux versions list
 
 ## 3.0.2
+
 ### Third-party Dependencies
+
 - Bump Thor version to handle DidYouMean deprecation warning
 
-
 ## 3.0.1
+
 ### tmux
+
 - add tmux 3.2a to Travis test matrix; add 3.2a to supported tmux versions list
+
 ### Misc
+
 - add support for local project configs using the .yaml extension
 
 ## 3.0.0
+
 ### Misc
+
 - Deprecate Ruby 2.5; bump min Ruby version in gemspec; bump Ruby versions in Travis test matrix
 - Fix config file parsing error: wrong number of arguments (given 4, expected 1) (#819)
 
 ## 2.0.3
+
 ### Misc
+
 - Add Ruby 3 to the Travis test matrix
 - add support for tmux 3.2
 
 ## 2.0.2
+
 ### Misc
+
 - add tmux 3.1c to Travis CI test matrix
 - add Ruby support link and RVM/rbenv links to README (#707)
 - add tmux 3.1b to Travis CI test matrix
 - document support for unnamed windows in README (#773)
 
 ## 2.0.1
+
 ### Misc
+
 - add support for tmux 3.1b
 
 ## 2.0.0
+
 ### Security
+
 - bump rake development dependency version to address CVE-2020-8130
+
 ### Misc
+
 - add support for tmux 3.1a
 - document removal of Zsh mux alias; suggest users migrate to RC based aliases
 - synchronize project configs in README and sample.yml
@@ -187,125 +287,167 @@
 - bump patch versions of supported Rubies in gemspec and Travis config
 
 ## 1.1.5
+
 ### Misc
+
 - add support for tmux 3.1 (#754)
 - bump copyright year in README
 
 ## 1.1.4
+
 ### Misc
+
 - bump Thor version to ~> 1.0 in order to accommodate Arch package and ecosystem
-(#739)
+  (#739)
 - add Ruby 2.7.0 to Travis test matrix
 
 ### Bugfixes
+
 - fix various completion script issues (#705/#737)
 
 ## 1.1.3
+
 ### Bugfixes
+
 - correct edge tmux version detection (#728)
 
 ### Misc
+
 - document local project creation (#439)
 - add support for tmux 3.0 and 3.0a (#734)
 
 ## 1.1.2
+
 ### Bugfixes
+
 - prevent commands from being re-run when re-attaching to session using custom
-socket (#719)
+  socket (#719)
 
 ### Misc
+
 - add zshell completions for command aliases
 - add note to README which covers temporary workaround for layout issues (#651)
 
 ## 1.1.1
+
 ### Bugfixes
+
 - increase min XDG version in gemspec in order to exclude broken release (#708)
 
 ## 1.1.0
+
 ### Misc
+
 - add support for tmux 2.9a
 
 ## 1.0.0
+
 ### Misc
+
 - add support for tmux 2.9
 
 ## 0.16.0
+
 ### Bugfixes
+
 - fix wemux class_eval error (#590)
+
 ### Misc
+
 - drop support for ruby 2.3
 - bump required_ruby_version
 - bump test matrix patch versions
 - Add `-n, [--newline], [--no-newline]` flag for list command
-    Force output to be one entry per line
+  Force output to be one entry per line
 - make pre/post deprecation warnings more descriptive
 - remove pre/post from project configuration template
 - remove support for Ruby 2.2
 - bundler version constraint now supports bundler >= 2 (required by TravisCI)
 
 ## 0.15.0
+
 ### Misc
+
 - add support for Ruby 2.6 to the TravisCI test matrix
 - add support for project config files using .yaml extension (#663)
 - allow test suite to pass when $TMUXINATOR_CONFIG is set (#665)
 
 ## 0.14.0
+
 ### Misc
+
 - Add `--suppress-tmux-version-warning` flag to prevent tmux version warning (#583)
 - Separate version warning from deprecation messages
 - Add unsupported version warnings for `stop` and `local` as well
 - quiet deprecation warnings in test output (#619)
 - reword "Project Configuration Location" section of README to reflect current
-behavior (#621)
+  behavior (#621)
 - correct some type on readme about aliases (#660)
 
 ## 0.13.0
+
 ### Bugfixes
+
 - prevent optargs from being lost when using the project-config flag (#639)
 - Add support for tmux 2.8 (#653)
 
 ## 0.12.0
+
 ### Bugfixes
+
 - Fix zsh completion when there are no projects
 - Run stop hook before killing the session
 
 ### Misc
+
 - Allow YAML Anchors & Aliases as per [spec](http://yaml.org/spec/1.2/spec.html#id2765878)
 - Remove confusing README section about the pane-base-index and
   window-base-index options. These options can be set independently of one
   another now that #542 and #543 are merged.
 
 ## 0.11.3
+
 ### Misc
+
 - replace j3rn's email with ethagnawl's in COC
 - use correct paths in generated config file comment (#440)
 
 ### Bugfixes
+
 - fix "wrong namespace" RuboCop warnings (#620)
 - fix [#431](https://github.com/tmuxinator/tmuxinator/issues/431), where Thor-based commands (e.g. "-v", "help") were failing
 
 ## 0.11.2
+
 ### Bugfixes
+
 - Fix [#555](https://github.com/tmuxinator/tmuxinator/issues/555), restoring
   `on_project_exit` hook behaviour (same as deprecated `post`)
 
 ## 0.11.1
+
 ### Misc
+
 - Add support for tmux 2.7 (#611)
 - Fix load order when multiple versions of tmuxinator are installed (#603)
 
 ## 0.11.0
+
 ### Misc
+
 - Make Config#xdg comment reference correct XDG variable and include example of
   degenerate case (#597)
 - Introduce factory_bot, to replace factory_girl, which was renamed
   recently.
 - Add Ruby 2.5 to the TravisCI test matrix and bump patch level of existing Rubies
   (2.2, 2.3, 2.4)
+
 ### New Features
+
 - Add optional `--project-config=...` parameter to `tmuxinator start` (#595)
 
 ## 0.10.1
+
 - Handle emojis in project names (#564)
 - Fix remaining sites where the base-index option (for windows) was incorrectly
   used in place of the pane-base-index option.
@@ -315,6 +457,7 @@ behavior (#621)
 - Updates `rubocop` to resolve security vulnerability
 
 ## 0.10.0
+
 - Fix a bug causing the user's global pane-base-index setting not to be
   respected
 - Remove Object#blank? monkey patch (#458)
@@ -328,6 +471,7 @@ behavior (#621)
 - Fix a bug causing the pane-base-index option to override base-index
 
 ### Misc
+
 - Removed support for Ruby 1.9.3, 2.0, & 2.1
 - Move gem dependencies from Gemfile to tmuxinator.gemspec
 - Add tmux 2.2 and 2.3 the TravisCI test matrix
@@ -335,10 +479,13 @@ behavior (#621)
 - Support user-specified and XDG Base Dirs configuration directories
 
 ### New Features
+
 - add on_project_start, on_project_first_start, on_project_restart, on_project_exit and on_project_stop hooks for project
 
 ## 0.9.0
+
 ### Misc
+
 - Temporarily hiding Shorthand entry in README.md to prevent new bug reports
   about the mux symlink being broken
 - Use `alias` (bash, zsh) and `abbr` (fish) instead of a symlink to hash `mux`. #401
@@ -346,6 +493,7 @@ behavior (#621)
 - Refactor Config.root
 
 ### New Features
+
 - Allow multiple panes to be defined using yaml hash or array #266, #406
 - Add `startup_pane` #380
 - Add synchronizations panes support #97
@@ -353,17 +501,20 @@ behavior (#621)
 - Add deprecation warning if `synchronize: true` or `before` is used
 
 ### Bugfixes
+
 - Suppress `tmux ls` non-zero exit status/message when no sessions exist (#414)
 - Will no longer crash when no panes are specified in a window
 - Locking activesupport at < 5.0.0 to prevent broken builds on Ruby < 2.2.3
 - Fixed whitespace issues in help
 
 ## 0.8.1
+
 ### Bugfixes
 
 - Fixed broken shell completions
 
 ## 0.8.0
+
 ### New features
 
 - Add support for deleting multiple projects at once, using `mux delete <p1> <p2> ...`
@@ -376,13 +527,16 @@ behavior (#621)
 - Bugfix for using `mux delete` to delete local projects
 
 ## 0.7.2
+
 - Bugfix for attaching to sessions by prefix when running `start`
 - Bugfix for "pane could not be created" error
 
 ## 0.7.1
+
 - Bugfix where `mux open` or similar would delete the contents of the file
 
 ## 0.7.0
+
 ### New features
 
 - Add support for starting in detached mode #307
@@ -391,6 +545,7 @@ behavior (#621)
 - Support passing args on the command line #343 :tada:
 
 ### Bug fixes and Misc
+
 - Fix some RSpec deprecations
 - Explain what ERB is in the readme #319
 - Prevent project names containing only numbers from raising a NoMethodError #324
@@ -402,6 +557,7 @@ behavior (#621)
 - Add gitter badge
 
 ## 0.6.11
+
 - Add aliasing of projects to create multiple sessions for a single project #143, #273
 - ERB support for projects #267
 - Post and attach options #293
@@ -413,6 +569,7 @@ behavior (#621)
 - Fix error when no project name is provided #303
 
 ## 0.6.10
+
 - Interpret config file as ERB template #255
 - Fix zsh completions #262
 - Alias `e` to edit and `o` to open #275
@@ -423,6 +580,7 @@ behavior (#621)
 - Include completions in gemspec #270
 
 ## 0.6.9
+
 - Update to RSpec 3.x
 - Allow for earlier versions of thor #234, #235
 - Remove dependency on git and fix warnings in gemspec #232, #233, #239
@@ -434,6 +592,7 @@ behavior (#621)
 - Fix `copy` overwriting files #254, #258
 
 ## 0.6.8
+
 - Remove some duplication #212
 - Add wemux support #88 - Thanks to Andrew Thal (@athal7)
 - Fix typos in readme #217, #216
@@ -441,6 +600,7 @@ behavior (#621)
 - Fix specs not running due to changes in thor
 
 ## 0.6.7
+
 - Remove use of grep for base-index #171
 - Fix bugs in `Tmuxinator::Config.default?` #169
 - Fix path for Rails log in directory sample #177
@@ -454,6 +614,7 @@ behavior (#621)
 - Fix compatibility with tmux 1.9
 
 ## 0.6.6
+
 - Fix a bug caused by not escaping the root path #145
 - Fix bash completion with a single argument #148
 - Fix regression where an array of commands for a window wasn't working #149
@@ -465,6 +626,7 @@ behavior (#621)
 - Make multiple commands use tmux's `send-keys` rather than just using `&&` for both panes and windows #100
 
 ## 0.6.5
+
 - Change deprecation continue message from any key to just the enter key
 - Dramatically clean up the readme to be clearer for new users
 - Update the contributing guide with references to the GitHub styleguide and add examples of how to leave good commit messages
@@ -476,21 +638,25 @@ behavior (#621)
 - Fix an issue where command aliases were being ignored
 
 ## 0.6.4
+
 - Fixes broken backwards compatibility of multiple pre commands #129
 - Fixes tmuxinator ignoring project root when started from within a tmux session #132
 - Add gem version badge
 
 ## 0.6.3
+
 - Remove stray pry #128
 - Allow starting a tmuxinator project while inside a tmux session #130
 - Set the tmux layout after pane creation to avoid pane too small errors #131
 - Check for both pane-base-index and base-index #126
 
 ## 0.6.2
+
 - Also pass command line options to the `base_index` lookup.
 - Fixed bug #116.
 
 ## 0.6.1
+
 - Remove stray binding.pry
 - Fix nil error when creating a new project.
 
@@ -511,21 +677,25 @@ behavior (#621)
 - Dropped support for Ruby 1.9.2
 
 ## 0.5.0
+
 - Added optional socket name support (Thanks to Adam Walters)
 - Added auto completion (Thanks to Jose Pablo Barrantes)
 
 ## 0.4.0
+
 - Does not crash if given an invalid yaml file format. report it and exit gracefully.
 - Removed clunky scripts & shell aliases (Thanks to Dane O'Connor)
 - Config files are now rendered JIT (Thanks to Dane O'Connor)
 - Can now start sessions from cli (Thanks to Dane O'Connor)
 
 ## 0.3.0
+
 - Added pre command (Thanks to Ian Yang)
 - Added multiple pre command (Thanks to Bjørn Arild Mæland)
 - Using tmux set default-path for project root
 - New aliases
 
 ## 0.2.0
+
 - Added pane support (Thanks to Aaron Spiegel)
 - RVM support (Thanks to Jay Adkisoon)
