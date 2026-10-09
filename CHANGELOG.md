@@ -2,7 +2,7 @@
 ### Fixes
 - Avoid bash-only `[[` when resolving the current session name so `stop_all` works under POSIX `/bin/sh` (e.g. dash on Debian)
 ### Misc
-- Include tmux 3.7c in supported versions list
+- Include tmux 3.7c, and 3.8 in supported versions list
 
 ## 3.4.1
 ### Misc
