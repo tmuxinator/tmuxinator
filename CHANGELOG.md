@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 3.4.2
 ### Fixes
 - Avoid bash-only `[[` when resolving the current session name so `stop_all` works under POSIX `/bin/sh` (e.g. dash on Debian)
 ### Misc
